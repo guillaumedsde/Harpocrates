@@ -37,7 +37,6 @@ paths:
         - "set"
       summary: "Add a new documentset set to the engine"
       description: ""
-      operationId: "addSet"
       consumes:
         - "application/json"
         - "application/xml"
