@@ -3,7 +3,6 @@ info:
   description: "This is an API for predictive analytics engines"
   version: "1"
   title: "REST API for predictive analtyics"
-#host: "CICERO.io"
 basePath: "/v1"
 externalDocs:
   description: "This is how documents etc can be pushed into the classifiers, and annotations received. "
