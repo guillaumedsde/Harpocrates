@@ -32,6 +32,7 @@ paths:
         - set
       summary: Add a new documentset set to the engine
       operationId: set.new_set
+      x-codegen-request-body-name: set
       requestBody:
         content:
           application/json:
@@ -191,6 +192,7 @@ paths:
       summary: Add a new document to the document set
       description: Contents of the document in the body of the request. This should be in plain text. The Content-Type header should be appropriately set to text/plain.
       operationId: set.new_document
+      x-codegen-request-body-name: document
       parameters:
         - in: path
           name: setid
@@ -405,19 +407,23 @@ components:
   schemas:
     documentSet:
       type: object
+      description: schema for a set of Documents "document set"
       required:
         - name
       properties:
         name:
           type: string
+          description: Name of the document Set
           example: FCC/1/400
         uid:
           type: string
+          description: Unique ID of the document Set
           example: set1
       xml:
         name: documentSet
     actualReviewingTime:
       type: object
+      description: A actual reviewing time (as opposed to an estimated reviewing time)
       properties:
         actualTime:
           type: number
@@ -427,6 +433,7 @@ components:
         name: actualReviewingTime
     reviewingTime:
       type: object
+      description: An estimated reviewing time (as opposed to an actual reviewing time)
       allOf:
         - $ref: "#/components/schemas/reviewingTime"
       required:
@@ -434,6 +441,8 @@ components:
       properties:
         predictedTime:
           type: number
+          # TODO specify unit
+          description: Predicted time for review
           format: float
           example: 10.5
       xml:
@@ -491,11 +500,13 @@ components:
               example: probability
     document:
       type: object
+      description: A document to review
       required:
         - docid
       properties:
         docid:
           type: string
+          description: Unique id for the document
       xml:
         name: document
     sensitivityPrediction:
