@@ -22,16 +22,16 @@ cache:
 validate:
   stage: test
   before_script:
-    - npm install -g ibm-openapi-validator
+    - npm install --dev-only
   script:
-    - lint-openapi "$DOCS_FOLDER/$SPEC_TO_DISPLAY" --errors_only
+    - npx lint-openapi "$DOCS_FOLDER/$SPEC_TO_DISPLAY" --errors_only
 
 # publishes all files from the $DOCS_FOLDER together with the static version of SwaggerUI
 # sets the specification file named in $SPEC_TO_DISPLAY to be displayed by default
 pages:
   stage: deploy
   before_script:
-    - npm install swagger-ui-dist
+    - npm install --dev-only
   script:
     - mkdir public
     - cp -rp node_modules/swagger-ui-dist/* public

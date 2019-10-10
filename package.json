@@ -1,0 +1,25 @@
+{
+  "name": "api-specification",
+  "version": "1.0.0",
+  "description": "This is a Swagger specification for an API for predictive analytics engines",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/visualising-sensitivity-classification-features/api-specification.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/visualising-sensitivity-classification-features/api-specification/issues"
+  },
+  "homepage": "https://gitlab.com/visualising-sensitivity-classification-features/api-specification#readme",
+  "devDependencies": {
+    "ibm-openapi-validator": "^0.15.1",
+    "swagger-ui-dist": "^3.23.11"
+  },
+  "dependencies": {}
+}
