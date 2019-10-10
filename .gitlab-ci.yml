@@ -1,6 +1,11 @@
 # This file was obtained from https://gitlab.com/mdhtr/gitlab-pages-swagger-ui/raw/master/.gitlab-ci.yml
+# and then modified
 
 image: node:alpine
+
+stages:
+  - test
+  - deploy
 
 # specify the location of the Open API Specification files within your project
 # and the filename of the specification that you would like to display by default
@@ -12,6 +17,13 @@ variables:
 cache:
   paths:
     - ./node_modules
+
+# Use IBM OpenAPI validator to check for any errors
+validate:
+  stage: test
+  before_script:
+    - npm install ibm-openapi-validator
+  script: lint-openapi -c ${DOCS_FOLDER}/${SPEC_TO_DISPLAY}
 
 # publishes all files from the $DOCS_FOLDER together with the static version of SwaggerUI
 # sets the specification file named in $SPEC_TO_DISPLAY to be displayed by default
