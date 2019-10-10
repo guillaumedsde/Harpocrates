@@ -28,7 +28,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/DocumentSet"
+                  $ref: "#/components/schemas/document_set"
     post:
       tags:
         - set
@@ -38,11 +38,11 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/DocumentSet"
+              $ref: "#/components/schemas/document_set"
           application/xml:
             schema:
-              $ref: "#/components/schemas/DocumentSet"
-        description: DocumentSet descriptor that needs to be added to the engine
+              $ref: "#/components/schemas/document_set"
+        description: document_set descriptor that needs to be added to the engine
         required: true
       responses:
         "200":
@@ -58,6 +58,7 @@ paths:
       parameters:
         - in: path
           name: setid
+          description: ID of the set
           required: true
           schema:
             type: string
@@ -69,7 +70,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Document"
+                  $ref: "#/components/schemas/document"
         "404":
           description: No such set
         "405":
@@ -82,6 +83,7 @@ paths:
       parameters:
         - in: path
           name: setid
+          description: ID of the set
           required: true
           schema:
             type: string
@@ -102,6 +104,7 @@ paths:
         - in: path
           name: setid
           required: true
+          description: ID of the set
           schema:
             type: string
       tags:
@@ -119,6 +122,7 @@ paths:
         - in: path
           name: setid
           required: true
+          description: ID of the set
           schema:
             type: string
         - in: query
@@ -148,6 +152,7 @@ paths:
         - in: path
           name: setid
           required: true
+          description: ID of the set
           schema:
             type: string
       tags:
@@ -166,6 +171,7 @@ paths:
         - in: path
           name: setid
           required: true
+          description: ID of the set
           schema:
             type: string
         - in: query
@@ -197,10 +203,12 @@ paths:
         - in: path
           name: setid
           required: true
+          description: ID of the set
           schema:
             type: string
         - in: path
           name: docid
+          description: ID of the document
           required: true
           schema:
             type: string
@@ -231,10 +239,12 @@ paths:
         - in: path
           name: setid
           required: true
+          description: ID of the set
           schema:
             type: string
         - in: path
           name: docid
+          description: ID of the document
           required: true
           schema:
             type: string
@@ -244,7 +254,7 @@ paths:
           content:
             "*/*":
               schema:
-                $ref: "#/components/schemas/SensitivityPrediction"
+                $ref: "#/components/schemas/sensitivity_prediction"
         "400":
           description: Invalid input
         "404":
@@ -263,15 +273,18 @@ paths:
         - in: path
           name: setid
           required: true
+          description: ID of the set
           schema:
             type: string
         - in: path
           name: docid
+          description: ID of the document
           required: true
           schema:
             type: string
         - in: path
           name: reviewerid
+          description: ID of the reviewer
           required: true
           schema:
             type: string
@@ -279,7 +292,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/SensitivityAnnotation"
+              $ref: "#/components/schemas/sensitivity_annotations"
         required: true
       responses:
         "200":
@@ -304,10 +317,12 @@ paths:
         - in: path
           name: setid
           required: true
+          description: ID of the set
           schema:
             type: string
         - in: path
           name: docid
+          description: ID of the document
           required: true
           schema:
             type: string
@@ -334,10 +349,12 @@ paths:
         - in: path
           name: setid
           required: true
+          description: ID of the set
           schema:
             type: string
         - in: path
           name: docid
+          description: ID of the document
           required: true
           schema:
             type: string
@@ -347,7 +364,7 @@ paths:
           content:
             "*/*":
               schema:
-                $ref: "#/components/schemas/ReviewingTime"
+                $ref: "#/components/schemas/reviewing_time"
         "400":
           description: Invalid request
         "404":
@@ -368,15 +385,18 @@ paths:
         - in: path
           name: setid
           required: true
+          description: ID of the set
           schema:
             type: string
         - in: path
           name: docid
+          description: ID of the document
           required: true
           schema:
             type: string
         - in: path
           name: reviewerid
+          description: ID of the reviewer
           required: true
           schema:
             type: string
@@ -384,7 +404,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ActualReviewingTime"
+              $ref: "#/components/schemas/actual_reviewing_time"
         required: true
       responses:
         "200":
@@ -403,7 +423,7 @@ servers:
   - url: /v1
 components:
   schemas:
-    DocumentSet:
+    document_set:
       type: object
       required:
         - name
@@ -415,8 +435,8 @@ components:
           type: string
           example: set1
       xml:
-        name: DocumentSet
-    ActualReviewingTime:
+        name: document_set
+    actual_reviewing_time:
       type: object
       properties:
         actualTime:
@@ -424,11 +444,11 @@ components:
           format: float
           example: 10.1
       xml:
-        name: ActualReviewingTime
-    ReviewingTime:
+        name: actual_reviewing_time
+    reviewing_time:
       type: object
       allOf:
-        - $ref: "#/components/schemas/ActualReviewingTime"
+        - $ref: "#/components/schemas/actual_reviewing_time"
       required:
         - predictedTime
       properties:
@@ -437,10 +457,10 @@ components:
           format: float
           example: 10.5
       xml:
-        name: ReviewingTime
-    Section:
+        name: reviewing_time
+    section:
       description: This is the base object for recording or suggesting sensitivities
-      title: Section
+      title: section
       type: object
       required:
         - name
@@ -483,11 +503,11 @@ components:
           description:
             This is an optional textual description of what the predicted
             sensitivity is, suitable for presentation to the user
-    PredictedSection:
+    predicted_section:
       description: This object describes a suggested annotation
-      title: PredictedSection
+      title: predicted_section
       allOf:
-        - $ref: "#/components/schemas/Section"
+        - $ref: "#/components/schemas/section"
         - type: object
           properties:
             confidence:
@@ -497,7 +517,7 @@ components:
             confidenceType:
               type: string
               example: probability
-    Document:
+    document:
       type: object
       required:
         - docid
@@ -505,8 +525,8 @@ components:
         docid:
           type: string
       xml:
-        name: Document
-    SensitivityPrediction:
+        name: document
+    sensitivity_prediction:
       type: object
       required:
         - predictedSections
@@ -514,10 +534,10 @@ components:
         predictedSections:
           type: array
           items:
-            $ref: "#/components/schemas/PredictedSection"
+            $ref: "#/components/schemas/predicted_section"
       xml:
-        name: SensitivityPrediction
-    SensitivityAnnotation:
+        name: sensitivity_prediction
+    sensitivity_annotations:
       type: object
       required:
         - sections
@@ -525,10 +545,10 @@ components:
         sections:
           type: array
           items:
-            $ref: "#/components/schemas/Section"
+            $ref: "#/components/schemas/section"
       xml:
-        name: SensitivityAnnotations
-    ApiResponse:
+        name: sensitivity_annotations
+    api_response:
       type: object
       properties:
         code:
