@@ -1,7 +1,6 @@
 # API specification
 
 ![Pipeline Status](https://gitlab.com/visualising-sensitivity-classification-features/api-specification/badges/master/pipeline.svg)
-
 ![Website](https://img.shields.io/website?url=https%3A%2F%2Fvisualising-sensitivity-classification-features.gitlab.io%2Fapi-specification)
 
 This is an [OpenAPI specification](https://en.wikipedia.org/wiki/OpenAPI_Specification) for an API for predictive analytics engines.
