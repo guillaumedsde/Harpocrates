@@ -182,7 +182,7 @@ paths:
           required: false
           schema:
             type: string
-            default: reviewing_time
+            default: reviewingTime
       responses:
         "200":
           description: Successful operation
@@ -342,7 +342,7 @@ paths:
             documentset must be complete'd before use.
         "501":
           description: Not implemented
-  "/document_set/{setid}/{docid}/reviewing_time":
+  "/document_set/{setid}/{docid}/reviewingTime":
     get:
       tags:
         - document
@@ -378,7 +378,7 @@ paths:
             documentset must be complete'd before use.
         "501":
           description: Not implemented
-  "/document_set/{setid}/{docid}/{reviewerid}/reviewing_time":
+  "/document_set/{setid}/{docid}/{reviewerid}/reviewingTime":
     post:
       tags:
         - document
@@ -515,7 +515,7 @@ components:
               type: number
               format: float
               example: 0.75
-            confidence_type:
+            confidenceType:
               type: string
               example: probability
     document:
@@ -530,9 +530,9 @@ components:
     sensitivity_prediction:
       type: object
       required:
-        - predicted_sections
+        - predictedSections
       properties:
-        predicted_sections:
+        predictedSections:
           type: array
           items:
             $ref: "#/components/schemas/predicted_section"
