@@ -38,29 +38,23 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/documentSet"
-          application/xml:
-            schema:
-              $ref: "#/components/schemas/documentSet"
         description: documentSet descriptor that needs to be added to the engine
         required: true
       responses:
         "200":
-          description: "Successful operation: document set added to the engine"
-        "405":
-          description: Invalid input
-  "/documentSet/{setid}":
+          $ref: '#/components/responses/ok'
+        "400":
+          $ref: '#/components/responses/malformedRequest'
+        "409":
+          $ref: '#/components/responses/conflict'
+  "/documentSet/{setId}":
     get:
       summary: lists all documents in the set
       operationId: get_documents_in_set
       tags:
         - set
       parameters:
-        - in: path
-          name: setid
-          description: ID of the set
-          required: true
-          schema:
-            type: string
+        - $ref: "#/components/parameters/setId"
       responses:
         "200":
           description: Successful operation
@@ -70,105 +64,66 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/document"
+        "400":
+          $ref: '#/components/responses/malformedRequest'
         "404":
-          description: No such set
-        "405":
-          description: Invalid input
+          $ref: '#/components/responses/notFound'
     delete:
       tags:
         - set
       summary: delete the set
       operationId: delete_set
       parameters:
-        - in: path
-          name: setid
-          description: ID of the set
-          required: true
-          schema:
-            type: string
+        - $ref: "#/components/parameters/setId"
       responses:
         "200":
-          description: Successful operation
+          $ref: '#/components/responses/ok'
+        "400":
+          $ref: '#/components/responses/malformedRequest'
         "404":
-          description: No such set
-        "405":
-          description: Invalid input
-  "/documentSet/{setid}/summary":
+          $ref: '#/components/responses/notFound'
+  "/documentSet/{setId}/summary":
     get:
       summary: lists an implementers current summary of the set, such as classification accuracy
       operationId: get_set_summary
       parameters:
-        - in: path
-          name: setid
-          required: true
-          description: ID of the set
-          schema:
-            type: string
+        - $ref: "#/components/parameters/setId"
       tags:
         - set
       responses:
         "200":
-          description: Successful operation
-        "501":
-          description: Not implemented
-  "/documentSet/{setid}/search":
+          $ref: '#/components/responses/ok'
+  "/documentSet/{setId}/search":
     get:
       summary: provides a search for a given specified query on the set
       operationId: search_documents_in_set
       parameters:
-        - in: path
-          name: setid
-          required: true
-          description: ID of the set
-          schema:
-            type: string
-        - in: query
-          name: q
-          description: Search query for filtering documents in the set
-          required: true
-          schema:
-            type: string
-        - in: query
-          name: format
-          description: Format of the response
-          required: false
-          schema:
-            type: string
-            default: json
+        - $ref: "#/components/parameters/setId"
+        - $ref: "#/components/parameters/searchQuery"
       tags:
         - set
       responses:
         "200":
-          description: Successful operation
-  "/documentSet/{setid}/complete":
+          $ref: '#/components/responses/ok'
+  "/documentSet/{setId}/complete":
     get:
       summary: indicates to an implementer that all documents in this set have now been uploaded. An implementer may choose to return 409 codes when accessing any documents if this method has not yet been called
       operationId: mark_set_as_complete
       parameters:
-        - in: path
-          name: setid
-          required: true
-          description: ID of the set
-          schema:
-            type: string
+        - $ref: "#/components/parameters/setId"
       tags:
         - set
       responses:
         "200":
-          description: Successful operation
-  "/documentSet/{setid}/byPriority":
+          $ref: '#/components/responses/ok'
+  "/documentSet/{setId}/byPriority":
     get:
       summary: lists all documents in the set, ordered by a prediction, such as reviewing time
       operationId: get_set_documents_by_priority
       tags:
         - set
       parameters:
-        - in: path
-          name: setid
-          required: true
-          description: ID of the set
-          schema:
-            type: string
+        - $ref: "#/components/parameters/setId"
         - in: query
           name: priority
           description: Priority to filter documents
@@ -178,34 +133,24 @@ paths:
             default: reviewingTime
       responses:
         "200":
-          description: Successful operation
+          $ref: '#/components/responses/ok'
+        "400":
+          $ref: '#/components/responses/malformedRequest'
         "404":
-          description: No such set
-        "405":
-          description: Invalid input
-        "501":
-          description: Not implemented
-  "/documentSet/{setid}/{docid}":
-    put:
+          $ref: '#/components/responses/notFound'
+        "409":
+          $ref: '#/components/responses/conflict'
+  "/documentSet/{setId}/{docId}":
+    post:
       tags:
         - document
       summary: Add a new document to the document set
       description: Contents of the document in the body of the request. This should be in plain text. The Content-Type header should be appropriately set to text/plain.
       operationId: new_document
-      x-codegen-request-body-name: document
+      x-codegen-request-body-name: body
       parameters:
-        - in: path
-          name: setid
-          required: true
-          description: ID of the set
-          schema:
-            type: string
-        - in: path
-          name: docid
-          description: ID of the document
-          required: true
-          schema:
-            type: string
+        - $ref: "#/components/parameters/setId"
+        - $ref: "#/components/parameters/docId"
       requestBody:
         content:
           text/plain:
@@ -214,32 +159,22 @@ paths:
         required: true
       responses:
         "200":
-          description: Successful operation - document received
-        "202":
-          description: The document has been accepted for processing, but the processing has not been complete'd (see RFC 2616).
+          $ref: '#/components/responses/ok'
         "400":
-          description: Invalid input
+          $ref: '#/components/responses/malformedRequest'
         "404":
-          description: No such documentset
-  "/documentSet/{setid}/{docid}/sensitivities":
+          $ref: '#/components/responses/notFound'
+        "409":
+          $ref: '#/components/responses/conflict'
+  "/documentSet/{setId}/{docId}/sensitivities":
     get:
       tags:
         - document
       summary: Returns the predicted sensitivities in the document
       operationId: get_document_sensitivities
       parameters:
-        - in: path
-          name: setid
-          required: true
-          description: ID of the set
-          schema:
-            type: string
-        - in: path
-          name: docid
-          description: ID of the document
-          required: true
-          schema:
-            type: string
+        - $ref: "#/components/parameters/setId"
+        - $ref: "#/components/parameters/docId"
       responses:
         "200":
           description: successful operation
@@ -248,36 +183,21 @@ paths:
               schema:
                 $ref: "#/components/schemas/sensitivityPrediction"
         "400":
-          description: Invalid input
+          $ref: '#/components/responses/malformedRequest'
         "404":
-          description: No such documentset or document
+          $ref: '#/components/responses/notFound'
         "409":
-          description: The document is there, but it has not yet been processed. The documentset must be complete'd before use.
-  "/documentSet/{setid}/{docid}/{reviewerid}/sensitivities":
+          $ref: '#/components/responses/conflict'
+  "/documentSet/{setId}/{docId}/{reviewerid}/sensitivities":
     post:
       tags:
         - document
       summary: Records the sensitivities that were found in the document by reviewers
       operationId: post_document_sensitivities
-      parameters:
-        - in: path
-          name: setid
-          required: true
-          description: ID of the set
-          schema:
-            type: string
-        - in: path
-          name: docid
-          description: ID of the document
-          required: true
-          schema:
-            type: string
-        - in: path
-          name: reviewerid
-          description: ID of the reviewer
-          required: true
-          schema:
-            type: string
+      parameters: 
+        - $ref: "#/components/parameters/setId"
+        - $ref: "#/components/parameters/docId"
+        - $ref: "#/components/parameters/reviewerId"
       requestBody:
         content:
           application/json:
@@ -286,64 +206,40 @@ paths:
         required: true
       responses:
         "200":
-          description: Successful operation
+          $ref: '#/components/responses/ok'
         "400":
-          description: Invalid input
+          $ref: '#/components/responses/malformedRequest'
         "404":
-          description: No such documentset or document
+          $ref: '#/components/responses/notFound'
         "409":
-          description: The document is there, but it has not yet been processed. The documentset must be complete'd before use.
-        "501":
-          description: Not implemented
-  "/documentSet/{setid}/{docid}/contents":
+          $ref: '#/components/responses/conflict'
+  "/documentSet/{setId}/{docId}/contents":
     get:
       tags:
         - document
       summary: Returns this engine's representation of the document
       operationId: get_document
       parameters:
-        - in: path
-          name: setid
-          required: true
-          description: ID of the set
-          schema:
-            type: string
-        - in: path
-          name: docid
-          description: ID of the document
-          required: true
-          schema:
-            type: string
+        - $ref: "#/components/parameters/setId"
+        - $ref: "#/components/parameters/docId"
       responses:
         "200":
-          description: successful operation
+          $ref: '#/components/responses/ok'
         "400":
-          description: Invalid request
+          $ref: '#/components/responses/malformedRequest'
         "404":
-          description: No such documentset or document
+          $ref: '#/components/responses/notFound'
         "409":
-          description: The document is there, but it has not yet been processed. The documentset must be complete'd before use.
-        "501":
-          description: Not implemented
-  "/documentSet/{setid}/{docid}/reviewingTime":
+          $ref: '#/components/responses/conflict'
+  "/documentSet/{setId}/{docId}/reviewingTime":
     get:
       tags:
         - document
       summary: Returns a prediction of the reviewing time of the document
       operationId: get_document_estimated_review_time
       parameters:
-        - in: path
-          name: setid
-          required: true
-          description: ID of the set
-          schema:
-            type: string
-        - in: path
-          name: docid
-          description: ID of the document
-          required: true
-          schema:
-            type: string
+        - $ref: "#/components/parameters/setId"
+        - $ref: "#/components/parameters/docId"
       responses:
         "200":
           description: successful operation
@@ -352,38 +248,21 @@ paths:
               schema:
                 $ref: "#/components/schemas/reviewingTime"
         "400":
-          description: Invalid request
+          $ref: '#/components/responses/malformedRequest'
         "404":
-          description: No such documentset or document
+          $ref: '#/components/responses/notFound'
         "409":
-          description: The document is there, but it has not yet been processed. The documentset must be complete'd before use.
-        "501":
-          description: Not implemented
-  "/documentSet/{setid}/{docid}/{reviewerid}/reviewingTime":
+          $ref: '#/components/responses/conflict'
+  "/documentSet/{setId}/{docId}/{reviewerid}/reviewingTime":
     post:
       tags:
         - document
       summary: Inform the engine of the actual reviewing time of the document
       operationId: get_document_actual_review_time
       parameters:
-        - in: path
-          name: setid
-          required: true
-          description: ID of the set
-          schema:
-            type: string
-        - in: path
-          name: docid
-          description: ID of the document
-          required: true
-          schema:
-            type: string
-        - in: path
-          name: reviewerid
-          description: ID of the reviewer
-          required: true
-          schema:
-            type: string
+        - $ref: "#/components/parameters/setId"
+        - $ref: "#/components/parameters/docId"
+        - $ref: "#/components/parameters/reviewerId"
       requestBody:
         content:
           application/json:
@@ -392,19 +271,92 @@ paths:
         required: true
       responses:
         "200":
-          description: OK
+          $ref: '#/components/responses/ok'
         "400":
-          description: Invalid input
+          $ref: '#/components/responses/malformedRequest'
         "404":
-          description: No such documentset or document
+          $ref: '#/components/responses/notFound'
         "409":
-          description: The document is there, but it has not yet been processed. The documentset must be complete'd before use.
-        "501":
-          description: Not implemented
+          $ref: '#/components/responses/conflict'
 servers:
   - url: /v1
 components:
+  parameters:
+    docId:
+      in: path
+      name: docId
+      description: ID of a document
+      required: true
+      schema:
+        type: string
+    setId:
+      in: path
+      name: setId
+      required: true
+      description: ID of a set
+      schema:
+        type: string
+    reviewerId:
+      in: path
+      name: reviewerid
+      description: ID of the reviewer
+      required: true
+      schema:
+        type: string
+    searchQuery:
+      in: query
+      name: searchQuery
+      description: Search query for filtering documents in the set
+      required: true
+      schema:
+        type: string
+  responses:
+    notFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/httpStatus'
+    unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/httpStatus'
+    ok:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/httpStatus'
+    conflict:
+      description: Conflicting element already present
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/httpStatus'
+    malformedRequest:
+      description: The request was invalid JSON or missing some attributes
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/httpStatus'
   schemas:
+    # Schema for error response body
+    httpStatus:
+      type: object
+      description: This object describes an HTTP status
+      properties:
+        code:
+          type: integer
+          format: int32
+          description: HTTP status code
+        message:
+          type: string
+          description: HTTP status message
+      required:
+        - code
+        - message
     documentSet:
       type: object
       description: schema for a set of Documents "document set"
@@ -419,8 +371,6 @@ components:
           type: string
           description: Unique ID of the document Set
           example: set1
-      xml:
-        name: documentSet
     actualReviewingTime:
       type: object
       description: A actual reviewing time (as opposed to an estimated reviewing time)
@@ -430,8 +380,6 @@ components:
           type: number
           format: float
           example: 10.1
-      xml:
-        name: actualReviewingTime
     reviewingTime:
       type: object
       description: An estimated reviewing time (as opposed to an actual reviewing time)
@@ -446,8 +394,6 @@ components:
           description: Predicted time for review
           format: float
           example: 10.5
-      xml:
-        name: reviewingTime
     section:
       description: This is the base object for recording or suggesting sensitivities
       title: section
@@ -503,13 +449,11 @@ components:
       type: object
       description: A document to review
       required:
-        - docid
+        - docId
       properties:
-        docid:
+        docId:
           type: string
           description: Unique id for the document
-      xml:
-        name: document
     sensitivityPrediction:
       type: object
       required:
@@ -519,8 +463,6 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/predictedSection"
-      xml:
-        name: sensitivityPrediction
     sensitivityAnnotation:
       type: object
       required:
@@ -530,15 +472,3 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/section"
-      xml:
-        name: sensitivityAnnotation
-    apiResponse:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        type:
-          type: string
-        message:
-          type: string
