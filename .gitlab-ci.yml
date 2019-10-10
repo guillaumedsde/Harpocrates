@@ -22,7 +22,7 @@ cache:
 validate:
   stage: test
   before_script:
-    - npm install ibm-openapi-validator
+    - npm install -g ibm-openapi-validator
   script: lint-openapi -c ${DOCS_FOLDER}/${SPEC_TO_DISPLAY}
 
 # publishes all files from the $DOCS_FOLDER together with the static version of SwaggerUI
