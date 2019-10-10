@@ -42,7 +42,7 @@ paths:
           application/xml:
             schema:
               $ref: "#/components/schemas/documentSet"
-        description: document_set descriptor that needs to be added to the engine
+        description: documentSet descriptor that needs to be added to the engine
         required: true
       responses:
         "200":
@@ -257,7 +257,7 @@ paths:
           content:
             "*/*":
               schema:
-                $ref: "#/components/schemas/sensitivity_prediction"
+                $ref: "#/components/schemas/sensitivityPrediction"
         "400":
           description: Invalid input
         "404":
@@ -295,7 +295,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/sensitivity_annotations"
+              $ref: "#/components/schemas/sensitivityAnnotation"
         required: true
       responses:
         "200":
@@ -367,7 +367,7 @@ paths:
           content:
             "*/*":
               schema:
-                $ref: "#/components/schemas/reviewing_time"
+                $ref: "#/components/schemas/reviewingTime"
         "400":
           description: Invalid request
         "404":
@@ -407,7 +407,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/actual_reviewing_time"
+              $ref: "#/components/schemas/actualReviewingTime"
         required: true
       responses:
         "200":
@@ -426,7 +426,7 @@ servers:
   - url: /v1
 components:
   schemas:
-    document_set:
+    documentSet:
       type: object
       required:
         - name
@@ -438,8 +438,8 @@ components:
           type: string
           example: set1
       xml:
-        name: document_set
-    actual_reviewing_time:
+        name: documentSet
+    actualReviewingTime:
       type: object
       properties:
         actualTime:
@@ -447,11 +447,11 @@ components:
           format: float
           example: 10.1
       xml:
-        name: actual_reviewing_time
-    reviewing_time:
+        name: actualReviewingTime
+    reviewingTime:
       type: object
       allOf:
-        - $ref: "#/components/schemas/actual_reviewing_time"
+        - $ref: "#/components/schemas/reviewingTime"
       required:
         - predictedTime
       properties:
@@ -460,7 +460,7 @@ components:
           format: float
           example: 10.5
       xml:
-        name: reviewing_time
+        name: reviewingTime
     section:
       description: This is the base object for recording or suggesting sensitivities
       title: section
@@ -504,9 +504,9 @@ components:
           description:
             This is an optional textual description of what the predicted
             sensitivity is, suitable for presentation to the user
-    predicted_section:
+    predictedSection:
       description: This object describes a suggested annotation
-      title: predicted_section
+      title: predictedSection
       allOf:
         - $ref: "#/components/schemas/section"
         - type: object
@@ -527,7 +527,7 @@ components:
           type: string
       xml:
         name: document
-    sensitivity_prediction:
+    sensitivityPrediction:
       type: object
       required:
         - predictedSections
@@ -535,10 +535,10 @@ components:
         predictedSections:
           type: array
           items:
-            $ref: "#/components/schemas/predicted_section"
+            $ref: "#/components/schemas/predictedSection"
       xml:
-        name: sensitivity_prediction
-    sensitivity_annotations:
+        name: sensitivityPrediction
+    sensitivityAnnotation:
       type: object
       required:
         - sections
@@ -548,8 +548,8 @@ components:
           items:
             $ref: "#/components/schemas/section"
       xml:
-        name: sensitivity_annotations
-    api_response:
+        name: sensitivityAnnotation
+    apiResponse:
       type: object
       properties:
         code:
