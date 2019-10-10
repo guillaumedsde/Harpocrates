@@ -2,7 +2,7 @@
   "shared": {
     "operations": {
       "no_operation_id": "warning",
-      "operation_id_case_cnoronvention": [
+      "operation_id_case_convention": [
         "warning",
         "lower_snake_case"
       ],
