@@ -17,7 +17,7 @@ paths:
       tags:
         - set
       summary: List all documentsets known by the engine
-      operationId: set.get_sets
+      operationId: get_sets
       responses:
         "200":
           description: Listing of all known document sets
@@ -31,7 +31,7 @@ paths:
       tags:
         - set
       summary: Add a new documentset set to the engine
-      operationId: set.new_set
+      operationId: new_set
       x-codegen-request-body-name: set
       requestBody:
         content:
@@ -51,7 +51,7 @@ paths:
   "/documentSet/{setid}":
     get:
       summary: lists all documents in the set
-      operationId: set.get_documents_in_set
+      operationId: get_documents_in_set
       tags:
         - set
       parameters:
@@ -78,7 +78,7 @@ paths:
       tags:
         - set
       summary: delete the set
-      operationId: set.delete_set
+      operationId: delete_set
       parameters:
         - in: path
           name: setid
@@ -96,7 +96,7 @@ paths:
   "/documentSet/{setid}/summary":
     get:
       summary: lists an implementers current summary of the set, such as classification accuracy
-      operationId: set.get_set_summary
+      operationId: get_set_summary
       parameters:
         - in: path
           name: setid
@@ -114,7 +114,7 @@ paths:
   "/documentSet/{setid}/search":
     get:
       summary: provides a search for a given specified query on the set
-      operationId: set.search_documents_in_set
+      operationId: search_documents_in_set
       parameters:
         - in: path
           name: setid
@@ -143,7 +143,7 @@ paths:
   "/documentSet/{setid}/complete":
     get:
       summary: indicates to an implementer that all documents in this set have now been uploaded. An implementer may choose to return 409 codes when accessing any documents if this method has not yet been called
-      operationId: set.set_complete
+      operationId: mark_set_as_complete
       parameters:
         - in: path
           name: setid
@@ -159,7 +159,7 @@ paths:
   "/documentSet/{setid}/byPriority":
     get:
       summary: lists all documents in the set, ordered by a prediction, such as reviewing time
-      operationId: set.get_set_documents_by_priority
+      operationId: get_set_documents_by_priority
       tags:
         - set
       parameters:
@@ -191,7 +191,7 @@ paths:
         - document
       summary: Add a new document to the document set
       description: Contents of the document in the body of the request. This should be in plain text. The Content-Type header should be appropriately set to text/plain.
-      operationId: set.new_document
+      operationId: new_document
       x-codegen-request-body-name: document
       parameters:
         - in: path
@@ -226,7 +226,7 @@ paths:
       tags:
         - document
       summary: Returns the predicted sensitivities in the document
-      operationId: document.get_document_sensitivities
+      operationId: get_document_sensitivities
       parameters:
         - in: path
           name: setid
@@ -258,7 +258,7 @@ paths:
       tags:
         - document
       summary: Records the sensitivities that were found in the document by reviewers
-      operationId: document.post_document_sensitivities
+      operationId: post_document_sensitivities
       parameters:
         - in: path
           name: setid
@@ -300,7 +300,7 @@ paths:
       tags:
         - document
       summary: Returns this engine's representation of the document
-      operationId: document.get_document
+      operationId: get_document
       parameters:
         - in: path
           name: setid
@@ -330,7 +330,7 @@ paths:
       tags:
         - document
       summary: Returns a prediction of the reviewing time of the document
-      operationId: document.get_document_estimated_review_time
+      operationId: get_document_estimated_review_time
       parameters:
         - in: path
           name: setid
@@ -364,7 +364,7 @@ paths:
       tags:
         - document
       summary: Inform the engine of the actual reviewing time of the document
-      operationId: document.get_document_actual_review_time
+      operationId: get_document_actual_review_time
       parameters:
         - in: path
           name: setid
@@ -426,6 +426,7 @@ components:
       description: A actual reviewing time (as opposed to an estimated reviewing time)
       properties:
         actualTime:
+          description: Actual time for review
           type: number
           format: float
           example: 10.1
@@ -435,7 +436,7 @@ components:
       type: object
       description: An estimated reviewing time (as opposed to an actual reviewing time)
       allOf:
-        - $ref: "#/components/schemas/reviewingTime"
+        - $ref: "#/components/schemas/actualReviewingTime"
       required:
         - predictedTime
       properties:
