@@ -14,7 +14,7 @@ tags:
   - name: document
     description: Everything about documents
 paths:
-  /documentset:
+  /document_set:
     get:
       tags:
         - set
@@ -49,7 +49,7 @@ paths:
           description: "Successful operation: document set added to the engine"
         "405":
           description: Invalid input
-  "/documentset/{setid}":
+  "/document_set/{setid}":
     get:
       summary: lists all documents in the set
       operationId: set.get_documents_in_set
@@ -94,7 +94,7 @@ paths:
           description: No such set
         "405":
           description: Invalid input
-  "/documentset/{setid}/summary":
+  "/document_set/{setid}/summary":
     get:
       summary:
         lists an implementers current summary of the set, such as classification
@@ -114,7 +114,7 @@ paths:
           description: Successful operation
         "501":
           description: Not implemented
-  "/documentset/{setid}/search":
+  "/document_set/{setid}/search":
     get:
       summary: provides a search for a given specified query on the set
       operationId: set.search_documents_in_set
@@ -127,11 +127,13 @@ paths:
             type: string
         - in: query
           name: q
+          description: Search query for filtering documents in the set
           required: true
           schema:
             type: string
         - in: query
           name: format
+          description: Format of the response
           required: false
           schema:
             type: string
@@ -141,7 +143,7 @@ paths:
       responses:
         "200":
           description: Successful operation
-  "/documentset/{setid}/complete":
+  "/document_set/{setid}/complete":
     get:
       summary:
         indicates to an implementer that all documents in this set have now been
@@ -160,7 +162,7 @@ paths:
       responses:
         "200":
           description: Successful operation
-  "/documentset/{setid}/byPriority":
+  "/document_set/{setid}/by_priority":
     get:
       summary: lists all documents in the set, ordered by a prediction, such as
         reviewing time
@@ -176,10 +178,11 @@ paths:
             type: string
         - in: query
           name: priority
+          description: Priority to filter documents
           required: false
           schema:
             type: string
-            default: reviewingTime
+            default: reviewing_time
       responses:
         "200":
           description: Successful operation
@@ -189,7 +192,7 @@ paths:
           description: Invalid input
         "501":
           description: Not implemented
-  "/documentset/{setid}/{docid}":
+  "/document_set/{setid}/{docid}":
     put:
       tags:
         - document
@@ -229,7 +232,7 @@ paths:
           description: Invalid input
         "404":
           description: No such documentset
-  "/documentset/{setid}/{docid}/sensitivities":
+  "/document_set/{setid}/{docid}/sensitivities":
     get:
       tags:
         - document
@@ -263,7 +266,7 @@ paths:
           description:
             The document is there, but it has not yet been processed. The
             documentset must be complete'd before use.
-  "/documentset/{setid}/{docid}/{reviewerid}/sensitivities":
+  "/document_set/{setid}/{docid}/{reviewerid}/sensitivities":
     post:
       tags:
         - document
@@ -307,7 +310,7 @@ paths:
             documentset must be complete'd before use.
         "501":
           description: Not implemented
-  "/documentset/{setid}/{docid}/contents":
+  "/document_set/{setid}/{docid}/contents":
     get:
       tags:
         - document
@@ -339,7 +342,7 @@ paths:
             documentset must be complete'd before use.
         "501":
           description: Not implemented
-  "/documentset/{setid}/{docid}/reviewingTime":
+  "/document_set/{setid}/{docid}/reviewing_time":
     get:
       tags:
         - document
@@ -375,7 +378,7 @@ paths:
             documentset must be complete'd before use.
         "501":
           description: Not implemented
-  "/documentset/{setid}/{docid}/{reviewerid}/reviewingTime":
+  "/document_set/{setid}/{docid}/{reviewerid}/reviewing_time":
     post:
       tags:
         - document
@@ -466,7 +469,7 @@ components:
         - name
       properties:
         startOffset:
-          type: number
+          type: integer
           format: int32
           example: 4
           description:
@@ -474,11 +477,10 @@ components:
             annotation)
         startWord:
           type: string
-          format: int32
           example: was
           description: actual first word of an annotation
         endOffset:
-          type: number
+          type: integer
           format: int32
           example: 20
           description:
@@ -486,7 +488,6 @@ components:
             annotation)
         endWord:
           type: string
-          format: int32
           example: said
           description: actual last word of an annotation
         fullAnnotation:
@@ -514,7 +515,7 @@ components:
               type: number
               format: float
               example: 0.75
-            confidenceType:
+            confidence_type:
               type: string
               example: probability
     document:
@@ -529,9 +530,9 @@ components:
     sensitivity_prediction:
       type: object
       required:
-        - predictedSections
+        - predicted_sections
       properties:
-        predictedSections:
+        predicted_sections:
           type: array
           items:
             $ref: "#/components/schemas/predicted_section"
