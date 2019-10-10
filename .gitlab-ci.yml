@@ -23,7 +23,8 @@ validate:
   stage: test
   before_script:
     - npm install -g ibm-openapi-validator
-  script: lint-openapi -c ${DOCS_FOLDER}/${SPEC_TO_DISPLAY}
+  script:
+    - lint-openapi --config "./$DOCS_FOLDER/$SPEC_TO_DISPLAY"
 
 # publishes all files from the $DOCS_FOLDER together with the static version of SwaggerUI
 # sets the specification file named in $SPEC_TO_DISPLAY to be displayed by default
