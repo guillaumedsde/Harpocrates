@@ -19,7 +19,7 @@ paths:
       tags:
         - set
       summary: List all documentsets known by the engine
-      description: ""
+      operationId: set.get_sets
       responses:
         "200":
           description: Listing of all known document sets
@@ -33,7 +33,7 @@ paths:
       tags:
         - set
       summary: Add a new documentset set to the engine
-      description: ""
+      operationId: set.new_set
       requestBody:
         content:
           application/json:
@@ -52,6 +52,7 @@ paths:
   "/documentset/{setid}":
     get:
       summary: lists all documents in the set
+      operationId: set.get_documents_in_set
       tags:
         - set
       parameters:
@@ -77,6 +78,7 @@ paths:
       tags:
         - set
       summary: delete the set
+      operationId: set.delete_set
       parameters:
         - in: path
           name: setid
@@ -95,6 +97,7 @@ paths:
       summary:
         lists an implementers current summary of the set, such as classification
         accuracy
+      operationId: set.get_set_summary
       parameters:
         - in: path
           name: setid
@@ -111,6 +114,7 @@ paths:
   "/documentset/{setid}/search":
     get:
       summary: provides a search for a given specified query on the set
+      operationId: set.search_documents_in_set
       parameters:
         - in: path
           name: setid
@@ -139,6 +143,7 @@ paths:
         indicates to an implementer that all documents in this set have now been
         uploaded. An implementer may choose to return 409 codes when accessing
         any documents if this method has not yet been called
+      operationId: set.set_complete
       parameters:
         - in: path
           name: setid
@@ -154,6 +159,7 @@ paths:
     get:
       summary: lists all documents in the set, ordered by a prediction, such as
         reviewing time
+      operationId: set.get_set_documents_by_priority
       tags:
         - set
       parameters:
@@ -186,6 +192,7 @@ paths:
         Contents of the document in the body of the request. This should be in
         plain text. The Content-Type header should be appropriately set to
         text/plain.
+      operationId: set.new_document
       parameters:
         - in: path
           name: setid
@@ -219,6 +226,7 @@ paths:
       tags:
         - document
       summary: Returns the predicted sensitivities in the document
+      operationId: document.get_document_sensitivities
       parameters:
         - in: path
           name: setid
@@ -250,6 +258,7 @@ paths:
       tags:
         - document
       summary: Records the sensitivities that were found in the document by reviewers
+      operationId: document.post_document_sensitivities
       parameters:
         - in: path
           name: setid
@@ -290,6 +299,7 @@ paths:
       tags:
         - document
       summary: Returns this engine's representation of the document
+      operationId: document.get_document
       parameters:
         - in: path
           name: setid
@@ -319,6 +329,7 @@ paths:
       tags:
         - document
       summary: Returns a prediction of the reviewing time of the document
+      operationId: document.get_document_estimated_review_time
       parameters:
         - in: path
           name: setid
@@ -352,6 +363,7 @@ paths:
       tags:
         - document
       summary: Inform the engine of the actual reviewing time of the document
+      operationId: document.get_document_actual_review_time
       parameters:
         - in: path
           name: setid
