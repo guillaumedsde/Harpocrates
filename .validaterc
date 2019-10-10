@@ -50,11 +50,11 @@
       "array_of_arrays": "warning",
       "property_case_convention": [
         "error",
-        "lower_snake_case"
+        "lower_camel_case"
       ],
       "enum_case_convention": [
         "error",
-        "lower_snake_case"
+        "lower_camel_case"
       ]
     },
     "walker": {
