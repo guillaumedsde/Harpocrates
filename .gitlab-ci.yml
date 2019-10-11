@@ -10,7 +10,7 @@ stages:
 # specify the location of the Open API Specification files within your project
 # and the filename of the specification that you would like to display by default
 variables:
-  DOCS_FOLDER: api-specifications
+  DOCS_FOLDER: api-specification
   SPEC_TO_DISPLAY: openapi.yml
 
 # These folders are cached between builds
