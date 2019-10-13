@@ -17,7 +17,7 @@ paths:
       tags:
         - set
       summary: List all documentsets known by the engine
-      operationId: api.set.get_sets
+      operationId: get_sets
       responses:
         "200":
           description: Listing of all known document sets
@@ -29,8 +29,8 @@ paths:
       tags:
         - set
       summary: Add a new documentset set to the engine
-      operationId: api.set.create_set
-      x-codegen-request-body-name: body
+      operationId: create_set
+      x-codegen-request-body-name: new_set
       requestBody:
         content:
           application/json:
@@ -48,7 +48,7 @@ paths:
   "/documentSet/{setId}":
     get:
       summary: lists all documents in the set
-      operationId: api.set.get_set
+      operationId: get_set
       tags:
         - set
       parameters:
@@ -69,8 +69,8 @@ paths:
         - document
       summary: Add a new document to the document set
       description: Contents of the document in the body of the request. This should be in plain text. The Content-Type header should be appropriately set to text/plain.
-      operationId: api.document.create_document
-      x-codegen-request-body-name: body
+      operationId: create_document
+      x-codegen-request-body-name: new_document
       parameters:
         - $ref: "#/components/parameters/setId"
       requestBody:
@@ -92,9 +92,44 @@ paths:
       tags:
         - set
       summary: delete the set
-      operationId: api.set.delete_set
+      operationId: delete_set
       parameters:
         - $ref: "#/components/parameters/setId"
+      responses:
+        "200":
+          $ref: "#/components/responses/ok"
+        "400":
+          $ref: "#/components/responses/malformedRequest"
+        "404":
+          $ref: "#/components/responses/notFound"
+  "/documentSet/{setId}/{documentId}":
+    get:
+      summary: get document from set
+      operationId: get_document
+      tags:
+        - document
+      parameters:
+        - $ref: "#/components/parameters/setId"
+        - $ref: "#/components/parameters/documentId"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/document"
+        "400":
+          $ref: "#/components/responses/malformedRequest"
+        "404":
+          $ref: "#/components/responses/notFound"
+    delete:
+      tags:
+        - document
+      summary: delete the set
+      operationId: delete_document
+      parameters:
+        - $ref: "#/components/parameters/setId"
+        - $ref: "#/components/parameters/documentId"
       responses:
         "200":
           $ref: "#/components/responses/ok"
@@ -160,7 +195,7 @@ paths:
   #         $ref: "#/components/responses/notFound"
   #       "409":
   #         $ref: "#/components/responses/conflict"
-  # "/documentSet/{setId}/{docId}/sensitivities":
+  # "/documentSet/{setId}/{documentId}/sensitivities":
   #   get:
   #     tags:
   #       - document
@@ -168,7 +203,7 @@ paths:
   #     operationId: get_document_sensitivities
   #     parameters:
   #       - $ref: "#/components/parameters/setId"
-  #       - $ref: "#/components/parameters/docId"
+  #       - $ref: "#/components/parameters/documentId"
   #     responses:
   #       "200":
   #         description: successful operation
@@ -182,7 +217,7 @@ paths:
   #         $ref: "#/components/responses/notFound"
   #       "409":
   #         $ref: "#/components/responses/conflict"
-  # "/documentSet/{setId}/{docId}/{reviewerid}/sensitivities":
+  # "/documentSet/{setId}/{documentId}/{reviewerid}/sensitivities":
   #   post:
   #     tags:
   #       - document
@@ -190,7 +225,7 @@ paths:
   #     operationId: post_document_sensitivities
   #     parameters:
   #       - $ref: "#/components/parameters/setId"
-  #       - $ref: "#/components/parameters/docId"
+  #       - $ref: "#/components/parameters/documentId"
   #       - $ref: "#/components/parameters/reviewerId"
   #     requestBody:
   #       content:
@@ -207,7 +242,7 @@ paths:
   #         $ref: "#/components/responses/notFound"
   #       "409":
   #         $ref: "#/components/responses/conflict"
-  # "/documentSet/{setId}/{docId}/contents":
+  # "/documentSet/{setId}/{documentId}/contents":
   #   get:
   #     tags:
   #       - document
@@ -215,7 +250,7 @@ paths:
   #     operationId: get_document
   #     parameters:
   #       - $ref: "#/components/parameters/setId"
-  #       - $ref: "#/components/parameters/docId"
+  #       - $ref: "#/components/parameters/documentId"
   #     responses:
   #       "200":
   #         $ref: "#/components/responses/ok"
@@ -225,7 +260,7 @@ paths:
   #         $ref: "#/components/responses/notFound"
   #       "409":
   #         $ref: "#/components/responses/conflict"
-  # "/documentSet/{setId}/{docId}/reviewingTime":
+  # "/documentSet/{setId}/{documentId}/reviewingTime":
   #   get:
   #     tags:
   #       - document
@@ -233,7 +268,7 @@ paths:
   #     operationId: get_document_estimated_review_time
   #     parameters:
   #       - $ref: "#/components/parameters/setId"
-  #       - $ref: "#/components/parameters/docId"
+  #       - $ref: "#/components/parameters/documentId"
   #     responses:
   #       "200":
   #         description: successful operation
@@ -247,7 +282,7 @@ paths:
   #         $ref: "#/components/responses/notFound"
   #       "409":
   #         $ref: "#/components/responses/conflict"
-  # "/documentSet/{setId}/{docId}/{reviewerid}/reviewingTime":
+  # "/documentSet/{setId}/{documentId}/{reviewerid}/reviewingTime":
   #   post:
   #     tags:
   #       - document
@@ -255,7 +290,7 @@ paths:
   #     operationId: get_document_actual_review_time
   #     parameters:
   #       - $ref: "#/components/parameters/setId"
-  #       - $ref: "#/components/parameters/docId"
+  #       - $ref: "#/components/parameters/documentId"
   #       - $ref: "#/components/parameters/reviewerId"
   #     requestBody:
   #       content:
@@ -276,9 +311,9 @@ servers:
   - url: /0.1.0
 components:
   parameters:
-    docId:
+    documentId:
       in: path
-      name: docId
+      name: documentId
       description: ID of a document
       required: true
       schema:
@@ -482,9 +517,9 @@ components:
       type: object
       description: A document to review
       required:
-        - docId
+        - documentId
       properties:
-        docId:
+        documentId:
           type: string
           description: Unique id for the document
     documents:
