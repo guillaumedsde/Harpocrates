@@ -1,0 +1,433 @@
+openapi: 3.0.2
+info:
+  description: This is an API for predictive analytics engines
+  title: REST API for predictive analtyics
+  version: 0.1.0
+externalDocs:
+  description: API documentation
+  url: https://visualising-sensitivity-classification-features.gitlab.io/api-specification/
+servers:
+  - url: /0.1.0
+tags:
+  - description: Everything about documentsets
+    name: set
+  - description: Everything about documents
+    name: document
+paths:
+  /documentSet:
+    get:
+      operationId: get_sets
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/documentSets'
+          description: Listing of all known document sets
+      summary: List all documentsets known by the engine
+      tags:
+        - set
+      x-openapi-router-controller: openapi_server.controllers.set_controller
+    post:
+      operationId: create_set
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/newDocumentSet'
+        description: documentSet descriptor that needs to be added to the engine
+        required: true
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: OK
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The request was invalid JSON or missing some attributes
+        409:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: Conflicting element already present
+      summary: Add a new documentset set to the engine
+      tags:
+        - set
+      x-codegen-request-body-name: body
+      x-openapi-router-controller: openapi_server.controllers.set_controller
+  /documentSet/{setId}:
+    delete:
+      operationId: delete_set
+      parameters:
+        - description: ID of a set
+          explode: false
+          in: path
+          name: setId
+          required: true
+          schema:
+            type: string
+          style: simple
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: OK
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The request was invalid JSON or missing some attributes
+        404:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The specified resource was not found
+      summary: delete the set
+      tags:
+        - set
+      x-openapi-router-controller: openapi_server.controllers.set_controller
+    get:
+      operationId: get_set
+      parameters:
+        - description: ID of a set
+          explode: false
+          in: path
+          name: setId
+          required: true
+          schema:
+            type: string
+          style: simple
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/documents'
+          description: Successful operation
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The request was invalid JSON or missing some attributes
+        404:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The specified resource was not found
+      summary: lists all documents in the set
+      tags:
+        - set
+      x-openapi-router-controller: openapi_server.controllers.set_controller
+    post:
+      description: Contents of the document in the body of the request. This should
+        be in plain text. The Content-Type header should be appropriately set to text/plain.
+      operationId: create_document
+      parameters:
+        - description: ID of a set
+          explode: false
+          in: path
+          name: setId
+          required: true
+          schema:
+            type: string
+          style: simple
+      requestBody:
+        content:
+          text/plain:
+            schema:
+              type: string
+        required: true
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: OK
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The request was invalid JSON or missing some attributes
+        404:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The specified resource was not found
+        409:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: Conflicting element already present
+      summary: Add a new document to the document set
+      tags:
+        - document
+      x-codegen-request-body-name: body
+      x-openapi-router-controller: openapi_server.controllers.document_controller
+  /documentSet/{setId}/{id}:
+    delete:
+      operationId: delete_document
+      parameters:
+        - description: ID of a set
+          explode: false
+          in: path
+          name: setId
+          required: true
+          schema:
+            type: string
+          style: simple
+        - description: ID of a document
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          style: simple
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: OK
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The request was invalid JSON or missing some attributes
+        404:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The specified resource was not found
+      summary: delete the set
+      tags:
+        - document
+      x-openapi-router-controller: openapi_server.controllers.document_controller
+    get:
+      operationId: get_document
+      parameters:
+        - description: ID of a set
+          explode: false
+          in: path
+          name: setId
+          required: true
+          schema:
+            type: string
+          style: simple
+        - description: ID of a document
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          style: simple
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/document'
+          description: Successful operation
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The request was invalid JSON or missing some attributes
+        404:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The specified resource was not found
+      summary: get document from set
+      tags:
+        - document
+      x-openapi-router-controller: openapi_server.controllers.document_controller
+components:
+  parameters:
+    id:
+      description: ID of a document
+      explode: false
+      in: path
+      name: id
+      required: true
+      schema:
+        type: string
+      style: simple
+    setId:
+      description: ID of a set
+      explode: false
+      in: path
+      name: setId
+      required: true
+      schema:
+        type: string
+      style: simple
+  responses:
+    notFound:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/httpStatus'
+      description: The specified resource was not found
+    unauthorized:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/httpStatus'
+      description: Unauthorized
+    ok:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/httpStatus'
+      description: OK
+    conflict:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/httpStatus'
+      description: Conflicting element already present
+    malformedRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/httpStatus'
+      description: The request was invalid JSON or missing some attributes
+  schemas:
+    idBase:
+      description: Base for the id schema of an object.
+      example: 42
+      type: integer
+      x-primary-key: true
+      x-autoincrement: true
+    nameBase:
+      description: The name of the object.
+      example: Object 1.
+      type: string
+      x-index: true
+    httpStatus:
+      description: This object describes an HTTP status
+      example:
+        code: 140
+        message: message
+      properties:
+        code:
+          description: HTTP status code
+          format: int32
+          maximum: 600
+          minimum: 100
+          type: integer
+        message:
+          description: HTTP status message
+          type: string
+      required:
+        - code
+        - message
+      type: object
+    newDocumentSet:
+      description: schema for a new "set of Documents"
+      properties:
+        name:
+          allOf:
+            - $ref: '#/components/schemas/nameBase'
+            - description: Name of the Document set
+      required:
+        - name
+      type: object
+    documentSet:
+      description: schema for a set of Documents
+      example:
+        name: ""
+        id: ""
+      properties:
+        name:
+          allOf:
+            - $ref: '#/components/schemas/nameBase'
+            - description: Name of the Document set
+        id:
+          allOf:
+            - $ref: '#/components/schemas/idBase'
+            - description: Unique identifier for a document set
+      required:
+        - id
+      type: object
+      x-tablename: document_sets
+    documentSets:
+      description: an object representing multiple document sets
+      example:
+        documentSets:
+          - name: ""
+            id: ""
+          - name: ""
+            id: ""
+      properties:
+        documentSets:
+          description: array of document sets
+          items:
+            $ref: '#/components/schemas/documentSet'
+          type: array
+      required:
+        - documentSets
+      type: object
+    document:
+      description: A document to review
+      example:
+        name: ""
+        id: ""
+        content: content
+      properties:
+        name:
+          allOf:
+            - $ref: '#/components/schemas/nameBase'
+            - description: Name of the Document
+        id:
+          allOf:
+            - $ref: '#/components/schemas/idBase'
+            - description: Unique identifier for a Document
+        content:
+          type: string
+      required:
+        - id
+      type: object
+      x-tablename: documents
+    documents:
+      description: an object representing multiple documents
+      example:
+        documents:
+          - name: ""
+            id: ""
+            content: content
+          - name: ""
+            id: ""
+            content: content
+      properties:
+        documents:
+          description: array of documents
+          items:
+            $ref: '#/components/schemas/document'
+          type: array
+      required:
+        - documents
+      type: object
