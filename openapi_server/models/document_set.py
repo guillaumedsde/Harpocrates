@@ -1,9 +1,12 @@
 # coding: utf-8
 
 from __future__ import absolute_import
+from datetime import date, datetime  # noqa: F401
 
-from openapi_server import util
+from typing import List, Dict  # noqa: F401
+
 from openapi_server.models.base_model_ import Model
+from openapi_server import util
 
 
 class DocumentSet(Model):
@@ -62,6 +65,8 @@ class DocumentSet(Model):
         :param name: The name of this DocumentSet.
         :type name: str
         """
+        if name is None:
+            raise ValueError("Invalid value for `name`, must not be `None`")  # noqa: E501
 
         self._name = name
 
@@ -83,7 +88,5 @@ class DocumentSet(Model):
         :param id: The id of this DocumentSet.
         :type id: int
         """
-        if id is None:
-            raise ValueError("Invalid value for `id`, must not be `None`")  # noqa: E501
 
         self._id = id

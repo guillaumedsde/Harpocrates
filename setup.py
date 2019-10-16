@@ -1,5 +1,6 @@
 # coding: utf-8
 
+import sys
 from setuptools import setup, find_packages
 
 NAME = "openapi_server"
@@ -35,3 +36,4 @@ setup(
     This is an API for predictive analytics engines
     """
 )
+

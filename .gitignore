@@ -69,3 +69,6 @@ target/
 
 # Flask intance directory
 instance/
+
+# OpenAPI generator
+git_push.sh
