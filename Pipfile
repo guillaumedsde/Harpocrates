@@ -11,6 +11,8 @@ pluggy = ">=0.3.1"
 py = ">=1.4.31"
 randomize = ">=0.13"
 Flask-Testing = "==0.6.1"
+python-dotenv = "*"
+tox-pipenv-install = "*"
 
 [packages]
 connexion = ">=2.0.2"
@@ -19,6 +21,7 @@ python-dateutil = ">=2.6.0"
 flask-sqlalchemy = "*"
 sqlalchemy = "*"
 openapi-sqlalchemy = "*"
+marshmallow-sqlalchemy = "*"
 
 [requires]
 python_version = "3.7"
