@@ -30,17 +30,20 @@ paths:
         - set
       summary: Add a new documentset set to the engine
       operationId: create_set
-      x-codegen-request-body-name: new_set
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/newDocumentSet"
+              $ref: "#/components/schemas/documentSet"
         description: documentSet descriptor that needs to be added to the engine
         required: true
       responses:
         "200":
-          $ref: "#/components/responses/ok"
+          description: The created document set Object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/documentSet"
         "400":
           $ref: "#/components/responses/malformedRequest"
         "409":
@@ -70,7 +73,6 @@ paths:
       summary: Add a new document to the document set
       description: Contents of the document in the body of the request. This should be in plain text. The Content-Type header should be appropriately set to text/plain.
       operationId: create_document
-      x-codegen-request-body-name: new_document
       parameters:
         - $ref: "#/components/parameters/setId"
       requestBody:
@@ -102,7 +104,7 @@ paths:
           $ref: "#/components/responses/malformedRequest"
         "404":
           $ref: "#/components/responses/notFound"
-  "/documentSet/{setId}/{documentId}":
+  "/documentSet/{setId}/{id}":
     get:
       summary: get document from set
       operationId: get_document
@@ -110,7 +112,7 @@ paths:
         - document
       parameters:
         - $ref: "#/components/parameters/setId"
-        - $ref: "#/components/parameters/documentId"
+        - $ref: "#/components/parameters/id"
       responses:
         "200":
           description: Successful operation
@@ -129,7 +131,7 @@ paths:
       operationId: delete_document
       parameters:
         - $ref: "#/components/parameters/setId"
-        - $ref: "#/components/parameters/documentId"
+        - $ref: "#/components/parameters/id"
       responses:
         "200":
           $ref: "#/components/responses/ok"
@@ -195,7 +197,7 @@ paths:
   #         $ref: "#/components/responses/notFound"
   #       "409":
   #         $ref: "#/components/responses/conflict"
-  # "/documentSet/{setId}/{documentId}/sensitivities":
+  # "/documentSet/{setId}/{id}/sensitivities":
   #   get:
   #     tags:
   #       - document
@@ -203,7 +205,7 @@ paths:
   #     operationId: get_document_sensitivities
   #     parameters:
   #       - $ref: "#/components/parameters/setId"
-  #       - $ref: "#/components/parameters/documentId"
+  #       - $ref: "#/components/parameters/id"
   #     responses:
   #       "200":
   #         description: successful operation
@@ -217,7 +219,7 @@ paths:
   #         $ref: "#/components/responses/notFound"
   #       "409":
   #         $ref: "#/components/responses/conflict"
-  # "/documentSet/{setId}/{documentId}/{reviewerid}/sensitivities":
+  # "/documentSet/{setId}/{id}/{reviewerid}/sensitivities":
   #   post:
   #     tags:
   #       - document
@@ -225,7 +227,7 @@ paths:
   #     operationId: post_document_sensitivities
   #     parameters:
   #       - $ref: "#/components/parameters/setId"
-  #       - $ref: "#/components/parameters/documentId"
+  #       - $ref: "#/components/parameters/id"
   #       - $ref: "#/components/parameters/reviewerId"
   #     requestBody:
   #       content:
@@ -242,7 +244,7 @@ paths:
   #         $ref: "#/components/responses/notFound"
   #       "409":
   #         $ref: "#/components/responses/conflict"
-  # "/documentSet/{setId}/{documentId}/contents":
+  # "/documentSet/{setId}/{id}/contents":
   #   get:
   #     tags:
   #       - document
@@ -250,7 +252,7 @@ paths:
   #     operationId: get_document
   #     parameters:
   #       - $ref: "#/components/parameters/setId"
-  #       - $ref: "#/components/parameters/documentId"
+  #       - $ref: "#/components/parameters/id"
   #     responses:
   #       "200":
   #         $ref: "#/components/responses/ok"
@@ -260,7 +262,7 @@ paths:
   #         $ref: "#/components/responses/notFound"
   #       "409":
   #         $ref: "#/components/responses/conflict"
-  # "/documentSet/{setId}/{documentId}/reviewingTime":
+  # "/documentSet/{setId}/{id}/reviewingTime":
   #   get:
   #     tags:
   #       - document
@@ -268,7 +270,7 @@ paths:
   #     operationId: get_document_estimated_review_time
   #     parameters:
   #       - $ref: "#/components/parameters/setId"
-  #       - $ref: "#/components/parameters/documentId"
+  #       - $ref: "#/components/parameters/id"
   #     responses:
   #       "200":
   #         description: successful operation
@@ -282,7 +284,7 @@ paths:
   #         $ref: "#/components/responses/notFound"
   #       "409":
   #         $ref: "#/components/responses/conflict"
-  # "/documentSet/{setId}/{documentId}/{reviewerid}/reviewingTime":
+  # "/documentSet/{setId}/{id}/{reviewerid}/reviewingTime":
   #   post:
   #     tags:
   #       - document
@@ -290,7 +292,7 @@ paths:
   #     operationId: get_document_actual_review_time
   #     parameters:
   #       - $ref: "#/components/parameters/setId"
-  #       - $ref: "#/components/parameters/documentId"
+  #       - $ref: "#/components/parameters/id"
   #       - $ref: "#/components/parameters/reviewerId"
   #     requestBody:
   #       content:
@@ -311,9 +313,9 @@ servers:
   - url: /0.1.0
 components:
   parameters:
-    documentId:
+    id:
       in: path
-      name: documentId
+      name: id
       description: ID of a document
       required: true
       schema:
@@ -353,31 +355,42 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/httpStatus"
-    unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/httpStatus"
-    ok:
-      description: OK
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/httpStatus"
+            code:
+              value: 404
+            mesage:
+              value: The resource you requested does not exist
     conflict:
       description: Conflicting element already present
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/httpStatus"
+            code:
+              value: 409
+            mesage:
+              value: The resource you tried to create already exists
     malformedRequest:
       description: The request was invalid JSON or missing some attributes
       content:
         application/json:
           schema:
             $ref: "#/components/schemas/httpStatus"
+            code:
+              value: 400
+            mesage:
+              value: Your request was badly formulated
   schemas:
+    idBase:
+      type: integer
+      description: Base for the id schema of an object.
+      example: 42
+      x-primary-key: true
+      x-autoincrement: true
+    nameBase:
+      type: string
+      description: The name of the object.
+      example: Object 1.
+      x-index: true
     # Schema for error response body
     httpStatus:
       required:
@@ -395,29 +408,22 @@ components:
         message:
           type: string
           description: HTTP status message
-    newDocumentSet:
+
+    documentSet:
       type: object
-      description: schema for a new set of Documents "document set"
+      x-tablename: document_set
+      description: schema for a set of Documents
       required:
         - name
       properties:
         name:
-          type: string
-          description: Name of the document Set
-          example: FCC/1/400
-    documentSet:
-      allOf:
-        # extend newDocumentSet
-        - $ref: "#/components/schemas/newDocumentSet"
-        # add uid field specific to already created document sets
-        - type: object
-          description: schema for a set of Documents "document set"
-          required:
-            - uid
-          properties:
-            uid:
-              type: string
-              description: Unique ID of the document Set
+          allOf:
+            - "$ref": "#/components/schemas/nameBase"
+            - description: Name of the Document set
+        id:
+          allOf:
+            - "$ref": "#/components/schemas/idBase"
+            - description: Unique identifier for a document set
     documentSets:
       type: object
       description: an object representing multiple document sets
@@ -516,12 +522,20 @@ components:
     document:
       type: object
       description: A document to review
+      x-tablename: document
       required:
-        - documentId
+        - id
       properties:
-        documentId:
+        name:
+          allOf:
+            - "$ref": "#/components/schemas/nameBase"
+            - description: Name of the Document
+        id:
+          allOf:
+            - "$ref": "#/components/schemas/idBase"
+            - description: Unique identifier for a Document
+        content:
           type: string
-          description: Unique id for the document
     documents:
       type: object
       description: an object representing multiple documents
