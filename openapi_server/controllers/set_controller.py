@@ -1,13 +1,16 @@
 from http import HTTPStatus
-
 import connexion
+import six
 
-from openapi_server import db
+
+from openapi_server.models.document_set import DocumentSet  # noqa: E501
 from openapi_server.models.document_sets import DocumentSets  # noqa: E501
 from openapi_server.models.documents import Documents  # noqa: E501
 from openapi_server.models.http_status import HttpStatus  # noqa: E501
-from openapi_server.models.models import DocumentSet
-from openapi_server.models.new_document_set import NewDocumentSet  # noqa: E501
+from openapi_server import util, db
+
+from openapi_server.models.sqlalchemy import DocumentSet as DocumentSetSql
+from openapi_server.models.marshmallow import DocumentSetSchema
 
 
 def create_set(body):  # noqa: E501
@@ -15,26 +18,36 @@ def create_set(body):  # noqa: E501
 
      # noqa: E501
 
-    :param body: documentSet descriptor that needs to be added to the engine
-    :type body: dict | bytes
+    :param document_set: documentSet descriptor that needs to be added to the engine
+    :type document_set: dict | bytes
 
     :rtype: HttpStatus
     """
+
     if not connexion.request.is_json:
         return HTTPStatus.BAD_REQUEST
 
-    new_set = NewDocumentSet.from_dict(connexion.request.get_json())  # noqa: E501
+    document_set = DocumentSet.from_dict(connexion.request.get_json())  # noqa: E501
+
+    print(document_set)
 
     # check for conflicting Database entries
-    existing_document_set = db.session.query(DocumentSet).filter_by(name=new_set.name).one_or_none()
+    # existing_document_set = db.session.query(DocumentSet).filter_by(Docname=new_document_set.name).one_or_none()
+    # existing_document_set = db.session.query(exists().where(SomeObject.field==value))
+    existing_document_set = (
+        db.session.query(DocumentSetSql.name).filter_by(name=document_set.name).scalar()
+        is not None
+    )
     if existing_document_set:
         return HTTPStatus.CONFLICT
 
+    document_set_sql = DocumentSetSql(name=document_set.name)
+
     # Add the document set to the database
-    db.session.add(new_set)
+    db.session.add(document_set_sql)
     db.session.commit()
 
-    return new_set
+    return DocumentSetSchema().dump(document_set_sql)
 
 
 def delete_set(set_id):  # noqa: E501
@@ -47,7 +60,7 @@ def delete_set(set_id):  # noqa: E501
 
     :rtype: HttpStatus
     """
-    return 'do some magic!'
+    return "do some magic!"
 
 
 def get_set(set_id):  # noqa: E501
@@ -60,7 +73,7 @@ def get_set(set_id):  # noqa: E501
 
     :rtype: Documents
     """
-    return 'do some magic!'
+    return "do some magic!"
 
 
 def get_sets():  # noqa: E501
@@ -71,4 +84,4 @@ def get_sets():  # noqa: E501
 
     :rtype: DocumentSets
     """
-    return 'do some magic!'
+    return "do some magic!"
