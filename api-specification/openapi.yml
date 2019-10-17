@@ -58,7 +58,7 @@ paths:
         - $ref: "#/components/parameters/setId"
       responses:
         "200":
-          description: Successful operation
+          description: Successfully got list of documents in set
           content:
             application/json:
               schema:
@@ -83,7 +83,11 @@ paths:
         required: true
       responses:
         "200":
-          $ref: "#/components/responses/ok"
+          description: Successfully created document in set
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/document"
         "400":
           $ref: "#/components/responses/malformedRequest"
         "404":
@@ -99,7 +103,11 @@ paths:
         - $ref: "#/components/parameters/setId"
       responses:
         "200":
-          $ref: "#/components/responses/ok"
+          description: Successfully deleted the document set
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/documentSet"
         "400":
           $ref: "#/components/responses/malformedRequest"
         "404":
@@ -115,7 +123,7 @@ paths:
         - $ref: "#/components/parameters/id"
       responses:
         "200":
-          description: Successful operation
+          description: Successfully got document from set
           content:
             application/json:
               schema:
@@ -134,7 +142,11 @@ paths:
         - $ref: "#/components/parameters/id"
       responses:
         "200":
-          $ref: "#/components/responses/ok"
+          description: Successfully deleted document in the set
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/document"
         "400":
           $ref: "#/components/responses/malformedRequest"
         "404":
