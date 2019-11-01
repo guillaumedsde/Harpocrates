@@ -67,4 +67,11 @@ def get_sets():  # noqa: E501
 
     :rtype: DocumentSets
     """
-    return "do some magic!"
+
+    doc_set_list = []
+    # TODO don't return service indices
+    for index in es.indices.get("*"):
+        doc_set = DocumentSet(name=index)
+        doc_set_list.append(doc_set)
+    doc_sets = DocumentSets(document_sets=doc_set_list)
+    return doc_sets
