@@ -63,12 +63,6 @@ target/
 #Ipython Notebook
 .ipynb_checkpoints
 
-# IDE configurations
-.vscode/
 .idea/
+.vscode/
 
-# Flask intance directory
-instance/
-
-# OpenAPI generator
-git_push.sh

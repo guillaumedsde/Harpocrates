@@ -3,25 +3,31 @@ import os
 import click
 import connexion
 from flask.cli import with_appcontext
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
+
+# from flask_sqlalchemy import SQLAlchemy
+# from flask_migrate import Migrate
+
+from elasticsearch import Elasticsearch
 
 from openapi_server import encoder
 
 __version__ = (0, 1, 0, "dev")
 
-db = SQLAlchemy()
+# db = SQLAlchemy()
 
+es = Elasticsearch()
 
 
 def create_app(test_config=None):
-    connexion_app = connexion.App(__name__, specification_dir="./openapi/", options={"swagger_ui": False})
+    connexion_app = connexion.App(
+        __name__, specification_dir="./openapi/", options={"swagger_ui": False}
+    )
 
     connexion_app.add_api(
         "openapi.yaml",
         arguments={"title": "REST API for predictive analtyics"},
         pythonic_params=True,
-        strict_validation=True
+        strict_validation=True,
     )
 
     app = connexion_app.app
@@ -52,10 +58,10 @@ def create_app(test_config=None):
     #     app.config.update(test_config)
 
     # initialize Flask-SQLAlchemy and the init-db command
-    db.init_app(app)
-    app.cli.add_command(init_db_command)
+    # db.init_app(app)
+    # app.cli.add_command(init_db_command)
 
-    migrate = Migrate(app, db)
+    # migrate = Migrate(app, db)
 
     return app
 
@@ -66,9 +72,9 @@ def init_db():
     db.session.commit()
 
 
-@click.command("init-db")
-@with_appcontext
-def init_db_command():
-    """Clear existing data and create new tables."""
-    init_db()
-    click.echo("Initialized the database.")
+# @click.command("init-db")
+# @with_appcontext
+# def init_db_command():
+#     """Clear existing data and create new tables."""
+#     init_db()
+#     click.echo("Initialized the database.")

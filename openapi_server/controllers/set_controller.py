@@ -1,16 +1,13 @@
-from http import HTTPStatus
 import connexion
 import six
-
+from http import HTTPStatus
 
 from openapi_server.models.document_set import DocumentSet  # noqa: E501
 from openapi_server.models.document_sets import DocumentSets  # noqa: E501
 from openapi_server.models.documents import Documents  # noqa: E501
 from openapi_server.models.http_status import HttpStatus  # noqa: E501
-from openapi_server import util, db
-
-from openapi_server.models.sqlalchemy import DocumentSet as DocumentSetSql
-from openapi_server.models.marshmallow import DocumentSetSchema
+from openapi_server.models.elastic_document_set import BODY
+from openapi_server import util, es
 
 
 def create_set(body):  # noqa: E501
@@ -21,33 +18,17 @@ def create_set(body):  # noqa: E501
     :param document_set: documentSet descriptor that needs to be added to the engine
     :type document_set: dict | bytes
 
-    :rtype: HttpStatus
+    :rtype: DocumentSet
     """
-
     if not connexion.request.is_json:
         return HTTPStatus.BAD_REQUEST
 
     document_set = DocumentSet.from_dict(connexion.request.get_json())  # noqa: E501
 
-    print(document_set)
+    # TODO error handling
+    es.indices.create(index=document_set.name, body=BODY)
 
-    # check for conflicting Database entries
-    # existing_document_set = db.session.query(DocumentSet).filter_by(Docname=new_document_set.name).one_or_none()
-    # existing_document_set = db.session.query(exists().where(SomeObject.field==value))
-    existing_document_set = (
-        db.session.query(DocumentSetSql.name).filter_by(name=document_set.name).scalar()
-        is not None
-    )
-    if existing_document_set:
-        return HTTPStatus.CONFLICT
-
-    document_set_sql = DocumentSetSql(name=document_set.name)
-
-    # Add the document set to the database
-    db.session.add(document_set_sql)
-    db.session.commit()
-
-    return DocumentSetSchema().dump(document_set_sql)
+    return HTTPStatus.CREATED
 
 
 def delete_set(set_id):  # noqa: E501
@@ -58,7 +39,7 @@ def delete_set(set_id):  # noqa: E501
     :param set_id: ID of a set
     :type set_id: str
 
-    :rtype: HttpStatus
+    :rtype: DocumentSet
     """
     return "do some magic!"
 
@@ -73,7 +54,9 @@ def get_set(set_id):  # noqa: E501
 
     :rtype: Documents
     """
-    return "do some magic!"
+    res = es.search(index=set_id, body={"query": {"match_all": {}}})
+    print("Got %d Hits:" % res["hits"]["total"]["value"])
+    return res["hits"]["hits"]
 
 
 def get_sets():  # noqa: E501
