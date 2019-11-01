@@ -1,9 +1,10 @@
 import connexion
 import six
+from http import HTTPStatus
 
 from openapi_server.models.document import Document  # noqa: E501
 from openapi_server.models.http_status import HttpStatus  # noqa: E501
-from openapi_server import util
+from openapi_server import util, es
 
 
 def create_document(set_id, body):  # noqa: E501
@@ -16,36 +17,41 @@ def create_document(set_id, body):  # noqa: E501
     :param body: 
     :type body: str
 
-    :rtype: None
+    :rtype: Document
     """
-    return 'do some magic!'
+
+    es_doc = {"body": body.decode()}
+    es.index(index=set_id, body=es_doc)
+    return HTTPStatus.CREATED
 
 
-def delete_document(set_id, id):  # noqa: E501
+def delete_document(set_id, doc_id):  # noqa: E501
     """delete the set
 
      # noqa: E501
 
     :param set_id: ID of a set
     :type set_id: str
-    :param id: ID of a document
-    :type id: str
+    :param doc_id: ID of a document
+    :type doc_id: str
 
-    :rtype: None
+    :rtype: Document
     """
-    return 'do some magic!'
+    return "do some magic!"
 
 
-def get_document(set_id, id):  # noqa: E501
+def get_document(set_id, doc_id):  # noqa: E501
     """get document from set
 
      # noqa: E501
 
     :param set_id: ID of a set
     :type set_id: str
-    :param id: ID of a document
-    :type id: str
+    :param doc_id: ID of a document
+    :type doc_id: str
 
     :rtype: Document
     """
-    return 'do some magic!'
+    res = es.get(index=set_id, doc_type="_doc", id=doc_id)
+
+    return res["_source"]
