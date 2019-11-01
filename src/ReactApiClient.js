@@ -5,7 +5,8 @@
 
 import { ApiClient } from "rest_api_for_predictive_analtyics";
 import { DocumentApi } from "rest_api_for_predictive_analtyics";
-import { SetApi } from "rest_api_for_predictive_analtyics";
+// import { SetApi } from "rest_api_for_predictive_analtyics";
+import SetApi from "./cicero-api-client/src/api/SetApi";
 
 class ReactApiClient extends ApiClient {
   callApi(
