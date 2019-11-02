@@ -304,15 +304,12 @@ components:
   schemas:
     idBase:
       description: Base for the id schema of an object.
-      example: 42
-      type: integer
-      x-primary-key: true
-      x-autoincrement: true
+      example: WaROKG4B0l9WO2IWoBnP
+      type: string
     nameBase:
       description: The name of the object.
-      example: Object 1.
+      example: Object 1
       type: string
-      x-index: true
     httpStatus:
       description: This object describes an HTTP status
       properties:
@@ -346,7 +343,6 @@ components:
       required:
       - name
       type: object
-      x-tablename: document_set
     documentSets:
       description: an object representing multiple document sets
       example:
@@ -384,7 +380,6 @@ components:
       required:
       - id
       type: object
-      x-tablename: document
     documents:
       description: an object representing multiple documents
       example:

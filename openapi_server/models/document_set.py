@@ -21,11 +21,11 @@ class DocumentSet(Model):
         :param name: The name of this DocumentSet.  # noqa: E501
         :type name: str
         :param id: The id of this DocumentSet.  # noqa: E501
-        :type id: int
+        :type id: str
         """
         self.openapi_types = {
             'name': str,
-            'id': int
+            'id': str
         }
 
         self.attribute_map = {
@@ -76,7 +76,7 @@ class DocumentSet(Model):
 
 
         :return: The id of this DocumentSet.
-        :rtype: int
+        :rtype: str
         """
         return self._id
 
@@ -86,7 +86,7 @@ class DocumentSet(Model):
 
 
         :param id: The id of this DocumentSet.
-        :type id: int
+        :type id: str
         """
 
         self._id = id

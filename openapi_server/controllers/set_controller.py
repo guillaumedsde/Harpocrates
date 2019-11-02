@@ -5,6 +5,7 @@ from http import HTTPStatus
 from openapi_server.models.document_set import DocumentSet  # noqa: E501
 from openapi_server.models.document_sets import DocumentSets  # noqa: E501
 from openapi_server.models.documents import Documents  # noqa: E501
+from openapi_server.models.document import Document
 from openapi_server.models.http_status import HttpStatus  # noqa: E501
 from openapi_server.models.elastic_document_set import BODY
 from openapi_server import util, es
@@ -55,8 +56,13 @@ def get_set(set_id):  # noqa: E501
     :rtype: Documents
     """
     res = es.search(index=set_id, body={"query": {"match_all": {}}})
-    print("Got %d Hits:" % res["hits"]["total"]["value"])
-    return res["hits"]["hits"]
+
+    document_list = []
+    for hit in res["hits"]["hits"]:
+        document = Document(id=hit["_id"], content=hit["_source"]["body"])
+        document_list.append(document)
+    documents = Documents(documents=document_list)
+    return documents
 
 
 def get_sets():  # noqa: E501
@@ -69,8 +75,9 @@ def get_sets():  # noqa: E501
     """
 
     doc_set_list = []
-    # TODO don't return service indices
     for index in es.indices.get("*"):
+        if index.startswith("."):
+            continue
         doc_set = DocumentSet(name=index)
         doc_set_list.append(doc_set)
     doc_sets = DocumentSets(document_sets=doc_set_list)
