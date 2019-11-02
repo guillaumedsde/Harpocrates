@@ -112,7 +112,7 @@ paths:
           $ref: "#/components/responses/malformedRequest"
         "404":
           $ref: "#/components/responses/notFound"
-  "/documentSet/{setId}/{id}":
+  "/documentSet/{setId}/{docId}":
     get:
       summary: get document from set
       operationId: get_document
@@ -120,7 +120,7 @@ paths:
         - document
       parameters:
         - $ref: "#/components/parameters/setId"
-        - $ref: "#/components/parameters/id"
+        - $ref: "#/components/parameters/docId"
       responses:
         "200":
           description: Successfully got document from set
@@ -139,7 +139,7 @@ paths:
       operationId: delete_document
       parameters:
         - $ref: "#/components/parameters/setId"
-        - $ref: "#/components/parameters/id"
+        - $ref: "#/components/parameters/docId"
       responses:
         "200":
           description: Successfully deleted document in the set
@@ -156,9 +156,9 @@ servers:
   - url: /0.1.0
 components:
   parameters:
-    id:
+    docId:
       in: path
-      name: id
+      name: docId
       description: ID of a document
       required: true
       schema:
@@ -205,16 +205,13 @@ components:
               value: Your request was badly formulated
   schemas:
     idBase:
-      type: integer
+      type: string
       description: Base for the id schema of an object.
-      example: 42
-      x-primary-key: true
-      x-autoincrement: true
+      example: "WaROKG4B0l9WO2IWoBnP"
     nameBase:
       type: string
       description: The name of the object.
-      example: Object 1.
-      x-index: true
+      example: Object 1
     # Schema for error response body
     httpStatus:
       required:
@@ -235,7 +232,6 @@ components:
 
     documentSet:
       type: object
-      x-tablename: document_set
       description: schema for a set of Documents
       required:
         - name
@@ -262,7 +258,6 @@ components:
     document:
       type: object
       description: A document to review
-      x-tablename: document
       required:
         - id
       properties:
