@@ -6,6 +6,7 @@ from flask.cli import with_appcontext
 
 # from flask_sqlalchemy import SQLAlchemy
 # from flask_migrate import Migrate
+from flask_cors import CORS
 
 from elasticsearch import Elasticsearch
 
@@ -31,6 +32,8 @@ def create_app(test_config=None):
     )
 
     app = connexion_app.app
+
+    CORS(app)
 
     app.json_encoder = encoder.JSONEncoder
 

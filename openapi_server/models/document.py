@@ -21,13 +21,13 @@ class Document(Model):
         :param name: The name of this Document.  # noqa: E501
         :type name: str
         :param id: The id of this Document.  # noqa: E501
-        :type id: int
+        :type id: str
         :param content: The content of this Document.  # noqa: E501
         :type content: str
         """
         self.openapi_types = {
             'name': str,
-            'id': int,
+            'id': str,
             'content': str
         }
 
@@ -79,7 +79,7 @@ class Document(Model):
 
 
         :return: The id of this Document.
-        :rtype: int
+        :rtype: str
         """
         return self._id
 
@@ -89,7 +89,7 @@ class Document(Model):
 
 
         :param id: The id of this Document.
-        :type id: int
+        :type id: str
         """
         if id is None:
             raise ValueError("Invalid value for `id`, must not be `None`")  # noqa: E501
