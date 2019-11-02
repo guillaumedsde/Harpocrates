@@ -25,8 +25,9 @@
     "prettier": "^1.18.2"
   },
   "dependencies": {
-    "react": "^16.10.2",
-    "react-dom": "^16.10.2",
+    "@reach/router": "^1.2.1",
+    "react": "^16.11.0",
+    "react-dom": "^16.11.0",
     "rest_api_for_predictive_analtyics": "file:../js-api-client"
   },
   "browserslist": [
