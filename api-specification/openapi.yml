@@ -1,6 +1,6 @@
 openapi: 3.0.2
 info:
-  description: This is the Rest API for the harpocrates application
+  description: This is the Rest API specification for the harpocrates application
   version: "0.1.0"
   title: Harpocrates API
 externalDocs:

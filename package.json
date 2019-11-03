@@ -1,7 +1,7 @@
 {
-  "name": "api-specification",
+  "name": "@harpocrates/api-specification",
   "version": "1.0.0",
-  "description": "This is a Swagger specification for an API for predictive analytics engines",
+  "description": "This is the Rest API specification for the harpocrates application",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
