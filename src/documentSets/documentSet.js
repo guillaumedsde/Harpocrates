@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 
-import HarpocratesApi from "@harpocrates/api-client";
+import { SetApi } from "@harpocrates/api-client";
+
+import DocumentUploadForm from "../documents/documentUploadForm";
 
 export default function DocumentSet(props) {
   const [documents, setDocuments] = useState([]);
 
-  var api = new HarpocratesApi.SetApi();
+  var api = new SetApi();
 
   useEffect(
     () => {
@@ -17,10 +19,14 @@ export default function DocumentSet(props) {
   );
 
   return (
-    <ul>
-      {documents.map(document => (
-        <li key={document.name}>{document.name}</li>
-      ))}
-    </ul>
+    <div>
+      <ul>
+        {documents.map(document => (
+          // FIXME document name is "NaN"
+          <li key={document.name}>{document.name}</li>
+        ))}
+      </ul>
+      <DocumentUploadForm documentSet={props.documentSetName} />
+    </div>
   );
 }
