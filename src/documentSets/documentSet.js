@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 
-var RestApiForPredictiveAnaltyics = require("rest_api_for_predictive_analtyics");
+import HarpocratesApi from "@harpocrates/api-client";
 
 export default function DocumentSet(props) {
   const [documents, setDocuments] = useState([]);
 
-  var api = new RestApiForPredictiveAnaltyics.SetApi();
+  var api = new HarpocratesApi.SetApi();
 
   useEffect(
     () => {

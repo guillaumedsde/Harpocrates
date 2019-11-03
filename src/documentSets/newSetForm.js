@@ -1,13 +1,11 @@
 import React, { useState } from "react";
 
-import { DocumentSet } from "rest_api_for_predictive_analtyics";
-
-var RestApiForPredictiveAnaltyics = require("rest_api_for_predictive_analtyics");
+import HarpocratesApi, { DocumentSet } from "@harpocrates/api-client";
 
 export default function NewSetForm() {
   const [newSetName, setNewSetName] = useState("");
 
-  var api = new RestApiForPredictiveAnaltyics.SetApi();
+  var api = new HarpocratesApi.SetApi();
 
   const handleSubmit = event => {
     event.preventDefault();
