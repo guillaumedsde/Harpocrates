@@ -27,6 +27,7 @@ def create_set(body):  # noqa: E501
     document_set = DocumentSet.from_dict(connexion.request.get_json())  # noqa: E501
 
     # TODO error handling
+    # FIXME block until index is actually created
     es.indices.create(index=document_set.name, body=BODY)
 
     return HTTPStatus.CREATED
