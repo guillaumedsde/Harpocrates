@@ -1,6 +1,6 @@
 /**
- * REST API for predictive analtyics
- * This is an API for predictive analytics engines
+ * Harpocrates API
+ * This is the Rest API specification for the harpocrates application
  *
  * The version of the OpenAPI document: 0.1.0
  * 

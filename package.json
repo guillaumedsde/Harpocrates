@@ -1,7 +1,7 @@
 {
   "name": "@harpocrates/api-client",
   "version": "0.1.0",
-  "description": "",
+  "description": "This is the Rest API for the harpocrates application",
   "license": "MIT",
   "main": "dist/index.js",
   "scripts": {

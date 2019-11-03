@@ -1,4 +1,4 @@
-# RestApiForPredictiveAnaltyics.DocumentSet
+# HarpocratesApi.DocumentSet
 
 ## Properties
 
