@@ -1,6 +1,6 @@
 /**
- * REST API for predictive analtyics
- * This is an API for predictive analytics engines
+ * Harpocrates API
+ * This is the Rest API specification for the harpocrates application
  *
  * The version of the OpenAPI document: 0.1.0
  * 
@@ -23,14 +23,14 @@ import SetApi from './api/SetApi';
 
 
 /**
-* This_is_an_API_for_predictive_analytics_engines.<br>
+* This_is_the_Rest_API_specification_for_the_harpocrates_application.<br>
 * The <code>index</code> module provides access to constructors for all the classes which comprise the public API.
 * <p>
 * An AMD (recommended!) or CommonJS application will generally do something equivalent to the following:
 * <pre>
-* var RestApiForPredictiveAnaltyics = require('index'); // See note below*.
-* var xxxSvc = new RestApiForPredictiveAnaltyics.XxxApi(); // Allocate the API class we're going to use.
-* var yyyModel = new RestApiForPredictiveAnaltyics.Yyy(); // Construct a model instance.
+* var HarpocratesApi = require('index'); // See note below*.
+* var xxxSvc = new HarpocratesApi.XxxApi(); // Allocate the API class we're going to use.
+* var yyyModel = new HarpocratesApi.Yyy(); // Construct a model instance.
 * yyyModel.someProperty = 'someValue';
 * ...
 * var zzz = xxxSvc.doSomething(yyyModel); // Invoke the service.
@@ -42,8 +42,8 @@ import SetApi from './api/SetApi';
 * <p>
 * A non-AMD browser application (discouraged) might do something like this:
 * <pre>
-* var xxxSvc = new RestApiForPredictiveAnaltyics.XxxApi(); // Allocate the API class we're going to use.
-* var yyy = new RestApiForPredictiveAnaltyics.Yyy(); // Construct a model instance.
+* var xxxSvc = new HarpocratesApi.XxxApi(); // Allocate the API class we're going to use.
+* var yyy = new HarpocratesApi.Yyy(); // Construct a model instance.
 * yyyModel.someProperty = 'someValue';
 * ...
 * var zzz = xxxSvc.doSomething(yyyModel); // Invoke the service.

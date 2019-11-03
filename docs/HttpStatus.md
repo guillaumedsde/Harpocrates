@@ -1,4 +1,4 @@
-# RestApiForPredictiveAnaltyics.HttpStatus
+# HarpocratesApi.HttpStatus
 
 ## Properties
 

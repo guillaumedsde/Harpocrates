@@ -1,4 +1,4 @@
-# RestApiForPredictiveAnaltyics.SetApi
+# HarpocratesApi.SetApi
 
 All URIs are relative to *http://localhost/0.1.0*
 
@@ -20,10 +20,10 @@ Add a new documentset set to the engine
 ### Example
 
 ```javascript
-import RestApiForPredictiveAnaltyics from 'rest_api_for_predictive_analtyics';
+import HarpocratesApi from 'harpocrates_api';
 
-let apiInstance = new RestApiForPredictiveAnaltyics.SetApi();
-let documentSet = new RestApiForPredictiveAnaltyics.DocumentSet(); // DocumentSet | documentSet descriptor that needs to be added to the engine
+let apiInstance = new HarpocratesApi.SetApi();
+let documentSet = new HarpocratesApi.DocumentSet(); // DocumentSet | documentSet descriptor that needs to be added to the engine
 apiInstance.createSet(documentSet).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
 }, (error) => {
@@ -62,9 +62,9 @@ delete the set
 ### Example
 
 ```javascript
-import RestApiForPredictiveAnaltyics from 'rest_api_for_predictive_analtyics';
+import HarpocratesApi from 'harpocrates_api';
 
-let apiInstance = new RestApiForPredictiveAnaltyics.SetApi();
+let apiInstance = new HarpocratesApi.SetApi();
 let setId = "setId_example"; // String | ID of a set
 apiInstance.deleteSet(setId).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -104,9 +104,9 @@ lists all documents in the set
 ### Example
 
 ```javascript
-import RestApiForPredictiveAnaltyics from 'rest_api_for_predictive_analtyics';
+import HarpocratesApi from 'harpocrates_api';
 
-let apiInstance = new RestApiForPredictiveAnaltyics.SetApi();
+let apiInstance = new HarpocratesApi.SetApi();
 let setId = "setId_example"; // String | ID of a set
 apiInstance.getSet(setId).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -146,9 +146,9 @@ List all documentsets known by the engine
 ### Example
 
 ```javascript
-import RestApiForPredictiveAnaltyics from 'rest_api_for_predictive_analtyics';
+import HarpocratesApi from 'harpocrates_api';
 
-let apiInstance = new RestApiForPredictiveAnaltyics.SetApi();
+let apiInstance = new HarpocratesApi.SetApi();
 apiInstance.getSets().then((data) => {
   console.log('API called successfully. Returned data: ' + data);
 }, (error) => {
