@@ -1,11 +1,11 @@
 openapi: 3.0.2
 info:
-  description: This is an API for predictive analytics engines
+  description: This is the Rest API for the harpocrates application
   version: "0.1.0"
-  title: REST API for predictive analtyics
+  title: Harpocrates API
 externalDocs:
   description: API documentation
-  url: https://visualising-sensitivity-classification-features.gitlab.io/api-specification/
+  url: https://harpocrates-app.gitlab.io/api-specification
 tags:
   - name: set
     description: Everything about documentsets
