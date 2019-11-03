@@ -28,7 +28,8 @@
     "@harpocrates/api-client": "^0.1.0",
     "@reach/router": "^1.2.1",
     "react": "^16.11.0",
-    "react-dom": "^16.11.0"
+    "react-dom": "^16.11.0",
+    "react-dropzone": "^10.1.10"
   },
   "browserslist": [
     "last 2 Chrome versions",

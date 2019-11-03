@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 
 import { Link } from "@reach/router";
 
-import HarpocratesApi from "@harpocrates/api-client";
+import { SetApi } from "@harpocrates/api-client";
 
 export default function DocumentSetList() {
   const [documentSets, setDocumentSets] = useState([]);
 
-  var api = new HarpocratesApi.SetApi();
+  var api = new SetApi();
 
   useEffect(
     () => {

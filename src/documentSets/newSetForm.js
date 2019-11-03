@@ -1,17 +1,19 @@
 import React, { useState } from "react";
 
-import HarpocratesApi, { DocumentSet } from "@harpocrates/api-client";
+import { navigate } from "@reach/router";
+
+import { SetApi, DocumentSet } from "@harpocrates/api-client";
 
 export default function NewSetForm() {
   const [newSetName, setNewSetName] = useState("");
 
-  var api = new HarpocratesApi.SetApi();
+  var api = new SetApi();
 
   const handleSubmit = event => {
     event.preventDefault();
     const newDocumentSet = new DocumentSet(newSetName);
     // TODO error handling
-    api.createSet(newDocumentSet);
+    api.createSet(newDocumentSet).then(navigate("documentSet/" + newSetName));
   };
 
   return (
