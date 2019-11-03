@@ -1,11 +1,11 @@
 {
-  "name": "tmp",
-  "version": "1.0.0",
+  "name": "@harpocrates/frontend",
+  "version": "0.1.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "parcel src/index.html",
-    "build": "parcel build src/index.html",
+    "dev": "npx parcel src/index.html",
+    "build": "npx parcel build src/index.html",
     "test": "echo \"Error: no test specified\" && exit 1",
     "format": "prettier \"src/**/*.{js,jsx,html}\" --write",
     "lint": "eslint \"src/**/*.{js,jsx}\" --quiet"
@@ -25,10 +25,10 @@
     "prettier": "^1.18.2"
   },
   "dependencies": {
+    "@harpocrates/api-client": "^0.1.0",
     "@reach/router": "^1.2.1",
     "react": "^16.11.0",
-    "react-dom": "^16.11.0",
-    "rest_api_for_predictive_analtyics": "file:../js-api-client"
+    "react-dom": "^16.11.0"
   },
   "browserslist": [
     "last 2 Chrome versions",
