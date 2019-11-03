@@ -1,4 +1,4 @@
-# harpocrates_api
+# Harpocrates API Client
 
 HarpocratesApi - JavaScript client for harpocrates_api
 This is the Rest API specification for the harpocrates application
