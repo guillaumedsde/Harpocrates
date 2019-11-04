@@ -60,7 +60,7 @@ def get_set(set_id):  # noqa: E501
 
     document_list = []
     for hit in res["hits"]["hits"]:
-        document = Document(id=hit["_id"], content=hit["_source"]["body"])
+        document = Document(document_id=hit["_id"], content=hit["_source"]["body"])
         document_list.append(document)
     documents = Documents(documents=document_list)
     return documents

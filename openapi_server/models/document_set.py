@@ -15,26 +15,26 @@ class DocumentSet(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, name=None, id=None):  # noqa: E501
+    def __init__(self, name=None, set_id=None):  # noqa: E501
         """DocumentSet - a model defined in OpenAPI
 
         :param name: The name of this DocumentSet.  # noqa: E501
         :type name: str
-        :param id: The id of this DocumentSet.  # noqa: E501
-        :type id: str
+        :param set_id: The set_id of this DocumentSet.  # noqa: E501
+        :type set_id: str
         """
         self.openapi_types = {
             'name': str,
-            'id': str
+            'set_id': str
         }
 
         self.attribute_map = {
             'name': 'name',
-            'id': 'id'
+            'set_id': 'setId'
         }
 
         self._name = name
-        self._id = id
+        self._set_id = set_id
 
     @classmethod
     def from_dict(cls, dikt) -> 'DocumentSet':
@@ -71,22 +71,22 @@ class DocumentSet(Model):
         self._name = name
 
     @property
-    def id(self):
-        """Gets the id of this DocumentSet.
+    def set_id(self):
+        """Gets the set_id of this DocumentSet.
 
 
-        :return: The id of this DocumentSet.
+        :return: The set_id of this DocumentSet.
         :rtype: str
         """
-        return self._id
+        return self._set_id
 
-    @id.setter
-    def id(self, id):
-        """Sets the id of this DocumentSet.
+    @set_id.setter
+    def set_id(self, set_id):
+        """Sets the set_id of this DocumentSet.
 
 
-        :param id: The id of this DocumentSet.
-        :type id: str
+        :param set_id: The set_id of this DocumentSet.
+        :type set_id: str
         """
 
-        self._id = id
+        self._set_id = set_id

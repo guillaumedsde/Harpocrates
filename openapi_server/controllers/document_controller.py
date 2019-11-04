@@ -54,4 +54,6 @@ def get_document(set_id, doc_id):  # noqa: E501
     """
     res = es.get(index=set_id, doc_type="_doc", id=doc_id)
 
-    return res["_source"]
+    document = Document(document_id=res["_id"], content=res["_source"]["body"])
+
+    return document

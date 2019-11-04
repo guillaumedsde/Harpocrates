@@ -22,10 +22,10 @@ REQUIRES = [
 setup(
     name=NAME,
     version=VERSION,
-    description="REST API for predictive analtyics",
+    description="Harpocrates API",
     author_email="",
     url="",
-    keywords=["OpenAPI", "REST API for predictive analtyics"],
+    keywords=["OpenAPI", "Harpocrates API"],
     install_requires=REQUIRES,
     packages=find_packages(),
     package_data={'': ['openapi/openapi.yaml']},
@@ -33,7 +33,7 @@ setup(
     entry_points={
         'console_scripts': ['openapi_server=openapi_server.__main__:main']},
     long_description="""\
-    This is an API for predictive analytics engines
+    This is the Rest API specification for the harpocrates application
     """
 )
 

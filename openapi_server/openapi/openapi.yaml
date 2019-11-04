@@ -1,13 +1,13 @@
 openapi: 3.0.2
 info:
-  description: This is an API for predictive analytics engines
-  title: REST API for predictive analtyics
-  version: 0.1.0
+  description: This is the Rest API specification for the harpocrates application
+  title: Harpocrates API
+  version: 0.1.1-1
 externalDocs:
   description: API documentation
-  url: https://visualising-sensitivity-classification-features.gitlab.io/api-specification/
+  url: https://harpocrates-app.gitlab.io/api-specification
 servers:
-- url: /0.1.0
+- url: /0.1.1
 tags:
 - description: Everything about documentsets
   name: set
@@ -330,13 +330,13 @@ components:
       description: schema for a set of Documents
       example:
         name: ""
-        id: ""
+        setId: ""
       properties:
         name:
           allOf:
           - $ref: '#/components/schemas/nameBase'
           - description: Name of the Document set
-        id:
+        setId:
           allOf:
           - $ref: '#/components/schemas/idBase'
           - description: Unique identifier for a document set
@@ -348,9 +348,9 @@ components:
       example:
         documentSets:
         - name: ""
-          id: ""
+          setId: ""
         - name: ""
-          id: ""
+          setId: ""
       properties:
         documentSets:
           description: array of document sets
@@ -364,31 +364,31 @@ components:
       description: A document to review
       example:
         name: ""
-        id: ""
+        documentId: ""
         content: content
       properties:
         name:
           allOf:
           - $ref: '#/components/schemas/nameBase'
           - description: Name of the Document
-        id:
+        documentId:
           allOf:
           - $ref: '#/components/schemas/idBase'
           - description: Unique identifier for a Document
         content:
           type: string
       required:
-      - id
+      - documentId
       type: object
     documents:
       description: an object representing multiple documents
       example:
         documents:
         - name: ""
-          id: ""
+          documentId: ""
           content: content
         - name: ""
-          id: ""
+          documentId: ""
           content: content
       properties:
         documents:
