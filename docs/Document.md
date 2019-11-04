@@ -6,6 +6,6 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **name** | **String** |  | [optional] 
 **documentId** | **String** |  | 
-**content** | **String** |  | [optional] 
+**content** | **String** | content of the document | [optional] 
 
 
