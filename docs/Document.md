@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **name** | **String** |  | [optional] 
-**id** | **String** |  | 
+**documentId** | **String** |  | 
 **content** | **String** |  | [optional] 
 
 

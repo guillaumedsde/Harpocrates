@@ -5,6 +5,6 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **name** | **String** |  | 
-**id** | **String** |  | [optional] 
+**setId** | **String** |  | [optional] 
 
 
