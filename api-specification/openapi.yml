@@ -1,7 +1,7 @@
 openapi: 3.0.2
 info:
   description: This is the Rest API specification for the harpocrates application
-  version: "0.1.0"
+  version: "0.1.1"
   title: Harpocrates API
 externalDocs:
   description: API documentation
@@ -79,7 +79,7 @@ paths:
         content:
           text/plain:
             schema:
-              type: string
+                    type: string
         required: true
       responses:
         "200":
@@ -240,7 +240,7 @@ components:
           allOf:
             - "$ref": "#/components/schemas/nameBase"
             - description: Name of the Document set
-        id:
+        setId:
           allOf:
             - "$ref": "#/components/schemas/idBase"
             - description: Unique identifier for a document set
@@ -259,13 +259,13 @@ components:
       type: object
       description: A document to review
       required:
-        - id
+        - documentId
       properties:
         name:
           allOf:
             - "$ref": "#/components/schemas/nameBase"
             - description: Name of the Document
-        id:
+        documentId:
           allOf:
             - "$ref": "#/components/schemas/idBase"
             - description: Unique identifier for a Document
