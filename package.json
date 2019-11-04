@@ -1,8 +1,8 @@
 {
   "name": "@harpocrates/api-client",
-  "version": "0.1.1",
-  "description": "This is the Rest API for the harpocrates application",
-  "license": "MIT",
+  "version": "0.1.1-1",
+  "description": "This_is_the_Rest_API_specification_for_the_harpocrates_application",
+  "license": "Unlicense",
   "main": "dist/index.js",
   "scripts": {
     "build": "babel src -d dist",

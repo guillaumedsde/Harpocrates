@@ -1,4 +1,4 @@
-# HarpocratesApi.HttpStatus
+# @HarpocratesApiClient.HttpStatus
 
 ## Properties
 
