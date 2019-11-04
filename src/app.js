@@ -4,6 +4,7 @@ import { Router, Link } from "@reach/router";
 import Home from "./home";
 import DocumentSets from "./documentSets/documentSets";
 import DocumentSet from "./documentSets/documentSet";
+import Document from "./documents/document";
 // import Document from "./document";
 
 const App = () => {
@@ -19,7 +20,7 @@ const App = () => {
         <Home path="/" />
         <DocumentSets path="documentSets" />
         <DocumentSet path="documentSet/:documentSetName" />
-        {/* <Document path="documentSet/:documentId" /> */}
+        <Document path="documentSet/:documentSetName/:documentId" />
       </Router>
     </React.StrictMode>
   );
