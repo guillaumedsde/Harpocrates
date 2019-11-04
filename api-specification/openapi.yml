@@ -1,7 +1,7 @@
 openapi: 3.0.2
 info:
   description: This is the Rest API specification for the harpocrates application
-  version: "0.1.1-1"
+  version: "0.2.0"
   title: Harpocrates API
 externalDocs:
   description: API documentation
@@ -151,9 +151,52 @@ paths:
           $ref: "#/components/responses/malformedRequest"
         "404":
           $ref: "#/components/responses/notFound"
-
+  "/documentSet/{setId}/{docId}/predictedClassification":
+    get:
+      summary: Get the predicted classification for the document
+      operationId: get_predicted_classification
+      tags:
+        - document
+      parameters:
+        - $ref: "#/components/parameters/setId"
+        - $ref: "#/components/parameters/docId"
+      responses:
+        "200":
+          description: Successfully got the predicted classification
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/predictedClassification"
+        "400":
+          $ref: "#/components/responses/malformedRequest"
+        "404":
+          $ref: "#/components/responses/notFound"
+  "/documentSet/{setId}/{docId}/predictedClassificationExplanation":
+    get:
+      summary: Get the explanation for the predicted classification of a document
+      operationId: get_predicted_classification_explanation
+      tags:
+        - document
+      parameters:
+        - $ref: "#/components/parameters/setId"
+        - $ref: "#/components/parameters/docId"
+      responses:
+        "200":
+          description: Successfully got the explanation for the predicted classification
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  explanations:
+                    allOf:
+                      - "$ref": "#/components/schemas/predictedClassificationExplanation"
+        "400":
+          $ref: "#/components/responses/malformedRequest"
+        "404":
+          $ref: "#/components/responses/notFound"
 servers:
-  - url: /0.1.1
+  - url: /0.2.0
 components:
   parameters:
     docId:
@@ -181,7 +224,7 @@ components:
             $ref: "#/components/schemas/httpStatus"
             code:
               value: 404
-            mesage:
+            message:
               value: The resource you requested does not exist
     conflict:
       description: Conflicting element already present
@@ -271,6 +314,7 @@ components:
             - description: Unique identifier for a Document
         content:
           type: string
+          description: content of the document
     documents:
       type: object
       description: an object representing multiple documents
@@ -282,3 +326,26 @@ components:
           description: array of documents
           items:
             $ref: "#/components/schemas/document"
+    predictedClassification:
+      type: object
+      description: The predicted Sensitivity (Sensitive or Not) of a document
+      required:
+        - sensitive
+      properties:
+        sensitive:
+          type: boolean
+          description: "true if the document is predicted to be sensitive, false otherwise"
+    predictedClassificationExplanation:
+      type: array
+      description: The explanation for the predicted sensitivity classification of a document as an array of features and their contribution to the explanation
+      items:
+        type: object
+        description: an object representing a feature that explains the classification
+        properties:
+          feature:
+            type: string
+            description: A feature of the text
+          value:
+            type: number
+            format: float
+            description: The contribution of that feature to the classification
