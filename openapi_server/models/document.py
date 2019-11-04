@@ -15,30 +15,30 @@ class Document(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, name=None, id=None, content=None):  # noqa: E501
+    def __init__(self, name=None, document_id=None, content=None):  # noqa: E501
         """Document - a model defined in OpenAPI
 
         :param name: The name of this Document.  # noqa: E501
         :type name: str
-        :param id: The id of this Document.  # noqa: E501
-        :type id: str
+        :param document_id: The document_id of this Document.  # noqa: E501
+        :type document_id: str
         :param content: The content of this Document.  # noqa: E501
         :type content: str
         """
         self.openapi_types = {
             'name': str,
-            'id': str,
+            'document_id': str,
             'content': str
         }
 
         self.attribute_map = {
             'name': 'name',
-            'id': 'id',
+            'document_id': 'documentId',
             'content': 'content'
         }
 
         self._name = name
-        self._id = id
+        self._document_id = document_id
         self._content = content
 
     @classmethod
@@ -74,27 +74,27 @@ class Document(Model):
         self._name = name
 
     @property
-    def id(self):
-        """Gets the id of this Document.
+    def document_id(self):
+        """Gets the document_id of this Document.
 
 
-        :return: The id of this Document.
+        :return: The document_id of this Document.
         :rtype: str
         """
-        return self._id
+        return self._document_id
 
-    @id.setter
-    def id(self, id):
-        """Sets the id of this Document.
+    @document_id.setter
+    def document_id(self, document_id):
+        """Sets the document_id of this Document.
 
 
-        :param id: The id of this Document.
-        :type id: str
+        :param document_id: The document_id of this Document.
+        :type document_id: str
         """
-        if id is None:
-            raise ValueError("Invalid value for `id`, must not be `None`")  # noqa: E501
+        if document_id is None:
+            raise ValueError("Invalid value for `document_id`, must not be `None`")  # noqa: E501
 
-        self._id = id
+        self._document_id = document_id
 
     @property
     def content(self):
