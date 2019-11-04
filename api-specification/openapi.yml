@@ -1,7 +1,7 @@
 openapi: 3.0.2
 info:
   description: This is the Rest API specification for the harpocrates application
-  version: "0.1.1"
+  version: "0.1.1-1"
   title: Harpocrates API
 externalDocs:
   description: API documentation
@@ -79,7 +79,7 @@ paths:
         content:
           text/plain:
             schema:
-                    type: string
+              type: string
         required: true
       responses:
         "200":
@@ -153,7 +153,7 @@ paths:
           $ref: "#/components/responses/notFound"
 
 servers:
-  - url: /0.1.0
+  - url: /0.1.1
 components:
   parameters:
     docId:
