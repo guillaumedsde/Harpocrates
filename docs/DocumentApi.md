@@ -1,6 +1,6 @@
-# HarpocratesApi.DocumentApi
+# @HarpocratesApiClient.DocumentApi
 
-All URIs are relative to *http://localhost/0.1.0*
+All URIs are relative to *http://localhost/0.1.1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -21,9 +21,9 @@ Contents of the document in the body of the request. This should be in plain tex
 ### Example
 
 ```javascript
-import HarpocratesApi from 'harpocrates_api';
+import @HarpocratesApiClient from '@harpocrates/api-client';
 
-let apiInstance = new HarpocratesApi.DocumentApi();
+let apiInstance = new @HarpocratesApiClient.DocumentApi();
 let setId = "setId_example"; // String | ID of a set
 let body = "body_example"; // String | 
 apiInstance.createDocument(setId, body).then((data) => {
@@ -65,9 +65,9 @@ delete the set
 ### Example
 
 ```javascript
-import HarpocratesApi from 'harpocrates_api';
+import @HarpocratesApiClient from '@harpocrates/api-client';
 
-let apiInstance = new HarpocratesApi.DocumentApi();
+let apiInstance = new @HarpocratesApiClient.DocumentApi();
 let setId = "setId_example"; // String | ID of a set
 let docId = "docId_example"; // String | ID of a document
 apiInstance.deleteDocument(setId, docId).then((data) => {
@@ -109,9 +109,9 @@ get document from set
 ### Example
 
 ```javascript
-import HarpocratesApi from 'harpocrates_api';
+import @HarpocratesApiClient from '@harpocrates/api-client';
 
-let apiInstance = new HarpocratesApi.DocumentApi();
+let apiInstance = new @HarpocratesApiClient.DocumentApi();
 let setId = "setId_example"; // String | ID of a set
 let docId = "docId_example"; // String | ID of a document
 apiInstance.getDocument(setId, docId).then((data) => {
