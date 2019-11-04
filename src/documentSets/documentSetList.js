@@ -17,16 +17,26 @@ export default function DocumentSetList() {
     },
     [] //dependencies
   );
-
-  return (
-    <div>
-      <ul>
-        {documentSets.map(set => (
-          <li key={set.name}>
-            <Link to={"/documentSet/" + set.name}>{set.name}</Link>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
+  // tell if no document Sets
+  if (documentSets.length == 0) {
+    return (
+      <div>
+        <p>No Document Sets</p>
+      </div>
+    );
+  }
+  // Otherwise display them
+  else {
+    return (
+      <div>
+        <ul>
+          {documentSets.map(set => (
+            <li key={set.name}>
+              <Link to={"/documentSet/" + set.name}>{set.name}</Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
 }
