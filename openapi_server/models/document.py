@@ -100,6 +100,7 @@ class Document(Model):
     def content(self):
         """Gets the content of this Document.
 
+        content of the document  # noqa: E501
 
         :return: The content of this Document.
         :rtype: str
@@ -110,6 +111,7 @@ class Document(Model):
     def content(self, content):
         """Sets the content of this Document.
 
+        content of the document  # noqa: E501
 
         :param content: The content of this Document.
         :type content: str

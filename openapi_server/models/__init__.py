@@ -8,3 +8,5 @@ from openapi_server.models.document_set import DocumentSet
 from openapi_server.models.document_sets import DocumentSets
 from openapi_server.models.documents import Documents
 from openapi_server.models.http_status import HttpStatus
+from openapi_server.models.inline_response200 import InlineResponse200
+from openapi_server.models.predicted_classification import PredictedClassification

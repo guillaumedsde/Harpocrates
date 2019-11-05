@@ -60,24 +60,4 @@ def create_app(test_config=None):
     #     # load the test config if passed in
     #     app.config.update(test_config)
 
-    # initialize Flask-SQLAlchemy and the init-db command
-    # db.init_app(app)
-    # app.cli.add_command(init_db_command)
-
-    # migrate = Migrate(app, db)
-
     return app
-
-
-def init_db():
-    db.drop_all()
-    db.create_all()
-    db.session.commit()
-
-
-# @click.command("init-db")
-# @with_appcontext
-# def init_db_command():
-#     """Clear existing data and create new tables."""
-#     init_db()
-#     click.echo("Initialized the database.")
