@@ -137,8 +137,9 @@ Class | Method | HTTP request | Description
  - [@HarpocratesApiClient.DocumentSets](docs/DocumentSets.md)
  - [@HarpocratesApiClient.Documents](docs/Documents.md)
  - [@HarpocratesApiClient.HttpStatus](docs/HttpStatus.md)
- - [@HarpocratesApiClient.InlineResponse200](docs/InlineResponse200.md)
  - [@HarpocratesApiClient.PredictedClassification](docs/PredictedClassification.md)
+ - [@HarpocratesApiClient.PredictedClassificationExplanation](docs/PredictedClassificationExplanation.md)
+ - [@HarpocratesApiClient.PredictedClassificationExplanationFeatures](docs/PredictedClassificationExplanationFeatures.md)
 
 
 ## Documentation for Authorization

@@ -15,8 +15,8 @@
 import ApiClient from "../ApiClient";
 import Document from '../model/Document';
 import HttpStatus from '../model/HttpStatus';
-import InlineResponse200 from '../model/InlineResponse200';
 import PredictedClassification from '../model/PredictedClassification';
+import PredictedClassificationExplanation from '../model/PredictedClassificationExplanation';
 
 /**
 * Document service.
@@ -255,7 +255,7 @@ export default class DocumentApi {
      * Get the explanation for the predicted classification of a document
      * @param {String} setId ID of a set
      * @param {String} docId ID of a document
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/InlineResponse200} and HTTP response
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/PredictedClassificationExplanation} and HTTP response
      */
     getPredictedClassificationExplanationWithHttpInfo(setId, docId) {
       let postBody = null;
@@ -282,7 +282,7 @@ export default class DocumentApi {
       let authNames = [];
       let contentTypes = [];
       let accepts = ['application/json'];
-      let returnType = InlineResponse200;
+      let returnType = PredictedClassificationExplanation;
       return this.apiClient.callApi(
         '/documentSet/{setId}/{docId}/predictedClassificationExplanation', 'GET',
         pathParams, queryParams, headerParams, formParams, postBody,
@@ -294,7 +294,7 @@ export default class DocumentApi {
      * Get the explanation for the predicted classification of a document
      * @param {String} setId ID of a set
      * @param {String} docId ID of a document
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/InlineResponse200}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/PredictedClassificationExplanation}
      */
     getPredictedClassificationExplanation(setId, docId) {
       return this.getPredictedClassificationExplanationWithHttpInfo(setId, docId)
