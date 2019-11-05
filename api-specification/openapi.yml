@@ -1,7 +1,7 @@
 openapi: 3.0.2
 info:
   description: This is the Rest API specification for the harpocrates application
-  version: "0.2.1"
+  version: "0.2.2"
   title: Harpocrates API
 externalDocs:
   description: API documentation
@@ -196,7 +196,7 @@ paths:
         "404":
           $ref: "#/components/responses/notFound"
 servers:
-  - url: /0.2.1
+  - url: /0.2.2
 components:
   parameters:
     docId:
@@ -336,8 +336,8 @@ components:
           type: boolean
           description: "true if the document is predicted to be sensitive, false otherwise"
         sensitivity:
-          type: number
-          format: integer
+          type: integer
+          format: int32
           description: Document sensitivity percentage
     predictedClassificationExplanation:
       type: array
