@@ -2,6 +2,14 @@ import React, { useEffect, useState } from "react";
 
 import { DocumentApi } from "@harpocrates/api-client";
 
+import LinearProgress from "@material-ui/core/LinearProgress";
+
+import Chip from "@material-ui/core/Chip";
+import Avatar from "@material-ui/core/Avatar";
+import CheckCircleIcon from "@material-ui/icons/CheckCircle";
+import WarningIcon from "@material-ui/icons/Warning";
+import { Box } from "@material-ui/core";
+
 export default function PredictedClassification(props) {
   const [predictedClassification, setPredictedClassification] = useState(null);
 
@@ -9,25 +17,52 @@ export default function PredictedClassification(props) {
 
   api.predictedClassification;
   // effect for getting document classification
-  useEffect(
-    () => {
-      api
-        .getPredictedClassification(props.documentSet, props.documentId)
-        .then(apiPredictedClassification => {
-          setPredictedClassification(apiPredictedClassification);
-        });
-    },
-    [] //dependencies
-  );
+  useEffect(() => {
+    api
+      .getPredictedClassification(props.documentSet, props.documentId)
+      .then(apiPredictedClassification => {
+        setPredictedClassification(apiPredictedClassification);
+      });
+  }, []);
+
+  if (predictedClassification != null) {
+    return (
+      <div>
+        <Box display="flex" mx={1}>
+          <Chip
+            label={`${
+              predictedClassification.sensitive
+                ? "Sensitive Document"
+                : "Non-sensitive document"
+            }`}
+            color={predictedClassification.sensitive ? "primary" : "default"}
+            icon={
+              predictedClassification.sensitive ? (
+                <WarningIcon />
+              ) : (
+                <CheckCircleIcon />
+              )
+            }
+          />
+          <Chip
+            avatar={
+              <Avatar>
+                <b>{`${predictedClassification.sensitivity}%`}</b>
+              </Avatar>
+            }
+            label="sensitive"
+            color={predictedClassification.sensitive ? "primary" : "default"}
+          />
+        </Box>
+      </div>
+    );
+  }
+
   return (
     <div>
-      {predictedClassification
-        ? `Prediction: ${
-            predictedClassification.sensitive
-              ? "Sensitive Document"
-              : "Non-sensitive document"
-          } (${predictedClassification.sensitivity}% sensitive)`
-        : "getting classification..."}
+      Evaluating document sensitivity...
+      <br />
+      <LinearProgress />
     </div>
   );
 }
