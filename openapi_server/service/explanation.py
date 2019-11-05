@@ -86,6 +86,6 @@ from openapi_server.service import CLASS_NAMES, SEED
 def lime_explanation(classifier, data):
     explainer = LimeTextExplainer(class_names=CLASS_NAMES)
     explanation = explainer.explain_instance(
-        text_instance=data, classifier_fn=classifier.predict_proba
+        text_instance=data, classifier_fn=classifier.predict_proba, num_features=10
     )
     return explanation.as_list()
