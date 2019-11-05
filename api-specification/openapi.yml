@@ -186,11 +186,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  explanations:
-                    allOf:
-                      - "$ref": "#/components/schemas/predictedClassificationExplanation"
+                $ref: "#/components/schemas/predictedClassificationExplanation"
         "400":
           $ref: "#/components/responses/malformedRequest"
         "404":
@@ -340,16 +336,20 @@ components:
           format: int32
           description: Document sensitivity percentage
     predictedClassificationExplanation:
-      type: array
-      description: The explanation for the predicted sensitivity classification of a document as an array of features and their contribution to the explanation
-      items:
-        type: object
-        description: an object representing a feature that explains the classification
-        properties:
-          feature:
-            type: string
-            description: A feature of the text
-          value:
-            type: number
-            format: float
-            description: The contribution of that feature to the classification
+      type: object
+      description: Object representing an explanation for a sensitivity prediction
+      properties:
+        features:
+          type: array
+          description: The explanation for the predicted sensitivity classification of a document as an array of features and their contribution to the explanation
+          items:
+            type: object
+            description: an object representing a feature that explains the classification
+            properties:
+              feature:
+                type: string
+                description: A feature of the text
+              weight:
+                type: number
+                format: float
+                description: The contribution of that feature to the classification
