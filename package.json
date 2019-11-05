@@ -25,11 +25,12 @@
     "prettier": "^1.18.2"
   },
   "dependencies": {
-    "@harpocrates/api-client": "^0.2.1",
+    "@harpocrates/api-client": "^0.2.2",
     "@reach/router": "^1.2.1",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
-    "react-dropzone": "^10.1.10"
+    "react-dropzone": "^10.1.10",
+    "react-highlight-words": "^0.16.0"
   },
   "browserslist": [
     "last 2 Chrome versions",

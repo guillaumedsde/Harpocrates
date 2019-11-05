@@ -13,7 +13,6 @@ export default function DocumentUploadForm(props) {
     reader.onload = () => {
       // Do whatever you want with the file contents
       const body = reader.result;
-      console.log(props);
       api.createDocument(props.documentSet, body);
     };
 
