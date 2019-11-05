@@ -1,6 +1,6 @@
 # @HarpocratesApiClient.DocumentApi
 
-All URIs are relative to *http://localhost/0.2.0*
+All URIs are relative to *http://localhost/0.2.1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
