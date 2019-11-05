@@ -2,12 +2,12 @@ openapi: 3.0.2
 info:
   description: This is the Rest API specification for the harpocrates application
   title: Harpocrates API
-  version: 0.1.1-1
+  version: 0.2.1
 externalDocs:
   description: API documentation
   url: https://harpocrates-app.gitlab.io/api-specification
 servers:
-- url: /0.1.1
+- url: /0.2.1
 tags:
 - description: Everything about documentsets
   name: set
@@ -262,6 +262,92 @@ paths:
       tags:
       - document
       x-openapi-router-controller: openapi_server.controllers.document_controller
+  /documentSet/{setId}/{docId}/predictedClassification:
+    get:
+      operationId: get_predicted_classification
+      parameters:
+      - description: ID of a set
+        explode: false
+        in: path
+        name: setId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: ID of a document
+        explode: false
+        in: path
+        name: docId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/predictedClassification'
+          description: Successfully got the predicted classification
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The request was invalid JSON or missing some attributes
+        404:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The specified resource was not found
+      summary: Get the predicted classification for the document
+      tags:
+      - document
+      x-openapi-router-controller: openapi_server.controllers.document_controller
+  /documentSet/{setId}/{docId}/predictedClassificationExplanation:
+    get:
+      operationId: get_predicted_classification_explanation
+      parameters:
+      - description: ID of a set
+        explode: false
+        in: path
+        name: setId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: ID of a document
+        explode: false
+        in: path
+        name: docId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+          description: Successfully got the explanation for the predicted classification
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The request was invalid JSON or missing some attributes
+        404:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The specified resource was not found
+      summary: Get the explanation for the predicted classification of a document
+      tags:
+      - document
+      x-openapi-router-controller: openapi_server.controllers.document_controller
 components:
   parameters:
     docId:
@@ -376,6 +462,7 @@ components:
           - $ref: '#/components/schemas/idBase'
           - description: Unique identifier for a Document
         content:
+          description: content of the document
           type: string
       required:
       - documentId
@@ -399,3 +486,41 @@ components:
       required:
       - documents
       type: object
+    predictedClassification:
+      description: The predicted Sensitivity (Sensitive or Not) of a document
+      example:
+        sensitive: true
+        sensitivity: 0.8008281904610115
+      properties:
+        sensitive:
+          description: true if the document is predicted to be sensitive, false otherwise
+          type: boolean
+        sensitivity:
+          description: Document sensitivity percentage
+          format: integer
+          type: number
+      required:
+      - sensitive
+      type: object
+    predictedClassificationExplanation:
+      description: The explanation for the predicted sensitivity classification of
+        a document as an array of features and their contribution to the explanation
+      items:
+        description: an object representing a feature that explains the classification
+        properties:
+          feature:
+            description: A feature of the text
+            type: string
+          value:
+            description: The contribution of that feature to the classification
+            format: float
+            type: number
+        type: object
+      type: array
+    inline_response_200:
+      example:
+        explanations: ""
+      properties:
+        explanations:
+          allOf:
+          - $ref: '#/components/schemas/predictedClassificationExplanation'
