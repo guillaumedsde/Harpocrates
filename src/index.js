@@ -18,8 +18,9 @@ import DocumentSet from './model/DocumentSet';
 import DocumentSets from './model/DocumentSets';
 import Documents from './model/Documents';
 import HttpStatus from './model/HttpStatus';
-import InlineResponse200 from './model/InlineResponse200';
 import PredictedClassification from './model/PredictedClassification';
+import PredictedClassificationExplanation from './model/PredictedClassificationExplanation';
+import PredictedClassificationExplanationFeatures from './model/PredictedClassificationExplanationFeatures';
 import DocumentApi from './api/DocumentApi';
 import SetApi from './api/SetApi';
 
@@ -93,16 +94,22 @@ export {
     HttpStatus,
 
     /**
-     * The InlineResponse200 model constructor.
-     * @property {module:model/InlineResponse200}
-     */
-    InlineResponse200,
-
-    /**
      * The PredictedClassification model constructor.
      * @property {module:model/PredictedClassification}
      */
     PredictedClassification,
+
+    /**
+     * The PredictedClassificationExplanation model constructor.
+     * @property {module:model/PredictedClassificationExplanation}
+     */
+    PredictedClassificationExplanation,
+
+    /**
+     * The PredictedClassificationExplanationFeatures model constructor.
+     * @property {module:model/PredictedClassificationExplanationFeatures}
+     */
+    PredictedClassificationExplanationFeatures,
 
     /**
     * The DocumentApi service constructor.

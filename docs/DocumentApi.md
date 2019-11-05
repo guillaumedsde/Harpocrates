@@ -192,7 +192,7 @@ No authorization required
 
 ## getPredictedClassificationExplanation
 
-> InlineResponse200 getPredictedClassificationExplanation(setId, docId)
+> PredictedClassificationExplanation getPredictedClassificationExplanation(setId, docId)
 
 Get the explanation for the predicted classification of a document
 
@@ -222,7 +222,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**InlineResponse200**](InlineResponse200.md)
+[**PredictedClassificationExplanation**](PredictedClassificationExplanation.md)
 
 ### Authorization
 
