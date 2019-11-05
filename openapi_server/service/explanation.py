@@ -1,5 +1,6 @@
-import eli5
-import shap
+# import eli5
+
+# import shap
 
 import sklearn
 
@@ -8,7 +9,7 @@ from lime.lime_text import LimeTextExplainer
 # from skater.core.explanations import Interpretation
 # from skater.model import InMemoryModel
 
-from sensitivity_classifier import CLASS_NAMES, SEED
+from openapi_server.service import CLASS_NAMES, SEED
 
 
 # def shap_kernel_explanation(classifier, train_data, test_data):
@@ -54,16 +55,19 @@ from sensitivity_classifier import CLASS_NAMES, SEED
 #     print(interpreter.feature_importance.feature_importance(CLASS_NAMES, model))
 
 
-def eli5_explanation(trained_classifier, data):
+# def eli5_explanation(trained_classifier, data):
 
-    explanation = eli5.sklearn.explain_prediction.explain_prediction_sklearn(
-        trained_classifier.named_steps["clf"],
-        data,
-        vec=trained_classifier.named_steps["vect"],
-        target_names=CLASS_NAMES,
-    )
+#     explanation = eli5.sklearn.explain_prediction.explain_prediction_sklearn(
+#         trained_classifier.named_steps["clf"],
+#         data,
+#         vec=trained_classifier.named_steps["vect"],
+#         target_names=CLASS_NAMES,
+#     )
 
-    return eli5.formatters.html.format_as_html(explanation)
+#     dict_explanation = eli5.formatters.format_as_dict(explanation)
+#     # print(dict_explanation["targets"])
+#     print(dict_explanation["targets"][0]["feature_weights"])
+#     return dict_explanation["targets"][0]["feature_weights"]
 
 
 # def sklearn_permutation_importance(trained_classifier, train_data, train_labels):
@@ -79,9 +83,9 @@ def eli5_explanation(trained_classifier, data):
 #     return eli5.show_weights(perm)
 
 
-# def lime_explanation(classifier, data):
-#     explainer = LimeTextExplainer(class_names=CLASS_NAMES)
-#     explanation = explainer.explain_instance(
-#         text_instance=data, classifier_fn=classifier.predict_proba
-#     )
-#     return explanation.as_html()
+def lime_explanation(classifier, data):
+    explainer = LimeTextExplainer(class_names=CLASS_NAMES)
+    explanation = explainer.explain_instance(
+        text_instance=data, classifier_fn=classifier.predict_proba
+    )
+    return explanation.as_list()

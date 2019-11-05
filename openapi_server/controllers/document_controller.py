@@ -8,10 +8,17 @@ import numpy as np
 from openapi_server.models.document import Document  # noqa: E501
 from openapi_server.models.http_status import HttpStatus  # noqa: E501
 from openapi_server.models.predicted_classification import PredictedClassification
+from openapi_server.models.predicted_classification_explanation import (
+    PredictedClassificationExplanation,
+)
+from openapi_server.models.predicted_classification_explanation_features import (
+    PredictedClassificationExplanationFeatures,
+)
 from openapi_server import util, es
 
 from openapi_server.service import CLASS_NAMES
 from openapi_server.service.classification import get_model
+from openapi_server.service.explanation import lime_explanation
 
 
 def create_document(set_id, body):  # noqa: E501
@@ -44,7 +51,7 @@ def delete_document(set_id, doc_id):  # noqa: E501
 
     :rtype: Document
     """
-    return "do some magic!"
+    return HTTPStatus.NOT_IMPLEMENTED
 
 
 def get_document(set_id, doc_id):  # noqa: E501
@@ -79,7 +86,7 @@ def get_predicted_classification(set_id, doc_id):  # noqa: E501
     :rtype: PredictedClassification
     """
     document = get_document(set_id, doc_id)
-    # TODO this is a long blocking call, needs to return 202 "created" with some URL to the processed element
+    # TODO this is a long blocking call when first training the classifier, needs to return 202 "created" with some URL to the processed element
     trained_model = get_model()
     classification_probas = trained_model.predict_proba([document.content])[0]
     best_classification_index = np.argmax(classification_probas)
@@ -100,6 +107,22 @@ def get_predicted_classification_explanation(set_id, doc_id):  # noqa: E501
     :param doc_id: ID of a document
     :type doc_id: str
 
-    :rtype: InlineResponse200
+    :rtype: PredictedClassificationExplanation
     """
-    return "do some magic!"
+    document = get_document(set_id, doc_id)
+
+    # TODO this is a long blocking call when first training the classifier, needs to return 202 "created" with some URL to the processed element
+    trained_model = get_model()
+    explanation = lime_explanation(trained_model, document.content)
+
+    features = []
+    for feature in explanation:
+        features.append(
+            PredictedClassificationExplanationFeatures(
+                feature=feature[0], weight=feature[1]
+            )
+        )
+
+    explanation = PredictedClassificationExplanation(features=features)
+
+    return explanation

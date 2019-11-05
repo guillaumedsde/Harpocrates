@@ -13,6 +13,7 @@ randomize = ">=0.13"
 Flask-Testing = "==0.6.1"
 python-dotenv = "*"
 tox-pipenv-install = "*"
+pylint = "*"
 
 [packages]
 connexion = ">=2.0.2"
@@ -24,6 +25,7 @@ beautifulsoup4 = "*"
 lime = "*"
 scikit-learn = "*"
 lxml = "*"
+lime = "*"
 
 [requires]
 python_version = "3.7"
