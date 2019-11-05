@@ -14,7 +14,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import KFold
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.pipeline import make_pipeline
+from sklearn.pipeline import Pipeline
 from sklearn.svm import SVC, LinearSVC
 from sklearn.tree import DecisionTreeClassifier
 
@@ -67,15 +67,17 @@ def train(classifier):
     file_paths = extract_file_paths()
     train_data = extract_data(file_paths)
     # build ML pipeline
-    pipeline = make_pipeline(
-        get_vectorizer(),
-        # HashingVectorizer(
-        #     norm='l2',
-        #     stop_words="english",
-        #     strip_accents="unicode",
-        #     lowercase=True,
-        # ),
-        classifier,
+    pipeline = Pipeline(
+        steps=[
+            ("vect", get_vectorizer()),
+            # HashingVectorizer(
+            #     norm='l2',
+            #     stop_words="english",
+            #     strip_accents="unicode",
+            #     lowercase=True,
+            # ),
+            ("clf", classifier),
+        ],
         verbose=True,
     )
 

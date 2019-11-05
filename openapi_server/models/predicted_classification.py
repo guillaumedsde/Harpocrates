@@ -21,11 +21,11 @@ class PredictedClassification(Model):
         :param sensitive: The sensitive of this PredictedClassification.  # noqa: E501
         :type sensitive: bool
         :param sensitivity: The sensitivity of this PredictedClassification.  # noqa: E501
-        :type sensitivity: float
+        :type sensitivity: int
         """
         self.openapi_types = {
             'sensitive': bool,
-            'sensitivity': float
+            'sensitivity': int
         }
 
         self.attribute_map = {
@@ -79,7 +79,7 @@ class PredictedClassification(Model):
         Document sensitivity percentage  # noqa: E501
 
         :return: The sensitivity of this PredictedClassification.
-        :rtype: float
+        :rtype: int
         """
         return self._sensitivity
 
@@ -90,7 +90,7 @@ class PredictedClassification(Model):
         Document sensitivity percentage  # noqa: E501
 
         :param sensitivity: The sensitivity of this PredictedClassification.
-        :type sensitivity: float
+        :type sensitivity: int
         """
 
         self._sensitivity = sensitivity

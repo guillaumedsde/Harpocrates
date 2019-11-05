@@ -2,12 +2,12 @@ openapi: 3.0.2
 info:
   description: This is the Rest API specification for the harpocrates application
   title: Harpocrates API
-  version: 0.2.1
+  version: 0.2.2
 externalDocs:
   description: API documentation
   url: https://harpocrates-app.gitlab.io/api-specification
 servers:
-- url: /0.2.1
+- url: /0.2.2
 tags:
 - description: Everything about documentsets
   name: set
@@ -330,7 +330,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200'
+                $ref: '#/components/schemas/predictedClassificationExplanation'
           description: Successfully got the explanation for the predicted classification
         400:
           content:
@@ -490,37 +490,44 @@ components:
       description: The predicted Sensitivity (Sensitive or Not) of a document
       example:
         sensitive: true
-        sensitivity: 0.8008281904610115
+        sensitivity: 0
       properties:
         sensitive:
           description: true if the document is predicted to be sensitive, false otherwise
           type: boolean
         sensitivity:
           description: Document sensitivity percentage
-          format: integer
-          type: number
+          format: int32
+          type: integer
       required:
       - sensitive
       type: object
     predictedClassificationExplanation:
-      description: The explanation for the predicted sensitivity classification of
-        a document as an array of features and their contribution to the explanation
-      items:
-        description: an object representing a feature that explains the classification
-        properties:
-          feature:
-            description: A feature of the text
-            type: string
-          value:
-            description: The contribution of that feature to the classification
-            format: float
-            type: number
-        type: object
-      type: array
-    inline_response_200:
+      description: Object representing an explanation for a sensitivity prediction
       example:
-        explanations: ""
+        features:
+        - feature: feature
+          weight: 0.8008282
+        - feature: feature
+          weight: 0.8008282
       properties:
-        explanations:
-          allOf:
-          - $ref: '#/components/schemas/predictedClassificationExplanation'
+        features:
+          description: The explanation for the predicted sensitivity classification
+            of a document as an array of features and their contribution to the explanation
+          items:
+            $ref: '#/components/schemas/predictedClassificationExplanation_features'
+          type: array
+      type: object
+    predictedClassificationExplanation_features:
+      description: an object representing a feature that explains the classification
+      example:
+        feature: feature
+        weight: 0.8008282
+      properties:
+        feature:
+          description: A feature of the text
+          type: string
+        weight:
+          description: The contribution of that feature to the classification
+          format: float
+          type: number
