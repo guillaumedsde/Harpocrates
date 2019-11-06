@@ -1,7 +1,7 @@
 openapi: 3.0.2
 info:
   description: This is the Rest API specification for the harpocrates application
-  version: "0.2.2"
+  version: "0.3.0"
   title: Harpocrates API
 externalDocs:
   description: API documentation
@@ -191,8 +191,6 @@ paths:
           $ref: "#/components/responses/malformedRequest"
         "404":
           $ref: "#/components/responses/notFound"
-servers:
-  - url: /0.2.2
 components:
   parameters:
     docId:
@@ -283,6 +281,13 @@ components:
           allOf:
             - "$ref": "#/components/schemas/idBase"
             - description: Unique identifier for a document set
+        documentCount:
+          type: integer
+          format: int32
+          description: number of documents in set
+        size:
+          type: string
+          description: size of the set, unit comes at the end of the string
     documentSets:
       type: object
       description: an object representing multiple document sets
