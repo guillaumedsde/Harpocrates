@@ -73,10 +73,10 @@ def get_sets():  # noqa: E501
 
     :rtype: DocumentSets
     """
-    # {'health': 'yellow', 'status': 'open', 'index': 'ttt', 'uuid': 'iybwGuC2S0OY8zhdjFLq9w', 'pri': '1', 'rep': '1', 'docs.count': '0', 'docs.deleted': '0', 'store.size': '283b', 'pri.store.size': '283b'}
 
     doc_set_list = []
     for index in cat.indices("*", format="json"):
+        # skip admin elasticsearch indexes
         if index["index"].startswith("."):
             continue
         doc_set = DocumentSet(
