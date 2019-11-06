@@ -38,19 +38,14 @@ export default function PredictedClassification(props) {
             color={predictedClassification.sensitive ? "primary" : "default"}
             icon={
               predictedClassification.sensitive ? (
-                <WarningIcon />
+                <WarningIcon fontSize="small" />
               ) : (
-                <CheckCircleIcon />
+                <CheckCircleIcon fontSize="small" />
               )
             }
           />
           <Chip
-            avatar={
-              <Avatar>
-                <b>{`${predictedClassification.sensitivity}%`}</b>
-              </Avatar>
-            }
-            label="sensitive"
+            label={`${predictedClassification.sensitivity}% sensitive`}
             color={predictedClassification.sensitive ? "primary" : "default"}
           />
         </Box>

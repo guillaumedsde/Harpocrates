@@ -8,10 +8,18 @@ import { DocumentApi } from "@harpocrates/api-client";
 import PredictedClassification from "./documentPredictedClassification";
 import DocumentBody from "./documentBody";
 
+import CustomizedSnackbar from "./status";
+
 export default function Document(props) {
   const [document, setDocument] = useState(null);
 
+  const [gettingExplanation, setGettingExplanation] = useState(true);
+
   var api = new DocumentApi();
+
+  function handleDoneGettingExplanation(newGettingExplanation) {
+    setGettingExplanation(newGettingExplanation);
+  }
 
   // effect for getting document
   useEffect(() => {
@@ -21,6 +29,9 @@ export default function Document(props) {
         setDocument(apiDocument);
       });
   }, []);
+
+  console.log(props);
+
   if (document) {
     return (
       <div>
@@ -36,6 +47,12 @@ export default function Document(props) {
           documentSetName={props.documentSetName}
           documentId={props.documentId}
           documentContent={document.content}
+          setExplanationDone={handleDoneGettingExplanation}
+        />
+        <CustomizedSnackbar
+          message="Calculating explanation for sensitivity prediction..."
+          open={gettingExplanation}
+          variant="info"
         />
       </div>
     );
