@@ -22,7 +22,16 @@ export default function ExplanationToggles(props) {
         }
         label={
           <div>
-            Why is this <b>sensitive</b>?
+            Why is this{" "}
+            <div
+              style={{
+                backgroundColor: "rgba(255, 0, 0, 0.75)",
+                display: "inline-block"
+              }}
+            >
+              sensitive
+            </div>
+            ?
           </div>
         }
       />
@@ -39,7 +48,16 @@ export default function ExplanationToggles(props) {
         }
         label={
           <div>
-            Why is this <b>not sensitive</b>?
+            Why is this{" "}
+            <div
+              style={{
+                backgroundColor: "rgba(0, 0, 255, 0.75)",
+                display: "inline-block"
+              }}
+            >
+              not sensitive
+            </div>
+            ?
           </div>
         }
       />

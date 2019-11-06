@@ -1,14 +1,23 @@
 import React, { useEffect, useState } from "react";
 
-import { Link } from "@reach/router";
+import { navigate } from "@reach/router";
 
 import { SetApi } from "@harpocrates/api-client";
 
-import DocumentSetCard from "./documentSetCard";
-import { Grid } from "@material-ui/core";
+import { Grid, LinearProgress } from "@material-ui/core";
+
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
+import ListItemText from "@material-ui/core/ListItemText";
+import Avatar from "@material-ui/core/Avatar";
+import IconButton from "@material-ui/core/IconButton";
+import FolderIcon from "@material-ui/icons/Folder";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 export default function DocumentSetList() {
-  const [documentSets, setDocumentSets] = useState([]);
+  const [documentSets, setDocumentSets] = useState(null);
 
   var api = new SetApi();
 
@@ -20,24 +29,44 @@ export default function DocumentSetList() {
     },
     [] //dependencies
   );
+
+  const handleListItemClick = (event, index) => {
+    navigate(`/documentSet/${index}`);
+  };
+  if (documentSets === null) {
+    return <LinearProgress />;
+  }
   // tell if no document Sets
-  if (documentSets.length == 0) {
-    return (
-      <Grid>
-        <h1>No Document Sets</h1>
-      </Grid>
-    );
+  else if (documentSets.length === 0) {
+    return <h1>No Document Sets</h1>;
   }
   // Otherwise display them
   else {
     return (
-      <Grid container spacing={3}>
+      <List>
         {documentSets.map(set => (
-          <Grid key={set.name} item m={10}>
-            <DocumentSetCard documentSet={set} />
-          </Grid>
+          <ListItem
+            key={set.setId}
+            button
+            onClick={event => handleListItemClick(event, set.name)}
+          >
+            <ListItemAvatar>
+              <Avatar>
+                <FolderIcon />
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText
+              primary={set.name}
+              secondary={`${set.documentCount} documents (${set.size})`}
+            />
+            <ListItemSecondaryAction>
+              <IconButton edge="end" aria-label="delete">
+                <DeleteIcon />
+              </IconButton>
+            </ListItemSecondaryAction>
+          </ListItem>
         ))}
-      </Grid>
+      </List>
     );
   }
 }
