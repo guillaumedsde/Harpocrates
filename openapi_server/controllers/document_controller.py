@@ -8,12 +8,11 @@ import numpy as np
 from openapi_server.models.document import Document  # noqa: E501
 from openapi_server.models.http_status import HttpStatus  # noqa: E501
 from openapi_server.models.predicted_classification import PredictedClassification
-from openapi_server.models.predicted_classification_explanation import (
-    PredictedClassificationExplanation,
+from openapi_server.models.predicted_classification_with_explanation import (
+    PredictedClassificationWithExplanation,
 )
-from openapi_server.models.predicted_classification_explanation_features import (
-    PredictedClassificationExplanationFeatures,
-)
+from openapi_server.models.feature import Feature
+
 from openapi_server import util, es
 
 from openapi_server.service import CLASS_NAMES
@@ -97,8 +96,9 @@ def get_predicted_classification(set_id, doc_id):  # noqa: E501
     return predicted
 
 
-def get_predicted_classification_explanation(set_id, doc_id):  # noqa: E501
-    """Get the explanation for the predicted classification of a document
+def get_predicted_classification_with_explanation(set_id, doc_id):  # noqa: E501
+    """Get the explanation for the predicted classification of a document with
+    the classification
 
      # noqa: E501
 
@@ -107,22 +107,34 @@ def get_predicted_classification_explanation(set_id, doc_id):  # noqa: E501
     :param doc_id: ID of a document
     :type doc_id: str
 
-    :rtype: PredictedClassificationExplanation
+    :rtype: PredictedClassificationWithExplanation
     """
     document = get_document(set_id, doc_id)
 
     # TODO this is a long blocking call when first training the classifier, needs to return 202 "created" with some URL to the processed element
     trained_model = get_model()
     explanation = lime_explanation(trained_model, document.content)
+    # document is sensitive if probability of "non sensitive" classification is lower than "sensitive" classification
+    sensitive = explanation.predict_proba[0] < explanation.predict_proba[1]
+    # sensitivity of document is the probability of "sensitive" classification
+    sensitivity = explanation.predict_proba[1]
 
-    features = []
-    for feature in explanation:
-        features.append(
-            PredictedClassificationExplanationFeatures(
-                feature=feature[0], weight=feature[1]
-            )
-        )
+    # sort into sensitive/non sensitive feature based on classification
+    sensitive_features = []
+    non_sensitive_features = []
+    for feature_info in explanation.as_list():
+        feature = Feature(feature=feature_info[0], weight=feature_info[1])
+        if (sensitive and feature.weight > 0) or (not sensitive and feature.weight < 0):
+            sensitive_features.append(feature)
+        else:
+            non_sensitive_features.append(feature)
 
-    explanation = PredictedClassificationExplanation(features=features)
+    # build and return final classification with explanation object
+    classification_with_explanation = PredictedClassificationWithExplanation(
+        sensitive=sensitive,
+        sensitivity=sensitivity,
+        non_sensitive_features=non_sensitive_features,
+        sensitive_features=sensitive_features,
+    )
 
-    return explanation
+    return classification_with_explanation
