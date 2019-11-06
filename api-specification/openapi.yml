@@ -171,7 +171,7 @@ paths:
           $ref: "#/components/responses/malformedRequest"
         "404":
           $ref: "#/components/responses/notFound"
-  "/documentSet/{setId}/{docId}/predictedClassificationExplanation":
+  "/documentSet/{setId}/{docId}/predictedClassificationWithExplanation":
     get:
       summary: Get the explanation for the predicted classification of a document
       operationId: get_predicted_classification_explanation
@@ -186,7 +186,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/predictedClassificationExplanation"
+                $ref: "#/components/schemas/predictedClassificationWithExplanation"
         "400":
           $ref: "#/components/responses/malformedRequest"
         "404":
@@ -340,21 +340,32 @@ components:
           type: integer
           format: int32
           description: Document sensitivity percentage
-    predictedClassificationExplanation:
+    feature:
       type: object
-      description: Object representing an explanation for a sensitivity prediction
+      description: an object representing a feature that explains the classification
+      required:
+        - feature
       properties:
-        features:
-          type: array
-          description: The explanation for the predicted sensitivity classification of a document as an array of features and their contribution to the explanation
-          items:
-            type: object
-            description: an object representing a feature that explains the classification
-            properties:
-              feature:
-                type: string
-                description: A feature of the text
-              weight:
-                type: number
-                format: float
-                description: The contribution of that feature to the classification
+        feature:
+          type: string
+          description: A feature of the text
+        weight:
+          type: number
+          format: float
+          description: The contribution of that feature to the classification
+    predictedClassificationWithExplanation:
+      allOf: # extend predictedClassification
+        - $ref: "#/components/schemas/predictedClassification"
+        - type: object
+          description: Object representing an explanation for a sensitivity prediction
+          properties:
+            sensitiveFeatures:
+              type: array
+              items:
+                $ref: "#/components/schemas/feature"
+              description: The explanation for the "sensitive" classification of a document as an array of features and their contribution to the explanation
+            nonSensitiveFeatures:
+              type: array
+              items:
+                $ref: "#/components/schemas/feature"
+              description: The explanation for the "non sensitive" classification of a document as an array of features and their contribution to the explanation
