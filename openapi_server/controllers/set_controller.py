@@ -7,7 +7,6 @@ from openapi_server.models.document_sets import DocumentSets  # noqa: E501
 from openapi_server.models.documents import Documents  # noqa: E501
 from openapi_server.models.document import Document
 from openapi_server.models.http_status import HttpStatus  # noqa: E501
-from openapi_server.models.elastic_document_set import BODY
 from openapi_server import util, es, cat
 
 
@@ -28,7 +27,7 @@ def create_set(body):  # noqa: E501
 
     # TODO error handling
     # FIXME block until index is actually created
-    es.indices.create(index=document_set.name, body=BODY)
+    es.indices.create(index=document_set.name)
 
     return HTTPStatus.CREATED
 

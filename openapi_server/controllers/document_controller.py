@@ -117,21 +117,29 @@ def get_predicted_classification_with_explanation(set_id, doc_id):  # noqa: E501
     # document is sensitive if probability of "non sensitive" classification is lower than "sensitive" classification
     sensitive = explanation.predict_proba[0] < explanation.predict_proba[1]
     # sensitivity of document is the probability of "sensitive" classification
-    sensitivity = explanation.predict_proba[1]
+    sensitivity = round(explanation.predict_proba[1] * 100)
 
     # sort into sensitive/non sensitive feature based on classification
     sensitive_features = []
     non_sensitive_features = []
+
+    print(sensitivity)
     for feature_info in explanation.as_list():
-        feature = Feature(feature=feature_info[0], weight=feature_info[1])
-        if (sensitive and feature.weight > 0) or (not sensitive and feature.weight < 0):
+        feature = Feature(feature=feature_info[0], weight=abs(feature_info[1]))
+        if (
+            sensitive
+            and (feature_info[1] > 0)
+            or (not sensitive)
+            and (feature_info[1] < 0)
+        ):
             sensitive_features.append(feature)
         else:
             non_sensitive_features.append(feature)
 
     # build and return final classification with explanation object
     classification_with_explanation = PredictedClassificationWithExplanation(
-        sensitive=sensitive,
+        # for some reason python boolean can't be casted to JSON
+        sensitive=int(sensitive),
         sensitivity=sensitivity,
         non_sensitive_features=non_sensitive_features,
         sensitive_features=sensitive_features,
