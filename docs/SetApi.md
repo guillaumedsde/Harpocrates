@@ -1,6 +1,6 @@
 # @HarpocratesApiClient.SetApi
 
-All URIs are relative to *http://localhost/0.2.2*
+All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
