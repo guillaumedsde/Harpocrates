@@ -9,17 +9,22 @@ import PredictedClassification from "./documentPredictedClassification";
 import DocumentBody from "./documentBody";
 
 import CustomizedSnackbar from "./status";
+import ExplanationToggles from "./explanationToggles";
 
 export default function Document(props) {
   const [document, setDocument] = useState(null);
 
-  const [gettingExplanation, setGettingExplanation] = useState(true);
+  const [classification, setClassification] = useState(null);
+
+  const [showSensitiveExplanations, setShowSensitiveExplanations] = useState(
+    true
+  );
+  const [
+    showNonSensitiveExplanations,
+    setShowNonSensitiveExplanations
+  ] = useState(false);
 
   var api = new DocumentApi();
-
-  function handleDoneGettingExplanation(newGettingExplanation) {
-    setGettingExplanation(newGettingExplanation);
-  }
 
   // effect for getting document
   useEffect(() => {
@@ -30,29 +35,45 @@ export default function Document(props) {
       });
   }, []);
 
-  console.log(props);
+  // effect for getting prediction and explanation
+  useEffect(() => {
+    api
+      .getPredictedClassificationWithExplanation(
+        props.documentSetName,
+        props.documentId
+      )
+      .then(apiClassification => {
+        setClassification(apiClassification);
+      });
+  }, []);
 
   if (document) {
     return (
       <div>
         <h1>{document.name}</h1>
         <h2>{document.documentId}</h2>
-        <Box my={2}>
-          <PredictedClassification
-            documentSet={props.documentSetName}
-            documentId={props.documentId}
-          />
-        </Box>
+        {classification ? (
+          <Box my={2}>
+            <PredictedClassification classification={classification} />
+          </Box>
+        ) : null}
+
         <DocumentBody
-          documentSetName={props.documentSetName}
-          documentId={props.documentId}
           documentContent={document.content}
-          setExplanationDone={handleDoneGettingExplanation}
+          classification={classification}
+          showNonSensitive={showNonSensitiveExplanations}
+          showSensitive={showSensitiveExplanations}
         />
         <CustomizedSnackbar
-          message="Calculating explanation for sensitivity prediction..."
-          open={gettingExplanation}
+          message="Calculating sensitivity classification with explanation..."
+          open={classification == null}
           variant="info"
+        />
+        <ExplanationToggles
+          showSensitiveExplanations={showSensitiveExplanations}
+          setShowSensitiveExplanations={setShowSensitiveExplanations}
+          showNonSensitiveExplanations={showNonSensitiveExplanations}
+          setShowNonSensitiveExplanations={setShowNonSensitiveExplanations}
         />
       </div>
     );
