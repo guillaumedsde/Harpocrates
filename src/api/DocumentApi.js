@@ -257,15 +257,15 @@ export default class DocumentApi {
      * @param {String} docId ID of a document
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/PredictedClassificationWithExplanation} and HTTP response
      */
-    getPredictedClassificationExplanationWithHttpInfo(setId, docId) {
+    getPredictedClassificationWithExplanationWithHttpInfo(setId, docId) {
       let postBody = null;
       // verify the required parameter 'setId' is set
       if (setId === undefined || setId === null) {
-        throw new Error("Missing the required parameter 'setId' when calling getPredictedClassificationExplanation");
+        throw new Error("Missing the required parameter 'setId' when calling getPredictedClassificationWithExplanation");
       }
       // verify the required parameter 'docId' is set
       if (docId === undefined || docId === null) {
-        throw new Error("Missing the required parameter 'docId' when calling getPredictedClassificationExplanation");
+        throw new Error("Missing the required parameter 'docId' when calling getPredictedClassificationWithExplanation");
       }
 
       let pathParams = {
@@ -296,8 +296,8 @@ export default class DocumentApi {
      * @param {String} docId ID of a document
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/PredictedClassificationWithExplanation}
      */
-    getPredictedClassificationExplanation(setId, docId) {
-      return this.getPredictedClassificationExplanationWithHttpInfo(setId, docId)
+    getPredictedClassificationWithExplanation(setId, docId) {
+      return this.getPredictedClassificationWithExplanationWithHttpInfo(setId, docId)
         .then(function(response_and_data) {
           return response_and_data.data;
         });
