@@ -4,6 +4,9 @@ import { Link } from "@reach/router";
 
 import { SetApi } from "@harpocrates/api-client";
 
+import DocumentSetCard from "./documentSetCard";
+import { Grid } from "@material-ui/core";
+
 export default function DocumentSetList() {
   const [documentSets, setDocumentSets] = useState([]);
 
@@ -20,23 +23,21 @@ export default function DocumentSetList() {
   // tell if no document Sets
   if (documentSets.length == 0) {
     return (
-      <div>
-        <p>No Document Sets</p>
-      </div>
+      <Grid>
+        <h1>No Document Sets</h1>
+      </Grid>
     );
   }
   // Otherwise display them
   else {
     return (
-      <div>
-        <ul>
-          {documentSets.map(set => (
-            <li key={set.name}>
-              <Link to={"/documentSet/" + set.name}>{set.name}</Link>
-            </li>
-          ))}
-        </ul>
-      </div>
+      <Grid container spacing={3}>
+        {documentSets.map(set => (
+          <Grid key={set.name} item m={10}>
+            <DocumentSetCard documentSet={set} />
+          </Grid>
+        ))}
+      </Grid>
     );
   }
 }
