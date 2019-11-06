@@ -8,7 +8,7 @@ Method | HTTP request | Description
 [**deleteDocument**](DocumentApi.md#deleteDocument) | **DELETE** /documentSet/{setId}/{docId} | delete the set
 [**getDocument**](DocumentApi.md#getDocument) | **GET** /documentSet/{setId}/{docId} | get document from set
 [**getPredictedClassification**](DocumentApi.md#getPredictedClassification) | **GET** /documentSet/{setId}/{docId}/predictedClassification | Get the predicted classification for the document
-[**getPredictedClassificationExplanation**](DocumentApi.md#getPredictedClassificationExplanation) | **GET** /documentSet/{setId}/{docId}/predictedClassificationExplanation | Get the explanation for the predicted classification of a document
+[**getPredictedClassificationExplanation**](DocumentApi.md#getPredictedClassificationExplanation) | **GET** /documentSet/{setId}/{docId}/predictedClassificationWithExplanation | Get the explanation for the predicted classification of a document
 
 
 
@@ -192,7 +192,7 @@ No authorization required
 
 ## getPredictedClassificationExplanation
 
-> PredictedClassificationExplanation getPredictedClassificationExplanation(setId, docId)
+> PredictedClassificationWithExplanation getPredictedClassificationExplanation(setId, docId)
 
 Get the explanation for the predicted classification of a document
 
@@ -222,7 +222,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**PredictedClassificationExplanation**](PredictedClassificationExplanation.md)
+[**PredictedClassificationWithExplanation**](PredictedClassificationWithExplanation.md)
 
 ### Authorization
 

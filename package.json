@@ -1,6 +1,6 @@
 {
   "name": "@harpocrates/api-client",
-  "version": "0.3.0",
+  "version": "1.0.1",
   "description": "This_is_the_Rest_API_specification_for_the_harpocrates_application",
   "license": "Unlicense",
   "main": "dist/index.js",
