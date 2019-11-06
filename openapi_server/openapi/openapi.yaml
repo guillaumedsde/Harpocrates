@@ -2,12 +2,12 @@ openapi: 3.0.2
 info:
   description: This is the Rest API specification for the harpocrates application
   title: Harpocrates API
-  version: 0.2.2
+  version: 0.3.0
 externalDocs:
   description: API documentation
   url: https://harpocrates-app.gitlab.io/api-specification
 servers:
-- url: /0.2.2
+- url: /
 tags:
 - description: Everything about documentsets
   name: set
@@ -305,7 +305,7 @@ paths:
       tags:
       - document
       x-openapi-router-controller: openapi_server.controllers.document_controller
-  /documentSet/{setId}/{docId}/predictedClassificationExplanation:
+  /documentSet/{setId}/{docId}/predictedClassificationWithExplanation:
     get:
       operationId: get_predicted_classification_explanation
       parameters:
@@ -330,7 +330,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/predictedClassificationExplanation'
+                $ref: '#/components/schemas/predictedClassificationWithExplanation'
           description: Successfully got the explanation for the predicted classification
         400:
           content:
@@ -415,6 +415,8 @@ components:
     documentSet:
       description: schema for a set of Documents
       example:
+        documentCount: 0
+        size: size
         name: ""
         setId: ""
       properties:
@@ -426,6 +428,13 @@ components:
           allOf:
           - $ref: '#/components/schemas/idBase'
           - description: Unique identifier for a document set
+        documentCount:
+          description: number of documents in set
+          format: int32
+          type: integer
+        size:
+          description: size of the set, unit comes at the end of the string
+          type: string
       required:
       - name
       type: object
@@ -433,9 +442,13 @@ components:
       description: an object representing multiple document sets
       example:
         documentSets:
-        - name: ""
+        - documentCount: 0
+          size: size
+          name: ""
           setId: ""
-        - name: ""
+        - documentCount: 0
+          size: size
+          name: ""
           setId: ""
       properties:
         documentSets:
@@ -502,27 +515,8 @@ components:
       required:
       - sensitive
       type: object
-    predictedClassificationExplanation:
-      description: Object representing an explanation for a sensitivity prediction
-      example:
-        features:
-        - feature: feature
-          weight: 0.8008282
-        - feature: feature
-          weight: 0.8008282
-      properties:
-        features:
-          description: The explanation for the predicted sensitivity classification
-            of a document as an array of features and their contribution to the explanation
-          items:
-            $ref: '#/components/schemas/predictedClassificationExplanation_features'
-          type: array
-      type: object
-    predictedClassificationExplanation_features:
+    feature:
       description: an object representing a feature that explains the classification
-      example:
-        feature: feature
-        weight: 0.8008282
       properties:
         feature:
           description: A feature of the text
@@ -531,3 +525,25 @@ components:
           description: The contribution of that feature to the classification
           format: float
           type: number
+      required:
+      - feature
+      type: object
+    predictedClassificationWithExplanation:
+      allOf:
+      - $ref: '#/components/schemas/predictedClassification'
+      - $ref: '#/components/schemas/predictedClassificationWithExplanation_allOf'
+    predictedClassificationWithExplanation_allOf:
+      description: Object representing an explanation for a sensitivity prediction
+      properties:
+        sensitiveFeatures:
+          description: The explanation for the "sensitive" classification of a document
+            as an array of features and their contribution to the explanation
+          items:
+            $ref: '#/components/schemas/feature'
+          type: array
+        nonSensitiveFeatures:
+          description: The explanation for the "non sensitive" classification of a
+            document as an array of features and their contribution to the explanation
+          items:
+            $ref: '#/components/schemas/feature'
+          type: array

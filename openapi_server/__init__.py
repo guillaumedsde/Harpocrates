@@ -9,6 +9,7 @@ from flask.cli import with_appcontext
 from flask_cors import CORS
 
 from elasticsearch import Elasticsearch
+from elasticsearch.client import CatClient
 
 from openapi_server import encoder
 
@@ -17,6 +18,7 @@ __version__ = (0, 1, 0, "dev")
 # db = SQLAlchemy()
 
 es = Elasticsearch()
+cat = CatClient(es)
 
 
 def create_app(test_config=None):

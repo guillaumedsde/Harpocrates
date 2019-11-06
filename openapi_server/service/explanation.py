@@ -88,4 +88,4 @@ def lime_explanation(classifier, data):
     explanation = explainer.explain_instance(
         text_instance=data, classifier_fn=classifier.predict_proba, num_features=10
     )
-    return explanation.as_list()
+    return explanation

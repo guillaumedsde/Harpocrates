@@ -8,7 +8,7 @@ from openapi_server.models.documents import Documents  # noqa: E501
 from openapi_server.models.document import Document
 from openapi_server.models.http_status import HttpStatus  # noqa: E501
 from openapi_server.models.elastic_document_set import BODY
-from openapi_server import util, es
+from openapi_server import util, es, cat
 
 
 def create_set(body):  # noqa: E501
@@ -74,12 +74,18 @@ def get_sets():  # noqa: E501
 
     :rtype: DocumentSets
     """
+    # {'health': 'yellow', 'status': 'open', 'index': 'ttt', 'uuid': 'iybwGuC2S0OY8zhdjFLq9w', 'pri': '1', 'rep': '1', 'docs.count': '0', 'docs.deleted': '0', 'store.size': '283b', 'pri.store.size': '283b'}
 
     doc_set_list = []
-    for index in es.indices.get("*"):
-        if index.startswith("."):
+    for index in cat.indices("*", format="json"):
+        if index["index"].startswith("."):
             continue
-        doc_set = DocumentSet(name=index)
+        doc_set = DocumentSet(
+            name=index["index"],
+            set_id=index["uuid"],
+            document_count=index["docs.count"],
+            size=index["store.size"],
+        )
         doc_set_list.append(doc_set)
     doc_sets = DocumentSets(document_sets=doc_set_list)
     return doc_sets
