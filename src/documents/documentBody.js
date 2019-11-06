@@ -24,12 +24,16 @@ export default function DocumentBody(props) {
   if (props.showSensitive & (props.classification !== null)) {
     props.classification.sensitiveFeatures.forEach(feature => {
       // TODO varied opacity depending on the weight with a minimum and maximum opacity
-      //var opacity = Math.abs(feature.weight);
-      var opacity = 1;
+      var opacity = feature.weight / 2 + 0.25;
+      //var opacity = 1;
       rules.push({
         rule: feature.feature,
         tag: x => (
-          <mark style={{ backgroundColor: `rgba(255, 0, 0, ${opacity})` }}>
+          <mark
+            style={{
+              backgroundColor: `rgba(255, 0, 0, ${opacity})`
+            }}
+          >
             {x}
           </mark>
         )
@@ -41,11 +45,11 @@ export default function DocumentBody(props) {
     props.classification.nonSensitiveFeatures.forEach(feature => {
       // TODO varied opacity depending on the weight with a minimum and maximum opacity
       //var opacity = Math.abs(feature.weight);
-      var opacity = 1;
+      var opacity = feature.weight / 2 + 0.25;
       rules.push({
         rule: feature.feature,
         tag: x => (
-          <mark style={{ backgroundColor: `rgba(0, 255, 0, ${opacity})` }}>
+          <mark style={{ backgroundColor: `rgba(0, 0, 255, ${opacity})` }}>
             {x}
           </mark>
         )
