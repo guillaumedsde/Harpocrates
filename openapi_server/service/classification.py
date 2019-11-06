@@ -108,7 +108,6 @@ def get_model(classifier=None, retrain=False):
         global_model_name = type(MODEL[-1]).__name__
     except NameError:
         global_model_name = None
-    print(global_model_name)
 
     if retrain or not os.path.exists(model_path):
         if not os.path.exists(MODELS_DIRECTORY):
