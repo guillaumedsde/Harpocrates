@@ -8,7 +8,7 @@ Method | HTTP request | Description
 [**deleteDocument**](DocumentApi.md#deleteDocument) | **DELETE** /documentSet/{setId}/{docId} | delete the set
 [**getDocument**](DocumentApi.md#getDocument) | **GET** /documentSet/{setId}/{docId} | get document from set
 [**getPredictedClassification**](DocumentApi.md#getPredictedClassification) | **GET** /documentSet/{setId}/{docId}/predictedClassification | Get the predicted classification for the document
-[**getPredictedClassificationExplanation**](DocumentApi.md#getPredictedClassificationExplanation) | **GET** /documentSet/{setId}/{docId}/predictedClassificationWithExplanation | Get the explanation for the predicted classification of a document
+[**getPredictedClassificationWithExplanation**](DocumentApi.md#getPredictedClassificationWithExplanation) | **GET** /documentSet/{setId}/{docId}/predictedClassificationWithExplanation | Get the explanation for the predicted classification of a document
 
 
 
@@ -190,9 +190,9 @@ No authorization required
 - **Accept**: application/json
 
 
-## getPredictedClassificationExplanation
+## getPredictedClassificationWithExplanation
 
-> PredictedClassificationWithExplanation getPredictedClassificationExplanation(setId, docId)
+> PredictedClassificationWithExplanation getPredictedClassificationWithExplanation(setId, docId)
 
 Get the explanation for the predicted classification of a document
 
@@ -204,7 +204,7 @@ import @HarpocratesApiClient from '@harpocrates/api-client';
 let apiInstance = new @HarpocratesApiClient.DocumentApi();
 let setId = "setId_example"; // String | ID of a set
 let docId = "docId_example"; // String | ID of a document
-apiInstance.getPredictedClassificationExplanation(setId, docId).then((data) => {
+apiInstance.getPredictedClassificationWithExplanation(setId, docId).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
 }, (error) => {
   console.error(error);

@@ -123,7 +123,7 @@ Class | Method | HTTP request | Description
 *@HarpocratesApiClient.DocumentApi* | [**deleteDocument**](docs/DocumentApi.md#deleteDocument) | **DELETE** /documentSet/{setId}/{docId} | delete the set
 *@HarpocratesApiClient.DocumentApi* | [**getDocument**](docs/DocumentApi.md#getDocument) | **GET** /documentSet/{setId}/{docId} | get document from set
 *@HarpocratesApiClient.DocumentApi* | [**getPredictedClassification**](docs/DocumentApi.md#getPredictedClassification) | **GET** /documentSet/{setId}/{docId}/predictedClassification | Get the predicted classification for the document
-*@HarpocratesApiClient.DocumentApi* | [**getPredictedClassificationExplanation**](docs/DocumentApi.md#getPredictedClassificationExplanation) | **GET** /documentSet/{setId}/{docId}/predictedClassificationWithExplanation | Get the explanation for the predicted classification of a document
+*@HarpocratesApiClient.DocumentApi* | [**getPredictedClassificationWithExplanation**](docs/DocumentApi.md#getPredictedClassificationWithExplanation) | **GET** /documentSet/{setId}/{docId}/predictedClassificationWithExplanation | Get the explanation for the predicted classification of a document
 *@HarpocratesApiClient.SetApi* | [**createSet**](docs/SetApi.md#createSet) | **POST** /documentSet | Add a new documentset set to the engine
 *@HarpocratesApiClient.SetApi* | [**deleteSet**](docs/SetApi.md#deleteSet) | **DELETE** /documentSet/{setId} | delete the set
 *@HarpocratesApiClient.SetApi* | [**getSet**](docs/SetApi.md#getSet) | **GET** /documentSet/{setId} | lists all documents in the set
