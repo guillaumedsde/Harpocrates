@@ -100,6 +100,9 @@ const useStyles = makeStyles(theme => ({
 export default function Dashboard(props) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
+
+  const [secondaryListItems, setSecondaryListItems] = React.useState(null);
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -138,9 +141,10 @@ export default function Dashboard(props) {
             Harpocrates
           </Typography>
           <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
+            {/* Navbar top right content */}
+            {/* <Badge badgeContent={4} color="secondary">
               <NotificationsIcon />
-            </Badge>
+            </Badge> */}
           </IconButton>
         </Toolbar>
       </AppBar>
@@ -158,13 +162,19 @@ export default function Dashboard(props) {
         </div>
         <Divider />
         <List>{mainListItems}</List>
-        <Divider />
-        {/* <List>{secondaryListItems}</List> */}
+
+        {secondaryListItems ? (
+          <div>
+            <Divider />
+            <List>{secondaryListItems}</List>
+          </div>
+        ) : (
+          []
+        )}
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
-          {/* <h1>Content</h1> */}
           {props.children}
         </Container>
       </main>

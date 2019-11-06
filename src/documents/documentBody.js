@@ -12,9 +12,12 @@ import createMarker from "react-content-marker";
 const useStyles = makeStyles(theme => ({
   root: {
     padding: theme.spacing(5, 5),
-    lineHeight: 2,
+    lineHeight: 1.5,
     maxWidth: "210mm",
-    margin: "auto"
+    margin: "auto",
+
+    // preserve text whitespaces
+    whiteSpace: "pre-wrap"
   }
 }));
 
@@ -65,6 +68,7 @@ export default function DocumentBody(props) {
           });
           // set state
           setRules(rules);
+          props.setExplanationDone(false);
         });
     },
     [] //dependencies
@@ -78,15 +82,5 @@ export default function DocumentBody(props) {
     );
   }
 
-  return (
-    <div>
-      <Box my={2}>
-        Calculating explanation for sensitivity prediction...
-        <br />
-        <LinearProgress />
-      </Box>
-
-      <Paper className={classes.root}>{props.documentContent}</Paper>
-    </div>
-  );
+  return <Paper className={classes.root}>{props.documentContent}</Paper>;
 }
