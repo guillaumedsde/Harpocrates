@@ -96,19 +96,29 @@ def train_and_store_classifier(classifier, path):
     return trained_classifier
 
 
-def get_model(classifier=None):
+def get_model(classifier=None, retrain=False):
+    global MODEL
     # if no classifier passed, used first one
     if not classifier:
         classifier = CLASSIFIERS[0]
 
     classifier_type = type(classifier).__name__
     model_path = MODELS_DIRECTORY.joinpath(classifier_type + ".joblib")
+    try:
+        global_model_name = type(MODEL[-1]).__name__
+    except NameError:
+        global_model_name = None
+    print(global_model_name)
 
-    if os.path.exists(model_path):
-        print("loading found model for %s from %s" % (classifier_type, model_path))
-        trained_classifier = load(model_path)
-    else:
+    if retrain or not os.path.exists(model_path):
         if not os.path.exists(MODELS_DIRECTORY):
             os.makedirs(MODELS_DIRECTORY)
         trained_classifier = train_and_store_classifier(classifier, model_path)
+        MODEL = trained_classifier
+    elif global_model_name == classifier_type:
+        trained_classifier = MODEL
+    else:
+        print("loading found model for %s from %s" % (classifier_type, model_path))
+        trained_classifier = load(model_path)
+        MODEL = trained_classifier
     return trained_classifier
