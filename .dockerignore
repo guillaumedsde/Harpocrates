@@ -1,0 +1,6 @@
+node_modules/**
+!node_modules/rest_api_for_predictive_analtyics/
+
+.git
+build
+dist
