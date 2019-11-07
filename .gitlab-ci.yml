@@ -39,8 +39,13 @@ pages:
     - cp -rp node_modules/swagger-ui-dist/* public
     - cp -rp $DOCS_FOLDER/* public
     - sed -i "s#https://petstore\.swagger\.io/v2/swagger\.json#$SPEC_TO_DISPLAY#g" public/index.html
+    - mv public ../
   artifacts:
     paths:
       - public
   only:
-    - master
+    changes:
+      - api-specification/**/*
+  except:
+    - branches
+    
