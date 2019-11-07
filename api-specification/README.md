@@ -7,7 +7,7 @@ This is an [OpenAPI specification](https://en.wikipedia.org/wiki/OpenAPI_Specifi
 
 ## Documentation
 
-OpenAPI documentation is automatically generated and published from this specification, it is [**available here**](https://harpocrates-app.gitlab.io/api-specification).
+OpenAPI documentation is automatically generated and published from this specification, it is [**available here**](https://harpocrates-app.gitlab.io/harpocrates).
 
 ## Contribute
 
