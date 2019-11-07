@@ -1,0 +1,371 @@
+openapi: 3.0.2
+info:
+  description: This is the Rest API specification for the harpocrates application
+  version: "1.0.1"
+  title: Harpocrates API
+externalDocs:
+  description: API documentation
+  url: https://harpocrates-app.gitlab.io/api-specification
+tags:
+  - name: set
+    description: Everything about documentsets
+  - name: document
+    description: Everything about documents
+paths:
+  /documentSet:
+    get:
+      tags:
+        - set
+      summary: List all documentsets known by the engine
+      operationId: get_sets
+      responses:
+        "200":
+          description: Listing of all known document sets
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/documentSets"
+    post:
+      tags:
+        - set
+      summary: Add a new documentset set to the engine
+      operationId: create_set
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/documentSet"
+        description: documentSet descriptor that needs to be added to the engine
+        required: true
+      responses:
+        "200":
+          description: The created document set Object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/documentSet"
+        "400":
+          $ref: "#/components/responses/malformedRequest"
+        "409":
+          $ref: "#/components/responses/conflict"
+  "/documentSet/{setId}":
+    get:
+      summary: lists all documents in the set
+      operationId: get_set
+      tags:
+        - set
+      parameters:
+        - $ref: "#/components/parameters/setId"
+      responses:
+        "200":
+          description: Successfully got list of documents in set
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/documents"
+        "400":
+          $ref: "#/components/responses/malformedRequest"
+        "404":
+          $ref: "#/components/responses/notFound"
+    post:
+      tags:
+        - document
+      summary: Add a new document to the document set
+      description: Contents of the document in the body of the request. This should be in plain text. The Content-Type header should be appropriately set to text/plain.
+      operationId: create_document
+      parameters:
+        - $ref: "#/components/parameters/setId"
+      requestBody:
+        content:
+          text/plain:
+            schema:
+              type: string
+        required: true
+      responses:
+        "200":
+          description: Successfully created document in set
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/document"
+        "400":
+          $ref: "#/components/responses/malformedRequest"
+        "404":
+          $ref: "#/components/responses/notFound"
+        "409":
+          $ref: "#/components/responses/conflict"
+    delete:
+      tags:
+        - set
+      summary: delete the set
+      operationId: delete_set
+      parameters:
+        - $ref: "#/components/parameters/setId"
+      responses:
+        "200":
+          description: Successfully deleted the document set
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/documentSet"
+        "400":
+          $ref: "#/components/responses/malformedRequest"
+        "404":
+          $ref: "#/components/responses/notFound"
+  "/documentSet/{setId}/{docId}":
+    get:
+      summary: get document from set
+      operationId: get_document
+      tags:
+        - document
+      parameters:
+        - $ref: "#/components/parameters/setId"
+        - $ref: "#/components/parameters/docId"
+      responses:
+        "200":
+          description: Successfully got document from set
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/document"
+        "400":
+          $ref: "#/components/responses/malformedRequest"
+        "404":
+          $ref: "#/components/responses/notFound"
+    delete:
+      tags:
+        - document
+      summary: delete the set
+      operationId: delete_document
+      parameters:
+        - $ref: "#/components/parameters/setId"
+        - $ref: "#/components/parameters/docId"
+      responses:
+        "200":
+          description: Successfully deleted document in the set
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/document"
+        "400":
+          $ref: "#/components/responses/malformedRequest"
+        "404":
+          $ref: "#/components/responses/notFound"
+  "/documentSet/{setId}/{docId}/predictedClassification":
+    get:
+      summary: Get the predicted classification for the document
+      operationId: get_predicted_classification
+      tags:
+        - document
+      parameters:
+        - $ref: "#/components/parameters/setId"
+        - $ref: "#/components/parameters/docId"
+      responses:
+        "200":
+          description: Successfully got the predicted classification
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/predictedClassification"
+        "400":
+          $ref: "#/components/responses/malformedRequest"
+        "404":
+          $ref: "#/components/responses/notFound"
+  "/documentSet/{setId}/{docId}/predictedClassificationWithExplanation":
+    get:
+      summary: Get the explanation for the predicted classification of a document
+      operationId: get_predicted_classification_with_explanation
+      tags:
+        - document
+      parameters:
+        - $ref: "#/components/parameters/setId"
+        - $ref: "#/components/parameters/docId"
+      responses:
+        "200":
+          description: Successfully got the explanation for the predicted classification
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/predictedClassificationWithExplanation"
+        "400":
+          $ref: "#/components/responses/malformedRequest"
+        "404":
+          $ref: "#/components/responses/notFound"
+components:
+  parameters:
+    docId:
+      in: path
+      name: docId
+      description: ID of a document
+      required: true
+      schema:
+        type: string
+    setId:
+      in: path
+      name: setId
+      required: true
+      description: ID of a set
+      schema:
+        type: string
+  responses:
+    # FIXME codes and messages don't actually have values
+    # NOTE is this really an issue? they are used as templates in swagger ui, as long as the structure is correct the rest does not really matter
+    notFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/httpStatus"
+            code:
+              value: 404
+            message:
+              value: The resource you requested does not exist
+    conflict:
+      description: Conflicting element already present
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/httpStatus"
+            code:
+              value: 409
+            mesage:
+              value: The resource you tried to create already exists
+    malformedRequest:
+      description: The request was invalid JSON or missing some attributes
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/httpStatus"
+            code:
+              value: 400
+            mesage:
+              value: Your request was badly formulated
+  schemas:
+    idBase:
+      type: string
+      description: Base for the id schema of an object.
+      example: "WaROKG4B0l9WO2IWoBnP"
+    nameBase:
+      type: string
+      description: The name of the object.
+      example: Object 1
+    # Schema for error response body
+    httpStatus:
+      required:
+        - code
+        - message
+      type: object
+      description: This object describes an HTTP status
+      properties:
+        code:
+          type: integer
+          format: int32
+          minimum: 100
+          maximum: 600
+          description: HTTP status code
+        message:
+          type: string
+          description: HTTP status message
+
+    documentSet:
+      type: object
+      description: schema for a set of Documents
+      required:
+        - name
+      properties:
+        name:
+          allOf:
+            - "$ref": "#/components/schemas/nameBase"
+            - description: Name of the Document set
+        setId:
+          allOf:
+            - "$ref": "#/components/schemas/idBase"
+            - description: Unique identifier for a document set
+        documentCount:
+          type: integer
+          format: int32
+          description: number of documents in set
+        size:
+          type: string
+          description: size of the set, unit comes at the end of the string
+    documentSets:
+      type: object
+      description: an object representing multiple document sets
+      required:
+        - documentSets
+      properties:
+        documentSets:
+          type: array
+          description: array of document sets
+          items:
+            $ref: "#/components/schemas/documentSet"
+    document:
+      type: object
+      description: A document to review
+      required:
+        - documentId
+      properties:
+        name:
+          allOf:
+            - "$ref": "#/components/schemas/nameBase"
+            - description: Name of the Document
+        documentId:
+          allOf:
+            - "$ref": "#/components/schemas/idBase"
+            - description: Unique identifier for a Document
+        content:
+          type: string
+          description: content of the document
+    documents:
+      type: object
+      description: an object representing multiple documents
+      required:
+        - documents
+      properties:
+        documents:
+          type: array
+          description: array of documents
+          items:
+            $ref: "#/components/schemas/document"
+    predictedClassification:
+      type: object
+      description: The predicted Sensitivity (Sensitive or Not) of a document
+      required:
+        - sensitive
+      properties:
+        sensitive:
+          type: boolean
+          description: "true if the document is predicted to be sensitive, false otherwise"
+        sensitivity:
+          type: integer
+          format: int32
+          description: Document sensitivity percentage
+    feature:
+      type: object
+      description: an object representing a feature that explains the classification
+      required:
+        - feature
+      properties:
+        feature:
+          type: string
+          description: A feature of the text
+        weight:
+          type: number
+          format: float
+          description: The contribution of that feature to the classification
+    predictedClassificationWithExplanation:
+      allOf: # extend predictedClassification
+        - $ref: "#/components/schemas/predictedClassification"
+        - type: object
+          description: Object representing an explanation for a sensitivity prediction
+          properties:
+            sensitiveFeatures:
+              type: array
+              items:
+                $ref: "#/components/schemas/feature"
+              description: The explanation for the "sensitive" classification of a document as an array of features and their contribution to the explanation
+            nonSensitiveFeatures:
+              type: array
+              items:
+                $ref: "#/components/schemas/feature"
+              description: The explanation for the "non sensitive" classification of a document as an array of features and their contribution to the explanation
