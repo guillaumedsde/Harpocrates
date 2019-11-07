@@ -1,0 +1,549 @@
+openapi: 3.0.2
+info:
+  description: This is the Rest API specification for the harpocrates application
+  title: Harpocrates API
+  version: 1.0.1
+externalDocs:
+  description: API documentation
+  url: https://harpocrates-app.gitlab.io/api-specification
+servers:
+- url: /
+tags:
+- description: Everything about documentsets
+  name: set
+- description: Everything about documents
+  name: document
+paths:
+  /documentSet:
+    get:
+      operationId: get_sets
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/documentSets'
+          description: Listing of all known document sets
+      summary: List all documentsets known by the engine
+      tags:
+      - set
+      x-openapi-router-controller: openapi_server.controllers.set_controller
+    post:
+      operationId: create_set
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/documentSet'
+        description: documentSet descriptor that needs to be added to the engine
+        required: true
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/documentSet'
+          description: The created document set Object
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The request was invalid JSON or missing some attributes
+        409:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: Conflicting element already present
+      summary: Add a new documentset set to the engine
+      tags:
+      - set
+      x-openapi-router-controller: openapi_server.controllers.set_controller
+  /documentSet/{setId}:
+    delete:
+      operationId: delete_set
+      parameters:
+      - description: ID of a set
+        explode: false
+        in: path
+        name: setId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/documentSet'
+          description: Successfully deleted the document set
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The request was invalid JSON or missing some attributes
+        404:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The specified resource was not found
+      summary: delete the set
+      tags:
+      - set
+      x-openapi-router-controller: openapi_server.controllers.set_controller
+    get:
+      operationId: get_set
+      parameters:
+      - description: ID of a set
+        explode: false
+        in: path
+        name: setId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/documents'
+          description: Successfully got list of documents in set
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The request was invalid JSON or missing some attributes
+        404:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The specified resource was not found
+      summary: lists all documents in the set
+      tags:
+      - set
+      x-openapi-router-controller: openapi_server.controllers.set_controller
+    post:
+      description: Contents of the document in the body of the request. This should
+        be in plain text. The Content-Type header should be appropriately set to text/plain.
+      operationId: create_document
+      parameters:
+      - description: ID of a set
+        explode: false
+        in: path
+        name: setId
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          text/plain:
+            schema:
+              type: string
+        required: true
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/document'
+          description: Successfully created document in set
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The request was invalid JSON or missing some attributes
+        404:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The specified resource was not found
+        409:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: Conflicting element already present
+      summary: Add a new document to the document set
+      tags:
+      - document
+      x-openapi-router-controller: openapi_server.controllers.document_controller
+  /documentSet/{setId}/{docId}:
+    delete:
+      operationId: delete_document
+      parameters:
+      - description: ID of a set
+        explode: false
+        in: path
+        name: setId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: ID of a document
+        explode: false
+        in: path
+        name: docId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/document'
+          description: Successfully deleted document in the set
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The request was invalid JSON or missing some attributes
+        404:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The specified resource was not found
+      summary: delete the set
+      tags:
+      - document
+      x-openapi-router-controller: openapi_server.controllers.document_controller
+    get:
+      operationId: get_document
+      parameters:
+      - description: ID of a set
+        explode: false
+        in: path
+        name: setId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: ID of a document
+        explode: false
+        in: path
+        name: docId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/document'
+          description: Successfully got document from set
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The request was invalid JSON or missing some attributes
+        404:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The specified resource was not found
+      summary: get document from set
+      tags:
+      - document
+      x-openapi-router-controller: openapi_server.controllers.document_controller
+  /documentSet/{setId}/{docId}/predictedClassification:
+    get:
+      operationId: get_predicted_classification
+      parameters:
+      - description: ID of a set
+        explode: false
+        in: path
+        name: setId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: ID of a document
+        explode: false
+        in: path
+        name: docId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/predictedClassification'
+          description: Successfully got the predicted classification
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The request was invalid JSON or missing some attributes
+        404:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The specified resource was not found
+      summary: Get the predicted classification for the document
+      tags:
+      - document
+      x-openapi-router-controller: openapi_server.controllers.document_controller
+  /documentSet/{setId}/{docId}/predictedClassificationWithExplanation:
+    get:
+      operationId: get_predicted_classification_with_explanation
+      parameters:
+      - description: ID of a set
+        explode: false
+        in: path
+        name: setId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: ID of a document
+        explode: false
+        in: path
+        name: docId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/predictedClassificationWithExplanation'
+          description: Successfully got the explanation for the predicted classification
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The request was invalid JSON or missing some attributes
+        404:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The specified resource was not found
+      summary: Get the explanation for the predicted classification of a document
+      tags:
+      - document
+      x-openapi-router-controller: openapi_server.controllers.document_controller
+components:
+  parameters:
+    docId:
+      description: ID of a document
+      explode: false
+      in: path
+      name: docId
+      required: true
+      schema:
+        type: string
+      style: simple
+    setId:
+      description: ID of a set
+      explode: false
+      in: path
+      name: setId
+      required: true
+      schema:
+        type: string
+      style: simple
+  responses:
+    notFound:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/httpStatus'
+      description: The specified resource was not found
+    conflict:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/httpStatus'
+      description: Conflicting element already present
+    malformedRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/httpStatus'
+      description: The request was invalid JSON or missing some attributes
+  schemas:
+    idBase:
+      description: Base for the id schema of an object.
+      example: WaROKG4B0l9WO2IWoBnP
+      type: string
+    nameBase:
+      description: The name of the object.
+      example: Object 1
+      type: string
+    httpStatus:
+      description: This object describes an HTTP status
+      properties:
+        code:
+          description: HTTP status code
+          format: int32
+          maximum: 600
+          minimum: 100
+          type: integer
+        message:
+          description: HTTP status message
+          type: string
+      required:
+      - code
+      - message
+      type: object
+    documentSet:
+      description: schema for a set of Documents
+      example:
+        documentCount: 0
+        size: size
+        name: ""
+        setId: ""
+      properties:
+        name:
+          allOf:
+          - $ref: '#/components/schemas/nameBase'
+          - description: Name of the Document set
+        setId:
+          allOf:
+          - $ref: '#/components/schemas/idBase'
+          - description: Unique identifier for a document set
+        documentCount:
+          description: number of documents in set
+          format: int32
+          type: integer
+        size:
+          description: size of the set, unit comes at the end of the string
+          type: string
+      required:
+      - name
+      type: object
+    documentSets:
+      description: an object representing multiple document sets
+      example:
+        documentSets:
+        - documentCount: 0
+          size: size
+          name: ""
+          setId: ""
+        - documentCount: 0
+          size: size
+          name: ""
+          setId: ""
+      properties:
+        documentSets:
+          description: array of document sets
+          items:
+            $ref: '#/components/schemas/documentSet'
+          type: array
+      required:
+      - documentSets
+      type: object
+    document:
+      description: A document to review
+      example:
+        name: ""
+        documentId: ""
+        content: content
+      properties:
+        name:
+          allOf:
+          - $ref: '#/components/schemas/nameBase'
+          - description: Name of the Document
+        documentId:
+          allOf:
+          - $ref: '#/components/schemas/idBase'
+          - description: Unique identifier for a Document
+        content:
+          description: content of the document
+          type: string
+      required:
+      - documentId
+      type: object
+    documents:
+      description: an object representing multiple documents
+      example:
+        documents:
+        - name: ""
+          documentId: ""
+          content: content
+        - name: ""
+          documentId: ""
+          content: content
+      properties:
+        documents:
+          description: array of documents
+          items:
+            $ref: '#/components/schemas/document'
+          type: array
+      required:
+      - documents
+      type: object
+    predictedClassification:
+      description: The predicted Sensitivity (Sensitive or Not) of a document
+      example:
+        sensitive: true
+        sensitivity: 0
+      properties:
+        sensitive:
+          description: true if the document is predicted to be sensitive, false otherwise
+          type: boolean
+        sensitivity:
+          description: Document sensitivity percentage
+          format: int32
+          type: integer
+      required:
+      - sensitive
+      type: object
+    feature:
+      description: an object representing a feature that explains the classification
+      properties:
+        feature:
+          description: A feature of the text
+          type: string
+        weight:
+          description: The contribution of that feature to the classification
+          format: float
+          type: number
+      required:
+      - feature
+      type: object
+    predictedClassificationWithExplanation:
+      allOf:
+      - $ref: '#/components/schemas/predictedClassification'
+      - $ref: '#/components/schemas/predictedClassificationWithExplanation_allOf'
+    predictedClassificationWithExplanation_allOf:
+      description: Object representing an explanation for a sensitivity prediction
+      properties:
+        sensitiveFeatures:
+          description: The explanation for the "sensitive" classification of a document
+            as an array of features and their contribution to the explanation
+          items:
+            $ref: '#/components/schemas/feature'
+          type: array
+        nonSensitiveFeatures:
+          description: The explanation for the "non sensitive" classification of a
+            document as an array of features and their contribution to the explanation
+          items:
+            $ref: '#/components/schemas/feature'
+          type: array
