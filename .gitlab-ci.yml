@@ -8,7 +8,7 @@ stages:
 # specify the location of the Open API Specification files within your project
 # and the filename of the specification that you would like to display by default
 variables:
-  DOCS_FOLDER: api-specification/api-specification
+  DOCS_FOLDER: api-specification
   SPEC_TO_DISPLAY: openapi.yml
 
 # These folders are cached between builds
@@ -21,6 +21,7 @@ validate-api-specification:
   image: node:alpine  
   stage: test
   before_script:
+    - cd api-specification
     - npm install --dev-only
   script:
     - npx lint-openapi "$DOCS_FOLDER/$SPEC_TO_DISPLAY" --errors_only
@@ -31,6 +32,7 @@ pages:
   image: node:alpine
   stage: documentation
   before_script:
+    - cd api-specification
     - npm install --dev-only
   script:
     - mkdir public
