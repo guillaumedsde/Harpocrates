@@ -44,8 +44,9 @@ pages:
     paths:
       - public
   only:
+    refs:
+      - master
     changes:
       - api-specification/**/*
-  except:
-    - branches
+    
     
