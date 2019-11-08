@@ -16,7 +16,7 @@ tox-pipenv-install = "*"
 pylint = "*"
 
 [packages]
-connexion = ">=2.0.2"
+connexion = {editable = true,git = "https://github.com/zalando/connexion.git",ref = "master"}
 swagger-ui-bundle = ">=0.0.2"
 python-dateutil = ">=2.6.0"
 elasticsearch = "*"
