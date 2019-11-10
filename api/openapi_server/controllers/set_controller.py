@@ -2,6 +2,9 @@ import connexion
 import six
 from http import HTTPStatus
 
+import elasticsearch
+import time
+
 from openapi_server.models.document_set import DocumentSet  # noqa: E501
 from openapi_server.models.document_sets import DocumentSets  # noqa: E501
 from openapi_server.models.documents import Documents  # noqa: E501
@@ -25,9 +28,10 @@ def create_set(body):  # noqa: E501
 
     document_set = DocumentSet.from_dict(connexion.request.get_json())  # noqa: E501
 
+    print("creating document set")
     # TODO error handling
     # FIXME block until index is actually created
-    es.indices.create(index=document_set.name)
+    es.indices.create(index=document_set.name, wait_for_active_shards="1")
 
     return HTTPStatus.CREATED
 

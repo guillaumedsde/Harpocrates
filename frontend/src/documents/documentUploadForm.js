@@ -13,7 +13,10 @@ export default function DocumentUploadForm(props) {
     reader.onload = () => {
       // Do whatever you want with the file contents
       const body = reader.result;
-      api.createDocument(props.documentSet, body);
+      props.setLoading(true);
+      api.createDocument(props.documentSet, body).then( () => {
+        props.triggerDocListRefresh(Math.random())
+      });
     };
 
     acceptedFiles.forEach(file => reader.readAsText(file));
