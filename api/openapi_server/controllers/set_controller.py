@@ -42,7 +42,9 @@ def delete_set(set_id):  # noqa: E501
 
     :rtype: DocumentSet
     """
-    return "do some magic!"
+
+    es.indices.delete(index=set_id)
+    return HTTPStatus.OK
 
 
 def get_set(set_id):  # noqa: E501
