@@ -34,7 +34,8 @@ def create_document(set_id, body):  # noqa: E501
     """
 
     es_doc = {"body": body.decode()}
-    es.index(index=set_id, body=es_doc)
+    es.index(index=set_id, body=es_doc, refresh="wait_for")
+
     return HTTPStatus.CREATED
 
 
@@ -50,7 +51,8 @@ def delete_document(set_id, doc_id):  # noqa: E501
 
     :rtype: Document
     """
-    return HTTPStatus.NOT_IMPLEMENTED
+    es.delete(index=set_id, id=doc_id, refresh="wait_for")
+    return HTTPStatus.OK
 
 
 def get_document(set_id, doc_id):  # noqa: E501
