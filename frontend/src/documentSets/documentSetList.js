@@ -18,7 +18,8 @@ import DeleteIcon from "@material-ui/icons/Delete";
 
 export default function DocumentSetList() {
   const [documentSets, setDocumentSets] = useState(null);
-
+  // TODO find better way to retrigger document list update on document delete
+  const [triggerRequest, setTriggerRequest] = useState(false)
   var api = new SetApi();
 
   useEffect(
@@ -27,12 +28,19 @@ export default function DocumentSetList() {
         setDocumentSets(apiSets.documentSets);
       });
     },
-    [] //dependencies
+    [triggerRequest] //dependencies
   );
 
   const handleListItemClick = (event, index) => {
     navigate(`/documentSet/${index}`);
   };
+
+  const deleteItem = React.useCallback((event, setId) => {
+    api.deleteSet(setId).then( response => {
+      setTriggerRequest(!triggerRequest);
+      console.log("deleted set")})
+  })
+
   if (documentSets === null) {
     return <LinearProgress />;
   }
@@ -60,7 +68,8 @@ export default function DocumentSetList() {
               secondary={`${set.documentCount} documents (${set.size})`}
             />
             <ListItemSecondaryAction>
-              <IconButton edge="end" aria-label="delete">
+              <IconButton edge="end" aria-label="delete" onClick={event => deleteItem(event,
+                  set.name)}>
                 <DeleteIcon />
               </IconButton>
             </ListItemSecondaryAction>
