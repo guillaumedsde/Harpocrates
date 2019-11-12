@@ -3,6 +3,14 @@ import Paper from "@material-ui/core/Paper";
 
 import { makeStyles } from "@material-ui/core/styles";
 
+import BorderColor from '@material-ui/icons/BorderColor';
+import FormatColorResetIcon from '@material-ui/icons/FormatColorReset';
+import InsertCommentIcon from '@material-ui/icons/InsertComment';
+import ToggleButton from '@material-ui/lab/ToggleButton';
+import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
+
+import Popover from 'react-text-selection-popover';
+
 import createMarker from "react-content-marker";
 
 const useStyles = makeStyles(theme => ({
@@ -20,6 +28,22 @@ const useStyles = makeStyles(theme => ({
 export default function DocumentBody(props) {
   const classes = useStyles();
   var rules = [];
+
+
+  var refBody = React.createRef()
+
+
+    const toggleButtons = [
+      <ToggleButton key={1} value="left">
+        <BorderColor />
+      </ToggleButton>,
+      <ToggleButton key={2} value="center">
+        <FormatColorResetIcon />
+      </ToggleButton>,
+      <ToggleButton key={3} value="right">
+        <InsertCommentIcon />
+      </ToggleButton>,
+    ];
 
   if (props.showSensitive & (props.classification !== null)) {
     props.classification.sensitiveFeatures.forEach(feature => {
@@ -59,8 +83,27 @@ export default function DocumentBody(props) {
 
   const MyMarker = createMarker(rules);
   return (
+    
     <Paper className={classes.root}>
-      <MyMarker>{props.documentContent}</MyMarker>
-    </Paper>
+            
+                <div>
+            <div
+              ref={refBody}
+              contentEditable="false"
+              suppressContentEditableWarning
+              
+            >
+              <MyMarker>{props.documentContent}</MyMarker>
+              
+            </div>
+            <Popover selectionRef={refBody}>
+            <ToggleButtonGroup size="small">
+      {toggleButtons}
+    </ToggleButtonGroup>
+            </Popover>
+          </div>
+          </Paper>
+          
+      
   );
 }
