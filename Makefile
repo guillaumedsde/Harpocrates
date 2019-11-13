@@ -3,16 +3,16 @@
 # ----------------------------
 
 # Import deploy config
-#dpl ?= deploy.env
-#include $(dpl)
-#export $(shell sed 's/=.*//' $(dpl))
+dpl ?= deploy.env
+include $(dpl)
+export $(shell sed 's/=.*//' $(dpl))
 
 # This version-strategy uses git tags to set the version string
 VERSION := $(shell git describe --tags --always --dirty)
 
 # Set gitlab-ci variables if not in a CI context
 ifndef CI_REGISTRY_IMAGE
-	CI_REGISTRY_IMAGE := $(DOCKER_REGISTRY)/harpocrates
+	CI_REGISTRY_IMAGE := $(DOCKER_REGISTRY)/harpocrates-app
 endif
 ifndef CI_COMMIT_REF_NAME
 	CI_COMMIT_REF_NAME := $(shell git rev-parse --abbrev-ref HEAD)
