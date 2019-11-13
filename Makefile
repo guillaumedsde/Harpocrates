@@ -12,7 +12,7 @@ VERSION := $(shell git describe --tags --always --dirty)
 
 # Set gitlab-ci variables if not in a CI context
 ifndef CI_REGISTRY_IMAGE
-	CI_REGISTRY_IMAGE := $(DOCKER_REGISTRY)/harpocrates-app
+	CI_REGISTRY_IMAGE := $(DOCKER_REGISTRY)/harpocrates-app/${APP_NAME}
 endif
 ifndef CI_COMMIT_REF_NAME
 	CI_COMMIT_REF_NAME := $(shell git rev-parse --abbrev-ref HEAD)
