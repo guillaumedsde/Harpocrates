@@ -46,6 +46,10 @@ strict-lint: ## Lint project code with python black, return error if there is an
 docker-login: ## Log in to the default registry
 	@docker login -u $(CI_REGISTRY_USER) -p $(CI_REGISTRY_PASSWORD) $(DOCKER_REGISTRY)
 
+.PHONY: docker-logout
+docker-logout: ## Logout to the default registry
+	@docker logout $(DOCKER_REGISTRY)
+
 .PHONY: build
 build: ## Build a docker image
 	@docker build -t $(CI_REGISTRY_IMAGE)/$(SERVICE):$(VERSION) -f $(SERVICE)/Dockerfile .

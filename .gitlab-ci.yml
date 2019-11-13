@@ -5,6 +5,7 @@ stages:
   - test
   - build
   - documentation
+  - cleanup
 
 # specify the location of the Open API Specification files within your project
 # and the filename of the specification that you would like to display by default
@@ -41,6 +42,7 @@ validate-api-specification:
     - make build
     - make tag
     - make deploy
+  - after
 
 api:
   extends: .build_service
@@ -85,4 +87,12 @@ pages:
     changes:
       - api-specification/**/*
     
-    
+
+
+cleanup_job:
+  image: alpine
+  stage: cleanup
+  script:
+    - apk add make
+    - make docker-logout
+  when: always
