@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Box from "@material-ui/core/Box";
+import Grid from '@material-ui/core/Grid';
+
 
 import { DocumentApi } from "@harpocrates/api-client";
 
@@ -49,14 +51,22 @@ export default function Document(props) {
 
   if (document) {
     return (
-      <div>
-        <h1>{document.name}</h1>
-        <h2>{document.documentId}</h2>
-        {classification ? (
-          <Box my={2}>
+      <>
+        <Grid container alignItems="center" spacing={2}>
+          { document.name ? 
+            <Grid item>
+              <h1>{document.name}</h1>
+            </Grid>
+            : null}
+          <Grid item>
+            <h2>{document.documentId}</h2>
+          </Grid>
+          {classification ? 
+          <Grid item>
             <PredictedClassification classification={classification} />
-          </Box>
-        ) : null}
+          </Grid>
+          : null}
+        </Grid>
 
         <DocumentBody
           documentContent={document.content}
@@ -75,13 +85,13 @@ export default function Document(props) {
           showNonSensitiveExplanations={showNonSensitiveExplanations}
           setShowNonSensitiveExplanations={setShowNonSensitiveExplanations}
         />
-      </div>
+      </>
     );
   } else {
     return (
-      <div>
+      <>
         <CircularProgress />
-      </div>
+      </>
     );
   }
 }
