@@ -42,7 +42,6 @@ validate-api-specification:
     - make build
     - make tag
     - make deploy
-  - after
 
 api:
   extends: .build_service
