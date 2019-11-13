@@ -3,15 +3,10 @@ import Paper from "@material-ui/core/Paper";
 
 import { makeStyles } from "@material-ui/core/styles";
 
-import BorderColor from '@material-ui/icons/BorderColor';
-import FormatColorResetIcon from '@material-ui/icons/FormatColorReset';
-import InsertCommentIcon from '@material-ui/icons/InsertComment';
-import ToggleButton from '@material-ui/lab/ToggleButton';
-import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
-
 import Popover from 'react-text-selection-popover';
-
 import createMarker from "react-content-marker";
+
+import PopoverMenu from "./textPopoverMenu"
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -33,17 +28,7 @@ export default function DocumentBody(props) {
   var refBody = React.createRef()
 
 
-    const toggleButtons = [
-      <ToggleButton key={1} value="left">
-        <BorderColor />
-      </ToggleButton>,
-      <ToggleButton key={2} value="center">
-        <FormatColorResetIcon />
-      </ToggleButton>,
-      <ToggleButton key={3} value="right">
-        <InsertCommentIcon />
-      </ToggleButton>,
-    ];
+    
 
   if (props.showSensitive & (props.classification !== null)) {
     props.classification.sensitiveFeatures.forEach(feature => {
@@ -97,9 +82,7 @@ export default function DocumentBody(props) {
               
             </div>
             <Popover selectionRef={refBody}>
-            <ToggleButtonGroup size="small">
-      {toggleButtons}
-    </ToggleButtonGroup>
+              <PopoverMenu/>
             </Popover>
           </div>
           </Paper>
