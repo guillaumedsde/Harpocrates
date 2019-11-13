@@ -3,6 +3,7 @@
 
 stages:
   - test
+  - build
   - documentation
 
 # specify the location of the Open API Specification files within your project
@@ -16,7 +17,7 @@ cache:
   paths:
     - ./node_modules
 
-# Use IBM OpenAPI validator to check for any errors
+# Use IBM OpenAPI validator to check for any errors in API specification
 validate-api-specification:
   image: node:alpine  
   stage: test
@@ -25,6 +26,41 @@ validate-api-specification:
     - npm install --dev-only
   script:
     - npx lint-openapi "$DOCS_FOLDER/$SPEC_TO_DISPLAY" --errors_only
+
+# template service build job
+.build_service:
+  stage: build
+  image: docker:stable
+  # disable cache for this job
+  cache: {}
+  before_script:
+    - apk add make
+    - apk add git
+    - make docker-login
+  script:
+    - make build
+    - make tag
+    - make deploy
+
+api:
+  extends: .build_service
+  # name of service to build is the name of the job
+  variables:
+    SERVICE: $CI_JOB_NAME
+  # only build on changes to api
+  only:
+    changes:
+      - api/**/*
+
+frontend:
+  extends: .build_service
+  # name of service to build is the name of the job
+  variables:
+    SERVICE: $CI_JOB_NAME
+  # only build on changes to frontend
+  only:
+    changes:
+      - frontend/**/*
 
 # publishes all files from the $DOCS_FOLDER together with the static version of SwaggerUI
 # sets the specification file named in $SPEC_TO_DISPLAY to be displayed by default
