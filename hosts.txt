@@ -1,0 +1,3 @@
+127.0.0.1       api.harpocrates.app.local
+127.0.0.1       harpocrates.app.local
+127.0.0.1       es.harpocrates.app.local
