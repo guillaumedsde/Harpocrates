@@ -1,0 +1,77 @@
+version: "3"
+
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:${ELK_STACK_VERSION}
+    environment:
+      discovery.type: single-node
+      #- cluster.name=docker-cluster
+      #- bootstrap.memory_lock=true
+      #- "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - 9200:9200
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    networks:
+      default:
+        aliases:
+          - es.harpocrates.app.local
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.elasticsearch.rule: Host(`es.harpocrates.app.local`)
+      traefik.port: "9200"
+  # python Flask API
+  api:
+    build:
+      # build it in its folder
+      context: ./api/
+      dockerfile: Dockerfile
+    environment: 
+      ES_URI: ${ES_URI}
+    ports:
+      - 5000:80
+    networks:
+      default:
+        aliases:
+          - api.harpocrates.app.local
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.api.rule: Host(`api.harpocrates.app.local`)
+      traefik.port: "80"
+  # React frontend
+  frontend:
+    # build it in its folder
+    build:
+      context: ./frontend/
+      dockerfile: Dockerfile
+    ports:
+      - 1234:80
+    networks:
+      default:
+        aliases:
+          - harpocrates.app.local
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.frontend.rule: Host(`harpocrates.app.local`)
+      traefik.port: "80"
+
+  # reverse proxy
+  traefik:
+    image: traefik:latest
+    command:
+      - "--log.level=DEBUG"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.default"
+      - "--entrypoints.default.address=:80"
+    ports:
+      - "80:80"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
+volumes:
+  esdata:

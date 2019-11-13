@@ -230,3 +230,5 @@ dmypy.json
 .pyre/
 
 dist/
+.vscode/
+*.code-workspace
