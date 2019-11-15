@@ -5,7 +5,6 @@ stages:
   - test
   - build
   - documentation
-  - cleanup
 
 # specify the location of the Open API Specification files within your project
 # and the filename of the specification that you would like to display by default
@@ -85,13 +84,3 @@ pages:
       - master
     changes:
       - api-specification/**/*
-    
-
-
-cleanup_job:
-  image: alpine
-  stage: cleanup
-  script:
-    - apk add make
-    - make docker-logout
-  when: always

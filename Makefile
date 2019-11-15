@@ -34,14 +34,6 @@ echo:
 help:
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
-.PHONY: docs
-docs: ## Build documentation
-	docker-compose up --build docs
-
-.PHONY: strict-lint
-strict-lint: ## Lint project code with python black, return error if there is any suggestion
-	black --check ./
-
 .PHONY: docker-login
 docker-login: ## Log in to the default registry
 	@docker login -u $(CI_REGISTRY_USER) -p $(CI_REGISTRY_PASSWORD) $(DOCKER_REGISTRY)
@@ -52,7 +44,7 @@ docker-logout: ## Logout to the default registry
 
 .PHONY: build
 build: ## Build a docker image
-	@docker build -t $(CI_REGISTRY_IMAGE)/$(SERVICE):$(VERSION) -f $(SERVICE)/Dockerfile .
+	@docker build -t $(CI_REGISTRY_IMAGE)/$(SERVICE):$(VERSION) -f $(SERVICE)/Dockerfile ./$(SERVICE)
 
 .PHONY: tag
 tag: ## Tag a docker image and set some aliases
