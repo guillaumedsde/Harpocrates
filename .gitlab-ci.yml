@@ -51,6 +51,8 @@ api:
   only:
     changes:
       - api/**/*
+      - .gitlab-ci/yml
+      - Makefile
 
 frontend:
   extends: .build_service
@@ -61,6 +63,8 @@ frontend:
   only:
     changes:
       - frontend/**/*
+      - .gitlab-ci/yml
+      - Makefile
 
 # publishes all files from the $DOCS_FOLDER together with the static version of SwaggerUI
 # sets the specification file named in $SPEC_TO_DISPLAY to be displayed by default
@@ -84,3 +88,5 @@ pages:
       - master
     changes:
       - api-specification/**/*
+      - .gitlab-ci/yml
+      - Makefile
