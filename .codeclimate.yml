@@ -1,0 +1,22 @@
+version: "2"
+
+plugins:
+  sonar-python:
+    enabled: true
+  pep8:
+    enabled: true
+  fixme:
+    enabled: true
+  radon:
+    enabled: true
+  duplication:
+    enabled: true
+    config:
+      languages:
+        - python:
+            python_version: 3
+        - javascript:
+  eslint:
+    enabled: true
+  nodesecurity:
+    enabled: true
