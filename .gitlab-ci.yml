@@ -6,6 +6,9 @@ stages:
   - build
   - documentation
 
+include:
+  - template: Code-Quality.gitlab-ci.yml
+
 # specify the location of the Open API Specification files within your project
 # and the filename of the specification that you would like to display by default
 variables:
@@ -19,13 +22,27 @@ cache:
 
 # Use IBM OpenAPI validator to check for any errors in API specification
 validate-api-specification:
-  image: node:alpine  
+  image: node:alpine
   stage: test
   before_script:
     - cd api-specification
     - npm install --dev-only
   script:
     - npx lint-openapi "$DOCS_FOLDER/$SPEC_TO_DISPLAY" --errors_only
+  tags:
+    - trdocker
+
+code_quality:
+  # disable cache for this job
+  cache: {}
+  # for some reason code quality only works on gitlab shared runners
+  only:
+    - merge_requests
+    - develop
+    - master
+  tags:
+    - shared
+  stage: test
 
 # template service build job
 .build_service:
@@ -41,6 +58,8 @@ validate-api-specification:
     - make build
     - make tag
     - make deploy
+  tags:
+    - trdocker
 
 api:
   extends: .build_service
@@ -90,3 +109,5 @@ pages:
       - api-specification/**/*
       - .gitlab-ci/yml
       - Makefile
+  tags:
+    - trdocker
