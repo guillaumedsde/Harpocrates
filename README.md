@@ -2,7 +2,7 @@
 
 ![Gitlab pipeline status](https://gitlab.com/harpocrates-app/harpocrates/badges/master/pipeline.svg)
 
-![UI demo](https://dissertation.guillaume.desusanne.com/ui-improvements/document_edit.gif)
+![UI demo](static/document_edit.gif)
 
 This is the monorepository for the Harpocrates sensitive document redaction application. Harpocrates is a web application to aid in the redaction of collections of sensitive by using Machine Learn (scikit-learn) to classify documents according to sensitivity and explaining these classifications (LIME).
 
