@@ -17,6 +17,7 @@ export default function Document(props) {
   const [document, setDocument] = useState(null);
 
   const [classification, setClassification] = useState(null);
+  const [sensitiveSections, setSensitiveSections] = useState(null);
 
   const [showSensitiveExplanations, setShowSensitiveExplanations] = useState(
     true
@@ -25,6 +26,8 @@ export default function Document(props) {
     showNonSensitiveExplanations,
     setShowNonSensitiveExplanations
   ] = useState(false);
+
+  const [sensitiveSectionsRefreshDate, refreshSensitiveSections] = useState(null);
 
   var api = new DocumentApi();
 
@@ -49,6 +52,16 @@ export default function Document(props) {
       });
   }, []);
 
+  // effect for getting sensitive sections
+  useEffect(() => {
+    api
+      .getSensitiveSections(props.documentSetName, props.documentId)
+      .then(apiSensitiveSections => {
+        setSensitiveSections(apiSensitiveSections)
+      });
+  }, [sensitiveSectionsRefreshDate]);
+
+
   if (document) {
     return (
       <>
@@ -69,7 +82,11 @@ export default function Document(props) {
         </Grid>
 
         <DocumentBody
-          documentContent={document.content}
+          document={document}
+          docId={props.documentId}
+          setName={props.documentSetName}
+          sensitiveSections={sensitiveSections}
+          refreshSensitiveSections={refreshSensitiveSections}
           classification={classification}
           showNonSensitive={showNonSensitiveExplanations}
           showSensitive={showSensitiveExplanations}

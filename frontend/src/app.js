@@ -14,7 +14,7 @@ const App = () => {
   return (
     // does nothing in production
     // but gives additional warnings in development
-    <React.StrictMode>
+    // <React.StrictMode>
       <Dashboard>
         <Router>
           <Home path="/" />
@@ -23,7 +23,7 @@ const App = () => {
           <Document path="documentSet/:documentSetName/:documentId" />
         </Router>
       </Dashboard>
-    </React.StrictMode>
+    // </React.StrictMode>
   );
 };
 

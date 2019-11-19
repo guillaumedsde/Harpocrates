@@ -4,10 +4,10 @@ All URIs are relative to *http://localhost*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**createSet**](SetApi.md#createSet) | **POST** /documentSet | Add a new documentset set to the engine
+[**createSet**](SetApi.md#createSet) | **POST** /documentSet | Add a new document set set to the engine
 [**deleteSet**](SetApi.md#deleteSet) | **DELETE** /documentSet/{setId} | delete the set
 [**getSet**](SetApi.md#getSet) | **GET** /documentSet/{setId} | lists all documents in the set
-[**getSets**](SetApi.md#getSets) | **GET** /documentSet | List all documentsets known by the engine
+[**getSets**](SetApi.md#getSets) | **GET** /documentSet | List all document sets known by the engine
 
 
 
@@ -15,7 +15,7 @@ Method | HTTP request | Description
 
 > DocumentSet createSet(documentSet)
 
-Add a new documentset set to the engine
+Add a new document set set to the engine
 
 ### Example
 
@@ -141,7 +141,7 @@ No authorization required
 
 > DocumentSets getSets()
 
-List all documentsets known by the engine
+List all document sets known by the engine
 
 ### Example
 

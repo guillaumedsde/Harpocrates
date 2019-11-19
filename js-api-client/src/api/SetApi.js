@@ -39,7 +39,7 @@ export default class SetApi {
 
 
     /**
-     * Add a new documentset set to the engine
+     * Add a new document set set to the engine
      * @param {module:model/DocumentSet} documentSet documentSet descriptor that needs to be added to the engine
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/DocumentSet} and HTTP response
      */
@@ -71,7 +71,7 @@ export default class SetApi {
     }
 
     /**
-     * Add a new documentset set to the engine
+     * Add a new document set set to the engine
      * @param {module:model/DocumentSet} documentSet documentSet descriptor that needs to be added to the engine
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/DocumentSet}
      */
@@ -176,7 +176,7 @@ export default class SetApi {
 
 
     /**
-     * List all documentsets known by the engine
+     * List all document sets known by the engine
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/DocumentSets} and HTTP response
      */
     getSetsWithHttpInfo() {
@@ -203,7 +203,7 @@ export default class SetApi {
     }
 
     /**
-     * List all documentsets known by the engine
+     * List all document sets known by the engine
      * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/DocumentSets}
      */
     getSets() {
