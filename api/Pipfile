@@ -25,6 +25,7 @@ beautifulsoup4 = "*"
 lime = "*"
 scikit-learn = "*"
 lxml = "*"
+pymongo = "*"
 
 [requires]
 python_version = "3.7"

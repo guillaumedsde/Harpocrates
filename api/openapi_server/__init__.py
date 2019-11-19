@@ -6,6 +6,9 @@ from flask.cli import with_appcontext
 
 from flask_cors import CORS
 
+from pymongo import MongoClient
+
+
 from elasticsearch import Elasticsearch
 from elasticsearch.client import CatClient
 
@@ -17,6 +20,10 @@ es_uri = os.environ.get("ES_URI") or "http://localhost:9200/"
 
 es = Elasticsearch([es_uri])
 cat = CatClient(es)
+
+MONGO_URI = os.environ.get("MONGO_URI") or "mongodb://root:example@localhost:27017/"
+mongo = MongoClient(MONGO_URI)
+db = mongo["document_sets"]
 
 
 def create_app(test_config=None):

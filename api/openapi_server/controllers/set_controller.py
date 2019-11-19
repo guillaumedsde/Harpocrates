@@ -10,7 +10,7 @@ from openapi_server.models.document_sets import DocumentSets  # noqa: E501
 from openapi_server.models.documents import Documents  # noqa: E501
 from openapi_server.models.document import Document
 from openapi_server.models.http_status import HttpStatus  # noqa: E501
-from openapi_server import util, es, cat
+from openapi_server import util, db, cat
 
 
 def create_set(body):  # noqa: E501
@@ -28,10 +28,7 @@ def create_set(body):  # noqa: E501
 
     document_set = DocumentSet.from_dict(connexion.request.get_json())  # noqa: E501
 
-    print("creating document set")
-    # TODO error handling
-    # FIXME block until index is actually created
-    es.indices.create(index=document_set.name, wait_for_active_shards="1")
+    db.create_collection(document_set.name)
 
     return HTTPStatus.CREATED
 
@@ -47,7 +44,7 @@ def delete_set(set_id):  # noqa: E501
     :rtype: DocumentSet
     """
 
-    es.indices.delete(index=set_id)
+    db[set_id].drop()
     return HTTPStatus.OK
 
 
@@ -61,14 +58,12 @@ def get_set(set_id):  # noqa: E501
 
     :rtype: Documents
     """
-    res = es.search(index=set_id, body={"query": {"match_all": {}}})
 
     document_list = []
-    for hit in res["hits"]["hits"]:
-        document = Document(document_id=hit["_id"], content=hit["_source"]["body"])
+    for entry in db[set_id].find({}, {"_id": 1}):
+        document = Document(document_id=str(entry.get("_id")))
         document_list.append(document)
-    documents = Documents(documents=document_list)
-    return documents
+    return Documents(documents=document_list)
 
 
 def get_sets():  # noqa: E501
@@ -81,16 +76,13 @@ def get_sets():  # noqa: E501
     """
 
     doc_set_list = []
-    for index in cat.indices("*", format="json"):
-        # skip admin elasticsearch indexes
-        if index["index"].startswith("."):
-            continue
-        doc_set = DocumentSet(
-            name=index["index"],
-            set_id=index["uuid"],
-            document_count=index["docs.count"],
-            size=index["store.size"],
+    for collection in db.list_collection_names():
+        doc_set_list.append(
+            DocumentSet(
+                name=collection,
+                set_id=collection,
+                document_count=db[collection].count(),
+            )
         )
-        doc_set_list.append(doc_set)
     doc_sets = DocumentSets(document_sets=doc_set_list)
     return doc_sets
