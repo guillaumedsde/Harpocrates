@@ -8,6 +8,9 @@ from flask.cli import with_appcontext
 # from flask_migrate import Migrate
 from flask_cors import CORS
 
+from pymongo import MongoClient
+
+
 from elasticsearch import Elasticsearch
 from elasticsearch.client import CatClient
 
@@ -19,6 +22,10 @@ __version__ = (0, 1, 0, "dev")
 
 es = Elasticsearch()
 cat = CatClient(es)
+
+MONGO_URI = os.environ.get("MONGO_URI") or "mongodb://root:example@localhost:27017/"
+mongo = MongoClient(MONGO_URI)
+db = mongo["document_sets"]
 
 
 def create_app(test_config=None):

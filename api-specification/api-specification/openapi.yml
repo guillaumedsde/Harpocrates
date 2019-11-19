@@ -8,7 +8,7 @@ externalDocs:
   url: https://harpocrates-app.gitlab.io/api-specification
 tags:
   - name: set
-    description: Everything about documentsets
+    description: Everything about document sets
   - name: document
     description: Everything about documents
 paths:
@@ -16,7 +16,7 @@ paths:
     get:
       tags:
         - set
-      summary: List all documentsets known by the engine
+      summary: List all document sets known by the engine
       operationId: get_sets
       responses:
         "200":
@@ -28,7 +28,7 @@ paths:
     post:
       tags:
         - set
-      summary: Add a new documentset set to the engine
+      summary: Add a new document set set to the engine
       operationId: create_set
       requestBody:
         content:
@@ -191,6 +191,48 @@ paths:
           $ref: "#/components/responses/malformedRequest"
         "404":
           $ref: "#/components/responses/notFound"
+  "/documentSet/{setId}/{docId}/sensitiveSections":
+    get:
+      summary: get sensitive sections of the document
+      operationId: get_sensitive_sections
+      tags:
+        - document
+      parameters:
+        - $ref: "#/components/parameters/setId"
+        - $ref: "#/components/parameters/docId"
+      description: documentSet descriptor that needs to be added to the engine
+      responses:
+        "200":
+          description: Successfully got the sensitive sections for the document
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/sensitiveSections"
+        "400":
+          $ref: "#/components/responses/malformedRequest"
+        "404":
+          $ref: "#/components/responses/notFound"
+    post:
+        summary: add a sensitive section to the document
+        operationId: add_sensitive_section
+        tags:
+          - document
+        parameters:
+          - $ref: "#/components/parameters/setId"
+          - $ref: "#/components/parameters/docId"
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/sensitiveSection"
+        description: documentSet descriptor that needs to be added to the engine
+        responses:
+          "201":
+            description: Successfully added the sensitive section
+          "400":
+            $ref: "#/components/responses/malformedRequest"
+          "404":
+            $ref: "#/components/responses/notFound"
 components:
   parameters:
     docId:
@@ -369,3 +411,53 @@ components:
               items:
                 $ref: "#/components/schemas/feature"
               description: The explanation for the "non sensitive" classification of a document as an array of features and their contribution to the explanation
+    sensitiveSections:
+      type: object
+      description: an object representing multiple sensitive sections
+      required:
+        - sensitiveSections
+      properties:
+        sensitiveSections:
+          type: array
+          description: array of sensitive sections
+          items:
+            $ref: "#/components/schemas/sensitiveSection"
+    sensitiveSection:
+      description: This is the base object for recording or suggesting sensitivities
+      title: Section
+      type: object
+      required:
+        - startOffset
+        - endOffset
+      properties:
+        startOffset:
+          type: integer
+          format: int32
+          example: 4
+          description: start offset of an annotation in characters (required for an annotation)
+        startWord:
+          type: string
+          example: was
+          description: actual first word of an annotation
+        endOffset:
+          type: integer
+          format: int32
+          example: 20
+          description: end offset of an annotation in characters (required for an annotation)
+        endWord:
+          type: string
+          example: said
+          description: actual last word of an annotation
+        fullAnnotation:
+          type: string
+          example: The minister said
+          description: For debugging purposes, the full text of the annotation
+        name:
+          type: string
+          example: S27
+          description: what was the exemption that was found (mandatory) # TODO make mandatory
+        description:
+          type: string
+          example: This matches the Royal Family checklist
+          description: This is an optional textual description of what the predicted sensitivity is, suitable for presentation to the user
+          

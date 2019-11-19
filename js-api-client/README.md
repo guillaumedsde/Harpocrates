@@ -103,9 +103,12 @@ var @HarpocratesApiClient = require('@harpocrates/api-client');
 
 var api = new @HarpocratesApiClient.DocumentApi()
 var setId = "setId_example"; // {String} ID of a set
-var body = "body_example"; // {String} 
-api.createDocument(setId, body).then(function(data) {
-  console.log('API called successfully. Returned data: ' + data);
+var docId = "docId_example"; // {String} ID of a document
+var opts = {
+  'sensitiveSection': new @HarpocratesApiClient.SensitiveSection() // {SensitiveSection} 
+};
+api.addSensitiveSection(setId, docId, opts).then(function() {
+  console.log('API called successfully.');
 }, function(error) {
   console.error(error);
 });
@@ -119,15 +122,17 @@ All URIs are relative to *http://localhost*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
+*@HarpocratesApiClient.DocumentApi* | [**addSensitiveSection**](docs/DocumentApi.md#addSensitiveSection) | **POST** /documentSet/{setId}/{docId}/sensitiveSections | add a sensitive section to the document
 *@HarpocratesApiClient.DocumentApi* | [**createDocument**](docs/DocumentApi.md#createDocument) | **POST** /documentSet/{setId} | Add a new document to the document set
 *@HarpocratesApiClient.DocumentApi* | [**deleteDocument**](docs/DocumentApi.md#deleteDocument) | **DELETE** /documentSet/{setId}/{docId} | delete the set
 *@HarpocratesApiClient.DocumentApi* | [**getDocument**](docs/DocumentApi.md#getDocument) | **GET** /documentSet/{setId}/{docId} | get document from set
 *@HarpocratesApiClient.DocumentApi* | [**getPredictedClassification**](docs/DocumentApi.md#getPredictedClassification) | **GET** /documentSet/{setId}/{docId}/predictedClassification | Get the predicted classification for the document
 *@HarpocratesApiClient.DocumentApi* | [**getPredictedClassificationWithExplanation**](docs/DocumentApi.md#getPredictedClassificationWithExplanation) | **GET** /documentSet/{setId}/{docId}/predictedClassificationWithExplanation | Get the explanation for the predicted classification of a document
-*@HarpocratesApiClient.SetApi* | [**createSet**](docs/SetApi.md#createSet) | **POST** /documentSet | Add a new documentset set to the engine
+*@HarpocratesApiClient.DocumentApi* | [**getSensitiveSections**](docs/DocumentApi.md#getSensitiveSections) | **GET** /documentSet/{setId}/{docId}/sensitiveSections | get sensitive sections of the document
+*@HarpocratesApiClient.SetApi* | [**createSet**](docs/SetApi.md#createSet) | **POST** /documentSet | Add a new document set set to the engine
 *@HarpocratesApiClient.SetApi* | [**deleteSet**](docs/SetApi.md#deleteSet) | **DELETE** /documentSet/{setId} | delete the set
 *@HarpocratesApiClient.SetApi* | [**getSet**](docs/SetApi.md#getSet) | **GET** /documentSet/{setId} | lists all documents in the set
-*@HarpocratesApiClient.SetApi* | [**getSets**](docs/SetApi.md#getSets) | **GET** /documentSet | List all documentsets known by the engine
+*@HarpocratesApiClient.SetApi* | [**getSets**](docs/SetApi.md#getSets) | **GET** /documentSet | List all document sets known by the engine
 
 
 ## Documentation for Models
@@ -141,6 +146,8 @@ Class | Method | HTTP request | Description
  - [@HarpocratesApiClient.PredictedClassification](docs/PredictedClassification.md)
  - [@HarpocratesApiClient.PredictedClassificationWithExplanation](docs/PredictedClassificationWithExplanation.md)
  - [@HarpocratesApiClient.PredictedClassificationWithExplanationAllOf](docs/PredictedClassificationWithExplanationAllOf.md)
+ - [@HarpocratesApiClient.SensitiveSection](docs/SensitiveSection.md)
+ - [@HarpocratesApiClient.SensitiveSections](docs/SensitiveSections.md)
 
 
 ## Documentation for Authorization
