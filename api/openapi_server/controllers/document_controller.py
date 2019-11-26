@@ -34,7 +34,7 @@ def add_sensitive_section(set_id, doc_id, body):  # noqa: E501
     :param sensitive_section: 
     :type sensitive_section: dict | bytes
 
-    :rtype: SensitiveSections
+    :rtype: SensitiveSection
     """
     if not connexion.request.is_json:
         return HTTPStatus.BAD_REQUEST
@@ -48,7 +48,33 @@ def add_sensitive_section(set_id, doc_id, body):  # noqa: E501
     )
 
     # return sensitive sections with HTTPStatus
-    return get_sensitive_sections(set_id, doc_id), HTTPStatus.CREATED
+    return sensitive_section, HTTPStatus.CREATED
+
+
+def add_sensitive_sections(set_id, doc_id, body):  # noqa: E501
+    """add multiple sensitive sections to the document
+
+    :param set_id: ID of a set
+    :type set_id: str
+    :param doc_id: ID of a document
+    :type doc_id: str
+    :param sensitive_sections: 
+    :type sensitive_sections: dict | bytes
+
+    :rtype: SensitiveSections
+    """
+    if not connexion.request.is_json:
+        return HTTPStatus.BAD_REQUEST
+    sensitive_sections = SensitiveSections.from_dict(
+        connexion.request.get_json()
+    )  # noqa: E501
+    
+    db[set_id].update_one(
+        {"_id": ObjectId(doc_id)}, {"$set" : {"sensitiveSections": sensitive_sections.to_dict()["sensitive_sections"]}},
+    )
+
+    # return sensitive sections with HTTPStatus
+    return sensitive_sections, HTTPStatus.CREATED
 
 
 def get_sensitive_sections(set_id, doc_id):
@@ -191,7 +217,11 @@ def get_predicted_classification_with_explanation(set_id, doc_id):  # noqa: E501
 
         # iterate over all matches and sort accordingly
         for match in matches:
-            feature = Feature(start_offset=match.span()[0], end_offset=match.span()[1], weight=abs(feature_info[1]))
+            feature = Feature(
+                start_offset=match.span()[0],
+                end_offset=match.span()[1],
+                weight=abs(feature_info[1]),
+            )
             if (
                 sensitive
                 and (feature_info[1] > 0)

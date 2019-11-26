@@ -4,7 +4,8 @@ All URIs are relative to *http://api.harpocrates.app.local*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**addSensitiveSection**](DocumentApi.md#addSensitiveSection) | **POST** /documentSet/{setId}/{docId}/sensitiveSections | add a sensitive section to the document
+[**addSensitiveSection**](DocumentApi.md#addSensitiveSection) | **POST** /documentSet/{setId}/{docId}/sensitiveSection | add a sensitive section to the document
+[**addSensitiveSections**](DocumentApi.md#addSensitiveSections) | **POST** /documentSet/{setId}/{docId}/sensitiveSections | add multiple sensitive sections to the document
 [**createDocument**](DocumentApi.md#createDocument) | **POST** /documentSet/{setId} | Add a new document to the document set
 [**deleteDocument**](DocumentApi.md#deleteDocument) | **DELETE** /documentSet/{setId}/{docId} | delete the set
 [**getDocument**](DocumentApi.md#getDocument) | **GET** /documentSet/{setId}/{docId} | get document from set
@@ -16,11 +17,11 @@ Method | HTTP request | Description
 
 ## addSensitiveSection
 
-> SensitiveSections addSensitiveSection(setId, docId, opts)
+> SensitiveSection addSensitiveSection(setId, docId, opts)
 
 add a sensitive section to the document
 
-documentSet descriptor that needs to be added to the engine
+add a sensitive section to the document
 
 ### Example
 
@@ -49,6 +50,56 @@ Name | Type | Description  | Notes
  **setId** | **String**| ID of a set | 
  **docId** | **String**| ID of a document | 
  **sensitiveSection** | [**SensitiveSection**](SensitiveSection.md)|  | [optional] 
+
+### Return type
+
+[**SensitiveSection**](SensitiveSection.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+
+## addSensitiveSections
+
+> SensitiveSections addSensitiveSections(setId, docId, opts)
+
+add multiple sensitive sections to the document
+
+add multiple sensitive sections to the document
+
+### Example
+
+```javascript
+import @HarpocratesApiClient from '@harpocrates/api-client';
+
+let apiInstance = new @HarpocratesApiClient.DocumentApi();
+let setId = "setId_example"; // String | ID of a set
+let docId = "docId_example"; // String | ID of a document
+let opts = {
+  'sensitiveSections': new @HarpocratesApiClient.SensitiveSections() // SensitiveSections | 
+};
+apiInstance.addSensitiveSections(setId, docId, opts).then((data) => {
+  console.log('API called successfully. Returned data: ' + data);
+}, (error) => {
+  console.error(error);
+});
+
+```
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **setId** | **String**| ID of a set | 
+ **docId** | **String**| ID of a document | 
+ **sensitiveSections** | [**SensitiveSections**](SensitiveSections.md)|  | [optional] 
 
 ### Return type
 
@@ -292,7 +343,7 @@ No authorization required
 
 get sensitive sections of the document
 
-documentSet descriptor that needs to be added to the engine
+get sensitive sections of the document
 
 ### Example
 

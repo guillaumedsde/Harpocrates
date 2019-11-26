@@ -8,7 +8,7 @@ import Switch from "@material-ui/core/Switch";
 
 export default function ExplanationToggles(props) {
   return (
-    <FormGroup>
+    <>
       <FormControlLabel
         control={
           <Switch
@@ -61,6 +61,6 @@ export default function ExplanationToggles(props) {
           </div>
         }
       />
-    </FormGroup>
+    </>
   );
 }
