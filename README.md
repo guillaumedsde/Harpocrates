@@ -45,13 +45,14 @@ To run the stack without docker you will need to have:
    - ```bash
      git clone https://gitlab.com/harpocrates-app/harpocrates.git
      cd harpocrates
+     cat hosts.txt >> /etc/hosts
      ```
 2. Create and install backend API environment and run API
    - ```bash
      cd api
      pipenv install
      pipenv shell
-     flask run
+     flask run --port 80
      ```
 3. Create and install frontend Node environment and run development build of frontend
    - ```bash
