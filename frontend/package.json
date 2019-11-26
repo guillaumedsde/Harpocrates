@@ -1,7 +1,8 @@
 {
   "name": "@harpocrates/frontend",
   "version": "0.1.0",
-  "description": "",
+  "description": "This is the ReactJS frontend for the Harpocrates frontend",
+  "repository": "https://gitlab.com/harpocrates-app/harpocrates",
   "main": "index.js",
   "scripts": {
     "dev": "npx parcel src/index.html",
@@ -10,8 +11,13 @@
     "format": "prettier \"src/**/*.{js,jsx,html}\" --write",
     "lint": "eslint \"src/**/*.{js,jsx}\" --quiet"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "react",
+    "Machine Learning",
+    "sensitive",
+    "redactions"
+  ],
+  "author": "guillaumedsde",
   "license": "ISC",
   "devDependencies": {
     "babel-eslint": "^10.0.3",
@@ -25,7 +31,7 @@
     "prettier": "^1.18.2"
   },
   "dependencies": {
-    "@harpocrates/api-client": "file:../js-api-client",
+    "@harpocrates/api-client": "^2.0.1",
     "@material-ui/core": "^4.6.0",
     "@material-ui/icons": "^4.5.1",
     "@material-ui/lab": "^4.0.0-alpha.32",
