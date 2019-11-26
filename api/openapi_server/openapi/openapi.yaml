@@ -4,7 +4,7 @@ info:
   license:
     name: MIT
   title: Harpocrates API
-  version: 3.0.0
+  version: 4.0.0
 externalDocs:
   description: API documentation
   url: https://harpocrates-app.gitlab.io/api-specification
@@ -351,9 +351,58 @@ paths:
       tags:
       - document
       x-openapi-router-controller: openapi_server.controllers.document_controller
+  /documentSet/{setId}/{docId}/sensitiveSection:
+    post:
+      description: add a sensitive section to the document
+      operationId: add_sensitive_section
+      parameters:
+      - description: ID of a set
+        explode: false
+        in: path
+        name: setId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: ID of a document
+        explode: false
+        in: path
+        name: docId
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/sensitiveSection'
+      responses:
+        201:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/sensitiveSection'
+          description: Successfully added the sensitive section
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The request was invalid JSON or missing some attributes
+        404:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The specified resource was not found
+      summary: add a sensitive section to the document
+      tags:
+      - document
+      x-openapi-router-controller: openapi_server.controllers.document_controller
   /documentSet/{setId}/{docId}/sensitiveSections:
     get:
-      description: documentSet descriptor that needs to be added to the engine
+      description: get sensitive sections of the document
       operationId: get_sensitive_sections
       parameters:
       - description: ID of a set
@@ -396,8 +445,8 @@ paths:
       - document
       x-openapi-router-controller: openapi_server.controllers.document_controller
     post:
-      description: documentSet descriptor that needs to be added to the engine
-      operationId: add_sensitive_section
+      description: add multiple sensitive sections to the document
+      operationId: add_sensitive_sections
       parameters:
       - description: ID of a set
         explode: false
@@ -419,14 +468,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/sensitiveSection'
+              $ref: '#/components/schemas/sensitiveSections'
       responses:
         201:
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/sensitiveSections'
-          description: Successfully added the sensitive section
+          description: Successfully added the sensitive sections
         400:
           content:
             application/json:
@@ -439,7 +488,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/httpStatus'
           description: The specified resource was not found
-      summary: add a sensitive section to the document
+      summary: add multiple sensitive sections to the document
       tags:
       - document
       x-openapi-router-controller: openapi_server.controllers.document_controller

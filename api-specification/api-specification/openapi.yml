@@ -1,7 +1,7 @@
 openapi: "3.0.2"
 info:
   description: This is the Rest API specification for the Harpocrates application
-  version: "3.0.0"
+  version: "4.0.0"
   title: Harpocrates API
   license:
     name: MIT
@@ -196,16 +196,42 @@ paths:
           $ref: "#/components/responses/malformedRequest"
         "404":
           $ref: "#/components/responses/notFound"
+  "/documentSet/{setId}/{docId}/sensitiveSection":
+    post:
+        summary: add a sensitive section to the document
+        description: add a sensitive section to the document
+        operationId: add_sensitive_section
+        tags:
+          - document
+        parameters:
+          - $ref: "#/components/parameters/setId"
+          - $ref: "#/components/parameters/docId"
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/sensitiveSection"
+        responses:
+          "201":
+            description: Successfully added the sensitive section
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/sensitiveSection"
+          "400":
+            $ref: "#/components/responses/malformedRequest"
+          "404":
+            $ref: "#/components/responses/notFound"
   "/documentSet/{setId}/{docId}/sensitiveSections":
     get:
       summary: get sensitive sections of the document
+      description: get sensitive sections of the document
       operationId: get_sensitive_sections
       tags:
         - document
       parameters:
         - $ref: "#/components/parameters/setId"
         - $ref: "#/components/parameters/docId"
-      description: documentSet descriptor that needs to be added to the engine
       responses:
         "200":
           description: Successfully got the sensitive sections for the document
@@ -218,8 +244,9 @@ paths:
         "404":
           $ref: "#/components/responses/notFound"
     post:
-        summary: add a sensitive section to the document
-        operationId: add_sensitive_section
+        summary: add multiple sensitive sections to the document
+        description: add multiple sensitive sections to the document
+        operationId: add_sensitive_sections
         tags:
           - document
         parameters:
@@ -229,11 +256,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/sensitiveSection"
-        description: documentSet descriptor that needs to be added to the engine
+                $ref: "#/components/schemas/sensitiveSections"
         responses:
           "201":
-            description: Successfully added the sensitive section
+            description: Successfully added the sensitive sections
             content:
               application/json:
                 schema:
