@@ -14,7 +14,16 @@ OpenAPI documentation is automatically generated and published from this specifi
 To install development packages (linter and swagger-ui) please run:
 
 ```bash
+cd api-specification
 npm install --dev-only
 ```
 
+## Linter
+
 A set of linting rules are defined in `.validaterc` using the [IBM openAPI validator](https://github.com/IBM/openapi-validator) and GitLab CI pipelines will fail if there are errors as defined in this file.
+
+To run the Linter validation, install development dependencies, then:
+
+```bash
+npx lint-openapi "api-specification/openapi.yml" --errors_only
+```
