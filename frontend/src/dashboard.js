@@ -9,11 +9,9 @@ import List from "@material-ui/core/List";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
-import Badge from "@material-ui/core/Badge";
 import Container from "@material-ui/core/Container";
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import NotificationsIcon from "@material-ui/icons/Notifications";
 import { mainListItems } from "./linkList";
 
 const drawerWidth = 240;
@@ -55,6 +53,16 @@ const useStyles = makeStyles(theme => ({
   },
   title: {
     flexGrow: 1
+  },
+  leftAppBar: {
+    position: 'relative',
+    marginRight: theme.spacing(2),
+    marginLeft: 0,
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+      marginLeft: theme.spacing(3),
+      width: 'auto',
+    },
   },
   drawerPaper: {
     position: "relative",
@@ -140,12 +148,12 @@ export default function Dashboard(props) {
           >
             Harpocrates
           </Typography>
-          <IconButton color="inherit">
-            {/* Navbar top right content */}
-            {/* <Badge badgeContent={4} color="secondary">
+          {/* <IconButton color="inherit">
+            Navbar top right content
+            <Badge badgeContent={4} color="secondary">
               <NotificationsIcon />
-            </Badge> */}
-          </IconButton>
+            </Badge>
+          </IconButton> */}
         </Toolbar>
       </AppBar>
       <Drawer

@@ -9,7 +9,7 @@ externalDocs:
 servers:
 - url: /
 tags:
-- description: Everything about documentsets
+- description: Everything about document sets
   name: set
 - description: Everything about documents
   name: document
@@ -24,7 +24,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/documentSets'
           description: Listing of all known document sets
-      summary: List all documentsets known by the engine
+      summary: List all document sets known by the engine
       tags:
       - set
       x-openapi-router-controller: openapi_server.controllers.set_controller
@@ -56,7 +56,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/httpStatus'
           description: Conflicting element already present
-      summary: Add a new documentset set to the engine
+      summary: Add a new document set set to the engine
       tags:
       - set
       x-openapi-router-controller: openapi_server.controllers.set_controller
@@ -348,6 +348,94 @@ paths:
       tags:
       - document
       x-openapi-router-controller: openapi_server.controllers.document_controller
+  /documentSet/{setId}/{docId}/sensitiveSections:
+    get:
+      description: documentSet descriptor that needs to be added to the engine
+      operationId: get_sensitive_sections
+      parameters:
+      - description: ID of a set
+        explode: false
+        in: path
+        name: setId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: ID of a document
+        explode: false
+        in: path
+        name: docId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/sensitiveSections'
+          description: Successfully got the sensitive sections for the document
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The request was invalid JSON or missing some attributes
+        404:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The specified resource was not found
+      summary: get sensitive sections of the document
+      tags:
+      - document
+      x-openapi-router-controller: openapi_server.controllers.document_controller
+    post:
+      description: documentSet descriptor that needs to be added to the engine
+      operationId: add_sensitive_section
+      parameters:
+      - description: ID of a set
+        explode: false
+        in: path
+        name: setId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: ID of a document
+        explode: false
+        in: path
+        name: docId
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/sensitiveSection'
+      responses:
+        201:
+          description: Successfully added the sensitive section
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The request was invalid JSON or missing some attributes
+        404:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The specified resource was not found
+      summary: add a sensitive section to the document
+      tags:
+      - document
+      x-openapi-router-controller: openapi_server.controllers.document_controller
 components:
   parameters:
     docId:
@@ -532,6 +620,82 @@ components:
       allOf:
       - $ref: '#/components/schemas/predictedClassification'
       - $ref: '#/components/schemas/predictedClassificationWithExplanation_allOf'
+    sensitiveSections:
+      description: an object representing multiple sensitive sections
+      example:
+        sensitiveSections:
+        - endWord: said
+          fullAnnotation: The minister said
+          endOffset: 20
+          startOffset: 4
+          name: S27
+          description: This matches the Royal Family checklist
+          startWord: was
+        - endWord: said
+          fullAnnotation: The minister said
+          endOffset: 20
+          startOffset: 4
+          name: S27
+          description: This matches the Royal Family checklist
+          startWord: was
+      properties:
+        sensitiveSections:
+          description: array of sensitive sections
+          items:
+            $ref: '#/components/schemas/sensitiveSection'
+          type: array
+      required:
+      - sensitiveSections
+      type: object
+    sensitiveSection:
+      description: This is the base object for recording or suggesting sensitivities
+      example:
+        endWord: said
+        fullAnnotation: The minister said
+        endOffset: 20
+        startOffset: 4
+        name: S27
+        description: This matches the Royal Family checklist
+        startWord: was
+      properties:
+        startOffset:
+          description: start offset of an annotation in characters (required for an
+            annotation)
+          example: 4
+          format: int32
+          type: integer
+        startWord:
+          description: actual first word of an annotation
+          example: was
+          type: string
+        endOffset:
+          description: end offset of an annotation in characters (required for an
+            annotation)
+          example: 20
+          format: int32
+          type: integer
+        endWord:
+          description: actual last word of an annotation
+          example: said
+          type: string
+        fullAnnotation:
+          description: For debugging purposes, the full text of the annotation
+          example: The minister said
+          type: string
+        name:
+          description: what was the exemption that was found (mandatory)
+          example: S27
+          type: string
+        description:
+          description: This is an optional textual description of what the predicted
+            sensitivity is, suitable for presentation to the user
+          example: This matches the Royal Family checklist
+          type: string
+      required:
+      - endOffset
+      - startOffset
+      title: Section
+      type: object
     predictedClassificationWithExplanation_allOf:
       description: Object representing an explanation for a sensitivity prediction
       properties:

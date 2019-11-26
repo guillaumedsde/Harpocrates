@@ -1,9 +1,11 @@
 import connexion
 import six
 from http import HTTPStatus
+import json
 
 
 import numpy as np
+from bson.objectid import ObjectId
 
 from openapi_server.models.document import Document  # noqa: E501
 from openapi_server.models.http_status import HttpStatus  # noqa: E501
@@ -12,12 +14,67 @@ from openapi_server.models.predicted_classification_with_explanation import (
     PredictedClassificationWithExplanation,
 )
 from openapi_server.models.feature import Feature
+from openapi_server.models.sensitive_section import SensitiveSection
+from openapi_server.models.sensitive_sections import SensitiveSections
 
-from openapi_server import util, es
+from openapi_server import util, db
 
 from openapi_server.service import CLASS_NAMES
 from openapi_server.service.classification import get_model
 from openapi_server.service.explanation import lime_explanation
+
+
+def add_sensitive_section(set_id, doc_id, body):  # noqa: E501
+    """add a sensitive section to the document
+
+    documentSet descriptor that needs to be added to the engine # noqa: E501
+
+    :param set_id: ID of a set
+    :type set_id: str
+    :param doc_id: ID of a document
+    :type doc_id: str
+    :param sensitive_section: 
+    :type sensitive_section: dict | bytes
+
+    :rtype: None
+    """
+    if not connexion.request.is_json:
+        return HTTPStatus.BAD_REQUEST
+    sensitive_section = SensitiveSection.from_dict(
+        connexion.request.get_json()
+    )  # noqa: E501
+
+    db[set_id].update_one(
+        {"_id": ObjectId(doc_id)},
+        {"$push": {"sensitiveSections": sensitive_section.to_dict()}},
+    )
+
+    return HTTPStatus.CREATED
+
+
+def get_sensitive_sections(set_id, doc_id):
+    """get document sensitive sections
+
+    :param set_id: ID of a set
+    :type set_id: str
+    :param doc_id: ID of a document
+    :type doc_id: str
+
+    :rtype: SensitiveSections
+    """
+
+    sensitive_sections_query = db[set_id].find_one(
+        {"_id": ObjectId(doc_id)}, {"sensitiveSections": 1}
+    )
+
+    sensitive_section_list = []
+
+    for section in sensitive_sections_query["sensitiveSections"]:
+        sensitive_section_list.append(SensitiveSection(**section))
+
+    sensitive_sections = SensitiveSections(sensitive_sections=sensitive_section_list)
+
+    return sensitive_sections
 
 
 def create_document(set_id, body):  # noqa: E501
@@ -33,8 +90,8 @@ def create_document(set_id, body):  # noqa: E501
     :rtype: Document
     """
 
-    es_doc = {"body": body.decode()}
-    es.index(index=set_id, body=es_doc, refresh="wait_for")
+    doc = {"body": body.decode(), "sensitiveSections": []}
+    doc_id = db[set_id].insert_one(doc)
 
     return HTTPStatus.CREATED
 
@@ -51,7 +108,8 @@ def delete_document(set_id, doc_id):  # noqa: E501
 
     :rtype: Document
     """
-    es.delete(index=set_id, id=doc_id, refresh="wait_for")
+
+    result = db[set_id].delete_one({"_id": ObjectId(doc_id)})
     return HTTPStatus.OK
 
 
@@ -67,9 +125,9 @@ def get_document(set_id, doc_id):  # noqa: E501
 
     :rtype: Document
     """
-    res = es.get(index=set_id, doc_type="_doc", id=doc_id)
 
-    document = Document(document_id=res["_id"], content=res["_source"]["body"])
+    doc = db[set_id].find_one({"_id": ObjectId(doc_id)})
+    document = Document(document_id=str(doc["_id"]), content=doc["body"])
 
     return document
 
@@ -125,7 +183,6 @@ def get_predicted_classification_with_explanation(set_id, doc_id):  # noqa: E501
     sensitive_features = []
     non_sensitive_features = []
 
-    print(sensitivity)
     for feature_info in explanation.as_list():
         feature = Feature(feature=feature_info[0], weight=abs(feature_info[1]))
         if (

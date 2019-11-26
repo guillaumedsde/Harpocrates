@@ -19,12 +19,12 @@ pylint = "*"
 connexion = {editable = true,git = "https://github.com/zalando/connexion.git",ref = "master"}
 swagger-ui-bundle = ">=0.0.2"
 python-dateutil = ">=2.6.0"
-elasticsearch = "*"
 flask-cors = "*"
 beautifulsoup4 = "*"
 lime = "*"
 scikit-learn = "*"
 lxml = "*"
+pymongo = "*"
 
 [requires]
 python_version = "3.7"

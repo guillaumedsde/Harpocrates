@@ -4,12 +4,64 @@ All URIs are relative to *http://api.harpocrates.app.local*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**addSensitiveSection**](DocumentApi.md#addSensitiveSection) | **POST** /documentSet/{setId}/{docId}/sensitiveSections | add a sensitive section to the document
 [**createDocument**](DocumentApi.md#createDocument) | **POST** /documentSet/{setId} | Add a new document to the document set
 [**deleteDocument**](DocumentApi.md#deleteDocument) | **DELETE** /documentSet/{setId}/{docId} | delete the set
 [**getDocument**](DocumentApi.md#getDocument) | **GET** /documentSet/{setId}/{docId} | get document from set
 [**getPredictedClassification**](DocumentApi.md#getPredictedClassification) | **GET** /documentSet/{setId}/{docId}/predictedClassification | Get the predicted classification for the document
 [**getPredictedClassificationWithExplanation**](DocumentApi.md#getPredictedClassificationWithExplanation) | **GET** /documentSet/{setId}/{docId}/predictedClassificationWithExplanation | Get the explanation for the predicted classification of a document
+[**getSensitiveSections**](DocumentApi.md#getSensitiveSections) | **GET** /documentSet/{setId}/{docId}/sensitiveSections | get sensitive sections of the document
 
+
+
+## addSensitiveSection
+
+> addSensitiveSection(setId, docId, opts)
+
+add a sensitive section to the document
+
+documentSet descriptor that needs to be added to the engine
+
+### Example
+
+```javascript
+import @HarpocratesApiClient from '@harpocrates/api-client';
+
+let apiInstance = new @HarpocratesApiClient.DocumentApi();
+let setId = "setId_example"; // String | ID of a set
+let docId = "docId_example"; // String | ID of a document
+let opts = {
+  'sensitiveSection': new @HarpocratesApiClient.SensitiveSection() // SensitiveSection | 
+};
+apiInstance.addSensitiveSection(setId, docId, opts).then(() => {
+  console.log('API called successfully.');
+}, (error) => {
+  console.error(error);
+});
+
+```
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **setId** | **String**| ID of a set | 
+ **docId** | **String**| ID of a document | 
+ **sensitiveSection** | [**SensitiveSection**](SensitiveSection.md)|  | [optional] 
+
+### Return type
+
+null (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
 
 
 ## createDocument
@@ -223,6 +275,52 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**PredictedClassificationWithExplanation**](PredictedClassificationWithExplanation.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+
+## getSensitiveSections
+
+> SensitiveSections getSensitiveSections(setId, docId)
+
+get sensitive sections of the document
+
+documentSet descriptor that needs to be added to the engine
+
+### Example
+
+```javascript
+import @HarpocratesApiClient from '@harpocrates/api-client';
+
+let apiInstance = new @HarpocratesApiClient.DocumentApi();
+let setId = "setId_example"; // String | ID of a set
+let docId = "docId_example"; // String | ID of a document
+apiInstance.getSensitiveSections(setId, docId).then((data) => {
+  console.log('API called successfully. Returned data: ' + data);
+}, (error) => {
+  console.error(error);
+});
+
+```
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **setId** | **String**| ID of a set | 
+ **docId** | **String**| ID of a document | 
+
+### Return type
+
+[**SensitiveSections**](SensitiveSections.md)
 
 ### Authorization
 
