@@ -46,6 +46,11 @@ docker-logout: ## Logout to the default registry
 build: ## Build a docker image
 	@docker build -t $(CI_REGISTRY_IMAGE)/$(SERVICE):$(VERSION) -f $(SERVICE)/Dockerfile ./$(SERVICE)
 
+
+.PHONY: start
+start: ## Build a docker image
+	@docker-compose up -d
+
 .PHONY: tag
 tag: ## Tag a docker image and set some aliases
 ifeq ($(CI_COMMIT_REF_NAME),develop)
