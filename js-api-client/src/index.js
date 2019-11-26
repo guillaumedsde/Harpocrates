@@ -22,6 +22,8 @@ import HttpStatus from './model/HttpStatus';
 import PredictedClassification from './model/PredictedClassification';
 import PredictedClassificationWithExplanation from './model/PredictedClassificationWithExplanation';
 import PredictedClassificationWithExplanationAllOf from './model/PredictedClassificationWithExplanationAllOf';
+import SensitiveSection from './model/SensitiveSection';
+import SensitiveSections from './model/SensitiveSections';
 import DocumentApi from './api/DocumentApi';
 import SetApi from './api/SetApi';
 
@@ -117,6 +119,18 @@ export {
      * @property {module:model/PredictedClassificationWithExplanationAllOf}
      */
     PredictedClassificationWithExplanationAllOf,
+
+    /**
+     * The SensitiveSection model constructor.
+     * @property {module:model/SensitiveSection}
+     */
+    SensitiveSection,
+
+    /**
+     * The SensitiveSections model constructor.
+     * @property {module:model/SensitiveSections}
+     */
+    SensitiveSections,
 
     /**
     * The DocumentApi service constructor.
