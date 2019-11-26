@@ -33,7 +33,7 @@ setup(
     entry_points={
         'console_scripts': ['openapi_server=openapi_server.__main__:main']},
     long_description="""\
-    This is the Rest API specification for the harpocrates application
+    This is the Rest API specification for the Harpocrates application
     """
 )
 
