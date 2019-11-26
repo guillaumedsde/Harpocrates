@@ -230,15 +230,3 @@ dmypy.json
 .pyre/
 
 dist/
-<<<<<<< HEAD
-*.code-workspace
-
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-=======
-.vscode/
->>>>>>> feat: gitignore vscode directory
-*.code-workspace
