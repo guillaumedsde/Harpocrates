@@ -122,7 +122,7 @@ export default function DocumentBody(props) {
               // lineHeight: 1.5
             }
           }
-          tokens={props.document.content.split(/\s+/)}
+          tokens={props.document.content.split(/(?!\n)\s+/)}
           // content={props.document.content}
           value={annotations}
           onChange={handleChange}
