@@ -27,8 +27,6 @@ export default function Document(props) {
     setShowNonSensitiveExplanations
   ] = useState(false);
 
-  const [sensitiveSectionsRefreshDate, refreshSensitiveSections] = useState(null);
-
   var api = new DocumentApi();
 
   // effect for getting document
@@ -59,7 +57,7 @@ export default function Document(props) {
       .then(apiSensitiveSections => {
         setSensitiveSections(apiSensitiveSections)
       });
-  }, [sensitiveSectionsRefreshDate]);
+  }, []);
 
 
   if (document) {
@@ -86,7 +84,7 @@ export default function Document(props) {
           docId={props.documentId}
           setName={props.documentSetName}
           sensitiveSections={sensitiveSections}
-          refreshSensitiveSections={refreshSensitiveSections}
+          setSensitiveSections={setSensitiveSections}
           classification={classification}
           showNonSensitive={showNonSensitiveExplanations}
           showSensitive={showSensitiveExplanations}
