@@ -61,3 +61,19 @@ To run the stack without docker you will need to have:
      npm run dev
      ```
 4. Run a MongoDB instance (you can use the one define in the docker-compose `docker-compose up -d mongo`)
+
+### Generate the Javascript API Client code
+
+The `js-api-client` service is a Node package auto-generated using the openapi-generator from the specification defined in `api-sepecification/api-specification/openapi.yml`.
+
+To update the JS client after having modified the specification use the following command at the repo's root __after having installed the [OpenAPI code generator](https://github.com/OpenAPITools/openapi-generator)__:
+
+```bash
+openapi-generator-cli generate \
+     -g javascript \
+     -o ./js-api-client/ \
+     -i ./api-specification/api-specification/openapi.yml \
+     --additional-properties=usePromises=true \
+     --additional-properties=projectName=@harpocrates/api-client \
+     --additional-properties=licenseName=MIT
+```
