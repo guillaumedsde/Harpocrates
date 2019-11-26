@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Box from "@material-ui/core/Box";
+import Grid from '@material-ui/core/Grid';
+
 
 import { DocumentApi } from "@harpocrates/api-client";
 
@@ -15,6 +17,7 @@ export default function Document(props) {
   const [document, setDocument] = useState(null);
 
   const [classification, setClassification] = useState(null);
+  const [sensitiveSections, setSensitiveSections] = useState(null);
 
   const [showSensitiveExplanations, setShowSensitiveExplanations] = useState(
     true
@@ -23,6 +26,8 @@ export default function Document(props) {
     showNonSensitiveExplanations,
     setShowNonSensitiveExplanations
   ] = useState(false);
+
+  const [sensitiveSectionsRefreshDate, refreshSensitiveSections] = useState(null);
 
   var api = new DocumentApi();
 
@@ -47,19 +52,41 @@ export default function Document(props) {
       });
   }, []);
 
+  // effect for getting sensitive sections
+  useEffect(() => {
+    api
+      .getSensitiveSections(props.documentSetName, props.documentId)
+      .then(apiSensitiveSections => {
+        setSensitiveSections(apiSensitiveSections)
+      });
+  }, [sensitiveSectionsRefreshDate]);
+
+
   if (document) {
     return (
-      <div>
-        <h1>{document.name}</h1>
-        <h2>{document.documentId}</h2>
-        {classification ? (
-          <Box my={2}>
+      <>
+        <Grid container alignItems="center" spacing={2}>
+          { document.name ? 
+            <Grid item>
+              <h1>{document.name}</h1>
+            </Grid>
+            : null}
+          <Grid item>
+            <h2>{document.documentId}</h2>
+          </Grid>
+          {classification ? 
+          <Grid item>
             <PredictedClassification classification={classification} />
-          </Box>
-        ) : null}
+          </Grid>
+          : null}
+        </Grid>
 
         <DocumentBody
-          documentContent={document.content}
+          document={document}
+          docId={props.documentId}
+          setName={props.documentSetName}
+          sensitiveSections={sensitiveSections}
+          refreshSensitiveSections={refreshSensitiveSections}
           classification={classification}
           showNonSensitive={showNonSensitiveExplanations}
           showSensitive={showSensitiveExplanations}
@@ -75,13 +102,13 @@ export default function Document(props) {
           showNonSensitiveExplanations={showNonSensitiveExplanations}
           setShowNonSensitiveExplanations={setShowNonSensitiveExplanations}
         />
-      </div>
+      </>
     );
   } else {
     return (
-      <div>
+      <>
         <CircularProgress />
-      </div>
+      </>
     );
   }
 }
