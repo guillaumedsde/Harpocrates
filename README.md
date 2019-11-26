@@ -21,6 +21,10 @@ cd harpocrates
 docker-compose up -d
 ```
 
+### Prebuilt docker images
+
+A Docker image repository with prebuilt docker images is also [available here](https://gitlab.com/harpocrates-app/harpocrates/container_registry)
+
 ## Development
 
 The development Logbook of Harpocrates can be [found here](https://dissertation.guillaume.desusanne.com).
@@ -76,4 +80,12 @@ openapi-generator-cli generate \
      --additional-properties=usePromises=true \
      --additional-properties=projectName=@harpocrates/api-client \
      --additional-properties=licenseName=MIT
+```
+
+### Generate the Flask API Server code
+
+The Flask API server code is also derived from the OpenAPI generator code, however, some files are protected from "auto generation overwrite" this list is in `api/.openapi-generator-ignore`. As such, some manual modification of these files might be required after code generation which is run from the project root with the following command __after having installed the [OpenAPI code generator](https://github.com/OpenAPITools/openapi-generator)__:
+
+```bash
+openapi-generator generate -g python-flask -o ./api -i ./api-specification/api-specification/openapi.yml
 ```
