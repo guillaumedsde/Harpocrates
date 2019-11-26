@@ -24,7 +24,7 @@ export default function Document(props) {
   const [redactionLabel, setRedactionLabel] = useState(labels[0]);
 
   const [showSensitiveExplanations, setShowSensitiveExplanations] = useState(
-    true
+    false
   );
   const [
     showNonSensitiveExplanations,
@@ -85,6 +85,7 @@ export default function Document(props) {
           <Grid container alignItems="center" spacing={2}>
             <Grid item>
               <ExplanationToggles
+                classification={classification}
                 showSensitiveExplanations={showSensitiveExplanations}
                 setShowSensitiveExplanations={setShowSensitiveExplanations}
                 showNonSensitiveExplanations={showNonSensitiveExplanations}
