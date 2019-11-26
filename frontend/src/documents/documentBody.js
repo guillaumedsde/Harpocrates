@@ -1,16 +1,13 @@
 /* eslint-disable react/display-name */
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import Paper from "@material-ui/core/Paper";
 
 import { makeStyles } from "@material-ui/core/styles";
 
-import Popover from 'react-text-selection-popover';
+import Popover from "react-text-selection-popover";
 import createMarker from "react-content-marker";
 
-
-import PopoverMenu from "./textPopoverMenu"
-
-
+import PopoverMenu from "./textPopoverMenu";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -29,48 +26,71 @@ export default function DocumentBody(props) {
 
   var rules = [];
 
-
-  var refBody = React.createRef()
+  var refBody = React.createRef();
 
   if (props.sensitiveSections != null) {
     props.sensitiveSections.sensitiveSections.forEach(sensitiveSection => {
       rules.push({
-        rule: new RegExp(`^(?:[\\s\\S]{${sensitiveSection.startOffset}})([\\s\\S]{${sensitiveSection.endOffset-sensitiveSection.startOffset}})`, "ygm"),
+        rule: new RegExp(
+          `^(?:[\\s\\S]{${
+            sensitiveSection.startOffset
+          }})([\\s\\S]{${sensitiveSection.endOffset -
+            sensitiveSection.startOffset}})`,
+          "ygm"
+        ),
         matchIndex: 1,
         tag: x => (
-          <mark key={`${sensitiveSection.startOffset}${sensitiveSection.endOffset}`} style={{ backgroundColor: `rgba(0, 0, 0, 1)` }}>
-            {x}
-          </mark>
-        )
-      })
-    })
-  }
-
-  if (props.showSensitive & (props.classification !== null)) {
-    props.classification.sensitiveFeatures.forEach(feature => {
-      // TODO varied opacity depending on the weight with a minimum and maximum opacity
-      var opacity = feature.weight / 2 + 0.25;
-      //var opacity = 1;
-      rules.push({
-        rule: feature.feature,
-        tag: x => (
-          <mark key={feature.feature} style={{backgroundColor: `rgba(255, 0, 0, ${opacity})`}}>
+          <mark
+            key={`${sensitiveSection.startOffset}${sensitiveSection.endOffset}`}
+            style={{ backgroundColor: `rgba(0, 0, 0, 1)` }}
+          >
             {x}
           </mark>
         )
       });
     });
   }
-  
+
+  if (props.showSensitive & (props.classification !== null)) {
+    props.classification.sensitiveFeatures.forEach(feature => {
+      console.log(feature);
+      // TODO varied opacity depending on the weight with a minimum and maximum opacity
+      var opacity = feature.weight / 2 + 0.25;
+      //var opacity = 1;
+      rules.push({
+        rule: new RegExp(
+          `^(?:[\\s\\S]{${feature.startOffset}})([\\s\\S]{${feature.endOffset -
+            feature.startOffset}})`,
+          "ygm"
+        ),
+        tag: x => (
+          <mark
+            key={feature.feature}
+            style={{ backgroundColor: `rgba(255, 0, 0, ${opacity})` }}
+          >
+            {x}
+          </mark>
+        )
+      });
+    });
+  }
+
   if (props.showNonSensitive & (props.classification !== null)) {
     props.classification.nonSensitiveFeatures.forEach(feature => {
       // TODO varied opacity depending on the weight with a minimum and maximum opacity
       //var opacity = Math.abs(feature.weight);
       var opacity = feature.weight / 2 + 0.25;
       rules.push({
-        rule: feature.feature,
+        rule: new RegExp(
+          `^(?:[\\s\\S]{${feature.startOffset}})([\\s\\S]{${feature.endOffset -
+            feature.startOffset}})`,
+          "ygm"
+        ),
         tag: x => (
-          <mark key={feature.feature} style={{ backgroundColor: `rgba(0, 0, 255, ${opacity})` }}>
+          <mark
+            key={feature.feature}
+            style={{ backgroundColor: `rgba(0, 0, 255, ${opacity})` }}
+          >
             {x}
           </mark>
         )
@@ -79,9 +99,11 @@ export default function DocumentBody(props) {
   }
 
   console.log(rules)
+
+  const SensitiveMarker = createMarker(rules);
   const MyMarker = createMarker(rules);
+
   return (
-    
     <Paper className={classes.root}>
       <div>
         <div
@@ -90,14 +112,16 @@ export default function DocumentBody(props) {
           id="docBody"
           suppressContentEditableWarning
         >
-          <MyMarker>{props.document.content}</MyMarker>
+          <MyMarker><SensitiveMarker>{props.document.content}</SensitiveMarker></MyMarker>
         </div>
         <Popover selectionRef={refBody}>
-          <PopoverMenu docId={props.docId} setName={props.setName} refreshSensitiveSections={props.refreshSensitiveSections}/>
+          <PopoverMenu
+            docId={props.docId}
+            setName={props.setName}
+            setSensitiveSections={props.setSensitiveSections}
+          />
         </Popover>
       </div>
     </Paper>
-          
-      
   );
 }
