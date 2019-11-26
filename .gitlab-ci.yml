@@ -96,8 +96,9 @@ pages:
   script:
     - mkdir public
     - cp -rp node_modules/swagger-ui-dist/* public
-    - cp -rp $DOCS_FOLDER/* public
-    - sed -i "s#https://petstore\.swagger\.io/v2/swagger\.json#$SPEC_TO_DISPLAY#g" public/index.html
+    - cp -rp $DOCS_FOLDER/* public/api
+    - sed -i "s#https://petstore\.swagger\.io/v2/swagger\.json#$SPEC_TO_DISPLAY#g" public/api/index.html
+    - cp static/index.html public/
     - mv public ../
   artifacts:
     paths:
