@@ -8,18 +8,9 @@ from flask_cors import CORS
 
 from pymongo import MongoClient
 
-
-from elasticsearch import Elasticsearch
-from elasticsearch.client import CatClient
-
 from openapi_server import encoder
 
 __version__ = (0, 1, 0, "dev")
-
-es_uri = os.environ.get("ES_URI") or "http://localhost:9200/"
-
-es = Elasticsearch([es_uri])
-cat = CatClient(es)
 
 MONGO_URI = os.environ.get("MONGO_URI") or "mongodb://root:example@localhost:27017/"
 mongo = MongoClient(MONGO_URI)

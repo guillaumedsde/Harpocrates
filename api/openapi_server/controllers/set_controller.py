@@ -1,8 +1,6 @@
 import connexion
 import six
 from http import HTTPStatus
-
-import elasticsearch
 import time
 
 from openapi_server.models.document_set import DocumentSet  # noqa: E501
@@ -10,7 +8,7 @@ from openapi_server.models.document_sets import DocumentSets  # noqa: E501
 from openapi_server.models.documents import Documents  # noqa: E501
 from openapi_server.models.document import Document
 from openapi_server.models.http_status import HttpStatus  # noqa: E501
-from openapi_server import util, db, cat
+from openapi_server import util, db
 
 
 def create_set(body):  # noqa: E501
