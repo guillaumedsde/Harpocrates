@@ -1,5 +1,7 @@
+ARG NODE_VERSION=13.2.0
+
 # build image
-FROM node:current-buster as build
+FROM node:${NODE_VERSION}-alpine as build
 
 ARG NODE_ENV=production
 
