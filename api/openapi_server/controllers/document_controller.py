@@ -2,7 +2,7 @@ import connexion
 import six
 from http import HTTPStatus
 import json
-
+import re
 
 import numpy as np
 from bson.objectid import ObjectId
@@ -27,8 +27,6 @@ from openapi_server.service.explanation import lime_explanation
 def add_sensitive_section(set_id, doc_id, body):  # noqa: E501
     """add a sensitive section to the document
 
-    documentSet descriptor that needs to be added to the engine # noqa: E501
-
     :param set_id: ID of a set
     :type set_id: str
     :param doc_id: ID of a document
@@ -36,7 +34,7 @@ def add_sensitive_section(set_id, doc_id, body):  # noqa: E501
     :param sensitive_section: 
     :type sensitive_section: dict | bytes
 
-    :rtype: None
+    :rtype: SensitiveSections
     """
     if not connexion.request.is_json:
         return HTTPStatus.BAD_REQUEST
@@ -49,7 +47,8 @@ def add_sensitive_section(set_id, doc_id, body):  # noqa: E501
         {"$push": {"sensitiveSections": sensitive_section.to_dict()}},
     )
 
-    return HTTPStatus.CREATED
+    # return sensitive sections with HTTPStatus
+    return get_sensitive_sections(set_id, doc_id), HTTPStatus.CREATED
 
 
 def get_sensitive_sections(set_id, doc_id):
@@ -183,17 +182,25 @@ def get_predicted_classification_with_explanation(set_id, doc_id):  # noqa: E501
     sensitive_features = []
     non_sensitive_features = []
 
+    # iterate over all features
     for feature_info in explanation.as_list():
-        feature = Feature(feature=feature_info[0], weight=abs(feature_info[1]))
-        if (
-            sensitive
-            and (feature_info[1] > 0)
-            or (not sensitive)
-            and (feature_info[1] < 0)
-        ):
-            sensitive_features.append(feature)
-        else:
-            non_sensitive_features.append(feature)
+        pattern = "\\b({feature})+\\b".format(feature=feature_info[0])
+
+        # match all features in content
+        matches = re.finditer(pattern, document.content, flags=re.MULTILINE)
+
+        # iterate over all matches and sort accordingly
+        for match in matches:
+            feature = Feature(start_offset=match.span()[0], end_offset=match.span()[1], weight=abs(feature_info[1]))
+            if (
+                sensitive
+                and (feature_info[1] > 0)
+                or (not sensitive)
+                and (feature_info[1] < 0)
+            ):
+                sensitive_features.append(feature)
+            else:
+                non_sensitive_features.append(feature)
 
     # build and return final classification with explanation object
     classification_with_explanation = PredictedClassificationWithExplanation(

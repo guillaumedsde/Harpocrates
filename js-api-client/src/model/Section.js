@@ -12,26 +12,23 @@
  */
 
 import ApiClient from '../ApiClient';
-import FeatureAllOf from './FeatureAllOf';
-import Section from './Section';
 
 /**
- * The Feature model module.
- * @module model/Feature
+ * The Section model module.
+ * @module model/Section
  * @version 3.0.0
  */
-class Feature {
+class Section {
     /**
-     * Constructs a new <code>Feature</code>.
-     * @alias module:model/Feature
-     * @implements module:model/Section
-     * @implements module:model/FeatureAllOf
+     * Constructs a new <code>Section</code>.
+     * Section of characters within a document
+     * @alias module:model/Section
      * @param startOffset {Number} start offset of a section in characters from the beginning of the document
      * @param endOffset {Number} end offset of a section in characters from the beginning of the document
      */
     constructor(startOffset, endOffset) { 
-        Section.initialize(this, startOffset, endOffset);FeatureAllOf.initialize(this);
-        Feature.initialize(this, startOffset, endOffset);
+        
+        Section.initialize(this, startOffset, endOffset);
     }
 
     /**
@@ -45,26 +42,21 @@ class Feature {
     }
 
     /**
-     * Constructs a <code>Feature</code> from a plain JavaScript object, optionally creating a new instance.
+     * Constructs a <code>Section</code> from a plain JavaScript object, optionally creating a new instance.
      * Copies all relevant properties from <code>data</code> to <code>obj</code> if supplied or a new instance if not.
      * @param {Object} data The plain JavaScript object bearing properties of interest.
-     * @param {module:model/Feature} obj Optional instance to populate.
-     * @return {module:model/Feature} The populated <code>Feature</code> instance.
+     * @param {module:model/Section} obj Optional instance to populate.
+     * @return {module:model/Section} The populated <code>Section</code> instance.
      */
     static constructFromObject(data, obj) {
         if (data) {
-            obj = obj || new Feature();
-            Section.constructFromObject(data, obj);
-            FeatureAllOf.constructFromObject(data, obj);
+            obj = obj || new Section();
 
             if (data.hasOwnProperty('startOffset')) {
                 obj['startOffset'] = ApiClient.convertToType(data['startOffset'], 'Number');
             }
             if (data.hasOwnProperty('endOffset')) {
                 obj['endOffset'] = ApiClient.convertToType(data['endOffset'], 'Number');
-            }
-            if (data.hasOwnProperty('weight')) {
-                obj['weight'] = ApiClient.convertToType(data['weight'], 'Number');
             }
         }
         return obj;
@@ -77,41 +69,18 @@ class Feature {
  * start offset of a section in characters from the beginning of the document
  * @member {Number} startOffset
  */
-Feature.prototype['startOffset'] = undefined;
-
-/**
- * end offset of a section in characters from the beginning of the document
- * @member {Number} endOffset
- */
-Feature.prototype['endOffset'] = undefined;
-
-/**
- * The contribution of that feature to the classification
- * @member {Number} weight
- */
-Feature.prototype['weight'] = undefined;
-
-
-// Implement Section interface:
-/**
- * start offset of a section in characters from the beginning of the document
- * @member {Number} startOffset
- */
 Section.prototype['startOffset'] = undefined;
+
 /**
  * end offset of a section in characters from the beginning of the document
  * @member {Number} endOffset
  */
 Section.prototype['endOffset'] = undefined;
-// Implement FeatureAllOf interface:
-/**
- * The contribution of that feature to the classification
- * @member {Number} weight
- */
-FeatureAllOf.prototype['weight'] = undefined;
 
 
 
 
-export default Feature;
+
+
+export default Section;
 

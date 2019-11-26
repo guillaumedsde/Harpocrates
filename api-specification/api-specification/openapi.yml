@@ -1,7 +1,7 @@
 openapi: "3.0.2"
 info:
   description: This is the Rest API specification for the Harpocrates application
-  version: "2.0.1"
+  version: "3.0.0"
   title: Harpocrates API
   license:
     name: MIT
@@ -234,6 +234,10 @@ paths:
         responses:
           "201":
             description: Successfully added the sensitive section
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/sensitiveSections"
           "400":
             $ref: "#/components/responses/malformedRequest"
           "404":
@@ -387,19 +391,33 @@ components:
           type: integer
           format: int32
           description: Document sensitivity percentage
-    feature:
+    section:
+      description: Section of characters within a document
       type: object
-      description: an object representing a feature that explains the classification
       required:
-        - feature
+        - startOffset
+        - endOffset
       properties:
-        feature:
-          type: string
-          description: A feature of the text
-        weight:
-          type: number
-          format: float
-          description: The contribution of that feature to the classification
+        startOffset:
+          type: integer
+          format: int32
+          example: 4
+          description: start offset of a section in characters from the beginning of the document
+        endOffset:
+          type: integer
+          format: int32
+          example: 20
+          description: end offset of a section in characters from the beginning of the document
+    feature:
+      allOf: # extend section
+        - $ref: "#/components/schemas/section"
+        - type: object
+          description: an object representing a feature that explains the classification
+          properties:
+            weight:
+              type: number
+              format: float
+              description: The contribution of that feature to the classification
     predictedClassificationWithExplanation:
       allOf: # extend predictedClassification
         - $ref: "#/components/schemas/predictedClassification"
@@ -428,41 +446,21 @@ components:
           items:
             $ref: "#/components/schemas/sensitiveSection"
     sensitiveSection:
-      description: This is the base object for recording or suggesting sensitivities
-      title: Section
-      type: object
-      required:
-        - startOffset
-        - endOffset
-      properties:
-        startOffset:
-          type: integer
-          format: int32
-          example: 4
-          description: start offset of an annotation in characters (required for an annotation)
-        startWord:
-          type: string
-          example: was
-          description: actual first word of an annotation
-        endOffset:
-          type: integer
-          format: int32
-          example: 20
-          description: end offset of an annotation in characters (required for an annotation)
-        endWord:
-          type: string
-          example: said
-          description: actual last word of an annotation
-        fullAnnotation:
-          type: string
-          example: The minister said
-          description: For debugging purposes, the full text of the annotation
-        name:
-          type: string
-          example: S27
-          description: what was the exemption that was found (mandatory) # TODO make mandatory
-        description:
-          type: string
-          example: This matches the Royal Family checklist
-          description: This is an optional textual description of what the predicted sensitivity is, suitable for presentation to the user
+      allOf: # extend section
+        - $ref: "#/components/schemas/section"
+        - type: object
+          description: This is the base object for recording or suggesting sensitivities
+          properties:
+            fullAnnotation:
+              type: string
+              example: The minister said
+              description: For debugging purposes, the full text of the annotation
+            name:
+              type: string
+              example: S27
+              description: what was the exemption that was found (mandatory) # TODO make mandatory
+            description:
+              type: string
+              example: This matches the Royal Family checklist
+              description: This is an optional textual description of what the predicted sensitivity is, suitable for presentation to the user
           

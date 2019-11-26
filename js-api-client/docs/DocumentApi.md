@@ -16,7 +16,7 @@ Method | HTTP request | Description
 
 ## addSensitiveSection
 
-> addSensitiveSection(setId, docId, opts)
+> SensitiveSections addSensitiveSection(setId, docId, opts)
 
 add a sensitive section to the document
 
@@ -33,8 +33,8 @@ let docId = "docId_example"; // String | ID of a document
 let opts = {
   'sensitiveSection': new @HarpocratesApiClient.SensitiveSection() // SensitiveSection | 
 };
-apiInstance.addSensitiveSection(setId, docId, opts).then(() => {
-  console.log('API called successfully.');
+apiInstance.addSensitiveSection(setId, docId, opts).then((data) => {
+  console.log('API called successfully. Returned data: ' + data);
 }, (error) => {
   console.error(error);
 });
@@ -52,7 +52,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-null (empty response body)
+[**SensitiveSections**](SensitiveSections.md)
 
 ### Authorization
 
