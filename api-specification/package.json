@@ -1,6 +1,5 @@
 {
   "name": "@harpocrates/api-specification",
-  "version": "2.0.0",
   "description": "This is the Rest API specification for the harpocrates application",
   "main": "index.js",
   "scripts": {
