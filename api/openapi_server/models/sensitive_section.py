@@ -19,15 +19,13 @@ class SensitiveSection(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, start_offset=None, end_offset=None, full_annotation=None, name=None, description=None):  # noqa: E501
+    def __init__(self, start_offset=None, end_offset=None, name=None, description=None):  # noqa: E501
         """SensitiveSection - a model defined in OpenAPI
 
         :param start_offset: The start_offset of this SensitiveSection.  # noqa: E501
         :type start_offset: int
         :param end_offset: The end_offset of this SensitiveSection.  # noqa: E501
         :type end_offset: int
-        :param full_annotation: The full_annotation of this SensitiveSection.  # noqa: E501
-        :type full_annotation: str
         :param name: The name of this SensitiveSection.  # noqa: E501
         :type name: str
         :param description: The description of this SensitiveSection.  # noqa: E501
@@ -36,7 +34,6 @@ class SensitiveSection(Model):
         self.openapi_types = {
             'start_offset': int,
             'end_offset': int,
-            'full_annotation': str,
             'name': str,
             'description': str
         }
@@ -44,14 +41,12 @@ class SensitiveSection(Model):
         self.attribute_map = {
             'start_offset': 'startOffset',
             'end_offset': 'endOffset',
-            'full_annotation': 'fullAnnotation',
             'name': 'name',
             'description': 'description'
         }
 
         self._start_offset = start_offset
         self._end_offset = end_offset
-        self._full_annotation = full_annotation
         self._name = name
         self._description = description
 
@@ -117,29 +112,6 @@ class SensitiveSection(Model):
         self._end_offset = end_offset
 
     @property
-    def full_annotation(self):
-        """Gets the full_annotation of this SensitiveSection.
-
-        For debugging purposes, the full text of the annotation  # noqa: E501
-
-        :return: The full_annotation of this SensitiveSection.
-        :rtype: str
-        """
-        return self._full_annotation
-
-    @full_annotation.setter
-    def full_annotation(self, full_annotation):
-        """Sets the full_annotation of this SensitiveSection.
-
-        For debugging purposes, the full text of the annotation  # noqa: E501
-
-        :param full_annotation: The full_annotation of this SensitiveSection.
-        :type full_annotation: str
-        """
-
-        self._full_annotation = full_annotation
-
-    @property
     def name(self):
         """Gets the name of this SensitiveSection.
 
@@ -159,6 +131,8 @@ class SensitiveSection(Model):
         :param name: The name of this SensitiveSection.
         :type name: str
         """
+        if name is None:
+            raise ValueError("Invalid value for `name`, must not be `None`")  # noqa: E501
 
         self._name = name
 

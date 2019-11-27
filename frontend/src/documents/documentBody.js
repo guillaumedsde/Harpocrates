@@ -48,11 +48,12 @@ export default function DocumentBody(props) {
 
   if (props.sensitiveSections) {
     props.sensitiveSections.sensitiveSections.forEach(feature => {
+      console.log(feature);
       // TODO varied opacity depending on the weight with a minimum and maximum opacity
       annotations.push({
         start: feature.startOffset,
         end: feature.endOffset,
-        tag: props.tag
+        tag: feature.name
       });
     });
   }
@@ -93,7 +94,11 @@ export default function DocumentBody(props) {
         (newAnnotation.tag !== "insensitiveExplanation")
       ) {
         sensitiveSections.push(
-          new SensitiveSection(newAnnotation.start, newAnnotation.end)
+          new SensitiveSection(
+            newAnnotation.start,
+            newAnnotation.end,
+            newAnnotation.tag
+          )
         );
       }
     });
