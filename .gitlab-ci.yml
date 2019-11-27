@@ -94,12 +94,13 @@ pages:
     - cd api-specification
     - npm install --dev-only
   script:
+    - mkdir api
+    - cp -rp node_modules/swagger-ui-dist/* api
+    - cp -rp $DOCS_FOLDER/* api
+    - sed -i "s#https://petstore\.swagger\.io/v2/swagger\.json#$SPEC_TO_DISPLAY#g" api/index.html
     - mkdir public
-    - cp -rp node_modules/swagger-ui-dist/* public
-    - cp -rp $DOCS_FOLDER/* public/api
-    - sed -i "s#https://petstore\.swagger\.io/v2/swagger\.json#$SPEC_TO_DISPLAY#g" public/api/index.html
-    - cp static/index.html public/
-    - mv public ../
+    - mv api public
+    - cp static/index.html public
   artifacts:
     paths:
       - public
