@@ -100,7 +100,8 @@ pages:
     - sed -i "s#https://petstore\.swagger\.io/v2/swagger\.json#$SPEC_TO_DISPLAY#g" api/index.html
     - mkdir public
     - mv api public
-    - cp static/index.html public
+    - cp ../static/index.html public
+    - mv public ../
   artifacts:
     paths:
       - public
