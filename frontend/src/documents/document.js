@@ -13,7 +13,7 @@ import CustomizedSnackbar from "./status";
 import ExplanationToggles from "./explanationToggles";
 import { InputLabel, FormControl, Select, MenuItem } from "@material-ui/core";
 
-const labels = [20, 21, 22, 23, 24];
+const labels = ["20", "21", "22", "23", "24"];
 
 export default function Document(props) {
   const [document, setDocument] = useState(null);

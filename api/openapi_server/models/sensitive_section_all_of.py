@@ -15,29 +15,24 @@ class SensitiveSectionAllOf(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, full_annotation=None, name=None, description=None):  # noqa: E501
+    def __init__(self, name=None, description=None):  # noqa: E501
         """SensitiveSectionAllOf - a model defined in OpenAPI
 
-        :param full_annotation: The full_annotation of this SensitiveSectionAllOf.  # noqa: E501
-        :type full_annotation: str
         :param name: The name of this SensitiveSectionAllOf.  # noqa: E501
         :type name: str
         :param description: The description of this SensitiveSectionAllOf.  # noqa: E501
         :type description: str
         """
         self.openapi_types = {
-            'full_annotation': str,
             'name': str,
             'description': str
         }
 
         self.attribute_map = {
-            'full_annotation': 'fullAnnotation',
             'name': 'name',
             'description': 'description'
         }
 
-        self._full_annotation = full_annotation
         self._name = name
         self._description = description
 
@@ -51,29 +46,6 @@ class SensitiveSectionAllOf(Model):
         :rtype: SensitiveSectionAllOf
         """
         return util.deserialize_model(dikt, cls)
-
-    @property
-    def full_annotation(self):
-        """Gets the full_annotation of this SensitiveSectionAllOf.
-
-        For debugging purposes, the full text of the annotation  # noqa: E501
-
-        :return: The full_annotation of this SensitiveSectionAllOf.
-        :rtype: str
-        """
-        return self._full_annotation
-
-    @full_annotation.setter
-    def full_annotation(self, full_annotation):
-        """Sets the full_annotation of this SensitiveSectionAllOf.
-
-        For debugging purposes, the full text of the annotation  # noqa: E501
-
-        :param full_annotation: The full_annotation of this SensitiveSectionAllOf.
-        :type full_annotation: str
-        """
-
-        self._full_annotation = full_annotation
 
     @property
     def name(self):
@@ -95,6 +67,8 @@ class SensitiveSectionAllOf(Model):
         :param name: The name of this SensitiveSectionAllOf.
         :type name: str
         """
+        if name is None:
+            raise ValueError("Invalid value for `name`, must not be `None`")  # noqa: E501
 
         self._name = name
 

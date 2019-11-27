@@ -1,7 +1,7 @@
 openapi: "3.0.2"
 info:
   description: This is the Rest API specification for the Harpocrates application
-  version: "4.0.0"
+  version: "4.1.0"
   title: Harpocrates API
   license:
     name: MIT
@@ -198,30 +198,30 @@ paths:
           $ref: "#/components/responses/notFound"
   "/documentSet/{setId}/{docId}/sensitiveSection":
     post:
-        summary: add a sensitive section to the document
-        description: add a sensitive section to the document
-        operationId: add_sensitive_section
-        tags:
-          - document
-        parameters:
-          - $ref: "#/components/parameters/setId"
-          - $ref: "#/components/parameters/docId"
-        requestBody:
+      summary: add a sensitive section to the document
+      description: add a sensitive section to the document
+      operationId: add_sensitive_section
+      tags:
+        - document
+      parameters:
+        - $ref: "#/components/parameters/setId"
+        - $ref: "#/components/parameters/docId"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/sensitiveSection"
+      responses:
+        "201":
+          description: Successfully added the sensitive section
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/sensitiveSection"
-        responses:
-          "201":
-            description: Successfully added the sensitive section
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/sensitiveSection"
-          "400":
-            $ref: "#/components/responses/malformedRequest"
-          "404":
-            $ref: "#/components/responses/notFound"
+        "400":
+          $ref: "#/components/responses/malformedRequest"
+        "404":
+          $ref: "#/components/responses/notFound"
   "/documentSet/{setId}/{docId}/sensitiveSections":
     get:
       summary: get sensitive sections of the document
@@ -244,30 +244,30 @@ paths:
         "404":
           $ref: "#/components/responses/notFound"
     post:
-        summary: add multiple sensitive sections to the document
-        description: add multiple sensitive sections to the document
-        operationId: add_sensitive_sections
-        tags:
-          - document
-        parameters:
-          - $ref: "#/components/parameters/setId"
-          - $ref: "#/components/parameters/docId"
-        requestBody:
+      summary: add multiple sensitive sections to the document
+      description: add multiple sensitive sections to the document
+      operationId: add_sensitive_sections
+      tags:
+        - document
+      parameters:
+        - $ref: "#/components/parameters/setId"
+        - $ref: "#/components/parameters/docId"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/sensitiveSections"
+      responses:
+        "201":
+          description: Successfully added the sensitive sections
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/sensitiveSections"
-        responses:
-          "201":
-            description: Successfully added the sensitive sections
-            content:
-              application/json:
-                schema:
-                  $ref: "#/components/schemas/sensitiveSections"
-          "400":
-            $ref: "#/components/responses/malformedRequest"
-          "404":
-            $ref: "#/components/responses/notFound"
+        "400":
+          $ref: "#/components/responses/malformedRequest"
+        "404":
+          $ref: "#/components/responses/notFound"
 components:
   parameters:
     docId:
@@ -476,17 +476,14 @@ components:
         - $ref: "#/components/schemas/section"
         - type: object
           description: This is the base object for recording or suggesting sensitivities
+          required:
+            - name
           properties:
-            fullAnnotation:
-              type: string
-              example: The minister said
-              description: For debugging purposes, the full text of the annotation
             name:
               type: string
               example: S27
-              description: what was the exemption that was found (mandatory) # TODO make mandatory
+              description: what was the exemption that was found (mandatory)
             description:
               type: string
               example: This matches the Royal Family checklist
               description: This is an optional textual description of what the predicted sensitivity is, suitable for presentation to the user
-          

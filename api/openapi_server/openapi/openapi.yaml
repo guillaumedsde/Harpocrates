@@ -4,7 +4,7 @@ info:
   license:
     name: MIT
   title: Harpocrates API
-  version: 4.0.0
+  version: 4.1.0
 externalDocs:
   description: API documentation
   url: https://harpocrates-app.gitlab.io/api-specification
@@ -730,10 +730,6 @@ components:
     sensitiveSection_allOf:
       description: This is the base object for recording or suggesting sensitivities
       properties:
-        fullAnnotation:
-          description: For debugging purposes, the full text of the annotation
-          example: The minister said
-          type: string
         name:
           description: what was the exemption that was found (mandatory)
           example: S27
@@ -743,3 +739,5 @@ components:
             sensitivity is, suitable for presentation to the user
           example: This matches the Royal Family checklist
           type: string
+      required:
+      - name
