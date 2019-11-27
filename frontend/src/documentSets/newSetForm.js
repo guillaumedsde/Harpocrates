@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 
-
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 
@@ -13,14 +12,12 @@ export default function NewSetForm(props) {
 
   const handleSubmit = event => {
     event.preventDefault();
-    props.setLoading(true)
+    props.setLoading(true);
     const newDocumentSet = new DocumentSet(newSetName);
     // TODO error handling
-    api.createSet(newDocumentSet).then( () => {
+    api.createSet(newDocumentSet).then(() => {
       props.setTriggerRequest(newDocumentSet.name);
-      
-    }
-    )
+    });
     setNewSetName("");
   };
 

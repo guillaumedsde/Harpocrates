@@ -19,9 +19,9 @@ import { LinearProgress } from "@material-ui/core";
 
 export default function DocumentSet(props) {
   const [documents, setDocuments] = useState(null);
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true);
   // TODO find better way to retrigger document list update on document delete
-  const [triggerListRefresh, setTriggerListRefresh] = useState(1)
+  const [triggerListRefresh, setTriggerListRefresh] = useState(1);
 
   var api = new SetApi();
   var docApi = new DocumentApi();
@@ -31,17 +31,18 @@ export default function DocumentSet(props) {
   };
 
   const deleteItem = React.useCallback((event, setId, docId) => {
-    setLoading(true)
-    docApi.deleteDocument(setId, docId).then( response => {
+    setLoading(true);
+    docApi.deleteDocument(setId, docId).then(response => {
       setTriggerListRefresh(Math.random());
-  })})
+    });
+  });
 
   useEffect(
     () => {
-      setLoading(true)
+      setLoading(true);
       api.getSet(props.documentSetName).then(apiSet => {
         setDocuments(apiSet.documents);
-        setLoading(false)
+        setLoading(false);
       });
     },
     [triggerListRefresh] //dependencies
@@ -51,7 +52,13 @@ export default function DocumentSet(props) {
     return <LinearProgress />;
   }
 
-  const documentUploadForm = <DocumentUploadForm documentSet={props.documentSetName} triggerDocListRefresh={setTriggerListRefresh} setLoading={setLoading}/>
+  const documentUploadForm = (
+    <DocumentUploadForm
+      documentSet={props.documentSetName}
+      triggerDocListRefresh={setTriggerListRefresh}
+      setLoading={setLoading}
+    />
+  );
   // tell if no document Sets
   if (documents.length === 0) {
     return (
@@ -63,7 +70,7 @@ export default function DocumentSet(props) {
   } else {
     return (
       <div>
-        {loading? <LinearProgress />:null}
+        {loading ? <LinearProgress /> : null}
         <List>
           {documents.map(document => (
             <ListItem
@@ -87,9 +94,17 @@ export default function DocumentSet(props) {
                 // secondary={`${set.documentCount} documents (${set.size})`}
               />
               <ListItemSecondaryAction>
-                <IconButton edge="end" aria-label="delete" onClick={event => deleteItem(event,
-                  props.documentSetName,
-                  document.documentId)}>
+                <IconButton
+                  edge="end"
+                  aria-label="delete"
+                  onClick={event =>
+                    deleteItem(
+                      event,
+                      props.documentSetName,
+                      document.documentId
+                    )
+                  }
+                >
                   <DeleteIcon />
                 </IconButton>
               </ListItemSecondaryAction>

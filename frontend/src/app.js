@@ -15,14 +15,14 @@ const App = () => {
     // does nothing in production
     // but gives additional warnings in development
     // <React.StrictMode>
-      <Dashboard>
-        <Router>
-          <Home path="/" />
-          <DocumentSets path="documentSets" />
-          <DocumentSet path="documentSet/:documentSetName" />
-          <Document path="documentSet/:documentSetName/:documentId" />
-        </Router>
-      </Dashboard>
+    <Dashboard>
+      <Router>
+        <Home path="/" />
+        <DocumentSets path="documentSets" />
+        <DocumentSet path="documentSet/:documentSetName" />
+        <Document path="documentSet/:documentSetName/:documentId" />
+      </Router>
+    </Dashboard>
     // </React.StrictMode>
   );
 };

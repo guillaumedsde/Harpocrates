@@ -16,14 +16,14 @@ import IconButton from "@material-ui/core/IconButton";
 import FolderIcon from "@material-ui/icons/Folder";
 import DeleteIcon from "@material-ui/icons/Delete";
 
-import NewSetForm from "./newSetForm"
+import NewSetForm from "./newSetForm";
 
 export default function DocumentSets() {
   const [documentSets, setDocumentSets] = useState(null);
   // TODO find better way to retrigger document list update on document delete
-  const [triggerRequest, setTriggerRequest] = useState(1)
+  const [triggerRequest, setTriggerRequest] = useState(1);
 
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true);
 
   var api = new SetApi();
 
@@ -31,7 +31,7 @@ export default function DocumentSets() {
     () => {
       api.getSets().then(apiSets => {
         setDocumentSets(apiSets.documentSets);
-        setLoading(false)
+        setLoading(false);
       });
     },
     [triggerRequest] //dependencies
@@ -42,56 +42,63 @@ export default function DocumentSets() {
   };
 
   const deleteItem = React.useCallback((event, setId) => {
-    setLoading(true)
-    api.deleteSet(setId).then( () => {
+    setLoading(true);
+    api.deleteSet(setId).then(() => {
       setTriggerRequest(Math.random());
-  })})
+    });
+  });
 
   if (documentSets === null) {
     return <LinearProgress />;
   }
 
-
-  const newSetForm = <NewSetForm setLoading={setLoading} setTriggerRequest={setTriggerRequest}/>
+  const newSetForm = (
+    <NewSetForm setLoading={setLoading} setTriggerRequest={setTriggerRequest} />
+  );
   // tell if no document Sets
   if (documentSets.length === 0) {
-    return <>
-    <h1>No Document Sets</h1>
-    {newSetForm}
-    </>;
+    return (
+      <>
+        <h1>No Document Sets</h1>
+        {newSetForm}
+      </>
+    );
   }
   // Otherwise display them
   else {
     return (
       <>
-      {loading? <LinearProgress />:null}
-      <List>
-        {documentSets.map(set => (
-          <ListItem
-            key={set.setId}
-            button
-            onClick={event => handleListItemClick(event, set.name)}
-            selected={triggerRequest === set.name}
-          >
-            <ListItemAvatar>
-              <Avatar>
-                <FolderIcon />
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText
-              primary={set.name}
-              secondary={`${set.documentCount} documents (${set.size})`}
-            />
-            <ListItemSecondaryAction>
-              <IconButton edge="end" aria-label="delete" onClick={event => deleteItem(event,
-                  set.name)}>
-                <DeleteIcon />
-              </IconButton>
-            </ListItemSecondaryAction>
-          </ListItem>
-        ))}
-      </List>
-      {newSetForm}
+        {loading ? <LinearProgress /> : null}
+        <List>
+          {documentSets.map(set => (
+            <ListItem
+              key={set.setId}
+              button
+              onClick={event => handleListItemClick(event, set.name)}
+              selected={triggerRequest === set.name}
+            >
+              <ListItemAvatar>
+                <Avatar>
+                  <FolderIcon />
+                </Avatar>
+              </ListItemAvatar>
+              <ListItemText
+                primary={set.name}
+                secondary={`${set.documentCount} documents (${set.size})`}
+              />
+              <ListItemSecondaryAction>
+                <IconButton
+                  edge="end"
+                  aria-label="delete"
+                  onClick={event => deleteItem(event, set.name)}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </ListItemSecondaryAction>
+            </ListItem>
+          ))}
+        </List>
+        {newSetForm}
       </>
     );
   }

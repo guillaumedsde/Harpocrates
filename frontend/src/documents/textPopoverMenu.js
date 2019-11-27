@@ -68,7 +68,7 @@ export default function PopoverMenu(props) {
     );
     api
       .addSensitiveSection(setId, docId, { sensitiveSection: section })
-      .then((sensitiveSections) => {
+      .then(sensitiveSections => {
         setSensitiveSections(sensitiveSections);
       });
   };

@@ -55,14 +55,14 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1
   },
   leftAppBar: {
-    position: 'relative',
+    position: "relative",
     marginRight: theme.spacing(2),
     marginLeft: 0,
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
+    width: "100%",
+    [theme.breakpoints.up("sm")]: {
       marginLeft: theme.spacing(3),
-      width: 'auto',
-    },
+      width: "auto"
+    }
   },
   drawerPaper: {
     position: "relative",

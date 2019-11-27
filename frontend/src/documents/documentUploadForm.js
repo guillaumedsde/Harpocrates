@@ -14,8 +14,8 @@ export default function DocumentUploadForm(props) {
       // Do whatever you want with the file contents
       const body = reader.result;
       props.setLoading(true);
-      api.createDocument(props.documentSet, body).then( () => {
-        props.triggerDocListRefresh(Math.random())
+      api.createDocument(props.documentSet, body).then(() => {
+        props.triggerDocListRefresh(Math.random());
       });
     };
 

@@ -13,7 +13,7 @@ export default function ExplanationToggles(props) {
         control={
           <Switch
             checked={props.showSensitiveExplanations}
-            disabled={props.classification===null}
+            disabled={props.classification === null}
             onChange={() => {
               props.setShowSensitiveExplanations(
                 !props.showSensitiveExplanations
@@ -40,7 +40,7 @@ export default function ExplanationToggles(props) {
         control={
           <Switch
             checked={props.showNonSensitiveExplanations}
-            disabled={props.classification===null}
+            disabled={props.classification === null}
             onChange={() => {
               props.setShowNonSensitiveExplanations(
                 !props.showNonSensitiveExplanations
