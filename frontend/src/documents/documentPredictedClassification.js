@@ -5,13 +5,12 @@ import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import WarningIcon from "@material-ui/icons/Warning";
 import { Grid } from "@material-ui/core";
 
-export default function PredictedClassification(props) {  
-  
+export default function PredictedClassification(props) {
   return (
     <Grid container spacing={1}>
       <Grid item>
         <Chip
-          style={{ margin: 'auto' }}
+          style={{ margin: "auto" }}
           label={`${
             props.classification.sensitive
               ? "Sensitive Document"
@@ -26,14 +25,14 @@ export default function PredictedClassification(props) {
             )
           }
         />
-        </Grid>
-        <Grid item>
+      </Grid>
+      <Grid item>
         <Chip
-        style={{ margin: 'auto' }}
+          style={{ margin: "auto" }}
           label={`${props.classification.sensitivity}% sensitive`}
           color={props.classification.sensitive ? "primary" : "default"}
         />
-        </Grid>
+      </Grid>
     </Grid>
   );
 }
