@@ -52,7 +52,7 @@ export default function DocumentBody(props) {
       annotations.push({
         start: feature.startOffset,
         end: feature.endOffset,
-        tag: "21"
+        tag: props.tag
       });
     });
   }
@@ -115,13 +115,6 @@ export default function DocumentBody(props) {
       </select> */}
       <Paper className={classes.root}>
         <TokenAnnotator
-          style={
-            {
-              // fontFamily: "IBM Plex Sans",
-              // maxWidth: 500,
-              // lineHeight: 1.5
-            }
-          }
           tokens={props.document.content.split(/(?!\n)\s+/)}
           // content={props.document.content}
           value={annotations}
@@ -136,14 +129,13 @@ export default function DocumentBody(props) {
               className={classes.margin}
               badgeContent={props.tag}
               color="primary"
-              key={props.content + props.tag}
+              key={props.content + props.tag + props.start + props.end}
             >
               <mark
                 style={
                   TAG_STYLES[props.tag] || {
                     backgroundColor: props.color || "black",
                     color: "white"
-                    // padding: "0 4px"
                   }
                 }
                 data-start={props.start}
