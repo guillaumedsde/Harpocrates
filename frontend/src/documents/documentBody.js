@@ -12,22 +12,14 @@ import {
   SensitiveSections
 } from "@harpocrates/api-client";
 
-const TAG_COLORS = {
-  22: "black",
-  sensitiveExplanation: "red",
-  insensitiveExplanation: "blue"
-};
-
 const TAG_STYLES = {
   sensitiveExplanation: {
     backgroundColor: "rgba(255, 0, 0, 0.5)",
     color: "black"
-    // padding: "0 4px"
   },
   insensitiveExplanation: {
     backgroundColor: "rgba(0, 0, 255, 0.5)",
     color: "black"
-    // padding: "0 4px"
   }
 };
 
@@ -37,7 +29,6 @@ const useStyles = makeStyles(theme => ({
     lineHeight: 1.5,
     maxWidth: "210mm",
     margin: "auto",
-
     // preserve text whitespaces
     whiteSpace: "pre-wrap"
   }
@@ -113,48 +104,41 @@ export default function DocumentBody(props) {
   };
 
   return (
-    <>
-      {/* <select onChange={handleTagChange} value={state.tag}>
-        <option value="ORG">ORG</option>
-        <option value="PERSON">PERSON</option>
-      </select> */}
-      <Paper className={classes.root}>
-        <TokenAnnotator
-          tokens={props.document.content.split(/(?!\n)\s+/)}
-          // content={props.document.content}
-          value={annotations}
-          onChange={handleChange}
-          getSpan={span => ({
-            ...span,
-            tag: props.tag,
-            color: TAG_COLORS[props.tag] || "black"
-          })}
-          renderMark={props => (
-            <Badge
-              className={classes.margin}
-              badgeContent={props.tag}
-              color="primary"
-              key={props.content + props.tag + props.start + props.end}
+    <Paper className={classes.root}>
+      <TokenAnnotator
+        tokens={props.document.content.split(/(?!\n)\s+/)}
+        content={props.document.content}
+        value={annotations}
+        onChange={handleChange}
+        getSpan={span => ({
+          ...span,
+          tag: props.tag
+        })}
+        renderMark={props => (
+          <Badge
+            className={classes.margin}
+            badgeContent={props.tag}
+            color="primary"
+            key={props.content + props.tag + props.start + props.end}
+          >
+            <mark
+              style={
+                TAG_STYLES[props.tag] || {
+                  backgroundColor: props.color || "black",
+                  color: "white"
+                }
+              }
+              data-start={props.start}
+              data-end={props.end}
+              onClick={() =>
+                props.onClick({ start: props.start, end: props.end })
+              }
             >
-              <mark
-                style={
-                  TAG_STYLES[props.tag] || {
-                    backgroundColor: props.color || "black",
-                    color: "white"
-                  }
-                }
-                data-start={props.start}
-                data-end={props.end}
-                onClick={() =>
-                  props.onClick({ start: props.start, end: props.end })
-                }
-              >
-                {props.content}
-              </mark>
-            </Badge>
-          )}
-        />
-      </Paper>
-    </>
+              {props.content}
+            </mark>
+          </Badge>
+        )}
+      />
+    </Paper>
   );
 }
