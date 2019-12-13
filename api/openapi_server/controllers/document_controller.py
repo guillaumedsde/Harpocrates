@@ -228,7 +228,12 @@ def get_predicted_classification_with_explanation(set_id, doc_id):  # noqa: E501
                 weight=feature_info[1],
                 text=match[0],
             )
-            if sensitive:
+            if (
+                sensitive
+                and (feature_info[1] > 0)
+                or (not sensitive)
+                and (feature_info[1] < 0)
+            ):
                 sensitive_features.append(feature)
             else:
                 non_sensitive_features.append(feature)
