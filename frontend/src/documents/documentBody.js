@@ -62,7 +62,7 @@ export default function DocumentBody(props) {
     }
 
     if (props.showSensitive) {
-      props.classification.nonSensitiveFeatures.forEach(feature => {
+      props.classification.sensitiveFeatures.forEach(feature => {
         // TODO varied opacity depending on the weight with a minimum and maximum opacity
         annotations.push({
           start: feature.startOffset,
@@ -105,7 +105,7 @@ export default function DocumentBody(props) {
 
   return (
     <Paper className={classes.root}>
-      <TokenAnnotator
+      <TextAnnotator
         tokens={props.document.content.split(/(?!\n)\s+/)}
         content={props.document.content}
         value={annotations}
