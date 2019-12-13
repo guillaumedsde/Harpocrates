@@ -68,9 +68,14 @@ def add_sensitive_sections(set_id, doc_id, body):  # noqa: E501
     sensitive_sections = SensitiveSections.from_dict(
         connexion.request.get_json()
     )  # noqa: E501
-    
+
     db[set_id].update_one(
-        {"_id": ObjectId(doc_id)}, {"$set" : {"sensitiveSections": sensitive_sections.to_dict()["sensitive_sections"]}},
+        {"_id": ObjectId(doc_id)},
+        {
+            "$set": {
+                "sensitiveSections": sensitive_sections.to_dict()["sensitive_sections"]
+            }
+        },
     )
 
     # return sensitive sections with HTTPStatus
@@ -220,14 +225,10 @@ def get_predicted_classification_with_explanation(set_id, doc_id):  # noqa: E501
             feature = Feature(
                 start_offset=match.span()[0],
                 end_offset=match.span()[1],
-                weight=abs(feature_info[1]),
+                weight=feature_info[1],
+                text=match[0],
             )
-            if (
-                sensitive
-                and (feature_info[1] > 0)
-                or (not sensitive)
-                and (feature_info[1] < 0)
-            ):
+            if sensitive:
                 sensitive_features.append(feature)
             else:
                 non_sensitive_features.append(feature)

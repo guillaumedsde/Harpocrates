@@ -4,7 +4,7 @@ info:
   license:
     name: MIT
   title: Harpocrates API
-  version: 4.1.0
+  version: 4.2.0
 externalDocs:
   description: API documentation
   url: https://harpocrates-app.gitlab.io/api-specification
@@ -674,6 +674,11 @@ components:
           example: 20
           format: int32
           type: integer
+        text:
+          description: textual representation of the section
+          example: NSA
+          format: string
+          type: string
       required:
       - endOffset
       - startOffset

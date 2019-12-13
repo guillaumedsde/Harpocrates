@@ -15,26 +15,31 @@ class Section(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, start_offset=None, end_offset=None):  # noqa: E501
+    def __init__(self, start_offset=None, end_offset=None, text=None):  # noqa: E501
         """Section - a model defined in OpenAPI
 
         :param start_offset: The start_offset of this Section.  # noqa: E501
         :type start_offset: int
         :param end_offset: The end_offset of this Section.  # noqa: E501
         :type end_offset: int
+        :param text: The text of this Section.  # noqa: E501
+        :type text: str
         """
         self.openapi_types = {
             'start_offset': int,
-            'end_offset': int
+            'end_offset': int,
+            'text': str
         }
 
         self.attribute_map = {
             'start_offset': 'startOffset',
-            'end_offset': 'endOffset'
+            'end_offset': 'endOffset',
+            'text': 'text'
         }
 
         self._start_offset = start_offset
         self._end_offset = end_offset
+        self._text = text
 
     @classmethod
     def from_dict(cls, dikt) -> 'Section':
@@ -96,3 +101,26 @@ class Section(Model):
             raise ValueError("Invalid value for `end_offset`, must not be `None`")  # noqa: E501
 
         self._end_offset = end_offset
+
+    @property
+    def text(self):
+        """Gets the text of this Section.
+
+        textual representation of the section  # noqa: E501
+
+        :return: The text of this Section.
+        :rtype: str
+        """
+        return self._text
+
+    @text.setter
+    def text(self, text):
+        """Sets the text of this Section.
+
+        textual representation of the section  # noqa: E501
+
+        :param text: The text of this Section.
+        :type text: str
+        """
+
+        self._text = text

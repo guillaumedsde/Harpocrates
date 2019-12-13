@@ -31,16 +31,27 @@
     "prettier": "^1.18.2"
   },
   "dependencies": {
-    "@harpocrates/api-client": "^4.1.0",
+    "@babel/core": "^7.7.5",
+    "@harpocrates/api-client": "^4.2.0",
     "@material-ui/core": "^4.6.0",
     "@material-ui/icons": "^4.5.1",
     "@material-ui/lab": "^4.0.0-alpha.32",
+    "@nivo/bar": "^0.60.1",
+    "@nivo/core": "^0.60.0",
+    "@nivo/generators": "^0.60.0",
     "@reach/router": "^1.2.1",
+    "@storybook/addon-actions": "^5.2.8",
+    "@storybook/react": "^5.2.8",
     "@types/react": "^16.9.13",
+    "babel-loader": "^8.0.6",
+    "lodash": "^4.17.15",
+    "material-ui": "^0.20.2",
+    "prop-types": "^15.7.2",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-dropzone": "^10.1.10",
-    "react-text-annotate": "^0.1.0"
+    "react-text-annotate": "^0.1.0",
+    "recharts": "^2.0.0-beta.1"
   },
   "browserslist": [
     "last 2 Chrome versions",

@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 
 import CircularProgress from "@material-ui/core/CircularProgress";
-import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
+import uniqBy from "lodash-es/uniqBy";
+import { ResponsiveContainer } from "recharts";
 
 import { DocumentApi } from "@harpocrates/api-client";
 
 import PredictedClassification from "./documentPredictedClassification";
 import DocumentBody from "./documentBody";
-
+import ExplanationChart from "./explanationBarChart";
 import CustomizedSnackbar from "./status";
 import ExplanationToggles from "./explanationToggles";
 import { InputLabel, FormControl, Select, MenuItem } from "@material-ui/core";
@@ -50,6 +51,7 @@ export default function Document(props) {
         props.documentId
       )
       .then(apiClassification => {
+        console.log(apiClassification);
         setClassification(apiClassification);
       });
   }, []);
@@ -62,6 +64,17 @@ export default function Document(props) {
         setSensitiveSections(apiSensitiveSections);
       });
   }, []);
+
+  var allUniqueFeatures = null;
+
+  if (classification != null) {
+    // concatenate all features
+    const allFeatures = classification.sensitiveFeatures.concat(
+      classification.nonSensitiveFeatures
+    );
+    // remove duplicate features
+    allUniqueFeatures = uniqBy(allFeatures, "text");
+  }
 
   if (document) {
     return (
@@ -115,19 +128,25 @@ export default function Document(props) {
               </Select>
             </Grid>
           </Grid>
+          <Grid container>
+            <Grid item>
+              <DocumentBody
+                document={document}
+                docId={props.documentId}
+                setName={props.documentSetName}
+                sensitiveSections={sensitiveSections}
+                setSensitiveSections={setSensitiveSections}
+                classification={classification}
+                showNonSensitive={showNonSensitiveExplanations}
+                showSensitive={showSensitiveExplanations}
+                tag={redactionLabel}
+              />
+            </Grid>
+            <Grid item>
+              <ExplanationChart explanationFeatures={allUniqueFeatures} />
+            </Grid>
+          </Grid>
         </Grid>
-
-        <DocumentBody
-          document={document}
-          docId={props.documentId}
-          setName={props.documentSetName}
-          sensitiveSections={sensitiveSections}
-          setSensitiveSections={setSensitiveSections}
-          classification={classification}
-          showNonSensitive={showNonSensitiveExplanations}
-          showSensitive={showSensitiveExplanations}
-          tag={redactionLabel}
-        />
         <CustomizedSnackbar
           message="Calculating sensitivity classification with explanation..."
           open={classification == null}
@@ -136,10 +155,6 @@ export default function Document(props) {
       </>
     );
   } else {
-    return (
-      <>
-        <CircularProgress />
-      </>
-    );
+    return <CircularProgress />;
   }
 }

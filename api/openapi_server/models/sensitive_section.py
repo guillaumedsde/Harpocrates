@@ -19,13 +19,15 @@ class SensitiveSection(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, start_offset=None, end_offset=None, name=None, description=None):  # noqa: E501
+    def __init__(self, start_offset=None, end_offset=None, text=None, name=None, description=None):  # noqa: E501
         """SensitiveSection - a model defined in OpenAPI
 
         :param start_offset: The start_offset of this SensitiveSection.  # noqa: E501
         :type start_offset: int
         :param end_offset: The end_offset of this SensitiveSection.  # noqa: E501
         :type end_offset: int
+        :param text: The text of this SensitiveSection.  # noqa: E501
+        :type text: str
         :param name: The name of this SensitiveSection.  # noqa: E501
         :type name: str
         :param description: The description of this SensitiveSection.  # noqa: E501
@@ -34,6 +36,7 @@ class SensitiveSection(Model):
         self.openapi_types = {
             'start_offset': int,
             'end_offset': int,
+            'text': str,
             'name': str,
             'description': str
         }
@@ -41,12 +44,14 @@ class SensitiveSection(Model):
         self.attribute_map = {
             'start_offset': 'startOffset',
             'end_offset': 'endOffset',
+            'text': 'text',
             'name': 'name',
             'description': 'description'
         }
 
         self._start_offset = start_offset
         self._end_offset = end_offset
+        self._text = text
         self._name = name
         self._description = description
 
@@ -110,6 +115,29 @@ class SensitiveSection(Model):
             raise ValueError("Invalid value for `end_offset`, must not be `None`")  # noqa: E501
 
         self._end_offset = end_offset
+
+    @property
+    def text(self):
+        """Gets the text of this SensitiveSection.
+
+        textual representation of the section  # noqa: E501
+
+        :return: The text of this SensitiveSection.
+        :rtype: str
+        """
+        return self._text
+
+    @text.setter
+    def text(self, text):
+        """Sets the text of this SensitiveSection.
+
+        textual representation of the section  # noqa: E501
+
+        :param text: The text of this SensitiveSection.
+        :type text: str
+        """
+
+        self._text = text
 
     @property
     def name(self):
