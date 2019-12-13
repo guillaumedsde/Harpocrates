@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Grid from "@material-ui/core/Grid";
 import uniqBy from "lodash-es/uniqBy";
-import { ResponsiveContainer } from "recharts";
 
 import { DocumentApi } from "@harpocrates/api-client";
 

@@ -8,9 +8,7 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
-  ReferenceLine,
-  ResponsiveContainer
+  ReferenceLine
 } from "recharts";
 import { CircularProgress } from "@material-ui/core";
 
