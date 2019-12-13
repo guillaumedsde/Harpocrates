@@ -19,30 +19,35 @@ class Feature(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, start_offset=None, end_offset=None, weight=None):  # noqa: E501
+    def __init__(self, start_offset=None, end_offset=None, text=None, weight=None):  # noqa: E501
         """Feature - a model defined in OpenAPI
 
         :param start_offset: The start_offset of this Feature.  # noqa: E501
         :type start_offset: int
         :param end_offset: The end_offset of this Feature.  # noqa: E501
         :type end_offset: int
+        :param text: The text of this Feature.  # noqa: E501
+        :type text: str
         :param weight: The weight of this Feature.  # noqa: E501
         :type weight: float
         """
         self.openapi_types = {
             'start_offset': int,
             'end_offset': int,
+            'text': str,
             'weight': float
         }
 
         self.attribute_map = {
             'start_offset': 'startOffset',
             'end_offset': 'endOffset',
+            'text': 'text',
             'weight': 'weight'
         }
 
         self._start_offset = start_offset
         self._end_offset = end_offset
+        self._text = text
         self._weight = weight
 
     @classmethod
@@ -105,6 +110,29 @@ class Feature(Model):
             raise ValueError("Invalid value for `end_offset`, must not be `None`")  # noqa: E501
 
         self._end_offset = end_offset
+
+    @property
+    def text(self):
+        """Gets the text of this Feature.
+
+        textual representation of the section  # noqa: E501
+
+        :return: The text of this Feature.
+        :rtype: str
+        """
+        return self._text
+
+    @text.setter
+    def text(self, text):
+        """Sets the text of this Feature.
+
+        textual representation of the section  # noqa: E501
+
+        :param text: The text of this Feature.
+        :type text: str
+        """
+
+        self._text = text
 
     @property
     def weight(self):

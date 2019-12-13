@@ -1,7 +1,7 @@
 openapi: "3.0.2"
 info:
   description: This is the Rest API specification for the Harpocrates application
-  version: "4.1.0"
+  version: "4.2.0"
   title: Harpocrates API
   license:
     name: MIT
@@ -434,6 +434,11 @@ components:
           format: int32
           example: 20
           description: end offset of a section in characters from the beginning of the document
+        text:
+          type: string
+          format: string
+          example: NSA
+          description: textual representation of the section
     feature:
       allOf: # extend section
         - $ref: "#/components/schemas/section"
