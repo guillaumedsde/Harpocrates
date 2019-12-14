@@ -11,7 +11,13 @@ import DocumentBody from "./documentBody";
 import ExplanationChart from "./explanationBarChart";
 import CustomizedSnackbar from "./status";
 import ExplanationToggles from "./explanationToggles";
-import { InputLabel, FormControl, Select, MenuItem } from "@material-ui/core";
+import {
+  InputLabel,
+  FormControl,
+  Select,
+  MenuItem,
+  Paper
+} from "@material-ui/core";
 
 const labels = ["20", "21", "22", "23", "24"];
 
@@ -127,7 +133,7 @@ export default function Document(props) {
               </Select>
             </Grid>
           </Grid>
-          <Grid container>
+          <Grid container spacing={2}>
             <Grid item>
               <DocumentBody
                 document={document}
@@ -141,7 +147,7 @@ export default function Document(props) {
                 tag={redactionLabel}
               />
             </Grid>
-            <Grid item>
+            <Grid item xs={4}>
               <ExplanationChart explanationFeatures={allUniqueFeatures} />
             </Grid>
           </Grid>
