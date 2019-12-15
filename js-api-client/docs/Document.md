@@ -6,6 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **name** | **String** |  | [optional] 
 **documentId** | **String** |  | 
+**predictedClassificationWithExplanation** | [**PredictedClassificationWithExplanation**](PredictedClassificationWithExplanation.md) |  | [optional] 
 **content** | **String** | content of the document | [optional] 
 
 
