@@ -2,24 +2,18 @@ import React, { useEffect, useState } from "react";
 
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Grid from "@material-ui/core/Grid";
+import Divider from "@material-ui/core/Divider";
+
 import uniqBy from "lodash-es/uniqBy";
 
 import { DocumentApi } from "@harpocrates/api-client";
 
 import DocumentInfo from "./documentInfo";
-import PredictedClassification from "./documentPredictedClassification";
 import DocumentBody from "./documentBody";
 import ExplanationChart from "./explanationBarChart";
 import CustomizedSnackbar from "./status";
 import ExplanationToggles from "./explanationToggles";
-import {
-  InputLabel,
-  FormControl,
-  Select,
-  MenuItem,
-  Paper,
-  Typography
-} from "@material-ui/core";
+import RedactionLabelSelect from "./redactionLabelSelect";
 
 const labels = ["20", "21", "22", "23", "24"];
 
@@ -92,8 +86,8 @@ export default function Document(props) {
             sm
           >
             <DocumentInfo document={document} classification={classification} />
-            <Grid container alignItems="center" spacing>
-              <Grid item>
+            <Grid container alignItems="center">
+              <Grid item style={{ width: "100%" }}>
                 <ExplanationToggles
                   classification={classification}
                   showSensitiveExplanations={showSensitiveExplanations}
@@ -103,23 +97,12 @@ export default function Document(props) {
                     setShowNonSensitiveExplanations
                   }
                 />
-              </Grid>
-              <Grid container alignItems="center">
-                <Select
-                  id="demo-simple-select"
-                  value={redactionLabel}
-                  autoWidth
-                  onChange={event => {
-                    setRedactionLabel(event.target.value);
-                  }}
-                >
-                  {labels.map(label => (
-                    <MenuItem key={label} value={label}>
-                      {label}
-                    </MenuItem>
-                  ))}
-                </Select>
-                <Typography>Redaction label </Typography>
+                <Divider />
+                <RedactionLabelSelect
+                  redactionLabel={redactionLabel}
+                  setRedactionLabel={setRedactionLabel}
+                  labels={labels}
+                />
               </Grid>
             </Grid>
           </Grid>

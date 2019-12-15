@@ -1,69 +1,55 @@
 import React from "react";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
+
 import Switch from "@material-ui/core/Switch";
-import { Grid } from "@material-ui/core";
+
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
+import ListItemText from "@material-ui/core/ListItemText";
+import ListSubheader from "@material-ui/core/ListSubheader";
+import WarningIcon from "@material-ui/icons/Warning";
+import CheckIcon from "@material-ui/icons/Check";
 
 export default function ExplanationToggles(props) {
   return (
-    <>
-      <Grid item xs={12}>
-        <FormControlLabel
-          control={
-            <Switch
-              checked={props.showSensitiveExplanations}
-              disabled={props.classification === null}
-              onChange={() => {
-                props.setShowSensitiveExplanations(
-                  !props.showSensitiveExplanations
-                );
-              }}
-            />
-          }
-          label={
-            <div>
-              Why is this{" "}
-              <div
-                style={{
-                  backgroundColor: "rgba(255, 0, 0, 0.25)",
-                  display: "inline-block"
-                }}
-              >
-                sensitive
-              </div>
-              ?
-            </div>
-          }
-        />
-      </Grid>
-      <Grid item xs={12}>
-        <FormControlLabel
-          control={
-            <Switch
-              checked={props.showNonSensitiveExplanations}
-              disabled={props.classification === null}
-              onChange={() => {
-                props.setShowNonSensitiveExplanations(
-                  !props.showNonSensitiveExplanations
-                );
-              }}
-            />
-          }
-          label={
-            <div>
-              Why is this{" "}
-              <div
-                style={{
-                  backgroundColor: "rgba(0, 0, 255, 0.25)",
-                  display: "inline-block"
-                }}
-              >
-                not sensitive
-              </div>
-              ?
-            </div>
-          }
-        />
-      </Grid>
-    </>
+    <List subheader={<ListSubheader>Explanations</ListSubheader>}>
+      <ListItem>
+        <ListItemIcon>
+          <WarningIcon />
+        </ListItemIcon>
+        <ListItemText id="switch-sensitive-label" primary="Sensitive" />
+        <ListItemSecondaryAction>
+          <Switch
+            checked={props.showSensitiveExplanations}
+            disabled={props.classification === null}
+            inputProps={{ "aria-labelledby": "switch-sensitive-label" }}
+            onChange={() => {
+              props.setShowSensitiveExplanations(
+                !props.showSensitiveExplanations
+              );
+            }}
+          />
+        </ListItemSecondaryAction>
+      </ListItem>
+      <ListItem>
+        <ListItemIcon>
+          <CheckIcon />
+        </ListItemIcon>
+        <ListItemText id="switch-non-sensitive-label" primary="Not Sensitive" />
+        <ListItemSecondaryAction>
+          <Switch
+            checked={props.showNonSensitiveExplanations}
+            disabled={props.classification === null}
+            inputProps={{ "aria-labelledby": "switch-non-sensitive-label" }}
+            onChange={() => {
+              props.setShowNonSensitiveExplanations(
+                !props.showNonSensitiveExplanations
+              );
+            }}
+          />
+        </ListItemSecondaryAction>
+      </ListItem>
+    </List>
   );
 }
