@@ -679,7 +679,6 @@ components:
         text:
           description: textual representation of the section
           example: NSA
-          format: string
           type: string
       required:
       - endOffset

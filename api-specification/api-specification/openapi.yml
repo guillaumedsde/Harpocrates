@@ -438,7 +438,6 @@ components:
           description: end offset of a section in characters from the beginning of the document
         text:
           type: string
-          format: string
           example: NSA
           description: textual representation of the section
     feature:
