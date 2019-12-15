@@ -70,22 +70,16 @@ To run the stack without docker you will need to have:
 
 The `js-api-client` service is a Node package auto-generated using the openapi-generator from the specification defined in `api-sepecification/api-specification/openapi.yml`.
 
-To update the JS client after having modified the specification use the following command at the repo's root __after having installed the [OpenAPI code generator](https://github.com/OpenAPITools/openapi-generator)__:
+To update the JS client after having modified the specification use the following command at the repo's root **after having installed the [OpenAPI code generator](https://github.com/OpenAPITools/openapi-generator)**:
 
 ```bash
-openapi-generator-cli generate \
-     -g javascript \
-     -o ./js-api-client/ \
-     -i ./api-specification/api-specification/openapi.yml \
-     --additional-properties=usePromises=true \
-     --additional-properties=projectName=@harpocrates/api-client \
-     --additional-properties=licenseName=MIT
+make api-client
 ```
 
 ### Generate the Flask API Server code
 
-The Flask API server code is also derived from the OpenAPI generator code, however, some files are protected from "auto generation overwrite" this list is in `api/.openapi-generator-ignore`. As such, some manual modification of these files might be required after code generation which is run from the project root with the following command __after having installed the [OpenAPI code generator](https://github.com/OpenAPITools/openapi-generator)__:
+The Flask API server code is also derived from the OpenAPI generator code, however, some files are protected from "auto generation overwrite" this list is in `api/.openapi-generator-ignore`. As such, some manual modification of these files might be required after code generation which is run from the project root with the following command **after having installed the [OpenAPI code generator](https://github.com/OpenAPITools/openapi-generator)**:
 
 ```bash
-openapi-generator generate -g python-flask -o ./api -i ./api-specification/api-specification/openapi.yml
+make api-server
 ```
