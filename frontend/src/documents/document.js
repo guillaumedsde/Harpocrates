@@ -56,7 +56,6 @@ export default function Document(props) {
         props.documentId
       )
       .then(apiClassification => {
-        console.log(apiClassification);
         setClassification(apiClassification);
       });
   }, []);
@@ -84,72 +83,77 @@ export default function Document(props) {
   if (document) {
     return (
       <>
-        <Grid>
-          <Grid container alignItems="center" spacing={2}>
-            {document.name ? (
+        <Grid container spacing={2}>
+          <Grid
+            container
+            xs
+            // alignItems="flex-start"
+            alignContent="flex-start"
+          >
+            <Grid container alignItems="center">
+              {document.name ? (
+                <Grid item>
+                  <h1>{document.name}</h1>
+                </Grid>
+              ) : null}
               <Grid item>
-                <h1>{document.name}</h1>
+                <h2>{document.documentId}</h2>
               </Grid>
-            ) : null}
-            <Grid item>
-              <h2>{document.documentId}</h2>
+              {classification ? (
+                <Grid item>
+                  <PredictedClassification classification={classification} />
+                </Grid>
+              ) : null}
             </Grid>
-            {classification ? (
+            <Grid container alignItems="center">
               <Grid item>
-                <PredictedClassification classification={classification} />
+                <ExplanationToggles
+                  classification={classification}
+                  showSensitiveExplanations={showSensitiveExplanations}
+                  setShowSensitiveExplanations={setShowSensitiveExplanations}
+                  showNonSensitiveExplanations={showNonSensitiveExplanations}
+                  setShowNonSensitiveExplanations={
+                    setShowNonSensitiveExplanations
+                  }
+                />
               </Grid>
-            ) : null}
-          </Grid>
-          <Grid container alignItems="center" spacing={2}>
-            <Grid item>
-              <ExplanationToggles
-                classification={classification}
-                showSensitiveExplanations={showSensitiveExplanations}
-                setShowSensitiveExplanations={setShowSensitiveExplanations}
-                showNonSensitiveExplanations={showNonSensitiveExplanations}
-                setShowNonSensitiveExplanations={
-                  setShowNonSensitiveExplanations
-                }
-              />
-            </Grid>
-            <Grid item>
-              <InputLabel id="demo-simple-select-label">
-                Redaction label
-              </InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={redactionLabel}
-                autoWidth
-                onChange={event => {
-                  setRedactionLabel(event.target.value);
-                }}
-              >
-                {labels.map(label => (
-                  <MenuItem key={label} value={label}>
-                    {label}
-                  </MenuItem>
-                ))}
-              </Select>
+              <Grid item>
+                <InputLabel id="demo-simple-select-label">
+                  Redaction label
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={redactionLabel}
+                  autoWidth
+                  onChange={event => {
+                    setRedactionLabel(event.target.value);
+                  }}
+                >
+                  {labels.map(label => (
+                    <MenuItem key={label} value={label}>
+                      {label}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </Grid>
             </Grid>
           </Grid>
-          <Grid container spacing={2}>
-            <Grid item>
-              <DocumentBody
-                document={document}
-                docId={props.documentId}
-                setName={props.documentSetName}
-                sensitiveSections={sensitiveSections}
-                setSensitiveSections={setSensitiveSections}
-                classification={classification}
-                showNonSensitive={showNonSensitiveExplanations}
-                showSensitive={showSensitiveExplanations}
-                tag={redactionLabel}
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <ExplanationChart explanationFeatures={allUniqueFeatures} />
-            </Grid>
+          <Grid item>
+            <DocumentBody
+              document={document}
+              docId={props.documentId}
+              setName={props.documentSetName}
+              sensitiveSections={sensitiveSections}
+              setSensitiveSections={setSensitiveSections}
+              classification={classification}
+              showNonSensitive={showNonSensitiveExplanations}
+              showSensitive={showSensitiveExplanations}
+              tag={redactionLabel}
+            />
+          </Grid>
+          <Grid item xs>
+            <ExplanationChart explanationFeatures={allUniqueFeatures} />
           </Grid>
         </Grid>
         <CustomizedSnackbar
