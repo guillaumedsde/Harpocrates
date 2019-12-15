@@ -70,3 +70,12 @@ endif
 clean: ## Remove all images related to the project
 	@docker images | grep $(CI_REGISTRY_IMAGE) | tr -s ' ' | cut -d ' ' -f 2 | xargs -I {} docker rmi $(CI_REGISTRY_IMAGE):{}
 
+
+.PHONY: api-client
+api-client: ## generate JS API client code from specification
+	@openapi-generator-cli generate -g javascript -o ./js-api-client/ -i ./api-specification/api-specification/openapi.yml --additional-properties=usePromises=true --additional-properties=projectName=@harpocrates/api-client --additional-properties=licenseName=MIT
+
+.PHONY: api-server
+api-server: ## generate Python API server code from specification
+	@openapi-generator generate -g python-flask -o ./api -i ./api-specification/api-specification/openapi.yml
+
