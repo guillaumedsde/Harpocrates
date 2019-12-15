@@ -9,29 +9,33 @@ import {
   CartesianGrid,
   Tooltip,
   ReferenceLine,
-  ResponsiveContainer
+  ResponsiveContainer,
+  Label
 } from "recharts";
 import { CircularProgress } from "@material-ui/core";
 
 export default function ExplanationChart(props) {
   if (props.explanationFeatures) {
     return (
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer>
         <BarChart
           width={0}
           height={0}
           data={props.explanationFeatures}
           layout="vertical"
-          margin={{
-            top: 5,
-            right: 30,
-            left: 30,
-            bottom: 5
-          }}
+          margin={{ top: 50, right: 50, bottom: 50, left: 50 }}
         >
           <CartesianGrid strokeDasharray="3 3" />
-          <YAxis dataKey="text" type="category" />
-          <XAxis type="number" />
+          <YAxis dataKey="text" type="category">
+            <Label value="Not Sensitive" offset={-50} position="insideBottom" />
+          </YAxis>
+          <XAxis type="number">
+            <Label
+              value="Sensitive"
+              offset={-20}
+              position="insideBottomRight"
+            />
+          </XAxis>
           <Tooltip />
           <ReferenceLine x={0} stroke="#000" />
           {/* Color depending on positivity of value */}
@@ -39,7 +43,8 @@ export default function ExplanationChart(props) {
             {props.explanationFeatures.map((entry, index) => (
               <Cell
                 key={`cell-${index}`}
-                fill={entry.weight > 0 ? "#2ca02c" : "#d62728"}
+                fill={entry.weight > 0 ? "red" : "blue"}
+                opacity={0.25}
               />
             ))}
           </Bar>

@@ -6,6 +6,7 @@ import uniqBy from "lodash-es/uniqBy";
 
 import { DocumentApi } from "@harpocrates/api-client";
 
+import DocumentInfo from "./documentInfo";
 import PredictedClassification from "./documentPredictedClassification";
 import DocumentBody from "./documentBody";
 import ExplanationChart from "./explanationBarChart";
@@ -16,7 +17,8 @@ import {
   FormControl,
   Select,
   MenuItem,
-  Paper
+  Paper,
+  Typography
 } from "@material-ui/core";
 
 const labels = ["20", "21", "22", "23", "24"];
@@ -83,29 +85,14 @@ export default function Document(props) {
   if (document) {
     return (
       <>
-        <Grid container spacing={2}>
+        <Grid container spacing={10}>
           <Grid
-            container
-            xs
+            item
             // alignItems="flex-start"
-            alignContent="flex-start"
+            sm
           >
-            <Grid container alignItems="center">
-              {document.name ? (
-                <Grid item>
-                  <h1>{document.name}</h1>
-                </Grid>
-              ) : null}
-              <Grid item>
-                <h2>{document.documentId}</h2>
-              </Grid>
-              {classification ? (
-                <Grid item>
-                  <PredictedClassification classification={classification} />
-                </Grid>
-              ) : null}
-            </Grid>
-            <Grid container alignItems="center">
+            <DocumentInfo document={document} classification={classification} />
+            <Grid container alignItems="center" spacing>
               <Grid item>
                 <ExplanationToggles
                   classification={classification}
@@ -117,12 +104,8 @@ export default function Document(props) {
                   }
                 />
               </Grid>
-              <Grid item>
-                <InputLabel id="demo-simple-select-label">
-                  Redaction label
-                </InputLabel>
+              <Grid container alignItems="center">
                 <Select
-                  labelId="demo-simple-select-label"
                   id="demo-simple-select"
                   value={redactionLabel}
                   autoWidth
@@ -136,10 +119,11 @@ export default function Document(props) {
                     </MenuItem>
                   ))}
                 </Select>
+                <Typography>Redaction label </Typography>
               </Grid>
             </Grid>
           </Grid>
-          <Grid item>
+          <Grid item sm={6}>
             <DocumentBody
               document={document}
               docId={props.documentId}
@@ -152,7 +136,7 @@ export default function Document(props) {
               tag={redactionLabel}
             />
           </Grid>
-          <Grid item xs>
+          <Grid item sm>
             <ExplanationChart explanationFeatures={allUniqueFeatures} />
           </Grid>
         </Grid>

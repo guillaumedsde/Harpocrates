@@ -3,12 +3,12 @@ import React from "react";
 import Chip from "@material-ui/core/Chip";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import WarningIcon from "@material-ui/icons/Warning";
-import { Grid } from "@material-ui/core";
+import { Grid, Typography, LinearProgress } from "@material-ui/core";
 
 export default function PredictedClassification(props) {
   return (
-    <Grid container spacing={1}>
-      <Grid item>
+    <>
+      <Grid item xs>
         <Chip
           style={{ margin: "auto" }}
           label={`${
@@ -26,13 +26,16 @@ export default function PredictedClassification(props) {
           }
         />
       </Grid>
-      <Grid item>
-        <Chip
-          style={{ margin: "auto" }}
-          label={`${props.classification.sensitivity}% sensitive`}
-          color={props.classification.sensitive ? "primary" : "default"}
+      <Grid item xs={12}>
+        <Typography variant="body1">
+          {props.classification.sensitivity}% sensitive
+        </Typography>
+        <LinearProgress
+          value={props.classification.sensitivity}
+          variant="determinate"
+          color={props.classification.sensitive ? "secondary" : "primary"}
         />
       </Grid>
-    </Grid>
+    </>
   );
 }
