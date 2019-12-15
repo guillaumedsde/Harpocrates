@@ -1,4 +1,7 @@
 import os
+from multiprocessing.pool import ThreadPool
+
+from multiprocessing import cpu_count
 
 import click
 import connexion
@@ -6,15 +9,35 @@ from flask.cli import with_appcontext
 
 from flask_cors import CORS
 
-from pymongo import MongoClient
-
 from openapi_server import encoder
+from openapi_server.db import create_db_client
 
 __version__ = (0, 1, 0, "dev")
 
-MONGO_URI = os.environ.get("MONGO_URI") or "mongodb://root:example@localhost:27017/"
-mongo = MongoClient(MONGO_URI)
-db = mongo["document_sets"]
+# setup database
+db = create_db_client()
+
+pool = ThreadPool(processes=cpu_count())
+
+
+# def make_celery(app):
+#     celery = Celery(
+#         app.import_name,
+#         backend=app.config["CELERY_RESULT_BACKEND"],
+#         broker=app.config["CELERY_BROKER_URL"],
+#     )
+#     celery.conf.update(app.config)
+#     TaskBase = celery.Task
+
+#     class ContextTask(TaskBase):
+#         abstract = True
+
+#         def __call__(self, *args, **kwargs):
+#             with app.app_context():
+#                 return TaskBase.__call__(self, *args, **kwargs)
+
+#     celery.Task = ContextTask
+#     return celery
 
 
 def create_app(test_config=None):
@@ -39,6 +62,14 @@ def create_app(test_config=None):
         # default secret that should be overridden in environ or config
         SECRET_KEY=os.environ.get("SECRET_KEY", "dev"),
     )
+
+    # setup messaging broker
+
+    # flask_app = Flask(__name__)
+    # flask_app.config.update(
+    #     CELERY_BROKER_URL=CELERY_BROKER, CELERY_RESULT_BACKEND=CELERY_BROKER
+    # )
+    # celery = make_celery(flask_app)
 
     # if test_config is None:
     #     # load the instance config, if it exists, when not testing

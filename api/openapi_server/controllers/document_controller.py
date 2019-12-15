@@ -19,9 +19,13 @@ from openapi_server.models.sensitive_sections import SensitiveSections
 
 from openapi_server import util, db
 
+from openapi_server import create_db_client
+
 from openapi_server.service import CLASS_NAMES
 from openapi_server.service.classification import get_model
 from openapi_server.service.explanation import lime_explanation
+
+# from openapi_server.service.classify import classify_and_explain
 
 
 def add_sensitive_section(set_id, doc_id, body):  # noqa: E501
@@ -121,7 +125,13 @@ def create_document(set_id, body):  # noqa: E501
     """
 
     doc = {"body": body.decode(), "sensitiveSections": []}
-    doc_id = db[set_id].insert_one(doc)
+    operation_result = db[set_id].insert_one(doc)
+
+    doc_id = operation_result.inserted_id
+
+    print(doc_id)
+
+    classify_and_explain(set_id, doc_id)
 
     return HTTPStatus.CREATED
 
@@ -186,9 +196,8 @@ def get_predicted_classification(set_id, doc_id):  # noqa: E501
     return predicted
 
 
-def get_predicted_classification_with_explanation(set_id, doc_id):  # noqa: E501
-    """Get the explanation for the predicted classification of a document with
-    the classification
+def calculate_classification_with_explanation(set_id, doc_id):
+    """Calculate the classification of a document with the explanation for the predicted classification
 
      # noqa: E501
 
@@ -248,3 +257,65 @@ def get_predicted_classification_with_explanation(set_id, doc_id):  # noqa: E501
     )
 
     return classification_with_explanation
+
+
+def get_predicted_classification_with_explanation(set_id, doc_id):  # noqa: E501
+    """Get the explanation for the predicted classification of a document with
+    the classification
+
+     # noqa: E501
+
+    :param set_id: ID of a set
+    :type set_id: str
+    :param doc_id: ID of a document
+    :type doc_id: str
+
+    :rtype: PredictedClassificationWithExplanation
+    """
+    document = get_document(set_id, doc_id)
+
+    predicted_classification_query = db[set_id].find_one(
+        {"_id": ObjectId(doc_id)}, {"predictedClassification": 1}
+    )
+
+    predicted_classification = predicted_classification_query["predictedClassification"]
+
+    # build and return final classification with explanation object
+    classification_with_explanation = PredictedClassificationWithExplanation.from_dict(
+        predicted_classification
+    )
+
+    sensitive_features = []
+    for feature in predicted_classification["sensitive_features"]:
+        sensitive_features.append(Feature(**feature))
+
+    non_sensitive_features = []
+    for feature in predicted_classification["non_sensitive_features"]:
+        non_sensitive_features.append(Feature(**feature))
+
+    classification_with_explanation.sensitive_features = sensitive_features
+    classification_with_explanation.non_sensitive_features = non_sensitive_features
+
+    # print(classification_with_explanation)
+
+    return classification_with_explanation
+
+
+def classify_and_explain(set_id, doc_id):
+    """calculates document classification and accompanying explanation
+
+    :param set_id: ID of a set
+    :type set_id: str
+    :param doc_id: ID of a document
+    :type doc_id: str
+    """
+
+    # global db
+    # db = create_db_client()
+
+    classification = calculate_classification_with_explanation(set_id, doc_id)
+
+    doc_id = db[set_id].update(
+        {"_id": ObjectId(doc_id)},
+        {"$set": {"predictedClassification": classification.to_dict()}},
+    )

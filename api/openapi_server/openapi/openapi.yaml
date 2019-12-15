@@ -618,6 +618,8 @@ components:
           allOf:
           - $ref: '#/components/schemas/idBase'
           - description: Unique identifier for a Document
+        predictedClassificationWithExplanation:
+          $ref: '#/components/schemas/predictedClassificationWithExplanation'
         content:
           description: content of the document
           type: string

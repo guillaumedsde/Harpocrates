@@ -12,6 +12,7 @@
  */
 
 import ApiClient from '../ApiClient';
+import PredictedClassificationWithExplanation from './PredictedClassificationWithExplanation';
 
 /**
  * The Document model module.
@@ -56,6 +57,9 @@ class Document {
             if (data.hasOwnProperty('documentId')) {
                 obj['documentId'] = ApiClient.convertToType(data['documentId'], 'String');
             }
+            if (data.hasOwnProperty('predictedClassificationWithExplanation')) {
+                obj['predictedClassificationWithExplanation'] = PredictedClassificationWithExplanation.constructFromObject(data['predictedClassificationWithExplanation']);
+            }
             if (data.hasOwnProperty('content')) {
                 obj['content'] = ApiClient.convertToType(data['content'], 'String');
             }
@@ -75,6 +79,11 @@ Document.prototype['name'] = undefined;
  * @member {String} documentId
  */
 Document.prototype['documentId'] = undefined;
+
+/**
+ * @member {module:model/PredictedClassificationWithExplanation} predictedClassificationWithExplanation
+ */
+Document.prototype['predictedClassificationWithExplanation'] = undefined;
 
 /**
  * content of the document
