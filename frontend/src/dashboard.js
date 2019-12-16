@@ -5,13 +5,13 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
 import Container from "@material-ui/core/Container";
 import HomeIcon from "@material-ui/icons/Home";
 import ListIcon from "@material-ui/icons/List";
+import { Link, Location } from "@reach/router";
+import { Button, Grid } from "@material-ui/core";
 
-import { Link } from "@reach/router";
-import { Button } from "@material-ui/core";
+import BreadcrumbsNavigation from "./navigation/breadcrumbsNavigation";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -87,22 +87,10 @@ export default function Dashboard(props) {
           >
             <b>η</b> Harpocrates
           </Typography>
-          <Button
-            color="inherit"
-            component={Link}
-            to="/"
-            startIcon={<HomeIcon />}
-          >
-            Home
-          </Button>
-          <Button
-            color="inherit"
-            component={Link}
-            to="documentSets"
-            startIcon={<ListIcon />}
-          >
-            Document Sets
-          </Button>
+
+          <Location>
+            {({ location }) => <BreadcrumbsNavigation location={location} />}
+          </Location>
         </Toolbar>
       </AppBar>
       <main className={classes.content}>

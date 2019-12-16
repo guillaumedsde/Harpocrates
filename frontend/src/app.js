@@ -19,8 +19,8 @@ const App = () => {
       <Router>
         <Home path="/" />
         <DocumentSets path="documentSets" />
-        <DocumentSet path="documentSet/:documentSetName" />
-        <Document path="documentSet/:documentSetName/:documentId" />
+        <DocumentSet path="documentSets/:documentSetName" />
+        <Document path="documentSets/:documentSetName/:documentId" />
       </Router>
     </Dashboard>
     // </React.StrictMode>
