@@ -4,7 +4,7 @@ info:
   license:
     name: MIT
   title: Harpocrates API
-  version: 4.2.0
+  version: 4.3.0
 externalDocs:
   description: API documentation
   url: https://harpocrates-app.gitlab.io/api-specification
@@ -606,6 +606,10 @@ components:
     document:
       description: A document to review
       example:
+        sensitiveSections:
+          sensitiveSections:
+          - null
+          - null
         name: ""
         documentId: ""
         content: content
@@ -620,6 +624,8 @@ components:
           - description: Unique identifier for a Document
         predictedClassificationWithExplanation:
           $ref: '#/components/schemas/predictedClassificationWithExplanation'
+        sensitiveSections:
+          $ref: '#/components/schemas/sensitiveSections'
         content:
           description: content of the document
           type: string
@@ -630,10 +636,18 @@ components:
       description: an object representing multiple documents
       example:
         documents:
-        - name: ""
+        - sensitiveSections:
+            sensitiveSections:
+            - null
+            - null
+          name: ""
           documentId: ""
           content: content
-        - name: ""
+        - sensitiveSections:
+            sensitiveSections:
+            - null
+            - null
+          name: ""
           documentId: ""
           content: content
       properties:

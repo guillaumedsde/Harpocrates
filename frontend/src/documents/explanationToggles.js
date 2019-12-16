@@ -1,8 +1,6 @@
 import React from "react";
 
 import Switch from "@material-ui/core/Switch";
-import MenuItem from "@material-ui/core/MenuItem";
-import Select from "@material-ui/core/Select";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -11,7 +9,6 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import WarningIcon from "@material-ui/icons/Warning";
 import CheckIcon from "@material-ui/icons/Check";
-import LibraryAddIcon from "@material-ui/icons/LibraryAdd";
 
 import Typography from "@material-ui/core/Typography";
 import Slider from "@material-ui/core/Slider";
@@ -60,7 +57,7 @@ export default function ExplanationToggles(props) {
       <ListItem>
         <ListItemText
           primary={
-            <Typography id="discrete-slider" gutterBottom>
+            <Typography component={"span"} id="discrete-slider" gutterBottom>
               Number of explanation features
             </Typography>
           }

@@ -98,7 +98,6 @@ export default function DocumentBody(props) {
         sensitiveSections: new SensitiveSections(sensitiveSections)
       })
       .then(sensitiveSections => {
-        console.log(sensitiveSections);
         props.setSensitiveSections(sensitiveSections);
       }, console.error);
   };
