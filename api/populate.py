@@ -35,27 +35,6 @@ MODEL_DIRECTORY = pathlib.Path("instance", "models")
 print("MODEL_DIRECTORY", MODEL_DIRECTORY)
 
 
-db = None
-
-
-def copy_func(f, globals=None, module=None):
-    """Based on https://stackoverflow.com/a/13503277/2988730 (@unutbu)"""
-    if globals is None:
-        globals = f.__globals__
-    g = types.FunctionType(
-        f.__code__,
-        globals,
-        name=f.__name__,
-        argdefs=f.__defaults__,
-        closure=f.__closure__,
-    )
-    g = functools.update_wrapper(g, f)
-    if module is not None:
-        g.__module__ = module
-    g.__kwdefaults__ = copy.copy(f.__kwdefaults__)
-    return g
-
-
 def process_document(path, data):
     from openapi_server.controllers.document_controller import (
         classify_and_explain,
@@ -63,18 +42,8 @@ def process_document(path, data):
         get_document,
     )
 
-    global db
-    db = process_db = create_db_client()
-
-    global get_document
-    get_document = copy_func(get_document, globals(), __name__)
-
-    global calculate_classification_with_explanation
-    calculate_classification_with_explanation = copy_func(
-        calculate_classification_with_explanation, globals(), __name__
-    )
-    global classify_and_explain
-    classify_and_explain = copy_func(classify_and_explain, globals(), __name__)
+    db = create_db_client()
+    classify_and_explain.__globals__["db"] = db
 
     collection = pathlib.Path(path).parts[-3]
     name = pathlib.Path(path).parts[-1]
