@@ -90,8 +90,8 @@ export default function DocumentSet(props) {
                 </Avatar>
               </ListItemAvatar>
               <ListItemText
-                primary={document.documentId}
-                // secondary={`${set.documentCount} documents (${set.size})`}
+                primary={document.name}
+                secondary={document.documentId}
               />
               <ListItemSecondaryAction>
                 <IconButton

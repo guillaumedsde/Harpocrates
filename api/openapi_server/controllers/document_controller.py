@@ -3,7 +3,7 @@ import six
 from http import HTTPStatus
 import json
 import re
-
+from copy import deepcopy
 import numpy as np
 from bson.objectid import ObjectId
 
@@ -98,8 +98,7 @@ def get_sensitive_sections(set_id, doc_id):
     )
 
     sensitive_section_list = []
-
-    for section in sensitive_sections_query["sensitiveSections"]:
+    for section in sensitive_sections_query.get("sensitiveSections") or []:
         sensitive_section_list.append(SensitiveSection(**section))
 
     sensitive_sections = SensitiveSections(sensitive_sections=sensitive_section_list)
@@ -161,7 +160,10 @@ def get_document(set_id, doc_id):  # noqa: E501
     """
 
     doc = db[set_id].find_one({"_id": ObjectId(doc_id)})
-    document = Document(document_id=str(doc["_id"]), content=doc["content"])
+    document_dict = deepcopy(doc)
+    document_dict["document_id"] = str(doc["_id"])
+    del document_dict["_id"]
+    document = Document(**document_dict)
 
     return document
 
@@ -269,10 +271,10 @@ def get_predicted_classification_with_explanation(set_id, doc_id):  # noqa: E501
     document = get_document(set_id, doc_id)
 
     predicted_classification_query = db[set_id].find_one(
-        {"_id": ObjectId(doc_id)}, {"predictedClassification": 1}
+        {"_id": ObjectId(doc_id)}, {"predicted_classification": 1}
     )
 
-    predicted_classification = predicted_classification_query["predictedClassification"]
+    predicted_classification = predicted_classification_query["predicted_classification"]
 
     # build and return final classification with explanation object
     classification_with_explanation = PredictedClassificationWithExplanation.from_dict(
@@ -308,5 +310,5 @@ def classify_and_explain(set_id, doc_id):
 
     doc_id = db[set_id].update_one(
         {"_id": ObjectId(doc_id)},
-        {"$set": {"predictedClassification": classification.to_dict()}},
+        {"$set": {"predicted_classification": classification.to_dict()}},
     )

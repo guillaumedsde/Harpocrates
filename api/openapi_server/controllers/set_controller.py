@@ -2,6 +2,7 @@ import connexion
 import six
 from http import HTTPStatus
 import time
+from copy import deepcopy
 
 from openapi_server.models.document_set import DocumentSet  # noqa: E501
 from openapi_server.models.document_sets import DocumentSets  # noqa: E501
@@ -58,8 +59,12 @@ def get_set(set_id):  # noqa: E501
     """
 
     document_list = []
-    for entry in db[set_id].find({}, {"_id": 1}):
-        document = Document(document_id=str(entry.get("_id")))
+    for entry in db[set_id].find({}, {"_id": 1, "name": 1}):
+        document_dict = deepcopy(entry)
+        document_dict["document_id"] = str(entry["_id"])
+        del document_dict["_id"]
+        print(document_dict)
+        document = Document(**document_dict)
         document_list.append(document)
     return Documents(documents=document_list)
 
