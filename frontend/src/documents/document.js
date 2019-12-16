@@ -80,10 +80,17 @@ export default function Document(props) {
   var allUniqueFeatures = null;
 
   if (classification != null) {
+    var allFeatures = classification.sensitiveFeatures;
+
+    classification.nonSensitiveFeatures.forEach(feature => {
+      var newFeature = { ...feature };
+      newFeature["weight"] = -feature.weight;
+      allFeatures.push(newFeature);
+    });
     // concatenate all features
-    const allFeatures = classification.sensitiveFeatures.concat(
-      classification.nonSensitiveFeatures
-    );
+    // const allFeatures = classification.sensitiveFeatures.concat(
+    //   classification.nonSensitiveFeatures
+    // );
     // remove duplicate features and sort by absolute value
     allUniqueFeatures = absSort(uniqBy(allFeatures, "text"));
   }
