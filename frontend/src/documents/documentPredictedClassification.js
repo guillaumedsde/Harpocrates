@@ -4,16 +4,18 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListSubheader from "@material-ui/core/ListSubheader";
-import { LinearProgress } from "@material-ui/core";
+import LinearProgress from "@material-ui/core/LinearProgress";
 
 export default function PredictedClassification(props) {
   return (
     <List subheader={<ListSubheader>Sensitivity</ListSubheader>}>
       <ListItem alignItems="flex-start">
         <ListItemText
-          primary={`${
-            props.classification ? props.classification.sensitivity : "? "
-          }% sensitive`}
+          primary={
+            props.classification
+              ? `${props.classification.sensitivity}% sensitive`
+              : "Calculating sensitivity"
+          }
           secondary={
             props.classification ? (
               <LinearProgress
