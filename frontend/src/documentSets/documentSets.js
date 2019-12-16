@@ -55,51 +55,49 @@ export default function DocumentSets() {
   const newSetForm = (
     <NewSetForm setLoading={setLoading} setTriggerRequest={setTriggerRequest} />
   );
-  // tell if no document Sets
+
+  var documentSetList;
   if (documentSets.length === 0) {
-    return (
-      <>
-        <h1>No Document Sets</h1>
-        {newSetForm}
-      </>
+    documentSetList = null;
+  } else {
+    documentSetList = (
+      <List>
+        {documentSets.map(set => (
+          <ListItem
+            key={set.setId}
+            button
+            onClick={event => handleListItemClick(event, set.name)}
+            selected={triggerRequest === set.name}
+          >
+            <ListItemAvatar>
+              <Avatar>
+                <FolderIcon />
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText
+              primary={set.name}
+              secondary={`${set.documentCount} documents (${set.size})`}
+            />
+            <ListItemSecondaryAction>
+              <IconButton
+                edge="end"
+                aria-label="delete"
+                onClick={event => deleteItem(event, set.name)}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </ListItemSecondaryAction>
+          </ListItem>
+        ))}
+      </List>
     );
   }
-  // Otherwise display them
-  else {
-    return (
-      <>
-        {loading ? <LinearProgress /> : null}
-        <List>
-          {documentSets.map(set => (
-            <ListItem
-              key={set.setId}
-              button
-              onClick={event => handleListItemClick(event, set.name)}
-              selected={triggerRequest === set.name}
-            >
-              <ListItemAvatar>
-                <Avatar>
-                  <FolderIcon />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText
-                primary={set.name}
-                secondary={`${set.documentCount} documents (${set.size})`}
-              />
-              <ListItemSecondaryAction>
-                <IconButton
-                  edge="end"
-                  aria-label="delete"
-                  onClick={event => deleteItem(event, set.name)}
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </ListItemSecondaryAction>
-            </ListItem>
-          ))}
-        </List>
-        {newSetForm}
-      </>
-    );
-  }
+
+  return (
+    <>
+      {loading ? <LinearProgress /> : null}
+      {documentSetList ? documentSetList : <h1>No Document Sets</h1>}
+      {newSetForm}
+    </>
+  );
 }
