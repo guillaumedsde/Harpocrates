@@ -38,7 +38,8 @@ CLASSIFIERS = (
     # RandomForestClassifier(),
     # KNeighborsClassifier(3),
     # DecisionTreeClassifier(),
-    SVC(probability=True, kernel="linear"),
+    SVC(probability=True, kernel="linear",
+    cache_size=1000),
 )
 
 
