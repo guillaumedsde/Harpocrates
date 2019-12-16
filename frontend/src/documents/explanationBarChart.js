@@ -17,7 +17,7 @@ import { CircularProgress } from "@material-ui/core";
 export default function ExplanationChart(props) {
   if (props.explanationFeatures) {
     return (
-      <div style={{ height: "80vh", width: "90%" }}>
+      <div style={{ height: "80vh", width: "90%", display: "block" }}>
         <ResponsiveContainer height="100%" width="100%">
           <BarChart
             width={0}
