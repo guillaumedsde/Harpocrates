@@ -38,7 +38,7 @@ export default function DocumentSets() {
   );
 
   const handleListItemClick = (event, index) => {
-    navigate(`/documentSet/${index}`);
+    navigate(`/documentSets/${index}`);
   };
 
   const deleteItem = React.useCallback((event, setId) => {

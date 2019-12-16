@@ -27,7 +27,7 @@ export default function DocumentSet(props) {
   var docApi = new DocumentApi();
 
   const handleListItemClick = (event, setId, docId) => {
-    navigate(`/documentSet/${setId}/${docId}`);
+    navigate(`/documentSets/${setId}/${docId}`);
   };
 
   const deleteItem = React.useCallback((event, setId, docId) => {
