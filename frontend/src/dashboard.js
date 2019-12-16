@@ -6,10 +6,7 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
-import HomeIcon from "@material-ui/icons/Home";
-import ListIcon from "@material-ui/icons/List";
-import { Link, Location } from "@reach/router";
-import { Button, Grid } from "@material-ui/core";
+import { Link, Location, navigate } from "@reach/router";
 
 import BreadcrumbsNavigation from "./navigation/breadcrumbsNavigation";
 
@@ -80,10 +77,11 @@ export default function Dashboard(props) {
       <AppBar position="absolute" className={clsx(classes.appBar)}>
         <Toolbar className={classes.toolbar}>
           <Typography
-            component="h2"
+            component={Link}
             variant="h6"
             color="inherit"
-            style={{ marginRight: "2vw" }}
+            style={{ marginRight: "2vw", textDecoration: "none" }}
+            to="/"
           >
             <b>η</b> Harpocrates
           </Typography>
