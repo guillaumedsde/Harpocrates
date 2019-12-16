@@ -1,5 +1,4 @@
 import React from "react";
-import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import List from "@material-ui/core/List";
