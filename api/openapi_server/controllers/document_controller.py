@@ -19,13 +19,9 @@ from openapi_server.models.sensitive_sections import SensitiveSections
 
 from openapi_server import util, db
 
-from openapi_server import create_db_client
-
 from openapi_server.service import CLASS_NAMES
 from openapi_server.service.classification import get_model
 from openapi_server.service.explanation import lime_explanation
-
-# from openapi_server.service.classify import classify_and_explain
 
 
 def add_sensitive_section(set_id, doc_id, body):  # noqa: E501
@@ -129,8 +125,6 @@ def create_document(set_id, body):  # noqa: E501
 
     doc_id = operation_result.inserted_id
 
-    print(doc_id)
-
     classify_and_explain(set_id, doc_id)
 
     return HTTPStatus.CREATED
@@ -167,7 +161,7 @@ def get_document(set_id, doc_id):  # noqa: E501
     """
 
     doc = db[set_id].find_one({"_id": ObjectId(doc_id)})
-    document = Document(document_id=str(doc["_id"]), content=doc["body"])
+    document = Document(document_id=str(doc["_id"]), content=doc["content"])
 
     return document
 
@@ -310,12 +304,9 @@ def classify_and_explain(set_id, doc_id):
     :type doc_id: str
     """
 
-    # global db
-    # db = create_db_client()
-
     classification = calculate_classification_with_explanation(set_id, doc_id)
 
-    doc_id = db[set_id].update(
+    doc_id = db[set_id].update_one(
         {"_id": ObjectId(doc_id)},
         {"$set": {"predictedClassification": classification.to_dict()}},
     )
