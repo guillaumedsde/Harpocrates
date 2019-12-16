@@ -14,6 +14,7 @@ import ExplanationChart from "./explanationBarChart";
 import CustomizedSnackbar from "./status";
 import ExplanationToggles from "./explanationToggles";
 import RedactionLabelSelect from "./redactionLabelSelect";
+import PredictedClassification from "./documentPredictedClassification";
 
 const labels = ["20", "21", "22", "23", "24"];
 
@@ -84,10 +85,15 @@ export default function Document(props) {
             item
             // alignItems="flex-start"
             sm
+            alignItems="center"
           >
-            <DocumentInfo document={document} classification={classification} />
-            <Grid container alignItems="center">
+            <Grid container>
               <Grid item style={{ width: "100%" }}>
+                <DocumentInfo document={document} />
+              </Grid>
+              <Grid item style={{ width: "100%" }}>
+                <PredictedClassification classification={classification} />
+                <Divider />
                 <ExplanationToggles
                   classification={classification}
                   showSensitiveExplanations={showSensitiveExplanations}

@@ -15,9 +15,6 @@ export default function DocumentInfo(props) {
       <Grid item xs>
         <Typography variant="h5">{props.document.documentId}</Typography>
       </Grid>
-      {props.classification ? (
-        <PredictedClassification classification={props.classification} />
-      ) : null}
     </Grid>
   );
 }
