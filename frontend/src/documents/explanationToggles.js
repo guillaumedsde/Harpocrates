@@ -61,7 +61,7 @@ export default function ExplanationToggles(props) {
         <ListItemText
           primary={
             <Typography id="discrete-slider" gutterBottom>
-              Explanation features
+              Number of explanation features
             </Typography>
           }
           secondary={
