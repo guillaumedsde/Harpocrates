@@ -119,7 +119,6 @@ def create_document(set_id, body):  # noqa: E501
     :rtype: Document
     """
 
-
     document = Document(content=body.decode())
     operation_result = db[set_id].insert_one(document.to_dict())
 
@@ -231,7 +230,7 @@ def calculate_classification_with_explanation(set_id, doc_id):
             feature = Feature(
                 start_offset=match.span()[0],
                 end_offset=match.span()[1],
-                weight=feature_info[1],
+                weight=abs(feature_info[1]),
                 text=match[0],
             )
             if (
@@ -275,7 +274,9 @@ def get_predicted_classification_with_explanation(set_id, doc_id):  # noqa: E501
         {"_id": ObjectId(doc_id)}, {"predicted_classification_with_explanation": 1}
     )
 
-    predicted_classification = predicted_classification_query["predicted_classification_with_explanation"]
+    predicted_classification = predicted_classification_query[
+        "predicted_classification_with_explanation"
+    ]
 
     # build and return final classification with explanation object
     classification_with_explanation = PredictedClassificationWithExplanation.from_dict(
@@ -311,5 +312,10 @@ def classify_and_explain(set_id, doc_id):
 
     doc_id = db[set_id].update_one(
         {"_id": ObjectId(doc_id)},
-        {"$set": {"predicted_classification_with_explanation": classification.to_dict()}},
+        {
+            "$set": {
+                "predicted_classification_with_explanation": classification.to_dict()
+            }
+        },
     )
+
