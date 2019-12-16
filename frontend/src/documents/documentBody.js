@@ -103,7 +103,10 @@ export default function DocumentBody(props) {
   };
 
   return (
-    <Paper className={classes.root}>
+    <Paper
+      className={classes.root}
+      style={{ height: "85vh", overflow: "auto" }}
+    >
       <TextAnnotator
         tokens={props.document.content.split(/(?!\n)\s+/)}
         content={props.document.content}
