@@ -88,8 +88,6 @@ export default function Document(props) {
     allUniqueFeatures = absSort(uniqBy(allFeatures, "text"));
   }
 
-  console.log(document);
-
   if (document) {
     return (
       <>

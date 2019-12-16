@@ -44,7 +44,7 @@ def add_sensitive_section(set_id, doc_id, body):  # noqa: E501
 
     db[set_id].update_one(
         {"_id": ObjectId(doc_id)},
-        {"$push": {"sensitiveSections": sensitive_section.to_dict()}},
+        {"$push": {"sensitive_sections": sensitive_section.to_dict()}},
     )
 
     # return sensitive sections with HTTPStatus
@@ -73,7 +73,7 @@ def add_sensitive_sections(set_id, doc_id, body):  # noqa: E501
         {"_id": ObjectId(doc_id)},
         {
             "$set": {
-                "sensitiveSections": sensitive_sections.to_dict()["sensitive_sections"]
+                "sensitive_sections": sensitive_sections.to_dict()["sensitive_sections"]
             }
         },
     )
@@ -94,11 +94,11 @@ def get_sensitive_sections(set_id, doc_id):
     """
 
     sensitive_sections_query = db[set_id].find_one(
-        {"_id": ObjectId(doc_id)}, {"sensitiveSections": 1}
+        {"_id": ObjectId(doc_id)}, {"sensitive_sections": 1}
     )
 
     sensitive_section_list = []
-    for section in sensitive_sections_query.get("sensitiveSections") or []:
+    for section in sensitive_sections_query.get("sensitive_sections") or []:
         sensitive_section_list.append(SensitiveSection(**section))
 
     sensitive_sections = SensitiveSections(sensitive_sections=sensitive_section_list)
@@ -119,14 +119,15 @@ def create_document(set_id, body):  # noqa: E501
     :rtype: Document
     """
 
-    doc = {"body": body.decode(), "sensitiveSections": []}
-    operation_result = db[set_id].insert_one(doc)
+
+    document = Document(content=body.decode())
+    operation_result = db[set_id].insert_one(document.to_dict())
 
     doc_id = operation_result.inserted_id
 
     classify_and_explain(set_id, doc_id)
 
-    return HTTPStatus.CREATED
+    return document, HTTPStatus.CREATED
 
 
 def delete_document(set_id, doc_id):  # noqa: E501
