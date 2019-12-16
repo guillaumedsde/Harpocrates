@@ -55,10 +55,12 @@ def get_vectorizer():
 def build_vectorizer():
     return TfidfVectorizer(
         norm="l2",
+        analyzer="word",
         stop_words="english",
         strip_accents="unicode",
         lowercase=True,
         use_idf=True,
+        smooth_idf=True,
     )
 
 
