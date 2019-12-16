@@ -31,8 +31,10 @@ def read_file(file_path):
         raw_html = file.read()
 
         bs = BeautifulSoup(raw_html, "lxml")
+        # get the contents of the last <pre> tags
+        pre = bs.find_all("pre")[-1]
 
-        text = bs.get_text()
+        text = pre.get_text()
     return text
 
 
