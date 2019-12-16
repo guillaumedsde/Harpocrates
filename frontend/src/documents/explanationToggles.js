@@ -70,7 +70,8 @@ export default function ExplanationToggles(props) {
               aria-labelledby="discrete-slider"
               valueLabelDisplay="auto"
               step={5}
-              disabled={props.classification === null}
+              disable={true} // enable when implemented in backend
+              // disabled={props.classification === null}
               marks
               min={0}
               max={50}
