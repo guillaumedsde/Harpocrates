@@ -88,6 +88,8 @@ export default function Document(props) {
     allUniqueFeatures = absSort(uniqBy(allFeatures, "text"));
   }
 
+  console.log(document);
+
   if (document) {
     return (
       <>
@@ -96,7 +98,6 @@ export default function Document(props) {
             item
             // alignItems="flex-start"
             sm
-            alignItems="center"
           >
             <Grid container>
               <Grid item style={{ width: "100%" }}>
