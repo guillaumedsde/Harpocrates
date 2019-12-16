@@ -49,7 +49,7 @@ if __name__ == "__main__":
     file_paths = extract_file_paths()
 
     train_paths, test_paths, train_labels, test_labels = train_test_split(
-        file_paths, labels, test_size=0.25, random_state=42
+        file_paths, labels, test_size=0.1, random_state=42
     )
 
     classifier = CLASSIFIERS[-1]
