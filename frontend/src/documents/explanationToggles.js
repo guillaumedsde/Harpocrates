@@ -23,6 +23,7 @@ export default function ExplanationToggles(props) {
           <Switch
             checked={props.showSensitiveExplanations}
             disabled={props.classification === null}
+            color="secondary"
             inputProps={{ "aria-labelledby": "switch-sensitive-label" }}
             onChange={() => {
               props.setShowSensitiveExplanations(
@@ -41,6 +42,7 @@ export default function ExplanationToggles(props) {
           <Switch
             checked={props.showNonSensitiveExplanations}
             disabled={props.classification === null}
+            color="primary"
             inputProps={{ "aria-labelledby": "switch-non-sensitive-label" }}
             onChange={() => {
               props.setShowNonSensitiveExplanations(
