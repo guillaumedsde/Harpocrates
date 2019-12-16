@@ -1,11 +1,7 @@
 import logging
 import pathlib
 import re
-
-import copy
-import types
-import functools
-from bson import ObjectId
+from math import floor
 from multiprocessing import Pool, cpu_count
 
 from sklearn.model_selection import train_test_split
@@ -14,20 +10,12 @@ from sklearn.pipeline import Pipeline
 
 from openapi_server.db import create_db_client
 
-
-from openapi_server.models.document import Document
-from openapi_server.models.feature import Feature
-from openapi_server.models.predicted_classification_with_explanation import (
-    PredictedClassificationWithExplanation,
-)
-
 from openapi_server.service.data_parsing import (
     extract_data,
     extract_file_paths,
     extract_labels,
 )
 from openapi_server.service.classification import get_model, CLASSIFIERS, get_vectorizer
-from openapi_server.service.explanation import lime_explanation
 
 
 MODEL_DIRECTORY = pathlib.Path("instance", "models")
@@ -93,7 +81,7 @@ if __name__ == "__main__":
 
     assert len(test_data) == len(test_paths)
 
-    pool = Pool(cpu_count())
+    pool = Pool(floor(cpu_count() / 2))
     # create, classify and store documents
     for path, data in zip(test_paths, test_data):
         pool.apply_async(
