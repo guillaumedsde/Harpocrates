@@ -23,7 +23,6 @@ export default function BreadcrumbsNavigation(props) {
   urlFragments.forEach(location => {
     path = path.concat(location).concat("/");
     const locationObj = { path: path, location: location };
-    console.log(locationObj);
     locations.push(locationObj);
   });
 
