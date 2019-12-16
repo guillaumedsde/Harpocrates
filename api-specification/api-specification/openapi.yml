@@ -7,7 +7,7 @@ info:
     name: MIT
 externalDocs:
   description: API documentation
-  url: "https://harpocrates-app.gitlab.io/api-specification"
+  url: "https://harpocrates-app.gitlab.io/harpocrates/api/index.html"
 servers:
   - url: "http://api.harpocrates.app.local"
     description: Local test server
