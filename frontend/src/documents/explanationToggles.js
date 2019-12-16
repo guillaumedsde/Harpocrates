@@ -1,7 +1,8 @@
 import React from "react";
 
 import Switch from "@material-ui/core/Switch";
-
+import MenuItem from "@material-ui/core/MenuItem";
+import Select from "@material-ui/core/Select";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -10,6 +11,10 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import WarningIcon from "@material-ui/icons/Warning";
 import CheckIcon from "@material-ui/icons/Check";
+import LibraryAddIcon from "@material-ui/icons/LibraryAdd";
+
+import Typography from "@material-ui/core/Typography";
+import Slider from "@material-ui/core/Slider";
 
 export default function ExplanationToggles(props) {
   return (
@@ -51,6 +56,30 @@ export default function ExplanationToggles(props) {
             }}
           />
         </ListItemSecondaryAction>
+      </ListItem>
+      <ListItem>
+        <ListItemText
+          primary={
+            <Typography id="discrete-slider" gutterBottom>
+              Explanation features
+            </Typography>
+          }
+          secondary={
+            <Slider
+              defaultValue={props.nbrExplanations}
+              aria-labelledby="discrete-slider"
+              valueLabelDisplay="auto"
+              step={5}
+              disabled={props.classification === null}
+              marks
+              min={0}
+              max={50}
+              onChange={event => {
+                props.setNbrExplanations(event.target.value);
+              }}
+            />
+          }
+        />
       </ListItem>
     </List>
   );

@@ -18,11 +18,22 @@ import PredictedClassification from "./documentPredictedClassification";
 
 const labels = ["20", "21", "22", "23", "24"];
 
+function absSort(arr) {
+  //build comparison function
+  function absoluteValueComparison(a, b) {
+    return Math.abs(a.weight) - Math.abs(b.weight);
+  }
+  //call comparison function as callback in array sort
+  return arr.sort(absoluteValueComparison).reverse();
+}
+
 export default function Document(props) {
   const [document, setDocument] = useState(null);
 
   const [classification, setClassification] = useState(null);
   const [sensitiveSections, setSensitiveSections] = useState(null);
+
+  const [nbrExplanations, setNbrExplanations] = useState(10);
 
   const [redactionLabel, setRedactionLabel] = useState(labels[0]);
 
@@ -73,8 +84,8 @@ export default function Document(props) {
     const allFeatures = classification.sensitiveFeatures.concat(
       classification.nonSensitiveFeatures
     );
-    // remove duplicate features
-    allUniqueFeatures = uniqBy(allFeatures, "text");
+    // remove duplicate features and sort by absolute value
+    allUniqueFeatures = absSort(uniqBy(allFeatures, "text"));
   }
 
   if (document) {
@@ -102,6 +113,8 @@ export default function Document(props) {
                   setShowNonSensitiveExplanations={
                     setShowNonSensitiveExplanations
                   }
+                  nbrExplanations={nbrExplanations}
+                  setNbrExplanations={setNbrExplanations}
                 />
                 <Divider />
                 <RedactionLabelSelect
