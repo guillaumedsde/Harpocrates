@@ -83,9 +83,11 @@ from openapi_server.service import CLASS_NAMES, SEED
 #     return eli5.show_weights(perm)
 
 
-def lime_explanation(classifier, data):
+def lime_explanation(classifier, data, features=10):
     explainer = LimeTextExplainer(class_names=CLASS_NAMES)
     explanation = explainer.explain_instance(
-        text_instance=data, classifier_fn=classifier.predict_proba, num_features=10
+        text_instance=data,
+        classifier_fn=classifier.predict_proba,
+        num_features=features,
     )
     return explanation
