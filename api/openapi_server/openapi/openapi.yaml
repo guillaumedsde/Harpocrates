@@ -7,7 +7,7 @@ info:
   version: 4.3.0
 externalDocs:
   description: API documentation
-  url: https://harpocrates-app.gitlab.io/api-specification
+  url: https://harpocrates-app.gitlab.io/harpocrates/api/index.html
 servers:
 - description: Local test server
   url: http://api.harpocrates.app.local
