@@ -58,7 +58,7 @@ export default function DocumentSets() {
 
   var documentSetList;
   if (documentSets.length === 0) {
-    documentSetList = null;
+    documentSetList = <h1>No Document Sets</h1>;
   } else {
     documentSetList = (
       <List>
@@ -96,7 +96,7 @@ export default function DocumentSets() {
   return (
     <>
       {loading ? <LinearProgress /> : null}
-      {documentSetList ? documentSetList : <h1>No Document Sets</h1>}
+      {documentSetList}
       {newSetForm}
     </>
   );

@@ -59,60 +59,56 @@ export default function DocumentSet(props) {
       setLoading={setLoading}
     />
   );
-  // tell if no document Sets
+
+  var documentList;
   if (documents.length === 0) {
-    return (
-      <div>
-        <h1>No Documents</h1>
-        {documentUploadForm}
-      </div>
-    );
+    documentList = <h1>No Documents</h1>;
   } else {
-    return (
-      <div>
-        {loading ? <LinearProgress /> : null}
-        <List>
-          {documents.map(document => (
-            <ListItem
-              key={document.documentId}
-              button
-              onClick={event =>
-                handleListItemClick(
-                  event,
-                  props.documentSetName,
-                  document.documentId
-                )
-              }
-            >
-              <ListItemAvatar>
-                <Avatar>
-                  <InsertDriveFileIcon />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText
-                primary={document.name}
-                secondary={document.documentId}
-              />
-              <ListItemSecondaryAction>
-                <IconButton
-                  edge="end"
-                  aria-label="delete"
-                  onClick={event =>
-                    deleteItem(
-                      event,
-                      props.documentSetName,
-                      document.documentId
-                    )
-                  }
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </ListItemSecondaryAction>
-            </ListItem>
-          ))}
-        </List>
-        {documentUploadForm}
-      </div>
+    documentList = (
+      <List>
+        {documents.map(document => (
+          <ListItem
+            key={document.documentId}
+            button
+            onClick={event =>
+              handleListItemClick(
+                event,
+                props.documentSetName,
+                document.documentId
+              )
+            }
+          >
+            <ListItemAvatar>
+              <Avatar>
+                <InsertDriveFileIcon />
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText
+              primary={document.name}
+              secondary={document.documentId}
+            />
+            <ListItemSecondaryAction>
+              <IconButton
+                edge="end"
+                aria-label="delete"
+                onClick={event =>
+                  deleteItem(event, props.documentSetName, document.documentId)
+                }
+              >
+                <DeleteIcon />
+              </IconButton>
+            </ListItemSecondaryAction>
+          </ListItem>
+        ))}
+      </List>
     );
   }
+
+  return (
+    <div>
+      {loading ? <LinearProgress /> : null}
+      {documentList}
+      {documentUploadForm}
+    </div>
+  );
 }
