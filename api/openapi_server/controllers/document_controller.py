@@ -271,10 +271,10 @@ def get_predicted_classification_with_explanation(set_id, doc_id):  # noqa: E501
     document = get_document(set_id, doc_id)
 
     predicted_classification_query = db[set_id].find_one(
-        {"_id": ObjectId(doc_id)}, {"predicted_classification": 1}
+        {"_id": ObjectId(doc_id)}, {"predicted_classification_with_explanation": 1}
     )
 
-    predicted_classification = predicted_classification_query["predicted_classification"]
+    predicted_classification = predicted_classification_query["predicted_classification_with_explanation"]
 
     # build and return final classification with explanation object
     classification_with_explanation = PredictedClassificationWithExplanation.from_dict(
@@ -310,5 +310,5 @@ def classify_and_explain(set_id, doc_id):
 
     doc_id = db[set_id].update_one(
         {"_id": ObjectId(doc_id)},
-        {"$set": {"predicted_classification": classification.to_dict()}},
+        {"$set": {"predicted_classification_with_explanation": classification.to_dict()}},
     )
