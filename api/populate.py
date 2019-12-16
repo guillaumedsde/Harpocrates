@@ -17,6 +17,13 @@ from openapi_server.service.data_parsing import (
 )
 from openapi_server.service.classification import get_model, CLASSIFIERS, get_vectorizer
 
+from openapi_server.controllers.document_controller import (
+    classify_and_explain,
+    calculate_classification_with_explanation,
+    get_document,
+)
+
+from openapi_server.models.document import Document
 
 MODEL_DIRECTORY = pathlib.Path("instance", "models")
 
@@ -24,11 +31,6 @@ print("MODEL_DIRECTORY", MODEL_DIRECTORY)
 
 
 def process_document(path, data):
-    from openapi_server.controllers.document_controller import (
-        classify_and_explain,
-        calculate_classification_with_explanation,
-        get_document,
-    )
 
     db = create_db_client()
     classify_and_explain.__globals__["db"] = db
