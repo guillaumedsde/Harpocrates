@@ -20,3 +20,14 @@ plugins:
     enabled: true
   nodesecurity:
     enabled: true
+exclude_patterns:
+  - "**/dist/"
+  - "**/build/"
+  - "**/.cache/"
+  - "**/instance/"
+  - "**/node_modules/"
+  - "**/spec/"
+  - "**/test/"
+  - "**/tests/"
+  - "**/vendor/"
+  - "**/*.d.ts"
