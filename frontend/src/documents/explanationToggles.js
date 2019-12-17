@@ -9,13 +9,44 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import WarningIcon from "@material-ui/icons/Warning";
 import CheckIcon from "@material-ui/icons/Check";
-
+import ImportContactsIcon from "@material-ui/icons/ImportContacts";
 import Typography from "@material-ui/core/Typography";
 import Slider from "@material-ui/core/Slider";
+import MenuItem from "@material-ui/core/MenuItem";
+import Select from "@material-ui/core/Select";
 
 export default function ExplanationToggles(props) {
   return (
     <List subheader={<ListSubheader>Explanations</ListSubheader>}>
+      <ListItem>
+        <ListItemIcon>
+          <ImportContactsIcon />
+        </ListItemIcon>
+        <ListItemText
+          id="select-explainer"
+          primary="Classification Explainer"
+        />
+        <ListItemSecondaryAction>
+          <Select
+            value="Lime"
+            autoWidth
+            disabled
+            inputProps={{ "aria-labelledby": "select-explainer" }}
+            // onChange={event => {
+            //   props.setRedactionLabel(event.target.value);
+            // }}
+          >
+            <MenuItem key="Lime" value="Lime">
+              Lime
+            </MenuItem>
+            {/* {props.labels.map(label => (
+              <MenuItem key={label} value={label}>
+                {label}
+              </MenuItem>
+            ))} */}
+          </Select>
+        </ListItemSecondaryAction>
+      </ListItem>
       <ListItem>
         <ListItemIcon>
           <WarningIcon />
