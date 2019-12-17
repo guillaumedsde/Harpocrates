@@ -63,17 +63,19 @@ export default function ExplanationToggles(props) {
           }
           secondary={
             <Slider
-              defaultValue={props.nbrExplanations}
+              value={props.nbrExplanations || 0}
               aria-labelledby="discrete-slider"
               valueLabelDisplay="auto"
-              step={5}
-              disabled={true} // enable when implemented in backend
-              // disabled={props.classification === null}
+              step={1}
+              // disabled={true} // enable when implemented in backend
+              disabled={
+                props.classification === null || props.nbrExplanations === null
+              }
               marks
               min={0}
-              max={50}
-              onChange={event => {
-                props.setNbrExplanations(event.target.value);
+              max={10}
+              onChange={(event, value) => {
+                props.setNbrExplanations(value);
               }}
             />
           }

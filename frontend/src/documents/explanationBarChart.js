@@ -26,8 +26,8 @@ function sortExplanations(arr) {
   return arr.sort(absoluteValueComparison).reverse();
 }
 
-function concatenateExplanations(classification) {
-  var allUniqueFeatures = null;
+export function concatenateExplanations(classification) {
+  var allUniqueFeatures = [];
 
   if (classification != null) {
     var allFeatures = [...classification.sensitiveFeatures];
@@ -45,7 +45,9 @@ function concatenateExplanations(classification) {
 
 export default function ExplanationChart(props) {
   // build list of sorted unique explanations
-  const uniqueExplanations = concatenateExplanations(props.classification);
+  const uniqueExplanations = concatenateExplanations(
+    props.classification
+  ).slice(0, props.nbrExplanations);
 
   // handle clicks on chart bars
   const handleClick = params => {
