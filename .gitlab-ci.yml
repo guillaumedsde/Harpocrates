@@ -90,8 +90,6 @@ frontend:
 pages:
   image: node:alpine
   stage: documentation
-  before_script:
-    -
   script:
     - mkdir public
     - cp ./static/index.html public
