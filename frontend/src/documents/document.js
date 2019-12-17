@@ -4,8 +4,6 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
 
-import uniqBy from "lodash-es/uniqBy";
-
 import { DocumentApi } from "@harpocrates/api-client";
 
 import DocumentInfo from "./documentInfo";
@@ -17,15 +15,6 @@ import RedactionLabelSelect from "./redactionLabelSelect";
 import PredictedClassification from "./documentPredictedClassification";
 
 const labels = ["20", "21", "22", "23", "24"];
-
-function absSort(arr) {
-  //build comparison function
-  function absoluteValueComparison(a, b) {
-    return Math.abs(a.weight) - Math.abs(b.weight);
-  }
-  //call comparison function as callback in array sort
-  return arr.sort(absoluteValueComparison).reverse();
-}
 
 export default function Document(props) {
   const [document, setDocument] = useState(null);
@@ -79,20 +68,6 @@ export default function Document(props) {
       });
   }, []);
 
-  var allUniqueFeatures = null;
-
-  if (classification != null) {
-    var allFeatures = [...classification.sensitiveFeatures];
-
-    classification.nonSensitiveFeatures.forEach(feature => {
-      var newFeature = { ...feature };
-      newFeature["weight"] = -feature.weight;
-      allFeatures.push(newFeature);
-    });
-    // remove duplicate features and sort by absolute value
-    allUniqueFeatures = absSort(uniqBy(allFeatures, "text"));
-  }
-
   if (document) {
     return (
       <>
@@ -144,7 +119,7 @@ export default function Document(props) {
           </Grid>
           <Grid item sm>
             <ExplanationChart
-              explanationFeatures={allUniqueFeatures}
+              classification={classification}
               activeFeature={activeFeature}
               setActiveFeature={setActiveFeature}
             />
