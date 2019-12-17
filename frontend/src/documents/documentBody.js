@@ -37,10 +37,9 @@ const useStyles = makeStyles(theme => ({
 export default function DocumentBody(props) {
   var annotations = [];
 
+  // display sensitive sections (redactions) if there are any
   if (props.sensitiveSections) {
     props.sensitiveSections.sensitiveSections.forEach(feature => {
-      console.log(feature);
-      // TODO varied opacity depending on the weight with a minimum and maximum opacity
       annotations.push({
         start: feature.startOffset,
         end: feature.endOffset,
@@ -48,11 +47,33 @@ export default function DocumentBody(props) {
       });
     });
   }
-
+  // display classification explanations if a classification is defined
   if (props.classification !== null) {
+    // also display activeFeature if it is defined, regardless of
+    // whether it is a sensitive or not feature
+    if (props.activeFeature) {
+      props.classification.nonSensitiveFeatures.forEach(feature => {
+        if (feature.text === props.activeFeature) {
+          annotations.push({
+            start: feature.startOffset,
+            end: feature.endOffset,
+            tag: "insensitiveExplanation"
+          });
+        }
+      });
+      props.classification.sensitiveFeatures.forEach(feature => {
+        if (feature.text === props.activeFeature) {
+          annotations.push({
+            start: feature.startOffset,
+            end: feature.endOffset,
+            tag: "sensitiveExplanation"
+          });
+        }
+      });
+    }
+    // display non sensitive features is toggle is enabled
     if (props.showNonSensitive) {
       props.classification.nonSensitiveFeatures.forEach(feature => {
-        // TODO varied opacity depending on the weight with a minimum and maximum opacity
         annotations.push({
           start: feature.startOffset,
           end: feature.endOffset,
@@ -60,10 +81,9 @@ export default function DocumentBody(props) {
         });
       });
     }
-
+    // display sensitive features is toggle is enabled
     if (props.showSensitive) {
       props.classification.sensitiveFeatures.forEach(feature => {
-        // TODO varied opacity depending on the weight with a minimum and maximum opacity
         annotations.push({
           start: feature.startOffset,
           end: feature.endOffset,
@@ -94,7 +114,7 @@ export default function DocumentBody(props) {
       }
     });
     api
-      .addSensitiveSections(props.setName, props.docId, {
+      .addSensitiveSections(props.setName, props.document.documentId, {
         sensitiveSections: new SensitiveSections(sensitiveSections)
       })
       .then(sensitiveSections => {

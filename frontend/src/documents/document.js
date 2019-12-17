@@ -30,6 +30,8 @@ function absSort(arr) {
 export default function Document(props) {
   const [document, setDocument] = useState(null);
 
+  const [activeFeature, setActiveFeature] = useState(null);
+
   const [classification, setClassification] = useState(null);
   const [sensitiveSections, setSensitiveSections] = useState(null);
 
@@ -134,7 +136,6 @@ export default function Document(props) {
           <Grid item sm={6}>
             <DocumentBody
               document={document}
-              docId={props.documentId}
               setName={props.documentSetName}
               sensitiveSections={sensitiveSections}
               setSensitiveSections={setSensitiveSections}
@@ -142,10 +143,15 @@ export default function Document(props) {
               showNonSensitive={showNonSensitiveExplanations}
               showSensitive={showSensitiveExplanations}
               tag={redactionLabel}
+              activeFeature={activeFeature}
             />
           </Grid>
           <Grid item sm>
-            <ExplanationChart explanationFeatures={allUniqueFeatures} />
+            <ExplanationChart
+              explanationFeatures={allUniqueFeatures}
+              activeFeature={activeFeature}
+              setActiveFeature={setActiveFeature}
+            />
           </Grid>
         </Grid>
         <CustomizedSnackbar

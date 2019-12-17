@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import {
   BarChart,
@@ -15,9 +15,17 @@ import {
 import { CircularProgress } from "@material-ui/core";
 
 export default function ExplanationChart(props) {
+  const handleClick = params => {
+    if (props.activeFeature === params.activeLabel) {
+      props.setActiveFeature(null);
+    } else {
+      props.setActiveFeature(params.activeLabel);
+    }
+  };
+
   if (props.explanationFeatures) {
     return (
-      <div style={{ height: "80vh", width: "90%", display: "block" }}>
+      <div style={{ height: "100%", width: "90%", display: "block" }}>
         <ResponsiveContainer height="100%" width="100%">
           <BarChart
             width={0}
@@ -25,6 +33,7 @@ export default function ExplanationChart(props) {
             data={props.explanationFeatures}
             layout="vertical"
             margin={{ top: 30, right: 30, bottom: 30, left: 30 }}
+            onClick={handleClick}
           >
             <CartesianGrid strokeDasharray="3 3" />
             <YAxis dataKey="text" type="category">
@@ -49,7 +58,7 @@ export default function ExplanationChart(props) {
                 <Cell
                   key={`cell-${index}`}
                   fill={entry.weight > 0 ? "red" : "blue"}
-                  opacity={0.25}
+                  opacity={entry.text === props.activeFeature ? 0.75 : 0.25}
                 />
               ))}
             </Bar>
