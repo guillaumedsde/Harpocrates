@@ -13,7 +13,7 @@ import {
   Label
 } from "recharts";
 
-import uniqBy from "lodash-es/uniqBy";
+import uniqBy from "lodash/uniqBy";
 
 import { CircularProgress } from "@material-ui/core";
 
