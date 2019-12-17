@@ -93,7 +93,7 @@ export default function ExplanationChart(props) {
                 <Cell
                   key={`cell-${index}`}
                   fill={entry.weight > 0 ? "red" : "blue"}
-                  opacity={entry.text === props.activeFeature ? 0.75 : 0.25}
+                  opacity={entry.text === props.activeFeature ? 1 : 0.5}
                 />
               ))}
             </Bar>

@@ -6,9 +6,12 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
-import { Link, Location, navigate } from "@reach/router";
+import { Link, Location } from "@reach/router";
+import IconButton from "@material-ui/core/IconButton";
+import Brightness6Icon from "@material-ui/icons/Brightness6";
 
 import BreadcrumbsNavigation from "./navigation/breadcrumbsNavigation";
+import { Grid } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -76,19 +79,31 @@ export default function Dashboard(props) {
       <CssBaseline />
       <AppBar position="absolute" className={clsx(classes.appBar)}>
         <Toolbar className={classes.toolbar}>
-          <Typography
-            component={Link}
-            variant="h6"
-            color="inherit"
-            style={{ marginRight: "2vw", textDecoration: "none" }}
-            to="/"
-          >
-            <b>η</b> Harpocrates
-          </Typography>
-
-          <Location>
-            {({ location }) => <BreadcrumbsNavigation location={location} />}
-          </Location>
+          <Grid container alignItems="center" alignContent="center">
+            <Grid item xs>
+              <Typography
+                component={Link}
+                variant="h6"
+                color="inherit"
+                style={{ marginRight: "2vw", textDecoration: "none" }}
+                to="/"
+              >
+                <b>η</b> Harpocrates
+              </Typography>
+            </Grid>
+            <Grid item xs>
+              <Location>
+                {({ location }) => (
+                  <BreadcrumbsNavigation location={location} />
+                )}
+              </Location>
+            </Grid>
+            <Grid item xs>
+              <IconButton onClick={() => props.setDarkTheme(!props.darkTheme)}>
+                <Brightness6Icon />
+              </IconButton>
+            </Grid>
+          </Grid>
         </Toolbar>
       </AppBar>
       <main className={classes.content}>
