@@ -82,7 +82,7 @@ export default function Document(props) {
   var allUniqueFeatures = null;
 
   if (classification != null) {
-    var allFeatures = classification.sensitiveFeatures;
+    var allFeatures = [...classification.sensitiveFeatures];
 
     classification.nonSensitiveFeatures.forEach(feature => {
       var newFeature = { ...feature };
