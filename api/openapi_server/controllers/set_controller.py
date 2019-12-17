@@ -63,7 +63,6 @@ def get_set(set_id):  # noqa: E501
         document_dict = deepcopy(entry)
         document_dict["document_id"] = str(entry["_id"])
         del document_dict["_id"]
-        print(document_dict)
         document = Document(**document_dict)
         document_list.append(document)
     return Documents(documents=document_list)
