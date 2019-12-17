@@ -6,6 +6,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import { TextAnnotator, TokenAnnotator } from "react-text-annotate";
 import { Badge } from "@material-ui/core";
 
+import { concatenateExplanations } from "./explanationBarChart";
+
 import {
   SensitiveSection,
   DocumentApi,
@@ -49,24 +51,22 @@ export default function DocumentBody(props) {
   }
   // display classification explanations if a classification is defined
   if (props.classification !== null) {
-    props.classification.nonSensitiveFeatures.forEach(feature => {
-      if (feature.text === props.activeFeature || props.showNonSensitive) {
-        annotations.push({
-          start: feature.startOffset,
-          end: feature.endOffset,
-          tag: "Not sensitive"
-        });
-      }
-    });
-    props.classification.sensitiveFeatures.forEach(feature => {
-      if (feature.text === props.activeFeature || props.showSensitive) {
-        annotations.push({
-          start: feature.startOffset,
-          end: feature.endOffset,
-          tag: "Sensitive"
-        });
-      }
-    });
+    concatenateExplanations(props.classification)
+      .slice(0, props.nbrExplanations)
+      .forEach(explanation => {
+        const sensitive = explanation.weight > 0;
+        if (
+          explanation.text === props.activeFeature ||
+          (!sensitive && props.showNonSensitive) ||
+          (sensitive && props.showSensitive)
+        ) {
+          annotations.push({
+            start: explanation.startOffset,
+            end: explanation.endOffset,
+            tag: sensitive ? "Sensitive " : "Not sensitive"
+          });
+        }
+      });
   }
 
   var api = new DocumentApi();

@@ -8,7 +8,9 @@ import { DocumentApi } from "@harpocrates/api-client";
 
 import DocumentInfo from "./documentInfo";
 import DocumentBody from "./documentBody";
-import ExplanationChart from "./explanationBarChart";
+import ExplanationChart, {
+  concatenateExplanations
+} from "./explanationBarChart";
 import CustomizedSnackbar from "./status";
 import ExplanationToggles from "./explanationToggles";
 import RedactionLabelSelect from "./redactionLabelSelect";
@@ -24,7 +26,7 @@ export default function Document(props) {
   const [classification, setClassification] = useState(null);
   const [sensitiveSections, setSensitiveSections] = useState(null);
 
-  const [nbrExplanations, setNbrExplanations] = useState(10);
+  const [nbrExplanations, setNbrExplanations] = useState(null);
 
   const [redactionLabel, setRedactionLabel] = useState(labels[0]);
 
@@ -55,6 +57,7 @@ export default function Document(props) {
         props.documentId
       )
       .then(apiClassification => {
+        setNbrExplanations(concatenateExplanations(apiClassification).length);
         setClassification(apiClassification);
       });
   }, []);
@@ -115,10 +118,12 @@ export default function Document(props) {
               showSensitive={showSensitiveExplanations}
               tag={redactionLabel}
               activeFeature={activeFeature}
+              nbrExplanations={nbrExplanations}
             />
           </Grid>
           <Grid item sm>
             <ExplanationChart
+              nbrExplanations={nbrExplanations}
               classification={classification}
               activeFeature={activeFeature}
               setActiveFeature={setActiveFeature}
