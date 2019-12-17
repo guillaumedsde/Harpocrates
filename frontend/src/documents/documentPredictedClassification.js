@@ -10,15 +10,38 @@ import Select from "@material-ui/core/Select";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import GroupWorkIcon from "@material-ui/icons/GroupWork";
+import WarningIcon from "@material-ui/icons/Warning";
+import CheckIcon from "@material-ui/icons/Check";
+import { CircularProgress } from "@material-ui/core";
 
 export default function PredictedClassification(props) {
   return (
     <List subheader={<ListSubheader>Classification</ListSubheader>}>
+      {props.classification ? (
+        <ListItem>
+          <ListItemIcon>
+            {props.classification.sensitive ? <WarningIcon /> : <CheckIcon />}
+          </ListItemIcon>
+          <ListItemText
+            primary={
+              props.classification.sensitive ? "Sensitive" : "Not sensitive"
+            }
+          />
+        </ListItem>
+      ) : (
+        <ListItem>
+          <ListItemIcon>
+            <CircularProgress />
+          </ListItemIcon>
+          <ListItemText primary="Not Yet Classified" />
+        </ListItem>
+      )}
+
       <ListItem alignItems="flex-start">
         <ListItemText
           primary={
             props.classification
-              ? `${props.classification.sensitivity}% sensitive`
+              ? `${props.classification.sensitivity}% Sensitive`
               : "Calculating sensitivity"
           }
           secondary={
