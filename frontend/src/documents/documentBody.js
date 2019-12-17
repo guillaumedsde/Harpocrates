@@ -49,48 +49,24 @@ export default function DocumentBody(props) {
   }
   // display classification explanations if a classification is defined
   if (props.classification !== null) {
-    // also display activeFeature if it is defined, regardless of
-    // whether it is a sensitive or not feature
-    if (props.activeFeature) {
-      props.classification.nonSensitiveFeatures.forEach(feature => {
-        if (feature.text === props.activeFeature) {
-          annotations.push({
-            start: feature.startOffset,
-            end: feature.endOffset,
-            tag: "insensitiveExplanation"
-          });
-        }
-      });
-      props.classification.sensitiveFeatures.forEach(feature => {
-        if (feature.text === props.activeFeature) {
-          annotations.push({
-            start: feature.startOffset,
-            end: feature.endOffset,
-            tag: "sensitiveExplanation"
-          });
-        }
-      });
-    }
-    // display non sensitive features is toggle is enabled
-    if (props.showNonSensitive) {
-      props.classification.nonSensitiveFeatures.forEach(feature => {
+    props.classification.nonSensitiveFeatures.forEach(feature => {
+      if (feature.text === props.activeFeature || props.showNonSensitive) {
         annotations.push({
           start: feature.startOffset,
           end: feature.endOffset,
-          tag: "insensitiveExplanation"
+          tag: "Not sensitive"
         });
-      });
-    }
-    // display sensitive features is toggle is enabled
-    if (props.showSensitive) {
-      props.classification.sensitiveFeatures.forEach(feature => {
+      }
+    });
+    props.classification.sensitiveFeatures.forEach(feature => {
+      if (feature.text === props.activeFeature || props.showSensitive) {
         annotations.push({
           start: feature.startOffset,
           end: feature.endOffset,
-          tag: "sensitiveExplanation"
+          tag: "Sensitive"
         });
-      });
-    }
+      }
+    });
   }
 
   var api = new DocumentApi();
