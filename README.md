@@ -25,6 +25,10 @@ docker-compose up -d
 
 A Docker image repository with prebuilt docker images is also [available here](https://gitlab.com/harpocrates-app/harpocrates/container_registry)
 
+## Documentation
+
+Documentation for Harpocrates services is available here: [https://harpocrates-app.gitlab.io/harpocrates](https://harpocrates-app.gitlab.io/harpocrates)
+
 ## Development
 
 The development Logbook of Harpocrates can be [found here](https://dissertation.guillaume.desusanne.com).
