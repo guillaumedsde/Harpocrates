@@ -132,7 +132,8 @@ pages:
   stage: documentation
   script:
     - mkdir public
-    - cp ./static/index.html public
+    - cp ./docs/index.html public
+    - cp -r docs public
     - cp README.md public
     - cp -r api-client public/
     - cp -r api public/
