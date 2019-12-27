@@ -75,6 +75,9 @@ clean: ## Remove all images related to the project
 api-client: ## generate JS API client code from specification
 	@openapi-generator-cli generate -g javascript -o ./js-api-client/ -i ./api-specification/api-specification/openapi.yml --additional-properties=usePromises=true --additional-properties=projectName=@harpocrates/api-client --additional-properties=licenseName=MIT
 
+.PHONY: api-client-doc
+api-client-doc: ## generate JS API client code from specification
+	$(MAKE) -C js-api-client docs
 .PHONY: api-server
 api-server: ## generate Python API server code from specification
 	@openapi-generator generate -g python-flask -o ./api -i ./api-specification/api-specification/openapi.yml

@@ -3,6 +3,7 @@
 
 stages:
   - test
+  - documentation
   - build
   - documentation
 
@@ -43,6 +44,44 @@ code_quality:
   tags:
     - shared
   stage: test
+
+api_client_doc:
+  stage: documentation
+  image: python:alpine
+  before_script:
+    - pip install mkdocs mkdocs-material
+  script:
+    - cd js-api-client
+    - make doc
+    - mv site ../api-client
+  only:
+    - master
+  artifacts:
+    paths:
+      - api-client
+  tags:
+    - trdocker
+
+# publishes all files from the $DOCS_FOLDER together with the static version of SwaggerUI
+# sets the specification file named in $SPEC_TO_DISPLAY to be displayed by default
+api_doc:
+  image: node:alpine
+  stage: documentation
+  script:
+    - cd api-specification
+    - npm install --dev-only
+    - mkdir api
+    - cp -rp node_modules/swagger-ui-dist/* api
+    - cp -rp $DOCS_FOLDER/* api
+    - sed -i "s#https://petstore\.swagger\.io/v2/swagger\.json#$SPEC_TO_DISPLAY#g" api/index.html
+    - mv api ../api
+  artifacts:
+    paths:
+      - api
+  only:
+    - master
+  tags:
+    - trdocker
 
 # template service build job
 .build_service:
@@ -88,19 +127,14 @@ frontend:
 # publishes all files from the $DOCS_FOLDER together with the static version of SwaggerUI
 # sets the specification file named in $SPEC_TO_DISPLAY to be displayed by default
 pages:
-  image: node:alpine
+  image: alpine
   stage: documentation
   script:
     - mkdir public
     - cp ./static/index.html public
     - cp README.md public
-    - cd api-specification
-    - npm install --dev-only
-    - mkdir api
-    - cp -rp node_modules/swagger-ui-dist/* api
-    - cp -rp $DOCS_FOLDER/* api
-    - sed -i "s#https://petstore\.swagger\.io/v2/swagger\.json#$SPEC_TO_DISPLAY#g" api/index.html
-    - mv api ../public/
+    - cp -r api-client public/
+    - cp -r api public/
   artifacts:
     paths:
       - public
