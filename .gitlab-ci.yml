@@ -3,7 +3,7 @@
 
 stages:
   - test
-  - documentation
+  - build-documentation
   - build
   - documentation
 
@@ -46,9 +46,10 @@ code_quality:
   stage: test
 
 api_client_doc:
-  stage: documentation
+  stage: build-documentation
   image: python:alpine
   before_script:
+    - apk add --no-cache make
     - pip install mkdocs mkdocs-material
   script:
     - cd js-api-client
@@ -65,8 +66,8 @@ api_client_doc:
 # publishes all files from the $DOCS_FOLDER together with the static version of SwaggerUI
 # sets the specification file named in $SPEC_TO_DISPLAY to be displayed by default
 api_doc:
+  stage: build-documentation
   image: node:alpine
-  stage: documentation
   script:
     - cd api-specification
     - npm install --dev-only
