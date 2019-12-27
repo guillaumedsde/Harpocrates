@@ -1,0 +1,10 @@
+site_name: Harpocrates Javascript API client
+repo_url: https://gitlab.com/harpocrates-app/harpocrates
+
+site_author: guillaumedsde
+copyright: Copyright &copy; 2019 guillaumedsde
+docs_dir: mkdocs
+nav:
+  - Home: index.md
+theme:
+  name: "material"
