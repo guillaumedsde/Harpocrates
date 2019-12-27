@@ -78,7 +78,7 @@ api_doc:
     - mv api ../api-doc
   artifacts:
     paths:
-      - api-docs
+      - api-doc
   only:
     - master
   tags:
@@ -136,7 +136,7 @@ pages:
     - cp -r docs public
     - cp README.md public
     - cp -r api-client public/
-    - mv api-docs public/
+    - mv api-doc public/
   artifacts:
     paths:
       - public
