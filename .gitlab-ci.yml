@@ -136,7 +136,7 @@ pages:
     - cp -r docs public
     - cp README.md public
     - cp -r api-client public/
-    - mv api-doc public/
+    - mv api-doc public/api
   artifacts:
     paths:
       - public
