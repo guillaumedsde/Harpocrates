@@ -75,7 +75,7 @@ api_doc:
     - cp -rp node_modules/swagger-ui-dist/* api
     - cp -rp $DOCS_FOLDER/* api
     - sed -i "s#https://petstore\.swagger\.io/v2/swagger\.json#$SPEC_TO_DISPLAY#g" api/index.html
-    - mv api ../api
+    - mv api ../api-doc
   artifacts:
     paths:
       - api
@@ -136,7 +136,7 @@ pages:
     - cp -r docs public
     - cp README.md public
     - cp -r api-client public/
-    - cp -r api public/
+    - mv api-docs public/
   artifacts:
     paths:
       - public
