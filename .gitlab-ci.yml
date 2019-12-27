@@ -78,7 +78,7 @@ api_doc:
     - mv api ../api-doc
   artifacts:
     paths:
-      - api
+      - api-docs
   only:
     - master
   tags:

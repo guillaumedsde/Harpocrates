@@ -6,9 +6,7 @@
 
 ![UI demo](docs/redacting.gif)
 
-This is the mono-repository for the Harpocrates sensitive document redaction application. Harpocrates is a web application to aid in the redaction of collections of sensitive by using Machine Learn (scikit-learn) to classify documents according to sensitivity and explaining these classifications (LIME).
-
-Harpocrates' interface not only allows redactors to visualize the Machine Learning classifications with their explanations but also to redact the uploaded documents.
+This is the mono-repository for the Harpocrates sensitive document redaction application. Harpocrates is a Web Application for redacting sensitive documents with Machine Learning (ML) classification of documents by sensitivity as part of my final year project. It is a ReactJS frontend backed by an OpenAPI generated Flask API with a Scikit-learn ML model to classify text documents stored in MongoDB. I am using Lime to extract features explaining the ML classification and to present a classification aid with its explanation to redactors in a friendly redaction web app.
 
 ## How to run
 
