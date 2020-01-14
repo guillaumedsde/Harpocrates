@@ -99,7 +99,10 @@ export default function Dashboard(props) {
               </Location>
             </Grid>
             <Grid item xs>
-              <IconButton onClick={() => props.setDarkTheme(!props.darkTheme)}>
+              <IconButton
+                onClick={() => props.setDarkTheme(!props.darkTheme)}
+                style={{ float: "right" }}
+              >
                 <Brightness6Icon />
               </IconButton>
             </Grid>
