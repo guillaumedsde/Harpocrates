@@ -85,7 +85,7 @@ export default function ExplanationChart(props) {
                 position="insideBottomRight"
               />
             </XAxis>
-            <Tooltip />
+            <Tooltip formatter={value => value.toFixed(6)} />
             <ReferenceLine x={0} stroke="#000" />
             {/* Color depending on positivity of value */}
             <Bar dataKey="weight">
