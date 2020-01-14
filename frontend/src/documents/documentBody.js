@@ -2,6 +2,7 @@ import * as React from "react";
 
 import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
+import { useTheme } from "@material-ui/styles";
 
 import { TextAnnotator, TokenAnnotator } from "react-text-annotate";
 import { Badge } from "@material-ui/core";
@@ -13,17 +14,6 @@ import {
   DocumentApi,
   SensitiveSections
 } from "@harpocrates/api-client";
-
-const TAG_STYLES = {
-  sensitiveExplanation: {
-    backgroundColor: "rgba(255, 0, 0, 0.5)",
-    color: "black"
-  },
-  insensitiveExplanation: {
-    backgroundColor: "rgba(0, 0, 255, 0.5)",
-    color: "black"
-  }
-};
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -38,6 +28,25 @@ const useStyles = makeStyles(theme => ({
 
 export default function DocumentBody(props) {
   var annotations = [];
+  const theme = useTheme();
+
+  console.log(theme);
+
+  const TAG_STYLES = {
+    sensitiveExplanation: {
+      backgroundColor: "rgba(255, 0, 0, 0.5)",
+      color: "black"
+    },
+    insensitiveExplanation: {
+      backgroundColor: "rgba(0, 0, 255, 0.5)",
+      color: "black"
+    }
+  };
+
+  const TAG_COLORS = {
+    sensitive: theme.palette.primary.main,
+    insensitive: theme.palette.secondary.main
+  };
 
   // display sensitive sections (redactions) if there are any
   if (props.sensitiveSections) {
@@ -63,7 +72,7 @@ export default function DocumentBody(props) {
           annotations.push({
             start: explanation.startOffset,
             end: explanation.endOffset,
-            tag: sensitive ? "Sensitive " : "Not sensitive"
+            tag: sensitive ? "sensitive" : "insensitive"
           });
         }
       });
@@ -77,8 +86,8 @@ export default function DocumentBody(props) {
     var sensitiveSections = [];
     newAnnotations.forEach(newAnnotation => {
       if (
-        (newAnnotation.tag !== "sensitiveExplanation") &
-        (newAnnotation.tag !== "insensitiveExplanation")
+        (newAnnotation.tag !== "sensitive") &
+        (newAnnotation.tag !== "insensitive")
       ) {
         sensitiveSections.push(
           new SensitiveSection(
@@ -110,32 +119,33 @@ export default function DocumentBody(props) {
         onChange={handleChange}
         getSpan={span => ({
           ...span,
-          tag: props.tag
+          tag: props.tag,
+          color: TAG_COLORS[props.tag]
         })}
-        renderMark={props => (
-          <Badge
-            className={classes.margin}
-            badgeContent={props.tag}
-            color="primary"
-            key={props.content + props.tag + props.start + props.end}
-          >
-            <mark
-              style={
-                TAG_STYLES[props.tag] || {
-                  backgroundColor: props.color || "black",
-                  color: "white"
-                }
-              }
-              data-start={props.start}
-              data-end={props.end}
-              onClick={() =>
-                props.onClick({ start: props.start, end: props.end })
-              }
-            >
-              {props.content}
-            </mark>
-          </Badge>
-        )}
+        // renderMark={props => (
+        //   <Badge
+        //     className={classes.margin}
+        //     badgeContent={props.tag}
+        //     color="primary"
+        //     key={props.content + props.tag + props.start + props.end}
+        //   >
+        //     <mark
+        //       style={
+        //         TAG_STYLES[props.tag] || {
+        //           backgroundColor: props.color || "black",
+        //           color: "white"
+        //         }
+        //       }
+        //       data-start={props.start}
+        //       data-end={props.end}
+        //       onClick={() =>
+        //         props.onClick({ start: props.start, end: props.end })
+        //       }
+        //     >
+        //       {props.content}
+        //     </mark>
+        //   </Badge>
+        // )}
       />
     </Paper>
   );
