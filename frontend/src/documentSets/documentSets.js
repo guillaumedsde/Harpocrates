@@ -4,7 +4,7 @@ import { navigate } from "@reach/router";
 
 import { SetApi } from "@harpocrates/api-client";
 
-import { LinearProgress } from "@material-ui/core";
+import { LinearProgress, Container } from "@material-ui/core";
 
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -96,8 +96,10 @@ export default function DocumentSets() {
   return (
     <>
       {loading ? <LinearProgress /> : null}
-      {documentSetList}
-      {newSetForm}
+      <Container maxWidth="md">
+        {documentSetList}
+        {newSetForm}
+      </Container>
     </>
   );
 }

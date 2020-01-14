@@ -15,7 +15,10 @@ import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
 import DeleteIcon from "@material-ui/icons/Delete";
 
 import DocumentUploadForm from "../documents/documentUploadForm";
-import { LinearProgress } from "@material-ui/core";
+import SensitivityBar from "../documents/documentSensitivityBar";
+import Sensitivity from "../documents/documentSensitivity";
+
+import { LinearProgress, Container } from "@material-ui/core";
 
 export default function DocumentSet(props) {
   const [documents, setDocuments] = useState(null);
@@ -60,6 +63,8 @@ export default function DocumentSet(props) {
     />
   );
 
+  console.log(documents);
+
   var documentList;
   if (documents.length === 0) {
     documentList = <h1>No Documents</h1>;
@@ -84,8 +89,21 @@ export default function DocumentSet(props) {
               </Avatar>
             </ListItemAvatar>
             <ListItemText
-              primary={document.name}
-              secondary={document.documentId}
+              primary={document.name || document.documentId}
+              secondary={
+                <>
+                  <Sensitivity
+                    classification={
+                      document.predictedClassificationWithExplanation
+                    }
+                  />
+                  <SensitivityBar
+                    classification={
+                      document.predictedClassificationWithExplanation
+                    }
+                  />
+                </>
+              }
             />
             <ListItemSecondaryAction>
               <IconButton
@@ -107,8 +125,10 @@ export default function DocumentSet(props) {
   return (
     <div>
       {loading ? <LinearProgress /> : null}
-      {documentList}
-      {documentUploadForm}
+      <Container maxWidth="md">
+        {documentList}
+        {documentUploadForm}
+      </Container>
     </div>
   );
 }
