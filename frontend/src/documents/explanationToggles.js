@@ -16,7 +16,6 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 
 export default function ExplanationToggles(props) {
-  console.log(props.nbrExplanations);
   return (
     <List subheader={<ListSubheader>Explanations</ListSubheader>}>
       <ListItem>
