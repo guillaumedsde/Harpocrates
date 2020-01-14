@@ -126,7 +126,7 @@ def create_document(set_id, body):  # noqa: E501
 
     classify_and_explain(set_id, doc_id)
 
-    return document, HTTPStatus.CREATED
+    return document
 
 
 def delete_document(set_id, doc_id):  # noqa: E501
@@ -167,7 +167,7 @@ def get_document(set_id, doc_id):  # noqa: E501
     del document_dict["_id"]
     document = Document(**document_dict)
 
-    return document, HTTPStatus.OK
+    return document
 
 
 def get_predicted_classification(set_id, doc_id):  # noqa: E501
@@ -295,8 +295,6 @@ def get_predicted_classification_with_explanation(set_id, doc_id):  # noqa: E501
 
     classification_with_explanation.sensitive_features = sensitive_features
     classification_with_explanation.non_sensitive_features = non_sensitive_features
-
-    # print(classification_with_explanation)
 
     return classification_with_explanation
 
