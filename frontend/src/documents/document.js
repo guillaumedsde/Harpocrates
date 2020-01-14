@@ -27,6 +27,7 @@ export default function Document(props) {
   const [sensitiveSections, setSensitiveSections] = useState(null);
 
   const [nbrExplanations, setNbrExplanations] = useState(null);
+  const [maxExplanations, setMaxExplanations] = useState(null);
 
   const [redactionLabel, setRedactionLabel] = useState(labels[0]);
 
@@ -57,7 +58,10 @@ export default function Document(props) {
         props.documentId
       )
       .then(apiClassification => {
-        setNbrExplanations(concatenateExplanations(apiClassification).length);
+        const apiMaxClassification = concatenateExplanations(apiClassification)
+          .length;
+        setMaxExplanations(apiMaxClassification);
+        setNbrExplanations(apiMaxClassification);
         setClassification(apiClassification);
       });
   }, []);
@@ -97,6 +101,7 @@ export default function Document(props) {
                   }
                   nbrExplanations={nbrExplanations}
                   setNbrExplanations={setNbrExplanations}
+                  maxExplanations={maxExplanations}
                 />
                 <Divider />
                 <RedactionLabelSelect

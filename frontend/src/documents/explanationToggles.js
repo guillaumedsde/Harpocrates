@@ -16,6 +16,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 
 export default function ExplanationToggles(props) {
+  console.log(props.nbrExplanations);
   return (
     <List subheader={<ListSubheader>Explanations</ListSubheader>}>
       <ListItem>
@@ -104,7 +105,7 @@ export default function ExplanationToggles(props) {
               }
               marks
               min={0}
-              max={10}
+              max={props.maxExplanations || 0}
               onChange={(event, value) => {
                 props.setNbrExplanations(value);
               }}
