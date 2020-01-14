@@ -30,8 +30,6 @@ export default function DocumentBody(props) {
   var annotations = [];
   const theme = useTheme();
 
-  console.log(theme);
-
   const TAG_STYLES = {
     sensitiveExplanation: {
       backgroundColor: "rgba(255, 0, 0, 0.5)",
