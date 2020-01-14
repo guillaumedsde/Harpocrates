@@ -4,7 +4,6 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListSubheader from "@material-ui/core/ListSubheader";
-import LinearProgress from "@material-ui/core/LinearProgress";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -13,6 +12,9 @@ import GroupWorkIcon from "@material-ui/icons/GroupWork";
 import WarningIcon from "@material-ui/icons/Warning";
 import CheckIcon from "@material-ui/icons/Check";
 import { CircularProgress } from "@material-ui/core";
+
+import SensitivityBar from "./documentSensitivityBar";
+import Sensitivity from "./documentSensitivity";
 
 export default function PredictedClassification(props) {
   return (
@@ -39,22 +41,8 @@ export default function PredictedClassification(props) {
 
       <ListItem alignItems="flex-start">
         <ListItemText
-          primary={
-            props.classification
-              ? `${props.classification.sensitivity}% Sensitive`
-              : "Calculating sensitivity"
-          }
-          secondary={
-            props.classification ? (
-              <LinearProgress
-                value={props.classification.sensitivity}
-                variant="determinate"
-                color={props.classification.sensitive ? "secondary" : "primary"}
-              />
-            ) : (
-              <LinearProgress />
-            )
-          }
+          primary={<Sensitivity classification={props.classification} />}
+          secondary={<SensitivityBar classification={props.classification} />}
         />
       </ListItem>
       <ListItem>
