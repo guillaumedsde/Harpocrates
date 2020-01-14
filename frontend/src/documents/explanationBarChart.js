@@ -1,4 +1,5 @@
 import React from "react";
+import { useTheme } from "@material-ui/styles";
 
 import {
   BarChart,
@@ -44,6 +45,7 @@ export function concatenateExplanations(classification) {
 }
 
 export default function ExplanationChart(props) {
+  const theme = useTheme();
   // build list of sorted unique explanations
   const uniqueExplanations = concatenateExplanations(
     props.classification
@@ -67,7 +69,7 @@ export default function ExplanationChart(props) {
             height={0}
             data={uniqueExplanations}
             layout="vertical"
-            margin={{ top: 10, right: 30, bottom: 10, left: 30 }}
+            margin={{ top: 10, right: 10, bottom: 10, left: 40 }}
             onClick={handleClick}
           >
             <CartesianGrid strokeDasharray="3 3" />
@@ -92,8 +94,16 @@ export default function ExplanationChart(props) {
               {uniqueExplanations.map((entry, index) => (
                 <Cell
                   key={`cell-${index}`}
-                  fill={entry.weight > 0 ? "red" : "blue"}
-                  opacity={entry.text === props.activeFeature ? 1 : 0.5}
+                  fill={
+                    entry.weight > 0
+                      ? entry.text === props.activeFeature
+                        ? theme.palette.secondary.main
+                        : theme.palette.secondary.light
+                      : entry.text === props.activeFeature
+                      ? theme.palette.primary.main
+                      : theme.palette.primary.light
+                  }
+                  // opacity={entry.text === props.activeFeature ? 1 : 0.75}
                 />
               ))}
             </Bar>
