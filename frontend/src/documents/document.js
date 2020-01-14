@@ -74,7 +74,7 @@ export default function Document(props) {
   if (document) {
     return (
       <>
-        <Grid container spacing={10}>
+        <Grid container spacing={5}>
           <Grid
             item
             // alignItems="flex-start"
