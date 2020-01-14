@@ -160,12 +160,14 @@ def get_document(set_id, doc_id):  # noqa: E501
     """
 
     doc = db[set_id].find_one({"_id": ObjectId(doc_id)})
+    if not doc:
+        return None, HTTPStatus.NOT_FOUND
     document_dict = deepcopy(doc)
     document_dict["document_id"] = str(doc["_id"])
     del document_dict["_id"]
     document = Document(**document_dict)
 
-    return document
+    return document, HTTPStatus.OK
 
 
 def get_predicted_classification(set_id, doc_id):  # noqa: E501
