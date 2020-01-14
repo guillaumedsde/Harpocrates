@@ -69,7 +69,7 @@ export default function ExplanationChart(props) {
             height={0}
             data={uniqueExplanations}
             layout="vertical"
-            margin={{ top: 10, right: 10, bottom: 10, left: 40 }}
+            margin={{ top: 10, right: 20, bottom: 20, left: 40 }}
             onClick={handleClick}
           >
             <CartesianGrid strokeDasharray="3 3" />
