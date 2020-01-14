@@ -83,7 +83,7 @@ if __name__ == "__main__":
 
     assert len(test_data) == len(test_paths)
 
-    pool = Pool(floor(cpu_count() / 2))
+    pool = Pool(cpu_count())
     # create, classify and store documents
     for path, data in zip(test_paths, test_data):
         pool.apply_async(
