@@ -64,7 +64,7 @@ export default function PredictedClassification(props) {
         <ListItemText id="select-classifier" primary="Classifier" />
         <ListItemSecondaryAction>
           <Select
-            value="Support-vector machine"
+            value="SVM"
             autoWidth
             disabled
             inputProps={{ "aria-labelledby": "select-classifier" }}
@@ -72,11 +72,8 @@ export default function PredictedClassification(props) {
             //   props.setRedactionLabel(event.target.value);
             // }}
           >
-            <MenuItem
-              key="Support-vector machine"
-              value="Support-vector machine"
-            >
-              Support-vector machine
+            <MenuItem key="SVM" value="SVM">
+              SVM
             </MenuItem>
             {/* {props.labels.map(label => (
               <MenuItem key={label} value={label}>
