@@ -33,7 +33,7 @@ export default function BreadcrumbsNavigation(props) {
       </>
     )
   });
-  var path = "";
+  var path = "/";
   urlFragments.forEach(location => {
     if (location) {
       path = path.concat(location).concat("/");
@@ -55,7 +55,7 @@ export default function BreadcrumbsNavigation(props) {
       >
         {locations.map(location => (
           <Link
-            key={location}
+            key={location.path}
             color="inherit"
             href={location.path}
             className={classes.link}
