@@ -53,10 +53,10 @@ export default function ExplanationChart(props) {
 
   // handle clicks on chart bars
   const handleClick = params => {
-    if (props.activeFeature === params.activeLabel) {
-      props.setActiveFeature(null);
-    } else {
+    if (!params || props.activeFeature !== params.activeLabel) {
       props.setActiveFeature(params.activeLabel);
+    } else {
+      props.setActiveFeature(null);
     }
   };
 
@@ -74,18 +74,14 @@ export default function ExplanationChart(props) {
           >
             <CartesianGrid strokeDasharray="3 3" />
             <YAxis dataKey="text" type="category">
-              <Label
-                value="Not Sensitive"
-                offset={-50}
-                position="insideBottom"
-              />
+              <Label offset={-50} position="insideBottom">
+                Not Sensitive
+              </Label>
             </YAxis>
             <XAxis type="number">
-              <Label
-                value="Sensitive"
-                offset={-20}
-                position="insideBottomRight"
-              />
+              <Label offset={-20} position="insideBottomRight">
+                Sensitive
+              </Label>
             </XAxis>
             <Tooltip formatter={value => value.toFixed(6)} />
             <ReferenceLine x={0} stroke="#000" />
