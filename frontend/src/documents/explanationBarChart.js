@@ -27,29 +27,30 @@ function sortExplanations(arr) {
   return arr.sort(absoluteValueComparison).reverse();
 }
 
-export function concatenateExplanations(classification) {
+export function uniqueFeatures(classification) {
   var allUniqueFeatures = [];
 
   if (classification != null) {
-    var allFeatures = [...classification.sensitiveFeatures];
-
-    classification.nonSensitiveFeatures.forEach(feature => {
-      var newFeature = { ...feature };
-      newFeature["weight"] = -feature.weight;
-      allFeatures.push(newFeature);
-    });
     // remove duplicate features and sort by absolute value
-    allUniqueFeatures = sortExplanations(uniqBy(allFeatures, "text"));
+    allUniqueFeatures = uniqBy(classification.features, "text");
+  } else {
+    return null;
   }
   return allUniqueFeatures;
 }
 
 export default function ExplanationChart(props) {
   const theme = useTheme();
-  // build list of sorted unique explanations
-  const uniqueExplanations = concatenateExplanations(
-    props.classification
-  ).slice(0, props.nbrExplanations);
+
+  var uniqueExplanations = null;
+
+  if (props.classification !== null) {
+    // build list of sorted unique explanations
+    uniqueExplanations = uniqueFeatures(props.classification).slice(
+      0,
+      props.nbrExplanations
+    );
+  }
 
   // handle clicks on chart bars
   const handleClick = params => {

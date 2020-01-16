@@ -8,9 +8,7 @@ import { DocumentApi } from "@harpocrates/api-client";
 
 import DocumentInfo from "./documentInfo";
 import DocumentBody from "./documentBody";
-import ExplanationChart, {
-  concatenateExplanations
-} from "./explanationBarChart";
+import ExplanationChart, { uniqueFeatures } from "./explanationBarChart";
 import CustomizedSnackbar from "./status";
 import ExplanationToggles from "./explanationToggles";
 import RedactionLabelSelect from "./redactionLabelSelect";
@@ -55,12 +53,10 @@ export default function Document(props) {
     api
       .getPredictedClassification(props.documentSetName, props.documentId)
       .then(apiClassification => {
-        const apiMaxClassification = concatenateExplanations(apiClassification)
-          .length;
+        const apiMaxClassification = uniqueFeatures(apiClassification).length;
         setMaxExplanations(apiMaxClassification);
         setNbrExplanations(apiMaxClassification);
         setClassification(apiClassification);
-        console.log(apiClassification);
       });
   }, []);
 
@@ -135,7 +131,7 @@ export default function Document(props) {
         </Grid>
         <CustomizedSnackbar
           message="Calculating sensitivity classification with explanation..."
-          open={classification == null}
+          open={classification === null}
           variant="info"
         />
       </>

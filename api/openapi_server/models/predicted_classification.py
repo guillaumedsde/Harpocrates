@@ -17,36 +17,31 @@ class PredictedClassification(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, sensitive=None, sensitivity=None, sensitive_features=None, non_sensitive_features=None):  # noqa: E501
+    def __init__(self, sensitive=None, sensitivity=None, features=None):  # noqa: E501
         """PredictedClassification - a model defined in OpenAPI
 
         :param sensitive: The sensitive of this PredictedClassification.  # noqa: E501
         :type sensitive: bool
         :param sensitivity: The sensitivity of this PredictedClassification.  # noqa: E501
         :type sensitivity: int
-        :param sensitive_features: The sensitive_features of this PredictedClassification.  # noqa: E501
-        :type sensitive_features: List[Feature]
-        :param non_sensitive_features: The non_sensitive_features of this PredictedClassification.  # noqa: E501
-        :type non_sensitive_features: List[Feature]
+        :param features: The features of this PredictedClassification.  # noqa: E501
+        :type features: List[Feature]
         """
         self.openapi_types = {
             'sensitive': bool,
             'sensitivity': int,
-            'sensitive_features': List[Feature],
-            'non_sensitive_features': List[Feature]
+            'features': List[Feature]
         }
 
         self.attribute_map = {
             'sensitive': 'sensitive',
             'sensitivity': 'sensitivity',
-            'sensitive_features': 'sensitiveFeatures',
-            'non_sensitive_features': 'nonSensitiveFeatures'
+            'features': 'features'
         }
 
         self._sensitive = sensitive
         self._sensitivity = sensitivity
-        self._sensitive_features = sensitive_features
-        self._non_sensitive_features = non_sensitive_features
+        self._features = features
 
     @classmethod
     def from_dict(cls, dikt) -> 'PredictedClassification':
@@ -108,47 +103,24 @@ class PredictedClassification(Model):
         self._sensitivity = sensitivity
 
     @property
-    def sensitive_features(self):
-        """Gets the sensitive_features of this PredictedClassification.
+    def features(self):
+        """Gets the features of this PredictedClassification.
 
-        The explanation for the \"sensitive\" classification of a document as an array of features and their contribution to the explanation  # noqa: E501
+        List of features explaining a document's classification  # noqa: E501
 
-        :return: The sensitive_features of this PredictedClassification.
+        :return: The features of this PredictedClassification.
         :rtype: List[Feature]
         """
-        return self._sensitive_features
+        return self._features
 
-    @sensitive_features.setter
-    def sensitive_features(self, sensitive_features):
-        """Sets the sensitive_features of this PredictedClassification.
+    @features.setter
+    def features(self, features):
+        """Sets the features of this PredictedClassification.
 
-        The explanation for the \"sensitive\" classification of a document as an array of features and their contribution to the explanation  # noqa: E501
+        List of features explaining a document's classification  # noqa: E501
 
-        :param sensitive_features: The sensitive_features of this PredictedClassification.
-        :type sensitive_features: List[Feature]
+        :param features: The features of this PredictedClassification.
+        :type features: List[Feature]
         """
 
-        self._sensitive_features = sensitive_features
-
-    @property
-    def non_sensitive_features(self):
-        """Gets the non_sensitive_features of this PredictedClassification.
-
-        The explanation for the \"non sensitive\" classification of a document as an array of features and their contribution to the explanation  # noqa: E501
-
-        :return: The non_sensitive_features of this PredictedClassification.
-        :rtype: List[Feature]
-        """
-        return self._non_sensitive_features
-
-    @non_sensitive_features.setter
-    def non_sensitive_features(self, non_sensitive_features):
-        """Sets the non_sensitive_features of this PredictedClassification.
-
-        The explanation for the \"non sensitive\" classification of a document as an array of features and their contribution to the explanation  # noqa: E501
-
-        :param non_sensitive_features: The non_sensitive_features of this PredictedClassification.
-        :type non_sensitive_features: List[Feature]
-        """
-
-        self._non_sensitive_features = non_sensitive_features
+        self._features = features
