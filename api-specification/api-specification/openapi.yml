@@ -1,7 +1,7 @@
 openapi: "3.0.2"
 info:
   description: This is the Rest API specification for the Harpocrates application
-  version: "4.3.0"
+  version: "5.0.0"
   title: Harpocrates API
   license:
     name: MIT
@@ -75,7 +75,7 @@ paths:
     post:
       tags:
         - document
-      summary: Add a new document to the document set
+      summary: Add a new document to the set
       description: Contents of the document in the body of the request. This should be in plain text. The Content-Type header should be appropriately set to text/plain.
       operationId: create_document
       parameters:
@@ -140,7 +140,7 @@ paths:
     delete:
       tags:
         - document
-      summary: delete the set
+      summary: delete document from set
       operationId: delete_document
       parameters:
         - $ref: "#/components/parameters/setId"
@@ -172,26 +172,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/predictedClassification"
-        "400":
-          $ref: "#/components/responses/malformedRequest"
-        "404":
-          $ref: "#/components/responses/notFound"
-  "/documentSet/{setId}/{docId}/predictedClassificationWithExplanation":
-    get:
-      summary: Get the explanation for the predicted classification of a document
-      operationId: get_predicted_classification_with_explanation
-      tags:
-        - document
-      parameters:
-        - $ref: "#/components/parameters/setId"
-        - $ref: "#/components/parameters/docId"
-      responses:
-        "200":
-          description: Successfully got the explanation for the predicted classification
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/predictedClassificationWithExplanation"
         "400":
           $ref: "#/components/responses/malformedRequest"
         "404":
@@ -390,8 +370,8 @@ components:
           allOf:
             - "$ref": "#/components/schemas/idBase"
             - description: Unique identifier for a Document
-        predictedClassificationWithExplanation:
-          $ref: "#/components/schemas/predictedClassificationWithExplanation"
+        predictedClassification:
+          $ref: "#/components/schemas/predictedClassification"
         sensitiveSections:
           $ref: "#/components/schemas/sensitiveSections"
         content:
@@ -410,7 +390,7 @@ components:
             $ref: "#/components/schemas/document"
     predictedClassification:
       type: object
-      description: The predicted Sensitivity (Sensitive or Not) of a document
+      description: The predicted Sensitivity (Sensitive or Not) of a document along with feature explanation for that classification
       required:
         - sensitive
       properties:
@@ -421,6 +401,16 @@ components:
           type: integer
           format: int32
           description: Document sensitivity percentage
+        sensitiveFeatures:
+          type: array
+          items:
+            $ref: "#/components/schemas/feature"
+          description: The explanation for the "sensitive" classification of a document as an array of features and their contribution to the explanation
+        nonSensitiveFeatures:
+          type: array
+          items:
+            $ref: "#/components/schemas/feature"
+          description: The explanation for the "non sensitive" classification of a document as an array of features and their contribution to the explanation
     section:
       description: Section of characters within a document
       type: object
@@ -452,22 +442,6 @@ components:
               type: number
               format: float
               description: The contribution of that feature to the classification
-    predictedClassificationWithExplanation:
-      allOf: # extend predictedClassification
-        - $ref: "#/components/schemas/predictedClassification"
-        - type: object
-          description: Object representing an explanation for a sensitivity prediction
-          properties:
-            sensitiveFeatures:
-              type: array
-              items:
-                $ref: "#/components/schemas/feature"
-              description: The explanation for the "sensitive" classification of a document as an array of features and their contribution to the explanation
-            nonSensitiveFeatures:
-              type: array
-              items:
-                $ref: "#/components/schemas/feature"
-              description: The explanation for the "non sensitive" classification of a document as an array of features and their contribution to the explanation
     sensitiveSections:
       type: object
       description: an object representing multiple sensitive sections

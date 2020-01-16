@@ -6,11 +6,11 @@ from datetime import date, datetime  # noqa: F401
 from typing import List, Dict  # noqa: F401
 
 from openapi_server.models.base_model_ import Model
-from openapi_server.models.predicted_classification_with_explanation import PredictedClassificationWithExplanation
+from openapi_server.models.predicted_classification import PredictedClassification
 from openapi_server.models.sensitive_sections import SensitiveSections
 from openapi_server import util
 
-from openapi_server.models.predicted_classification_with_explanation import PredictedClassificationWithExplanation  # noqa: E501
+from openapi_server.models.predicted_classification import PredictedClassification  # noqa: E501
 from openapi_server.models.sensitive_sections import SensitiveSections  # noqa: E501
 
 class Document(Model):
@@ -19,15 +19,15 @@ class Document(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, name=None, document_id=None, predicted_classification_with_explanation=None, sensitive_sections=None, content=None):  # noqa: E501
+    def __init__(self, name=None, document_id=None, predicted_classification=None, sensitive_sections=None, content=None):  # noqa: E501
         """Document - a model defined in OpenAPI
 
         :param name: The name of this Document.  # noqa: E501
         :type name: str
         :param document_id: The document_id of this Document.  # noqa: E501
         :type document_id: str
-        :param predicted_classification_with_explanation: The predicted_classification_with_explanation of this Document.  # noqa: E501
-        :type predicted_classification_with_explanation: PredictedClassificationWithExplanation
+        :param predicted_classification: The predicted_classification of this Document.  # noqa: E501
+        :type predicted_classification: PredictedClassification
         :param sensitive_sections: The sensitive_sections of this Document.  # noqa: E501
         :type sensitive_sections: SensitiveSections
         :param content: The content of this Document.  # noqa: E501
@@ -36,7 +36,7 @@ class Document(Model):
         self.openapi_types = {
             'name': str,
             'document_id': str,
-            'predicted_classification_with_explanation': PredictedClassificationWithExplanation,
+            'predicted_classification': PredictedClassification,
             'sensitive_sections': SensitiveSections,
             'content': str
         }
@@ -44,14 +44,14 @@ class Document(Model):
         self.attribute_map = {
             'name': 'name',
             'document_id': 'documentId',
-            'predicted_classification_with_explanation': 'predictedClassificationWithExplanation',
+            'predicted_classification': 'predictedClassification',
             'sensitive_sections': 'sensitiveSections',
             'content': 'content'
         }
 
         self._name = name
         self._document_id = document_id
-        self._predicted_classification_with_explanation = predicted_classification_with_explanation
+        self._predicted_classification = predicted_classification
         self._sensitive_sections = sensitive_sections
         self._content = content
 
@@ -111,25 +111,25 @@ class Document(Model):
         self._document_id = document_id
 
     @property
-    def predicted_classification_with_explanation(self):
-        """Gets the predicted_classification_with_explanation of this Document.
+    def predicted_classification(self):
+        """Gets the predicted_classification of this Document.
 
 
-        :return: The predicted_classification_with_explanation of this Document.
-        :rtype: PredictedClassificationWithExplanation
+        :return: The predicted_classification of this Document.
+        :rtype: PredictedClassification
         """
-        return self._predicted_classification_with_explanation
+        return self._predicted_classification
 
-    @predicted_classification_with_explanation.setter
-    def predicted_classification_with_explanation(self, predicted_classification_with_explanation):
-        """Sets the predicted_classification_with_explanation of this Document.
+    @predicted_classification.setter
+    def predicted_classification(self, predicted_classification):
+        """Sets the predicted_classification of this Document.
 
 
-        :param predicted_classification_with_explanation: The predicted_classification_with_explanation of this Document.
-        :type predicted_classification_with_explanation: PredictedClassificationWithExplanation
+        :param predicted_classification: The predicted_classification of this Document.
+        :type predicted_classification: PredictedClassification
         """
 
-        self._predicted_classification_with_explanation = predicted_classification_with_explanation
+        self._predicted_classification = predicted_classification
 
     @property
     def sensitive_sections(self):

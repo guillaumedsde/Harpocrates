@@ -10,9 +10,7 @@ from bson.objectid import ObjectId
 from openapi_server.models.document import Document  # noqa: E501
 from openapi_server.models.http_status import HttpStatus  # noqa: E501
 from openapi_server.models.predicted_classification import PredictedClassification
-from openapi_server.models.predicted_classification_with_explanation import (
-    PredictedClassificationWithExplanation,
-)
+
 from openapi_server.models.feature import Feature
 from openapi_server.models.sensitive_section import SensitiveSection
 from openapi_server.models.sensitive_sections import SensitiveSections
@@ -170,30 +168,6 @@ def get_document(set_id, doc_id):  # noqa: E501
     return document
 
 
-def get_predicted_classification(set_id, doc_id):  # noqa: E501
-    """Get the predicted classification for the document
-
-     # noqa: E501
-
-    :param set_id: ID of a set
-    :type set_id: str
-    :param doc_id: ID of a document
-    :type doc_id: str
-
-    :rtype: PredictedClassification
-    """
-    document = get_document(set_id, doc_id)
-    # TODO this is a long blocking call when first training the classifier, needs to return 202 "created" with some URL to the processed element
-    trained_model = get_model()
-    classification_probas = trained_model.predict_proba([document.content])[0]
-    best_classification_index = np.argmax(classification_probas)
-    sensitive = CLASS_NAMES[best_classification_index] == "sensitive"
-    sensitivity = round(classification_probas[1] * 100)
-
-    predicted = PredictedClassification(sensitive=sensitive, sensitivity=sensitivity)
-    return predicted
-
-
 def calculate_classification_with_explanation(set_id, doc_id):
     """Calculate the classification of a document with the explanation for the predicted classification
 
@@ -246,7 +220,7 @@ def calculate_classification_with_explanation(set_id, doc_id):
                 non_sensitive_features.append(feature)
 
     # build and return final classification with explanation object
-    classification_with_explanation = PredictedClassificationWithExplanation(
+    classification_with_explanation = PredictedClassification(
         # for some reason python boolean can't be casted to JSON
         sensitive=int(sensitive),
         sensitivity=sensitivity,
@@ -257,9 +231,8 @@ def calculate_classification_with_explanation(set_id, doc_id):
     return classification_with_explanation
 
 
-def get_predicted_classification_with_explanation(set_id, doc_id):  # noqa: E501
-    """Get the explanation for the predicted classification of a document with
-    the classification
+def get_predicted_classification(set_id, doc_id):  # noqa: E501
+    """Get the explanation for the predicted classification of a document
 
      # noqa: E501
 
@@ -268,22 +241,20 @@ def get_predicted_classification_with_explanation(set_id, doc_id):  # noqa: E501
     :param doc_id: ID of a document
     :type doc_id: str
 
-    :rtype: PredictedClassificationWithExplanation
+    :rtype: PredictedClassification
     """
     document = get_document(set_id, doc_id)
 
     predicted_classification_query = db[set_id].find_one(
-        {"_id": ObjectId(doc_id)}, {"predicted_classification_with_explanation": 1}
+        {"_id": ObjectId(doc_id)}, {"predicted_classification": 1}
     )
 
     predicted_classification = predicted_classification_query[
-        "predicted_classification_with_explanation"
+        "predicted_classification"
     ]
 
     # build and return final classification with explanation object
-    classification_with_explanation = PredictedClassificationWithExplanation.from_dict(
-        predicted_classification
-    )
+    classification = PredictedClassification.from_dict(predicted_classification)
 
     sensitive_features = []
     for feature in predicted_classification["sensitive_features"]:
@@ -293,13 +264,13 @@ def get_predicted_classification_with_explanation(set_id, doc_id):  # noqa: E501
     for feature in predicted_classification["non_sensitive_features"]:
         non_sensitive_features.append(Feature(**feature))
 
-    classification_with_explanation.sensitive_features = sensitive_features
-    classification_with_explanation.non_sensitive_features = non_sensitive_features
+    classification.sensitive_features = sensitive_features
+    classification.non_sensitive_features = non_sensitive_features
 
-    return classification_with_explanation
+    return classification
 
 
-def classify_and_explain(set_id, doc_id):
+def classify(set_id, doc_id):
     """calculates document classification and accompanying explanation
 
     :param set_id: ID of a set
@@ -312,10 +283,6 @@ def classify_and_explain(set_id, doc_id):
 
     doc_id = db[set_id].update_one(
         {"_id": ObjectId(doc_id)},
-        {
-            "$set": {
-                "predicted_classification_with_explanation": classification.to_dict()
-            }
-        },
+        {"$set": {"predicted_classification": classification.to_dict()}},
     )
 

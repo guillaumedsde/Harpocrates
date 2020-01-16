@@ -6,11 +6,10 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**addSensitiveSection**](DocumentApi.md#addSensitiveSection) | **POST** /documentSet/{setId}/{docId}/sensitiveSection | add a sensitive section to the document
 [**addSensitiveSections**](DocumentApi.md#addSensitiveSections) | **POST** /documentSet/{setId}/{docId}/sensitiveSections | add multiple sensitive sections to the document
-[**createDocument**](DocumentApi.md#createDocument) | **POST** /documentSet/{setId} | Add a new document to the document set
-[**deleteDocument**](DocumentApi.md#deleteDocument) | **DELETE** /documentSet/{setId}/{docId} | delete the set
+[**createDocument**](DocumentApi.md#createDocument) | **POST** /documentSet/{setId} | Add a new document to the set
+[**deleteDocument**](DocumentApi.md#deleteDocument) | **DELETE** /documentSet/{setId}/{docId} | delete document from set
 [**getDocument**](DocumentApi.md#getDocument) | **GET** /documentSet/{setId}/{docId} | get document from set
 [**getPredictedClassification**](DocumentApi.md#getPredictedClassification) | **GET** /documentSet/{setId}/{docId}/predictedClassification | Get the predicted classification for the document
-[**getPredictedClassificationWithExplanation**](DocumentApi.md#getPredictedClassificationWithExplanation) | **GET** /documentSet/{setId}/{docId}/predictedClassificationWithExplanation | Get the explanation for the predicted classification of a document
 [**getSensitiveSections**](DocumentApi.md#getSensitiveSections) | **GET** /documentSet/{setId}/{docId}/sensitiveSections | get sensitive sections of the document
 
 
@@ -119,7 +118,7 @@ No authorization required
 
 > Document createDocument(setId, body)
 
-Add a new document to the document set
+Add a new document to the set
 
 Contents of the document in the body of the request. This should be in plain text. The Content-Type header should be appropriately set to text/plain.
 
@@ -165,7 +164,7 @@ No authorization required
 
 > Document deleteDocument(setId, docId)
 
-delete the set
+delete document from set
 
 ### Example
 
@@ -282,50 +281,6 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**PredictedClassification**](PredictedClassification.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: Not defined
-- **Accept**: application/json
-
-
-## getPredictedClassificationWithExplanation
-
-> PredictedClassificationWithExplanation getPredictedClassificationWithExplanation(setId, docId)
-
-Get the explanation for the predicted classification of a document
-
-### Example
-
-```javascript
-import @HarpocratesApiClient from '@harpocrates/api-client';
-
-let apiInstance = new @HarpocratesApiClient.DocumentApi();
-let setId = "setId_example"; // String | ID of a set
-let docId = "docId_example"; // String | ID of a document
-apiInstance.getPredictedClassificationWithExplanation(setId, docId).then((data) => {
-  console.log('API called successfully. Returned data: ' + data);
-}, (error) => {
-  console.error(error);
-});
-
-```
-
-### Parameters
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **setId** | **String**| ID of a set | 
- **docId** | **String**| ID of a document | 
-
-### Return type
-
-[**PredictedClassificationWithExplanation**](PredictedClassificationWithExplanation.md)
 
 ### Authorization
 

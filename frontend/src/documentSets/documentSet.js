@@ -93,14 +93,10 @@ export default function DocumentSet(props) {
               secondary={
                 <>
                   <Sensitivity
-                    classification={
-                      document.predictedClassificationWithExplanation
-                    }
+                    classification={document.predictedClassification}
                   />
                   <SensitivityBar
-                    classification={
-                      document.predictedClassificationWithExplanation
-                    }
+                    classification={document.predictedClassification}
                   />
                 </>
               }

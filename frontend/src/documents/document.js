@@ -53,16 +53,14 @@ export default function Document(props) {
   // effect for getting prediction and explanation
   useEffect(() => {
     api
-      .getPredictedClassificationWithExplanation(
-        props.documentSetName,
-        props.documentId
-      )
+      .getPredictedClassification(props.documentSetName, props.documentId)
       .then(apiClassification => {
         const apiMaxClassification = concatenateExplanations(apiClassification)
           .length;
         setMaxExplanations(apiMaxClassification);
         setNbrExplanations(apiMaxClassification);
         setClassification(apiClassification);
+        console.log(apiClassification);
       });
   }, []);
 
