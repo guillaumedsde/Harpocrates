@@ -4,7 +4,7 @@ info:
   license:
     name: MIT
   title: Harpocrates API
-  version: 5.0.0
+  version: 6.0.0
 externalDocs:
   description: API documentation
   url: https://harpocrates-app.gitlab.io/harpocrates/api/index.html
@@ -564,14 +564,11 @@ components:
       description: A document to review
       example:
         predictedClassification:
+          features:
+          - null
+          - null
           sensitive: true
           sensitivity: 0
-          nonSensitiveFeatures:
-          - null
-          - null
-          sensitiveFeatures:
-          - null
-          - null
         sensitiveSections:
           sensitiveSections:
           - null
@@ -603,14 +600,11 @@ components:
       example:
         documents:
         - predictedClassification:
+            features:
+            - null
+            - null
             sensitive: true
             sensitivity: 0
-            nonSensitiveFeatures:
-            - null
-            - null
-            sensitiveFeatures:
-            - null
-            - null
           sensitiveSections:
             sensitiveSections:
             - null
@@ -619,14 +613,11 @@ components:
           documentId: ""
           content: content
         - predictedClassification:
+            features:
+            - null
+            - null
             sensitive: true
             sensitivity: 0
-            nonSensitiveFeatures:
-            - null
-            - null
-            sensitiveFeatures:
-            - null
-            - null
           sensitiveSections:
             sensitiveSections:
             - null
@@ -647,14 +638,11 @@ components:
       description: The predicted Sensitivity (Sensitive or Not) of a document along
         with feature explanation for that classification
       example:
+        features:
+        - null
+        - null
         sensitive: true
         sensitivity: 0
-        nonSensitiveFeatures:
-        - null
-        - null
-        sensitiveFeatures:
-        - null
-        - null
       properties:
         sensitive:
           description: true if the document is predicted to be sensitive, false otherwise
@@ -663,15 +651,8 @@ components:
           description: Document sensitivity percentage
           format: int32
           type: integer
-        sensitiveFeatures:
-          description: The explanation for the "sensitive" classification of a document
-            as an array of features and their contribution to the explanation
-          items:
-            $ref: '#/components/schemas/feature'
-          type: array
-        nonSensitiveFeatures:
-          description: The explanation for the "non sensitive" classification of a
-            document as an array of features and their contribution to the explanation
+        features:
+          description: List of features explaining a document's classification
           items:
             $ref: '#/components/schemas/feature'
           type: array
@@ -728,7 +709,9 @@ components:
       description: an object representing a feature that explains the classification
       properties:
         weight:
-          description: The contribution of that feature to the classification
+          description: The contribution of that feature to the classification, if
+            positive weight, this feature contributes to a document's sensitivity
+            and conversely
           format: float
           type: number
     sensitiveSection_allOf:

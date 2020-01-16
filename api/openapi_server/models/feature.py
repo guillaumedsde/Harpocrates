@@ -138,7 +138,7 @@ class Feature(Model):
     def weight(self):
         """Gets the weight of this Feature.
 
-        The contribution of that feature to the classification  # noqa: E501
+        The contribution of that feature to the classification, if positive weight, this feature contributes to a document's sensitivity and conversely  # noqa: E501
 
         :return: The weight of this Feature.
         :rtype: float
@@ -149,7 +149,7 @@ class Feature(Model):
     def weight(self, weight):
         """Sets the weight of this Feature.
 
-        The contribution of that feature to the classification  # noqa: E501
+        The contribution of that feature to the classification, if positive weight, this feature contributes to a document's sensitivity and conversely  # noqa: E501
 
         :param weight: The weight of this Feature.
         :type weight: float

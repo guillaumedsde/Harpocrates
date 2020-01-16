@@ -1,7 +1,7 @@
 openapi: "3.0.2"
 info:
   description: This is the Rest API specification for the Harpocrates application
-  version: "5.0.0"
+  version: "6.0.0"
   title: Harpocrates API
   license:
     name: MIT
@@ -401,16 +401,11 @@ components:
           type: integer
           format: int32
           description: Document sensitivity percentage
-        sensitiveFeatures:
+        features:
           type: array
           items:
             $ref: "#/components/schemas/feature"
-          description: The explanation for the "sensitive" classification of a document as an array of features and their contribution to the explanation
-        nonSensitiveFeatures:
-          type: array
-          items:
-            $ref: "#/components/schemas/feature"
-          description: The explanation for the "non sensitive" classification of a document as an array of features and their contribution to the explanation
+          description: List of features explaining a document's classification
     section:
       description: Section of characters within a document
       type: object
@@ -441,7 +436,7 @@ components:
             weight:
               type: number
               format: float
-              description: The contribution of that feature to the classification
+              description: The contribution of that feature to the classification, if positive weight, this feature contributes to a document's sensitivity and conversely
     sensitiveSections:
       type: object
       description: an object representing multiple sensitive sections

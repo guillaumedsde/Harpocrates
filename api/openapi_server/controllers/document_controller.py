@@ -122,7 +122,7 @@ def create_document(set_id, body):  # noqa: E501
 
     doc_id = operation_result.inserted_id
 
-    classify_and_explain(set_id, doc_id)
+    classify(set_id, doc_id)
 
     return document
 
@@ -191,12 +191,24 @@ def calculate_classification_with_explanation(set_id, doc_id):
     sensitivity = round(explanation.predict_proba[1] * 100)
 
     # sort into sensitive/non sensitive feature based on classification
-    sensitive_features = []
-    non_sensitive_features = []
+    features = []
 
     # iterate over all features
     for feature_info in explanation.as_list():
+
+        # regex pattern for finding feature in document
         pattern = "\\b({feature})+\\b".format(feature=feature_info[0])
+
+        # calculate custom weight, positive if sensitive, negative otherwise
+
+        # if sensitive feature
+        if (sensitive and (feature_info[1] > 0)) or (
+            not sensitive and (feature_info[1] < 0)
+        ):
+            weight = abs(feature_info[1])
+        # if non sensitive feature
+        else:
+            weight = -abs(feature_info[1])
 
         # match all features in content
         matches = re.finditer(pattern, document.content, flags=re.MULTILINE)
@@ -206,26 +218,17 @@ def calculate_classification_with_explanation(set_id, doc_id):
             feature = Feature(
                 start_offset=match.span()[0],
                 end_offset=match.span()[1],
-                weight=abs(feature_info[1]),
+                weight=weight,
                 text=match[0],
             )
-            if (
-                sensitive
-                and (feature_info[1] > 0)
-                or (not sensitive)
-                and (feature_info[1] < 0)
-            ):
-                sensitive_features.append(feature)
-            else:
-                non_sensitive_features.append(feature)
+            features.append(feature)
 
     # build and return final classification with explanation object
     classification_with_explanation = PredictedClassification(
         # for some reason python boolean can't be casted to JSON
         sensitive=int(sensitive),
         sensitivity=sensitivity,
-        non_sensitive_features=non_sensitive_features,
-        sensitive_features=sensitive_features,
+        features=features,
     )
 
     return classification_with_explanation
@@ -256,16 +259,11 @@ def get_predicted_classification(set_id, doc_id):  # noqa: E501
     # build and return final classification with explanation object
     classification = PredictedClassification.from_dict(predicted_classification)
 
-    sensitive_features = []
-    for feature in predicted_classification["sensitive_features"]:
-        sensitive_features.append(Feature(**feature))
+    features = []
+    for feature in predicted_classification["features"]:
+        features.append(Feature(**feature))
 
-    non_sensitive_features = []
-    for feature in predicted_classification["non_sensitive_features"]:
-        non_sensitive_features.append(Feature(**feature))
-
-    classification.sensitive_features = sensitive_features
-    classification.non_sensitive_features = non_sensitive_features
+    classification.features = features
 
     return classification
 

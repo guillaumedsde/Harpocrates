@@ -7,7 +7,7 @@ import { useTheme } from "@material-ui/styles";
 import { TextAnnotator, TokenAnnotator } from "react-text-annotate";
 import { Badge } from "@material-ui/core";
 
-import { concatenateExplanations } from "./explanationBarChart";
+import { uniqueFeatures } from "./explanationBarChart";
 
 import {
   SensitiveSection,
@@ -58,7 +58,7 @@ export default function DocumentBody(props) {
   }
   // display classification explanations if a classification is defined
   if (props.classification !== null) {
-    concatenateExplanations(props.classification)
+    uniqueFeatures(props.classification)
       .slice(0, props.nbrExplanations)
       .forEach(explanation => {
         const sensitive = explanation.weight > 0;
