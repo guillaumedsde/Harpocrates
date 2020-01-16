@@ -6,7 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **name** | **String** |  | [optional] 
 **documentId** | **String** |  | 
-**predictedClassificationWithExplanation** | [**PredictedClassificationWithExplanation**](PredictedClassificationWithExplanation.md) |  | [optional] 
+**predictedClassification** | [**PredictedClassification**](PredictedClassification.md) |  | [optional] 
 **sensitiveSections** | [**SensitiveSections**](SensitiveSections.md) |  | [optional] 
 **content** | **String** | content of the document | [optional] 
 

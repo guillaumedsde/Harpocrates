@@ -60,7 +60,7 @@ def get_set(set_id):  # noqa: E501
 
     document_list = []
     for entry in db[set_id].find(
-        {}, {"_id": 1, "name": 1, "predicted_classification_with_explanation": 1}
+        {}, {"_id": 1, "name": 1, "predicted_classification": 1}
     ):
         document_dict = deepcopy(entry)
         document_dict["document_id"] = str(entry["_id"])

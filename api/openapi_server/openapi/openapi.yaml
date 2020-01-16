@@ -4,7 +4,7 @@ info:
   license:
     name: MIT
   title: Harpocrates API
-  version: 4.3.0
+  version: 5.0.0
 externalDocs:
   description: API documentation
   url: https://harpocrates-app.gitlab.io/harpocrates/api/index.html
@@ -176,7 +176,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/httpStatus'
           description: Conflicting element already present
-      summary: Add a new document to the document set
+      summary: Add a new document to the set
       tags:
       - document
       x-openapi-router-controller: openapi_server.controllers.document_controller
@@ -219,7 +219,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/httpStatus'
           description: The specified resource was not found
-      summary: delete the set
+      summary: delete document from set
       tags:
       - document
       x-openapi-router-controller: openapi_server.controllers.document_controller
@@ -305,49 +305,6 @@ paths:
                 $ref: '#/components/schemas/httpStatus'
           description: The specified resource was not found
       summary: Get the predicted classification for the document
-      tags:
-      - document
-      x-openapi-router-controller: openapi_server.controllers.document_controller
-  /documentSet/{setId}/{docId}/predictedClassificationWithExplanation:
-    get:
-      operationId: get_predicted_classification_with_explanation
-      parameters:
-      - description: ID of a set
-        explode: false
-        in: path
-        name: setId
-        required: true
-        schema:
-          type: string
-        style: simple
-      - description: ID of a document
-        explode: false
-        in: path
-        name: docId
-        required: true
-        schema:
-          type: string
-        style: simple
-      responses:
-        200:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/predictedClassificationWithExplanation'
-          description: Successfully got the explanation for the predicted classification
-        400:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/httpStatus'
-          description: The request was invalid JSON or missing some attributes
-        404:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/httpStatus'
-          description: The specified resource was not found
-      summary: Get the explanation for the predicted classification of a document
       tags:
       - document
       x-openapi-router-controller: openapi_server.controllers.document_controller
@@ -606,6 +563,15 @@ components:
     document:
       description: A document to review
       example:
+        predictedClassification:
+          sensitive: true
+          sensitivity: 0
+          nonSensitiveFeatures:
+          - null
+          - null
+          sensitiveFeatures:
+          - null
+          - null
         sensitiveSections:
           sensitiveSections:
           - null
@@ -622,8 +588,8 @@ components:
           allOf:
           - $ref: '#/components/schemas/idBase'
           - description: Unique identifier for a Document
-        predictedClassificationWithExplanation:
-          $ref: '#/components/schemas/predictedClassificationWithExplanation'
+        predictedClassification:
+          $ref: '#/components/schemas/predictedClassification'
         sensitiveSections:
           $ref: '#/components/schemas/sensitiveSections'
         content:
@@ -636,14 +602,32 @@ components:
       description: an object representing multiple documents
       example:
         documents:
-        - sensitiveSections:
+        - predictedClassification:
+            sensitive: true
+            sensitivity: 0
+            nonSensitiveFeatures:
+            - null
+            - null
+            sensitiveFeatures:
+            - null
+            - null
+          sensitiveSections:
             sensitiveSections:
             - null
             - null
           name: ""
           documentId: ""
           content: content
-        - sensitiveSections:
+        - predictedClassification:
+            sensitive: true
+            sensitivity: 0
+            nonSensitiveFeatures:
+            - null
+            - null
+            sensitiveFeatures:
+            - null
+            - null
+          sensitiveSections:
             sensitiveSections:
             - null
             - null
@@ -660,10 +644,17 @@ components:
       - documents
       type: object
     predictedClassification:
-      description: The predicted Sensitivity (Sensitive or Not) of a document
+      description: The predicted Sensitivity (Sensitive or Not) of a document along
+        with feature explanation for that classification
       example:
         sensitive: true
         sensitivity: 0
+        nonSensitiveFeatures:
+        - null
+        - null
+        sensitiveFeatures:
+        - null
+        - null
       properties:
         sensitive:
           description: true if the document is predicted to be sensitive, false otherwise
@@ -672,6 +663,18 @@ components:
           description: Document sensitivity percentage
           format: int32
           type: integer
+        sensitiveFeatures:
+          description: The explanation for the "sensitive" classification of a document
+            as an array of features and their contribution to the explanation
+          items:
+            $ref: '#/components/schemas/feature'
+          type: array
+        nonSensitiveFeatures:
+          description: The explanation for the "non sensitive" classification of a
+            document as an array of features and their contribution to the explanation
+          items:
+            $ref: '#/components/schemas/feature'
+          type: array
       required:
       - sensitive
       type: object
@@ -702,10 +705,6 @@ components:
       allOf:
       - $ref: '#/components/schemas/section'
       - $ref: '#/components/schemas/feature_allOf'
-    predictedClassificationWithExplanation:
-      allOf:
-      - $ref: '#/components/schemas/predictedClassification'
-      - $ref: '#/components/schemas/predictedClassificationWithExplanation_allOf'
     sensitiveSections:
       description: an object representing multiple sensitive sections
       example:
@@ -732,21 +731,6 @@ components:
           description: The contribution of that feature to the classification
           format: float
           type: number
-    predictedClassificationWithExplanation_allOf:
-      description: Object representing an explanation for a sensitivity prediction
-      properties:
-        sensitiveFeatures:
-          description: The explanation for the "sensitive" classification of a document
-            as an array of features and their contribution to the explanation
-          items:
-            $ref: '#/components/schemas/feature'
-          type: array
-        nonSensitiveFeatures:
-          description: The explanation for the "non sensitive" classification of a
-            document as an array of features and their contribution to the explanation
-          items:
-            $ref: '#/components/schemas/feature'
-          type: array
     sensitiveSection_allOf:
       description: This is the base object for recording or suggesting sensitivities
       properties:
