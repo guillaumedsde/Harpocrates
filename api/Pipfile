@@ -26,6 +26,8 @@ lxml = "*"
 pymongo = "*"
 connexion = "*"
 uwsgi = "*"
+shap = "*"
+xgboost = "*"
 
 [pipenv]
 allow_prereleases = true

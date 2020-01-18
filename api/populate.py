@@ -69,18 +69,23 @@ if __name__ == "__main__":
         verbose=True,
     )
 
-    train_data = extract_data(train_paths)
-
-    # train classifier
-    pipeline.fit(train_data, train_labels)
-
-    # store classifier
     classifier_type = type(classifier).__name__
     model_path = MODEL_DIRECTORY.joinpath(classifier_type + ".joblib")
-    dump(pipeline, model_path)
 
+    # only retrain the model if it does not exist
+    if not model_path.exists():
+        train_data = extract_data(train_paths)
+
+        # train classifier
+        pipeline.fit(train_data, train_labels)
+
+        # store classifier
+        dump(pipeline, model_path)
+
+    # extract test data
     test_data = extract_data(test_paths)
 
+    # check that all test data was read correctly
     assert len(test_data) == len(test_paths)
 
     pool = Pool(cpu_count())
