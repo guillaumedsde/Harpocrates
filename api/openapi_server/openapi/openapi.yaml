@@ -4,7 +4,7 @@ info:
   license:
     name: MIT
   title: Harpocrates API
-  version: 6.0.0
+  version: 7.0.0
 externalDocs:
   description: API documentation
   url: https://harpocrates-app.gitlab.io/harpocrates/api/index.html
@@ -564,9 +564,15 @@ components:
       description: A document to review
       example:
         predictedClassification:
-          features:
-          - null
-          - null
+          explanations:
+          - features:
+            - null
+            - null
+            explainer: explainer
+          - features:
+            - null
+            - null
+            explainer: explainer
           sensitive: true
           sensitivity: 0
         sensitiveSections:
@@ -600,9 +606,15 @@ components:
       example:
         documents:
         - predictedClassification:
-            features:
-            - null
-            - null
+            explanations:
+            - features:
+              - null
+              - null
+              explainer: explainer
+            - features:
+              - null
+              - null
+              explainer: explainer
             sensitive: true
             sensitivity: 0
           sensitiveSections:
@@ -613,9 +625,15 @@ components:
           documentId: ""
           content: content
         - predictedClassification:
-            features:
-            - null
-            - null
+            explanations:
+            - features:
+              - null
+              - null
+              explainer: explainer
+            - features:
+              - null
+              - null
+              explainer: explainer
             sensitive: true
             sensitivity: 0
           sensitiveSections:
@@ -638,9 +656,15 @@ components:
       description: The predicted Sensitivity (Sensitive or Not) of a document along
         with feature explanation for that classification
       example:
-        features:
-        - null
-        - null
+        explanations:
+        - features:
+          - null
+          - null
+          explainer: explainer
+        - features:
+          - null
+          - null
+          explainer: explainer
         sensitive: true
         sensitivity: 0
       properties:
@@ -651,13 +675,33 @@ components:
           description: Document sensitivity percentage
           format: int32
           type: integer
-        features:
-          description: List of features explaining a document's classification
+        explanations:
+          description: list of explanations for a predicted classification
           items:
-            $ref: '#/components/schemas/feature'
+            $ref: '#/components/schemas/predictedClassificationExplanation'
           type: array
       required:
       - sensitive
+      type: object
+    predictedClassificationExplanation:
+      description: Explanation for a predicted classification
+      example:
+        features:
+        - null
+        - null
+        explainer: explainer
+      properties:
+        features:
+          description: List of features with weights explaining a document's classification
+          items:
+            $ref: '#/components/schemas/feature'
+          type: array
+        explainer:
+          description: Explainer used to obtain explanation
+          type: string
+      required:
+      - explainer
+      - features
       type: object
     section:
       description: Section of characters within a document

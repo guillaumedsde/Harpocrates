@@ -16,6 +16,8 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 
 export default function ExplanationToggles(props) {
+  const explanationDisabled =
+    props.classification === null || !props.classification.explanations;
   return (
     <List subheader={<ListSubheader>Explanations</ListSubheader>}>
       <ListItem>
@@ -28,22 +30,24 @@ export default function ExplanationToggles(props) {
         />
         <ListItemSecondaryAction>
           <Select
-            value="Lime"
+            value={props.explainer || "None"}
             autoWidth
-            disabled
+            disabled={
+              !(Array.isArray(props.explainers) && props.explainers.length)
+            }
             inputProps={{ "aria-labelledby": "select-explainer" }}
-            // onChange={event => {
-            //   props.setRedactionLabel(event.target.value);
-            // }}
+            onChange={event => {
+              props.setExplainer(event.target.value);
+            }}
           >
-            <MenuItem key="Lime" value="Lime">
-              Lime
+            <MenuItem value="None" disabled>
+              None
             </MenuItem>
-            {/* {props.labels.map(label => (
-              <MenuItem key={label} value={label}>
-                {label}
+            {props.explainers.map(explainer => (
+              <MenuItem key={explainer} value={explainer}>
+                {explainer}
               </MenuItem>
-            ))} */}
+            ))}
           </Select>
         </ListItemSecondaryAction>
       </ListItem>
@@ -55,7 +59,7 @@ export default function ExplanationToggles(props) {
         <ListItemSecondaryAction>
           <Switch
             checked={props.showSensitiveExplanations}
-            disabled={props.classification === null}
+            disabled={explanationDisabled}
             color="secondary"
             inputProps={{ "aria-labelledby": "switch-sensitive-label" }}
             onChange={() => {
@@ -74,7 +78,7 @@ export default function ExplanationToggles(props) {
         <ListItemSecondaryAction>
           <Switch
             checked={props.showNonSensitiveExplanations}
-            disabled={props.classification === null}
+            disabled={explanationDisabled}
             color="primary"
             inputProps={{ "aria-labelledby": "switch-non-sensitive-label" }}
             onChange={() => {
@@ -99,9 +103,7 @@ export default function ExplanationToggles(props) {
               valueLabelDisplay="auto"
               step={1}
               // disabled={true} // enable when implemented in backend
-              disabled={
-                props.classification === null || props.nbrExplanations === null
-              }
+              disabled={explanationDisabled || props.nbrExplanations === null}
               marks
               min={0}
               max={props.maxExplanations || 0}

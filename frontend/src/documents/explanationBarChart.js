@@ -44,9 +44,9 @@ export default function ExplanationChart(props) {
 
   var uniqueExplanations = null;
 
-  if (props.classification !== null) {
+  if (props.explanations) {
     // build list of sorted unique explanations
-    uniqueExplanations = uniqueFeatures(props.classification).slice(
+    uniqueExplanations = uniqueFeatures(props.explanations).slice(
       0,
       props.nbrExplanations
     );

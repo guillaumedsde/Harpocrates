@@ -57,8 +57,8 @@ export default function DocumentBody(props) {
     });
   }
   // display classification explanations if a classification is defined
-  if (props.classification !== null) {
-    uniqueFeatures(props.classification)
+  if (props.explanations) {
+    uniqueFeatures(props.explanations)
       .slice(0, props.nbrExplanations)
       .forEach(explanation => {
         const sensitive = explanation.weight > 0;
