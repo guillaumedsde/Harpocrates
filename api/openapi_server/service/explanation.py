@@ -56,13 +56,6 @@ def shap_tree_explanation(trained_classifier, data, features=20):
     for i in sorted_sliced_indices:
         weights.append((feature_names[i], shap_values[0][i]))
 
-    # shap.summary_plot(
-    #     shap_values,
-    #     transformed_data,
-    #     # plot_type="bar",
-    #     feature_names=trained_classifier.named_steps.vect.get_feature_names(),
-    # )
-
     return weights
 
 
