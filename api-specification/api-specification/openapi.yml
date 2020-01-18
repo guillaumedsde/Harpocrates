@@ -1,7 +1,7 @@
 openapi: "3.0.2"
 info:
   description: This is the Rest API specification for the Harpocrates application
-  version: "6.0.0"
+  version: "7.0.0"
   title: Harpocrates API
   license:
     name: MIT
@@ -401,11 +401,26 @@ components:
           type: integer
           format: int32
           description: Document sensitivity percentage
+        explanations:
+          type: array
+          items:
+            $ref: "#/components/schemas/predictedClassificationExplanation"
+          description: list of explanations for a predicted classification
+    predictedClassificationExplanation:
+      type: object
+      description: Explanation for a predicted classification
+      required:
+        - features
+        - explainer
+      properties:
         features:
           type: array
           items:
             $ref: "#/components/schemas/feature"
-          description: List of features explaining a document's classification
+          description: List of features with weights explaining a document's classification
+        explainer:
+          type: string
+          description: Explainer used to obtain explanation
     section:
       description: Section of characters within a document
       type: object

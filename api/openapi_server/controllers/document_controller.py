@@ -9,6 +9,10 @@ from bson.objectid import ObjectId
 
 from openapi_server.models.document import Document  # noqa: E501
 from openapi_server.models.http_status import HttpStatus  # noqa: E501
+from openapi_server.models.predicted_classification_explanation import (
+    PredictedClassificationExplanation,
+)
+
 from openapi_server.models.predicted_classification import PredictedClassification
 
 from openapi_server.models.feature import Feature
@@ -186,55 +190,65 @@ def calculate_classification_with_explanation(set_id, doc_id):
     trained_model = get_model()
 
     # calculate explanations
-    lime_explanation = lime_explanation(trained_model, document.content)
+    lime = lime_explanation(trained_model, document.content)
 
     # shap explanation
-    shap_explanation = shap_explanation(trained_model, document.content)
+    shap = shap_tree_explanation(trained_model, document.content)
 
     # document is sensitive if probability of "non sensitive" classification is lower than "sensitive" classification
-    sensitive = lime_explanation.predict_proba[0] < lime_explanation.predict_proba[1]
+    sensitive = lime.predict_proba[0] < lime.predict_proba[1]
     # sensitivity of document is the probability of "sensitive" classification
-    sensitivity = round(lime_explanation.predict_proba[1] * 100)
+    sensitivity = round(lime.predict_proba[1] * 100)
 
-    # sort into sensitive/non sensitive feature based on classification
-    features = []
+    feature_weights = {"lime": lime.as_list(), "shap": shap}
 
-    # iterate over all features
-    for feature_info in lime_explanation.as_list():
+    explanations = []
 
-        # regex pattern for finding feature in document
-        pattern = "\\b({feature})+\\b".format(feature=feature_info[0])
+    # iterate over all explanations
+    for explainer, explanation in feature_weights.items():
+        # sort into sensitive/non sensitive feature based on classification
+        features = []
 
-        # calculate custom weight, positive if sensitive, negative otherwise
+        # iterate over all features
+        for feature_info in explanation:
 
-        # if sensitive feature
-        if (sensitive and (feature_info[1] > 0)) or (
-            not sensitive and (feature_info[1] < 0)
-        ):
-            weight = abs(feature_info[1])
-        # if non sensitive feature
-        else:
-            weight = -abs(feature_info[1])
+            # regex pattern for finding feature in document
+            pattern = "\\b({feature})+\\b".format(feature=feature_info[0])
 
-        # match all features in content
-        matches = re.finditer(pattern, document.content, flags=re.MULTILINE)
+            # calculate custom weight, positive if sensitive, negative otherwise
 
-        # iterate over all matches and sort accordingly
-        for match in matches:
-            feature = Feature(
-                start_offset=match.span()[0],
-                end_offset=match.span()[1],
-                weight=weight,
-                text=match[0],
-            )
-            features.append(feature)
+            # if sensitive feature
+            if (sensitive and (feature_info[1] > 0)) or (
+                not sensitive and (feature_info[1] < 0)
+            ):
+                weight = abs(feature_info[1])
+            # if non sensitive feature
+            else:
+                weight = -abs(feature_info[1])
+
+            # match all features in content
+            matches = re.finditer(pattern, document.content, flags=re.MULTILINE)
+
+            # iterate over all matches and sort accordingly
+            for match in matches:
+                feature = Feature(
+                    start_offset=match.span()[0],
+                    end_offset=match.span()[1],
+                    weight=weight,
+                    text=match[0],
+                )
+                features.append(feature)
+
+        explanations.append(
+            PredictedClassificationExplanation(features=features, explainer=explainer)
+        )
 
     # build and return final classification with explanation object
     classification_with_explanation = PredictedClassification(
         # for some reason python boolean can't be casted to JSON
         sensitive=int(sensitive),
         sensitivity=sensitivity,
-        features=features,
+        explanations=explanations,
     )
 
     return classification_with_explanation
@@ -265,11 +279,19 @@ def get_predicted_classification(set_id, doc_id):  # noqa: E501
     # build and return final classification with explanation object
     classification = PredictedClassification.from_dict(predicted_classification)
 
-    features = []
-    for feature in predicted_classification["features"]:
-        features.append(Feature(**feature))
+    explanations = []
 
-    classification.features = features
+    for explanation in predicted_classification["explanations"]:
+        features = []
+        for feature in explanation["features"]:
+            features.append(Feature(**feature))
+        explanations.append(
+            PredictedClassificationExplanation(
+                features=features, explainer=explanation["explainer"]
+            )
+        )
+
+    classification.explanations = explanations
 
     return classification
 

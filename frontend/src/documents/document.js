@@ -25,6 +25,9 @@ export default function Document(props) {
   const [classification, setClassification] = useState(null);
   const [sensitiveSections, setSensitiveSections] = useState(null);
 
+  const [explainer, setExplainer] = useState(null);
+  const [explainers, setExplainers] = useState([]);
+
   const [nbrExplanations, setNbrExplanations] = useState(null);
   const [maxExplanations, setMaxExplanations] = useState(null);
 
@@ -54,7 +57,23 @@ export default function Document(props) {
     api
       .getPredictedClassification(props.documentSetName, props.documentId)
       .then(apiClassification => {
-        const apiMaxClassification = uniqueFeatures(apiClassification).length;
+        // create list of explainers from API response
+        const apiExplainers = apiClassification.explanations.map(
+          explanation => explanation.explainer
+        );
+
+        // update list of explainers
+        setExplainers(apiExplainers);
+
+        // set current explainer to first explainer
+        setExplainer(apiExplainers[0]);
+
+        // calculate maximum number of explanation features from
+        // number of unique features in first explanation
+        const apiMaxClassification = uniqueFeatures(
+          apiClassification.explanations[0]
+        ).length;
+
         setMaxExplanations(apiMaxClassification);
         setNbrExplanations(apiMaxClassification);
         setClassification(apiClassification);
@@ -97,6 +116,9 @@ export default function Document(props) {
                   nbrExplanations={nbrExplanations}
                   setNbrExplanations={setNbrExplanations}
                   maxExplanations={maxExplanations}
+                  explainer={explainer}
+                  setExplainer={setExplainer}
+                  explainers={explainers}
                 />
                 <Divider />
                 <RedactionLabelSelect
@@ -115,7 +137,11 @@ export default function Document(props) {
               setName={props.documentSetName}
               sensitiveSections={sensitiveSections}
               setSensitiveSections={setSensitiveSections}
-              classification={classification}
+              explanations={
+                classification
+                  ? classification.explanations[explainers.indexOf(explainer)]
+                  : []
+              }
               showNonSensitive={showNonSensitiveExplanations}
               showSensitive={showSensitiveExplanations}
               tag={redactionLabel}
@@ -126,7 +152,11 @@ export default function Document(props) {
           <Grid item sm>
             <ExplanationChart
               nbrExplanations={nbrExplanations}
-              classification={classification}
+              explanations={
+                classification
+                  ? classification.explanations[explainers.indexOf(explainer)]
+                  : []
+              }
               activeFeature={activeFeature}
               setActiveFeature={setActiveFeature}
             />

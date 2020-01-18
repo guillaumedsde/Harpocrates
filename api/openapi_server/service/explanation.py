@@ -54,7 +54,7 @@ def shap_tree_explanation(trained_classifier, data, features=20):
     feature_names = trained_classifier.named_steps.vect.get_feature_names()
     weights = []
     for i in sorted_sliced_indices:
-        weights.append((feature_names[i], shap_values[0][i]))
+        weights.append((feature_names[i], float(shap_values[0][i])))
 
     return weights
 
