@@ -23,6 +23,17 @@ export default function ExportButtons() {
           </Button>
         </ListItemSecondaryAction>
       </ListItem>
+      <ListItem>
+        <ListItemIcon>
+          <GetAppIcon />
+        </ListItemIcon>
+        <ListItemText id="select-label" primary="Original file" />
+        <ListItemSecondaryAction>
+          <Button variant="contained" color="primary" disabled={true}>
+            Download
+          </Button>
+        </ListItemSecondaryAction>
+      </ListItem>
     </List>
   );
 }
