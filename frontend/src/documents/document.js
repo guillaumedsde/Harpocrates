@@ -13,6 +13,7 @@ import CustomizedSnackbar from "./status";
 import ExplanationToggles from "./explanationToggles";
 import RedactionLabelSelect from "./redactionLabelSelect";
 import PredictedClassification from "./documentPredictedClassification";
+import ExportButtons from "./exportButtons";
 
 const labels = ["20", "21", "22", "23", "24"];
 
@@ -103,6 +104,8 @@ export default function Document(props) {
                   setRedactionLabel={setRedactionLabel}
                   labels={labels}
                 />
+                <Divider />
+                <ExportButtons />
               </Grid>
             </Grid>
           </Grid>
