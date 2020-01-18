@@ -2,7 +2,7 @@ from multiprocessing import cpu_count
 from pathlib import Path
 
 
-PROCESSES = int(cpu_count() / 2)
+PROCESSES = cpu_count()
 CLASS_NAMES = ["not sensitive", "sensitive"]
 SEED = 1968
 MODELS_DIRECTORY = Path.cwd().joinpath("instance", "models")

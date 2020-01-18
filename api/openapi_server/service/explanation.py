@@ -1,10 +1,12 @@
 # import eli5
 
-# import shap
+import shap
 
 import sklearn
 
 from lime.lime_text import LimeTextExplainer
+
+import numpy as np
 
 # from skater.core.explanations import Interpretation
 # from skater.model import InMemoryModel
@@ -36,15 +38,32 @@ from openapi_server.service import CLASS_NAMES, SEED
 #     return shap_values
 
 
-# def shap_tree_explanation(trained_classifier, test_data):
-#     explainer = shap.TreeExplainer(trained_classifier.steps[-1][1])
+def shap_tree_explanation(trained_classifier, data, features=20):
+    explainer = shap.TreeExplainer(trained_classifier.named_steps.clf)
 
-#     # transform data
-#     transformed_test_data = trained_classifier.steps[0][1].transform(test_data)
+    # transform data
+    transformed_data = trained_classifier.named_steps.vect.transform([data])
 
-#     shap_values = explainer.shap_values(transformed_test_data)
+    # calculate shap values for all features
+    shap_values = explainer.shap_values(transformed_data)
 
-#     return shap_values
+    # get indices for first n biggest absolute weights
+    sorted_sliced_indices = np.flip(np.argsort(np.absolute(shap_values[0])))[:features]
+
+    # create feature:weight mapping as array
+    feature_names = trained_classifier.named_steps.vect.get_feature_names()
+    weights = []
+    for i in sorted_sliced_indices:
+        weights.append((feature_names[i], shap_values[0][i]))
+
+    # shap.summary_plot(
+    #     shap_values,
+    #     transformed_data,
+    #     # plot_type="bar",
+    #     feature_names=trained_classifier.named_steps.vect.get_feature_names(),
+    # )
+
+    return weights
 
 
 # def skater_global_interpretation(classifier, model_train_data, interpreter_train_data, interpreter_train_labels):

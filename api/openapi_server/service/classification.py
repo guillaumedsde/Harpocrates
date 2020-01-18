@@ -17,6 +17,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.pipeline import Pipeline
 from sklearn.svm import SVC, LinearSVC
 from sklearn.tree import DecisionTreeClassifier
+from xgboost import XGBClassifier
 
 from openapi_server.service import (
     PROCESSES,
@@ -35,11 +36,11 @@ from openapi_server.service.data_parsing import (
 # instantiate classifier objects
 CLASSIFIERS = (
     # MultinomialNB(),
-    # RandomForestClassifier(),
+    # DecisionTreeClassifier(),
     # KNeighborsClassifier(3),
     # DecisionTreeClassifier(),
-    SVC(probability=True, kernel="linear",
-    cache_size=1000),
+    # SVC(probability=True, kernel="linear", cache_size=1000),
+    XGBClassifier(n_jobs=PROCESSES),
 )
 
 

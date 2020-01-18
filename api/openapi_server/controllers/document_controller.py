@@ -19,7 +19,7 @@ from openapi_server import util, db
 
 from openapi_server.service import CLASS_NAMES
 from openapi_server.service.classification import get_model
-from openapi_server.service.explanation import lime_explanation
+from openapi_server.service.explanation import lime_explanation, shap_tree_explanation
 
 
 def add_sensitive_section(set_id, doc_id, body):  # noqa: E501
@@ -178,23 +178,29 @@ def calculate_classification_with_explanation(set_id, doc_id):
     :param doc_id: ID of a document
     :type doc_id: str
 
-    :rtype: PredictedClassificationWithExplanation
+    :rtype: PredictedClassification
     """
     document = get_document(set_id, doc_id)
 
     # TODO this is a long blocking call when first training the classifier, needs to return 202 "created" with some URL to the processed element
     trained_model = get_model()
-    explanation = lime_explanation(trained_model, document.content)
+
+    # calculate explanations
+    lime_explanation = lime_explanation(trained_model, document.content)
+
+    # shap explanation
+    shap_explanation = shap_explanation(trained_model, document.content)
+
     # document is sensitive if probability of "non sensitive" classification is lower than "sensitive" classification
-    sensitive = explanation.predict_proba[0] < explanation.predict_proba[1]
+    sensitive = lime_explanation.predict_proba[0] < lime_explanation.predict_proba[1]
     # sensitivity of document is the probability of "sensitive" classification
-    sensitivity = round(explanation.predict_proba[1] * 100)
+    sensitivity = round(lime_explanation.predict_proba[1] * 100)
 
     # sort into sensitive/non sensitive feature based on classification
     features = []
 
     # iterate over all features
-    for feature_info in explanation.as_list():
+    for feature_info in lime_explanation.as_list():
 
         # regex pattern for finding feature in document
         pattern = "\\b({feature})+\\b".format(feature=feature_info[0])
