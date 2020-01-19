@@ -3,7 +3,8 @@
   "description": "This is the Rest API specification for the harpocrates application",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "validate": "npx lint-openapi ./api-specification/openapi.yml --errors_only"
   },
   "repository": {
     "type": "git",
@@ -17,7 +18,7 @@
   },
   "homepage": "https://gitlab.com/visualising-sensitivity-classification-features/api-specification#readme",
   "devDependencies": {
-    "ibm-openapi-validator": "^0.15.1",
+    "ibm-openapi-validator": "^0.16.1",
     "swagger-ui-dist": "^3.23.11"
   },
   "dependencies": {}
