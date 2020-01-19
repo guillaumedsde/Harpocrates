@@ -43,6 +43,7 @@ export default function PredictedClassification(props) {
         <ListItemText
           primary={<Sensitivity classification={props.classification} />}
           secondary={<SensitivityBar classification={props.classification} />}
+          secondaryTypographyProps={{ component: "div" }}
         />
       </ListItem>
       <ListItem>
