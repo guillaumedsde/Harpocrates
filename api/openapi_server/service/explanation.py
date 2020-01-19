@@ -13,6 +13,7 @@ import numpy as np
 
 from openapi_server.service import CLASS_NAMES, SEED
 
+MAX_FEATURES = 20
 
 # def shap_kernel_explanation(classifier, train_data, test_data):
 
@@ -38,7 +39,7 @@ from openapi_server.service import CLASS_NAMES, SEED
 #     return shap_values
 
 
-def shap_tree_explanation(trained_classifier, data, features=20):
+def shap_tree_explanation(trained_classifier, data, features=MAX_FEATURES):
     explainer = shap.TreeExplainer(trained_classifier.named_steps.clf)
 
     # transform data
@@ -95,7 +96,7 @@ def shap_tree_explanation(trained_classifier, data, features=20):
 #     return eli5.show_weights(perm)
 
 
-def lime_explanation(classifier, data, features=20):
+def lime_explanation(classifier, data, features=MAX_FEATURES):
     explainer = LimeTextExplainer(class_names=CLASS_NAMES)
     explanation = explainer.explain_instance(
         text_instance=data,
