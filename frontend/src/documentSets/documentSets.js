@@ -76,7 +76,7 @@ export default function DocumentSets() {
             </ListItemAvatar>
             <ListItemText
               primary={set.name}
-              secondary={`${set.documentCount} documents (${set.size})`}
+              secondary={`${set.documentCount} documents`}
             />
             <ListItemSecondaryAction>
               <IconButton
