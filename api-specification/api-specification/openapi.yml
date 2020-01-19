@@ -1,7 +1,7 @@
 openapi: "3.0.2"
 info:
   description: This is the Rest API specification for the Harpocrates application
-  version: "7.1.0"
+  version: "7.1.1"
   title: Harpocrates API
   license:
     name: MIT
@@ -353,6 +353,7 @@ components:
       properties:
         documentSets:
           type: array
+          uniqueItems: true
           description: array of document sets
           items:
             $ref: "#/components/schemas/documentSet"
@@ -385,6 +386,7 @@ components:
       properties:
         documents:
           type: array
+          uniqueItems: true
           description: array of documents
           items:
             $ref: "#/components/schemas/document"
@@ -397,15 +399,21 @@ components:
         sensitive:
           type: boolean
           description: "true if the document is predicted to be sensitive, false otherwise"
+          example: true
         sensitivity:
-          type: integer
-          format: int32
-          description: Document sensitivity percentage
+          type: number
+          format: double
+          description: Document sensitivity
+          minimum: 0.0
+          maximum: 100.0
+          example: 78.3
         classifier:
           type: string
           description: Classifier algorithm used for this classification
+          example: SVM
         explanations:
           type: array
+          uniqueItems: true
           items:
             $ref: "#/components/schemas/predictedClassificationExplanation"
           description: list of explanations for a predicted classification
@@ -418,12 +426,14 @@ components:
       properties:
         features:
           type: array
+          uniqueItems: true
           items:
             $ref: "#/components/schemas/feature"
           description: List of features with weights explaining a document's classification
         explainer:
           type: string
           description: Explainer used to obtain explanation
+          example: Lime
     section:
       description: Section of characters within a document
       type: object
@@ -463,6 +473,7 @@ components:
       properties:
         sensitiveSections:
           type: array
+          uniqueItems: true
           description: array of sensitive sections
           items:
             $ref: "#/components/schemas/sensitiveSection"
