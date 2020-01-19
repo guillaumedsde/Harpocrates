@@ -63,8 +63,6 @@ export default function DocumentSet(props) {
     />
   );
 
-  console.log(documents);
-
   var documentList;
   if (documents.length === 0) {
     documentList = <h1>No Documents</h1>;
@@ -100,6 +98,7 @@ export default function DocumentSet(props) {
                   />
                 </>
               }
+              secondaryTypographyProps={{ component: "div" }}
             />
             <ListItemSecondaryAction>
               <IconButton
