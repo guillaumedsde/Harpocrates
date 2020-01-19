@@ -29,7 +29,7 @@ validate-api-specification:
     - cd api-specification
     - npm install --dev-only
   script:
-    - npx lint-openapi "$DOCS_FOLDER/$SPEC_TO_DISPLAY" --errors_only
+    - npm run validate
   tags:
     - trdocker
 
