@@ -23,7 +23,7 @@ class PredictedClassification(Model):
         :param sensitive: The sensitive of this PredictedClassification.  # noqa: E501
         :type sensitive: bool
         :param sensitivity: The sensitivity of this PredictedClassification.  # noqa: E501
-        :type sensitivity: int
+        :type sensitivity: float
         :param classifier: The classifier of this PredictedClassification.  # noqa: E501
         :type classifier: str
         :param explanations: The explanations of this PredictedClassification.  # noqa: E501
@@ -31,7 +31,7 @@ class PredictedClassification(Model):
         """
         self.openapi_types = {
             'sensitive': bool,
-            'sensitivity': int,
+            'sensitivity': float,
             'classifier': str,
             'explanations': List[PredictedClassificationExplanation]
         }
@@ -88,10 +88,10 @@ class PredictedClassification(Model):
     def sensitivity(self):
         """Gets the sensitivity of this PredictedClassification.
 
-        Document sensitivity percentage  # noqa: E501
+        Document sensitivity  # noqa: E501
 
         :return: The sensitivity of this PredictedClassification.
-        :rtype: int
+        :rtype: float
         """
         return self._sensitivity
 
@@ -99,11 +99,15 @@ class PredictedClassification(Model):
     def sensitivity(self, sensitivity):
         """Sets the sensitivity of this PredictedClassification.
 
-        Document sensitivity percentage  # noqa: E501
+        Document sensitivity  # noqa: E501
 
         :param sensitivity: The sensitivity of this PredictedClassification.
-        :type sensitivity: int
+        :type sensitivity: float
         """
+        if sensitivity is not None and sensitivity > 100.0:  # noqa: E501
+            raise ValueError("Invalid value for `sensitivity`, must be a value less than or equal to `100.0`")  # noqa: E501
+        if sensitivity is not None and sensitivity < 0.0:  # noqa: E501
+            raise ValueError("Invalid value for `sensitivity`, must be a value greater than or equal to `0.0`")  # noqa: E501
 
         self._sensitivity = sensitivity
 
