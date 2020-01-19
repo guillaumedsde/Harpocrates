@@ -46,17 +46,16 @@ def shap_tree_explanation(trained_classifier, data, features=MAX_FEATURES):
     transformed_data = trained_classifier.named_steps.vect.transform([data])
 
     # calculate shap values for all features
-    shap_values = explainer.shap_values(transformed_data)
+    shap_values = explainer.shap_values(transformed_data)[0]
 
     # get indices for first n biggest absolute weights
-    sorted_sliced_indices = np.flip(np.argsort(np.absolute(shap_values[0])))[:features]
+    sorted_sliced_indices = np.argsort(-np.abs(shap_values))[:features]
 
     # create feature:weight mapping as array
     feature_names = trained_classifier.named_steps.vect.get_feature_names()
     weights = []
     for i in sorted_sliced_indices:
-        weights.append((feature_names[i], float(shap_values[0][i])))
-
+        weights.append((feature_names[i], float(shap_values[i])))
     return weights
 
 
