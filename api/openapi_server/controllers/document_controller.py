@@ -190,7 +190,7 @@ def calculate_classification_with_explanation(set_id, doc_id):
     document = get_document(set_id, doc_id)
 
     # TODO this is a long blocking call when first training the classifier, needs to return 202 "created" with some URL to the processed element
-    trained_model = get_model()
+    trained_model, classifier_type = get_model()
 
     # calculate explanations
     lime = lime_explanation(trained_model, document.content)
@@ -252,14 +252,15 @@ def calculate_classification_with_explanation(set_id, doc_id):
         )
 
     # build and return final classification with explanation object
-    classification_with_explanation = PredictedClassification(
+    classification = PredictedClassification(
         # for some reason python boolean can't be casted to JSON
         sensitive=int(sensitive),
         sensitivity=sensitivity,
         explanations=explanations,
+        classifier=classifier_type,
     )
 
-    return classification_with_explanation
+    return classification
 
 
 def get_predicted_classification(set_id, doc_id):  # noqa: E501

@@ -17,30 +17,35 @@ class PredictedClassification(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, sensitive=None, sensitivity=None, explanations=None):  # noqa: E501
+    def __init__(self, sensitive=None, sensitivity=None, classifier=None, explanations=None):  # noqa: E501
         """PredictedClassification - a model defined in OpenAPI
 
         :param sensitive: The sensitive of this PredictedClassification.  # noqa: E501
         :type sensitive: bool
         :param sensitivity: The sensitivity of this PredictedClassification.  # noqa: E501
         :type sensitivity: int
+        :param classifier: The classifier of this PredictedClassification.  # noqa: E501
+        :type classifier: str
         :param explanations: The explanations of this PredictedClassification.  # noqa: E501
         :type explanations: List[PredictedClassificationExplanation]
         """
         self.openapi_types = {
             'sensitive': bool,
             'sensitivity': int,
+            'classifier': str,
             'explanations': List[PredictedClassificationExplanation]
         }
 
         self.attribute_map = {
             'sensitive': 'sensitive',
             'sensitivity': 'sensitivity',
+            'classifier': 'classifier',
             'explanations': 'explanations'
         }
 
         self._sensitive = sensitive
         self._sensitivity = sensitivity
+        self._classifier = classifier
         self._explanations = explanations
 
     @classmethod
@@ -101,6 +106,29 @@ class PredictedClassification(Model):
         """
 
         self._sensitivity = sensitivity
+
+    @property
+    def classifier(self):
+        """Gets the classifier of this PredictedClassification.
+
+        Classifier algorithm used for this classification  # noqa: E501
+
+        :return: The classifier of this PredictedClassification.
+        :rtype: str
+        """
+        return self._classifier
+
+    @classifier.setter
+    def classifier(self, classifier):
+        """Sets the classifier of this PredictedClassification.
+
+        Classifier algorithm used for this classification  # noqa: E501
+
+        :param classifier: The classifier of this PredictedClassification.
+        :type classifier: str
+        """
+
+        self._classifier = classifier
 
     @property
     def explanations(self):

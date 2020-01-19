@@ -4,10 +4,10 @@ info:
   license:
     name: MIT
   title: Harpocrates API
-  version: 7.0.0
+  version: 7.1.0
 externalDocs:
-  description: API documentation
-  url: https://harpocrates-app.gitlab.io/harpocrates/api/index.html
+  description: Documentation
+  url: https://harpocrates-app.gitlab.io/harpocrates
 servers:
 - description: Local test server
   url: http://api.harpocrates.app.local
@@ -564,6 +564,7 @@ components:
       description: A document to review
       example:
         predictedClassification:
+          classifier: classifier
           explanations:
           - features:
             - null
@@ -606,6 +607,7 @@ components:
       example:
         documents:
         - predictedClassification:
+            classifier: classifier
             explanations:
             - features:
               - null
@@ -625,6 +627,7 @@ components:
           documentId: ""
           content: content
         - predictedClassification:
+            classifier: classifier
             explanations:
             - features:
               - null
@@ -656,6 +659,7 @@ components:
       description: The predicted Sensitivity (Sensitive or Not) of a document along
         with feature explanation for that classification
       example:
+        classifier: classifier
         explanations:
         - features:
           - null
@@ -675,6 +679,9 @@ components:
           description: Document sensitivity percentage
           format: int32
           type: integer
+        classifier:
+          description: Classifier algorithm used for this classification
+          type: string
         explanations:
           description: list of explanations for a predicted classification
           items:
