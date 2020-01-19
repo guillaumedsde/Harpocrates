@@ -124,4 +124,4 @@ def get_model(classifier=None, retrain=False):
         print("loading found model for %s from %s" % (classifier_type, model_path))
         trained_classifier = load(model_path)
         MODEL = trained_classifier
-    return trained_classifier
+    return trained_classifier, classifier_type

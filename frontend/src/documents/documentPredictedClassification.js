@@ -53,7 +53,9 @@ export default function PredictedClassification(props) {
         <ListItemText id="select-classifier" primary="Classifier" />
         <ListItemSecondaryAction>
           <Select
-            value="SVM"
+            value={
+              props.classification ? props.classification.classifier : "None"
+            }
             autoWidth
             disabled
             inputProps={{ "aria-labelledby": "select-classifier" }}
@@ -61,9 +63,17 @@ export default function PredictedClassification(props) {
             //   props.setRedactionLabel(event.target.value);
             // }}
           >
-            <MenuItem key="SVM" value="SVM">
-              SVM
+            <MenuItem value="None" disabled>
+              None
             </MenuItem>
+            {props.classification ? (
+              <MenuItem
+                key={props.classification.classifier}
+                value={props.classification.classifier}
+              >
+                {props.classification.classifier}
+              </MenuItem>
+            ) : null}
             {/* {props.labels.map(label => (
               <MenuItem key={label} value={label}>
                 {label}
