@@ -99,6 +99,9 @@ def get_sensitive_sections(set_id, doc_id):
         {"_id": ObjectId(doc_id)}, {"sensitive_sections": 1}
     )
 
+    if not sensitive_sections_query:
+        return HTTPStatus.NOT_FOUND
+
     sensitive_section_list = []
     for section in sensitive_sections_query.get("sensitive_sections") or []:
         sensitive_section_list.append(SensitiveSection(**section))
@@ -227,7 +230,12 @@ def calculate_classification_with_explanation(set_id, doc_id):
                 weight = -abs(feature_info[1])
 
             # match all features in content
-            matches = re.finditer(pattern, document.content, flags=re.MULTILINE)
+            matches = re.finditer(
+                pattern,
+                document.content,
+                # match in entire document and regardless of case
+                flags=re.MULTILINE | re.IGNORECASE,
+            )
 
             # iterate over all matches and sort accordingly
             for match in matches:
@@ -271,6 +279,9 @@ def get_predicted_classification(set_id, doc_id):  # noqa: E501
     predicted_classification_query = db[set_id].find_one(
         {"_id": ObjectId(doc_id)}, {"predicted_classification": 1}
     )
+
+    if not predicted_classification_query:
+        return HTTPStatus.NOT_FOUND
 
     predicted_classification = predicted_classification_query[
         "predicted_classification"

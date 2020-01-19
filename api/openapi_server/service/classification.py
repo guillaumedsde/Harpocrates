@@ -40,7 +40,7 @@ CLASSIFIERS = (
     # KNeighborsClassifier(3),
     # DecisionTreeClassifier(),
     # SVC(probability=True, kernel="linear", cache_size=1000),
-    XGBClassifier(n_jobs=PROCESSES),
+    XGBClassifier(n_jobs=PROCESSES, objective="binary:logistic"),
 )
 
 
