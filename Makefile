@@ -46,11 +46,6 @@ docker-logout: ## Logout to the default registry
 build: ## Build a docker image
 	@docker build -t $(CI_REGISTRY_IMAGE)/$(SERVICE):$(VERSION) -f $(SERVICE)/Dockerfile ./$(SERVICE)
 
-.PHONY: build-distroless
-build-distroless: ## Build a docker image
-	@docker build -t $(CI_REGISTRY_IMAGE)/$(SERVICE):distroless -f $(SERVICE)/distroless.Dockerfile ./$(SERVICE)
-
-
 .PHONY: start
 start: ## Build a docker image
 	@docker-compose up -d
@@ -70,10 +65,6 @@ ifeq ($(CI_COMMIT_REF_NAME),master)
 endif
 	@docker push $(CI_REGISTRY_IMAGE)/$(SERVICE):$(CI_COMMIT_REF_NAME)
 
-.PHONY: deploy-distroless
-deploy-distroless:
-	@docker push $(CI_REGISTRY_IMAGE)/$(SERVICE):distroless
-
 .PHONY: clean
 clean: ## Remove all images related to the project
 	@docker images | grep $(CI_REGISTRY_IMAGE) | tr -s ' ' | cut -d ' ' -f 2 | xargs -I {} docker rmi $(CI_REGISTRY_IMAGE):{}
@@ -86,6 +77,7 @@ api-client: ## generate JS API client code from specification
 .PHONY: api-client-doc
 api-client-doc: ## generate JS API client code from specification
 	$(MAKE) -C js-api-client docs
+
 .PHONY: api-server
 api-server: ## generate Python API server code from specification
 	@openapi-generator generate -g python-flask -o ./api -i ./api-specification/api-specification/openapi.yml
