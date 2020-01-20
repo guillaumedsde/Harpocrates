@@ -27,6 +27,7 @@ pymongo = "*"
 connexion = "*"
 shap = "*"
 xgboost = "*"
+waitress = "*"
 
 [pipenv]
 allow_prereleases = true
