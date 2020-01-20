@@ -25,7 +25,6 @@ scikit-learn = "*"
 lxml = "*"
 pymongo = "*"
 connexion = "*"
-uwsgi = "*"
 shap = "*"
 xgboost = "*"
 

@@ -96,8 +96,10 @@ api_doc:
     - make docker-login
   script:
     - make build
+    - make build-distroless
     - make tag
     - make deploy
+    - make deploy-distroless
   tags:
     - trdocker
 

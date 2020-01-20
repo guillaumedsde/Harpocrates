@@ -46,6 +46,10 @@ docker-logout: ## Logout to the default registry
 build: ## Build a docker image
 	@docker build -t $(CI_REGISTRY_IMAGE)/$(SERVICE):$(VERSION) -f $(SERVICE)/Dockerfile ./$(SERVICE)
 
+.PHONY: build-distroless
+build-distroless: ## Build a docker image
+	@docker build -t $(CI_REGISTRY_IMAGE)/$(SERVICE):distroless -f $(SERVICE)/distroless.Dockerfile ./$(SERVICE)
+
 
 .PHONY: start
 start: ## Build a docker image
@@ -53,7 +57,7 @@ start: ## Build a docker image
 
 .PHONY: tag
 tag: ## Tag a docker image and set some aliases
-ifeq ($(CI_COMMIT_REF_NAME),develop)
+ifeq ($(CI_COMMIT_REF_NAME),master)
 	@docker tag $(CI_REGISTRY_IMAGE)/$(SERVICE):$(VERSION) $(CI_REGISTRY_IMAGE)/$(SERVICE):latest
 endif
 	@docker tag $(CI_REGISTRY_IMAGE)/$(SERVICE):$(VERSION) $(CI_REGISTRY_IMAGE)/$(SERVICE):$(CI_COMMIT_REF_NAME)
@@ -61,10 +65,14 @@ endif
 .PHONY: deploy
 deploy: ## Push image to the docker registry
 	@docker push $(CI_REGISTRY_IMAGE)/$(SERVICE):$(VERSION)
-ifeq ($(CI_COMMIT_REF_NAME),develop)
+ifeq ($(CI_COMMIT_REF_NAME),master)
 	@docker push $(CI_REGISTRY_IMAGE)/$(SERVICE):latest
 endif
 	@docker push $(CI_REGISTRY_IMAGE)/$(SERVICE):$(CI_COMMIT_REF_NAME)
+
+.PHONY: deploy-distroless
+deploy-distroless:
+	@docker push $(CI_REGISTRY_IMAGE)/$(SERVICE):distroless
 
 .PHONY: clean
 clean: ## Remove all images related to the project
