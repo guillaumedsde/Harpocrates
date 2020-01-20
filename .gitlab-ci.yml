@@ -96,10 +96,8 @@ api_doc:
     - make docker-login
   script:
     - make build
-    - make build-distroless
     - make tag
     - make deploy
-    - make deploy-distroless
   tags:
     - trdocker
 
@@ -108,6 +106,12 @@ api:
   # name of service to build is the name of the job
   variables:
     SERVICE: $CI_JOB_NAME
+  script:
+    - make build
+    - make build-distroless
+    - make tag
+    - make deploy
+    - make deploy-distroless
   # only build on changes to api
   only:
     changes:
