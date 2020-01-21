@@ -70,7 +70,7 @@ class SensitiveSection(Model):
     def start_offset(self):
         """Gets the start_offset of this SensitiveSection.
 
-        start offset of a section in characters from the beginning of the document  # noqa: E501
+        start offset of a section in characters from the beginning of the text  # noqa: E501
 
         :return: The start_offset of this SensitiveSection.
         :rtype: int
@@ -81,7 +81,7 @@ class SensitiveSection(Model):
     def start_offset(self, start_offset):
         """Sets the start_offset of this SensitiveSection.
 
-        start offset of a section in characters from the beginning of the document  # noqa: E501
+        start offset of a section in characters from the beginning of the text  # noqa: E501
 
         :param start_offset: The start_offset of this SensitiveSection.
         :type start_offset: int
@@ -95,7 +95,7 @@ class SensitiveSection(Model):
     def end_offset(self):
         """Gets the end_offset of this SensitiveSection.
 
-        end offset of a section in characters from the beginning of the document  # noqa: E501
+        end offset of a section in characters from the beginning of the text  # noqa: E501
 
         :return: The end_offset of this SensitiveSection.
         :rtype: int
@@ -106,7 +106,7 @@ class SensitiveSection(Model):
     def end_offset(self, end_offset):
         """Sets the end_offset of this SensitiveSection.
 
-        end offset of a section in characters from the beginning of the document  # noqa: E501
+        end offset of a section in characters from the beginning of the text  # noqa: E501
 
         :param end_offset: The end_offset of this SensitiveSection.
         :type end_offset: int
