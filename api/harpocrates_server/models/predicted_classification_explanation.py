@@ -53,7 +53,7 @@ class PredictedClassificationExplanation(Model):
     def features(self):
         """Gets the features of this PredictedClassificationExplanation.
 
-        List of features with weights explaining a document's classification  # noqa: E501
+        List of features with weights explaining a text's classification  # noqa: E501
 
         :return: The features of this PredictedClassificationExplanation.
         :rtype: List[Feature]
@@ -64,7 +64,7 @@ class PredictedClassificationExplanation(Model):
     def features(self, features):
         """Sets the features of this PredictedClassificationExplanation.
 
-        List of features with weights explaining a document's classification  # noqa: E501
+        List of features with weights explaining a text's classification  # noqa: E501
 
         :param features: The features of this PredictedClassificationExplanation.
         :type features: List[Feature]

@@ -6,8 +6,6 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **name** | **String** |  | [optional] 
 **documentId** | **String** |  | 
-**predictedClassification** | [**PredictedClassification**](PredictedClassification.md) |  | [optional] 
-**sensitiveSections** | [**SensitiveSections**](SensitiveSections.md) |  | [optional] 
-**content** | **String** | content of the document | [optional] 
+**paragraphs** | [**[Paragraph]**](Paragraph.md) | list of paragraph object representing the content of the document | 
 
 
