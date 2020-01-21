@@ -28,7 +28,7 @@
   var instance;
 
   beforeEach(function() {
-    instance = new @HarpocratesApiClient.SensitiveSections();
+    instance = new @HarpocratesApiClient.Paragraph();
   });
 
   var getProperty = function(object, getter, property) {
@@ -47,16 +47,28 @@
       object[property] = value;
   }
 
-  describe('SensitiveSections', function() {
-    it('should create an instance of SensitiveSections', function() {
-      // uncomment below and update the code to test SensitiveSections
-      //var instane = new @HarpocratesApiClient.SensitiveSections();
-      //expect(instance).to.be.a(@HarpocratesApiClient.SensitiveSections);
+  describe('Paragraph', function() {
+    it('should create an instance of Paragraph', function() {
+      // uncomment below and update the code to test Paragraph
+      //var instane = new @HarpocratesApiClient.Paragraph();
+      //expect(instance).to.be.a(@HarpocratesApiClient.Paragraph);
+    });
+
+    it('should have the property predictedClassification (base name: "predictedClassification")', function() {
+      // uncomment below and update the code to test the property predictedClassification
+      //var instane = new @HarpocratesApiClient.Paragraph();
+      //expect(instance).to.be();
     });
 
     it('should have the property sensitiveSections (base name: "sensitiveSections")', function() {
       // uncomment below and update the code to test the property sensitiveSections
-      //var instane = new @HarpocratesApiClient.SensitiveSections();
+      //var instane = new @HarpocratesApiClient.Paragraph();
+      //expect(instance).to.be();
+    });
+
+    it('should have the property content (base name: "content")', function() {
+      // uncomment below and update the code to test the property content
+      //var instane = new @HarpocratesApiClient.Paragraph();
       //expect(instance).to.be();
     });
 
