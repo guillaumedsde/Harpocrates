@@ -1,7 +1,7 @@
 openapi: "3.0.2"
 info:
   description: This is the Rest API specification for the Harpocrates application
-  version: "7.1.2"
+  version: "8.1.1"
   title: Harpocrates API
   license:
     name: MIT
@@ -357,11 +357,25 @@ components:
           description: array of document sets
           items:
             $ref: "#/components/schemas/documentSet"
+    paragraph:
+      type: object
+      description: A paragraph from a document
+      required:
+        - content
+      properties:
+        predictedClassification:
+          $ref: "#/components/schemas/predictedClassification"
+        sensitiveSections:
+          $ref: "#/components/schemas/sensitiveSections"
+        content:
+          type: string
+          description: content of the paragraph
     document:
       type: object
       description: A document to review
       required:
         - documentId
+        - paragraphs
       properties:
         name:
           allOf:
@@ -371,13 +385,12 @@ components:
           allOf:
             - "$ref": "#/components/schemas/idBase"
             - description: Unique identifier for a Document
-        predictedClassification:
-          $ref: "#/components/schemas/predictedClassification"
-        sensitiveSections:
-          $ref: "#/components/schemas/sensitiveSections"
-        content:
-          type: string
-          description: content of the document
+        paragraphs:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: "#/components/schemas/paragraph"
+          description: list of paragraph object representing the content of the document
     documents:
       type: object
       description: an object representing multiple documents
@@ -392,7 +405,7 @@ components:
             $ref: "#/components/schemas/document"
     predictedClassification:
       type: object
-      description: The predicted Sensitivity (Sensitive or Not) of a document along with feature explanation for that classification
+      description: The predicted Sensitivity (Sensitive or Not) of a text along with feature explanation for that classification
       required:
         - sensitive
       properties:
@@ -429,13 +442,13 @@ components:
           uniqueItems: true
           items:
             $ref: "#/components/schemas/feature"
-          description: List of features with weights explaining a document's classification
+          description: List of features with weights explaining a text's classification
         explainer:
           type: string
           description: Explainer used to obtain explanation
           example: Lime
     section:
-      description: Section of characters within a document
+      description: Section of characters within a text
       type: object
       required:
         - startOffset
@@ -445,12 +458,12 @@ components:
           type: integer
           format: int32
           example: 4
-          description: start offset of a section in characters from the beginning of the document
+          description: start offset of a section in characters from the beginning of the text
         endOffset:
           type: integer
           format: int32
           example: 20
-          description: end offset of a section in characters from the beginning of the document
+          description: end offset of a section in characters from the beginning of the text
         text:
           type: string
           example: NSA
