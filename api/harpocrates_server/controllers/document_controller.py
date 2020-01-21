@@ -2,6 +2,7 @@ import connexion
 from typing import Tuple, Union
 import six
 from http import HTTPStatus
+from typing import List
 import json
 import re
 from copy import deepcopy
@@ -20,6 +21,7 @@ from harpocrates_server.models.feature import Feature
 from harpocrates_server.models.sensitive_section import SensitiveSection
 from harpocrates_server.models.sensitive_sections import SensitiveSections
 from harpocrates_server.models.http_status import HttpStatus as ApiHttpStatus
+from harpocrates_server.models.paragraph import Paragraph
 
 from harpocrates_server import util, db
 
@@ -31,7 +33,10 @@ from harpocrates_server.service.explanation import (
 )
 
 from harpocrates_server.service.errors import create_api_http_status
-from harpocrates_server.service.document import document_from_mongo_dict
+from harpocrates_server.service.document import (
+    document_from_mongo_dict,
+    paragraphs_from_content,
+)
 
 
 def add_sensitive_section(
@@ -140,8 +145,8 @@ def create_document(set_id, body) -> Tuple[Document, int]:  # noqa: E501
 
     :rtype: Document
     """
-
-    document = Document(content=body.decode())
+    paragraphs = paragraphs_from_content(body.decode())
+    document = Document(paragraphs=paragraphs)
     operation_result = db[set_id].insert_one(document.to_dict())
 
     doc_id = operation_result.inserted_id
@@ -185,24 +190,15 @@ def get_document(
     document_dict = deepcopy(doc)
     document_dict["document_id"] = str(doc["_id"])
     del document_dict["_id"]
-    document = Document(**document_dict)
+    document = Document().from_dict(document_dict)
 
     return document, HTTPStatus.OK.value
 
 
-def calculate_classification_with_explanation(
-    set_id: str, doc_id: str
-) -> PredictedClassification:
-    """Calculate the classification of a document with the explanation for the predicted classification
+def classify_text(text: str) -> PredictedClassification:
+    """Calculate the classification of a text with the explanation for the predicted classification
 
-     # noqa: E501
-
-    :param set_id: ID of a set
-    :type set_id: str
-    :param doc_id: ID of a document
-    :type doc_id: str
-
-    :rtype: PredictedClassification
+    :param document: document for which to calculate classification
     """
     document, status = get_document(set_id, doc_id)
 
@@ -210,14 +206,14 @@ def calculate_classification_with_explanation(
     trained_model, classifier_type = get_model()
 
     # calculate explanations
-    lime = lime_explanation(trained_model, document.content)
+    lime = lime_explanation(trained_model, text)
 
     # shap explanation
     # shap = shap_tree_explanation(trained_model, document.content)
 
     # document is sensitive if probability of "non sensitive" classification is lower than "sensitive" classification
     sensitive = lime.predict_proba[0] < lime.predict_proba[1]
-    # sensitivity of document is the probability of "sensitive" classification
+    # sensitivity of text is the probability of "sensitive" classification
     sensitivity = round(lime.predict_proba[1] * 100)
 
     feature_weights = {"lime": lime.as_list()}  # , "shap": shap}
@@ -232,7 +228,7 @@ def calculate_classification_with_explanation(
         # iterate over all features
         for feature_info in explanation:
 
-            # regex pattern for finding feature in document
+            # regex pattern for finding feature in text
             pattern = "\\b({feature})+\\b".format(feature=feature_info[0])
 
             # calculate custom weight, positive if sensitive, negative otherwise
@@ -249,7 +245,7 @@ def calculate_classification_with_explanation(
             # match all features in content
             matches = re.finditer(
                 pattern,
-                document.content,
+                text,
                 # match in entire document and regardless of case
                 flags=re.MULTILINE | re.IGNORECASE,
             )
@@ -263,7 +259,6 @@ def calculate_classification_with_explanation(
                     text=match[0],
                 )
                 features.append(feature)
-
         explanations.append(
             PredictedClassificationExplanation(features=features, explainer=explainer)
         )
@@ -345,10 +340,26 @@ def classify(set_id: str, doc_id: str) -> None:
     :type doc_id: str
     """
 
-    classification = calculate_classification_with_explanation(set_id, doc_id)
+    document = get_document(set_id, doc_id)
+
+    # rebuild document content from list of paragraph content
+    document_content = "".join([paragraph.content for paragraph in document.paragraphs])
+
+    classification = classify_text(document_content)
+
+    classified_paragraphs = calculate_paragraph_classifications(document)
 
     doc_id = db[set_id].update_one(
         {"_id": ObjectId(doc_id)},
-        {"$set": {"predicted_classification": classification.to_dict()}},
+        {
+            "$set": {
+                # Update document wide predicted classification
+                "predicted_classification": classification.to_dict(),
+                # Update paragrah classifications
+                "paragraphs": [
+                    paragraph.to_dict() for paragraph in classified_paragraphs
+                ],
+            }
+        },
     )
 
