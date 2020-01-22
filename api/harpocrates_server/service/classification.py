@@ -41,7 +41,12 @@ CLASSIFIERS = [
     # DecisionTreeClassifier(),
     # SVC(probability=True, kernel="linear", cache_size=1000),
     # XGBClassifier(n_jobs=PROCESSES, objective="binary:logistic"),
-    SVC(kernel="linear", probability=True, decision_function_shape="ovo", cache_size=1000)
+    SVC(
+        kernel="linear",
+        probability=True,
+        decision_function_shape="ovo",
+        cache_size=1000,
+    )
 ]
 
 

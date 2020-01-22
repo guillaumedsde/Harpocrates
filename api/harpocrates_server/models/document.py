@@ -6,16 +6,14 @@ from datetime import date, datetime  # noqa: F401
 from typing import List, Dict  # noqa: F401
 
 from harpocrates_server.models.base_model_ import Model
+from harpocrates_server.models.paragraph import Paragraph
 from harpocrates_server.models.predicted_classification import PredictedClassification
-from harpocrates_server.models.sensitive_sections import SensitiveSections
 from harpocrates_server import util
 
+from harpocrates_server.models.paragraph import Paragraph  # noqa: E501
 from harpocrates_server.models.predicted_classification import (
     PredictedClassification,
 )  # noqa: E501
-from harpocrates_server.models.sensitive_sections import SensitiveSections  # noqa: E501
-
-from harpocrates_server.models.paragraph import Paragraph
 
 
 class Document(Model):
@@ -24,30 +22,41 @@ class Document(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, name=None, document_id=None, paragraphs=None):  # noqa: E501
+    def __init__(
+        self,
+        name=None,
+        document_id=None,
+        predicted_classification=None,
+        paragraphs=None,
+    ):  # noqa: E501
         """Document - a model defined in OpenAPI
 
         :param name: The name of this Document.  # noqa: E501
         :type name: str
         :param document_id: The document_id of this Document.  # noqa: E501
         :type document_id: str
+        :param predicted_classification: The predicted_classification of this Document.  # noqa: E501
+        :type predicted_classification: PredictedClassification
         :param paragraphs: The paragraphs of this Document.  # noqa: E501
         :type paragraphs: List[Paragraph]
         """
         self.openapi_types = {
             "name": str,
             "document_id": str,
+            "predicted_classification": PredictedClassification,
             "paragraphs": List[Paragraph],
         }
 
         self.attribute_map = {
             "name": "name",
             "document_id": "documentId",
+            "predicted_classification": "predictedClassification",
             "paragraphs": "paragraphs",
         }
 
         self._name = name
         self._document_id = document_id
+        self._predicted_classification = predicted_classification
         self._paragraphs = paragraphs
 
     @classmethod
@@ -106,6 +115,27 @@ class Document(Model):
             )  # noqa: E501
 
         self._document_id = document_id
+
+    @property
+    def predicted_classification(self):
+        """Gets the predicted_classification of this Document.
+
+
+        :return: The predicted_classification of this Document.
+        :rtype: PredictedClassification
+        """
+        return self._predicted_classification
+
+    @predicted_classification.setter
+    def predicted_classification(self, predicted_classification):
+        """Sets the predicted_classification of this Document.
+
+
+        :param predicted_classification: The predicted_classification of this Document.
+        :type predicted_classification: PredictedClassification
+        """
+
+        self._predicted_classification = predicted_classification
 
     @property
     def paragraphs(self):
