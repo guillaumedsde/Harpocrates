@@ -5,15 +5,17 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useTheme } from "@material-ui/styles";
 
 import { TextAnnotator } from "react-text-annotate";
-import { Badge } from "@material-ui/core";
+import { Grid} from "@material-ui/core";
 
 import { uniqueFeatures } from "./explanationBarChart";
+import SensitivityBar from "./documentSensitivityBar";
 
 import {
   SensitiveSection,
   DocumentApi,
   SensitiveSections
 } from "@harpocrates/api-client";
+import Sensitivity from "./documentSensitivity";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -110,41 +112,30 @@ export default function DocumentBody(props) {
       className={classes.root}
       style={{ height: "85vh", overflow: "auto" }}
     >
-      <TextAnnotator
-        // tokens={props.document.content.split(/(?!\n)\s+/)}
-        content={props.document.content}
-        value={annotations}
-        onChange={handleChange}
-        getSpan={span => ({
-          ...span,
-          tag: props.tag,
-          color: TAG_COLORS[props.tag]
-        })}
-        // renderMark={props => (
-        //   <Badge
-        //     className={classes.margin}
-        //     badgeContent={props.tag}
-        //     color="primary"
-        //     key={props.content + props.tag + props.start + props.end}
-        //   >
-        //     <mark
-        //       style={
-        //         TAG_STYLES[props.tag] || {
-        //           backgroundColor: props.color || "black",
-        //           color: "white"
-        //         }
-        //       }
-        //       data-start={props.start}
-        //       data-end={props.end}
-        //       onClick={() =>
-        //         props.onClick({ start: props.start, end: props.end })
-        //       }
-        //     >
-        //       {props.content}
-        //     </mark>
-        //   </Badge>
-        // )}
-      />
+      <Grid container alignItems="center" justify="center">
+        {props.document.paragraphs.map(paragraph => (
+          <>
+            <Grid item xs={10}>
+              <TextAnnotator
+                content={paragraph.content}
+                value={[]}
+                onChange={handleChange}
+                getSpan={span => ({
+                  ...span,
+                  tag: props.tag,
+                  color: TAG_COLORS[props.tag]
+                })}
+              />
+            </Grid>
+            <Grid item xs={2}>
+              <Sensitivity classification={paragraph.predictedClassification} />
+              <SensitivityBar
+                classification={paragraph.predictedClassification}
+              />
+            </Grid>
+          </>
+        ))}
+      </Grid>
     </Paper>
   );
 }

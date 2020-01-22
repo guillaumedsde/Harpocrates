@@ -1,7 +1,7 @@
 openapi: "3.0.2"
 info:
   description: This is the Rest API specification for the Harpocrates application
-  version: "8.1.1"
+  version: "8.2.0"
   title: Harpocrates API
   license:
     name: MIT
@@ -385,6 +385,8 @@ components:
           allOf:
             - "$ref": "#/components/schemas/idBase"
             - description: Unique identifier for a Document
+        predictedClassification:
+          $ref: "#/components/schemas/predictedClassification"
         paragraphs:
           type: array
           uniqueItems: true

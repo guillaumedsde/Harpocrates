@@ -1,3 +1,4 @@
+import traceback
 import connexion
 from typing import Tuple, Union
 import six
@@ -187,11 +188,27 @@ def get_document(
     if not doc:
         error = HTTPStatus.NOT_FOUND
         return create_api_http_status(error), error.value
+
+    # recreate document object
     document_dict = deepcopy(doc)
     document_dict["document_id"] = str(doc["_id"])
     del document_dict["_id"]
     document = Document().from_dict(document_dict)
 
+    # recreate paragraph objects
+    paragraphs = []
+    for paragraph_dict in document_dict["paragraphs"]:
+        classification_dict = paragraph_dict["predicted_classification"]
+
+        classification = None
+        if classification_dict:
+            classification = PredictedClassification().from_dict(classification_dict)
+        paragraph = Paragraph().from_dict(paragraph_dict)
+        paragraph.predicted_classification = classification
+        paragraphs.append(paragraph)
+
+    # add paragraphs to document and return it
+    document.paragraphs = paragraphs
     return document, HTTPStatus.OK.value
 
 
@@ -209,9 +226,8 @@ def classify_text(text: str) -> PredictedClassification:
     lime = lime_explanation(trained_model, text)
 
     # shap explanation
-    # shap = shap_tree_explanation(trained_model, document.content)
-
-    # document is sensitive if probability of "non sensitive" classification is lower than "sensitive" classification
+    # shap = shap_tree_explanation(trained_model, text)
+    # text is sensitive if probability of "non sensitive" classification is lower than "sensitive" classification
     sensitive = lime.predict_proba[0] < lime.predict_proba[1]
     # sensitivity of text is the probability of "sensitive" classification
     sensitivity = round(lime.predict_proba[1] * 100)
@@ -275,9 +291,34 @@ def classify_text(text: str) -> PredictedClassification:
     return classification
 
 
-def get_predicted_classification(
-    set_id: str, doc_id: str
-) -> Tuple[Union[ApiHttpStatus, PredictedClassification], int]:  # noqa: E501
+def calculate_paragraph_classifications(
+    document: Document,
+) -> List[PredictedClassification]:
+    """Calculate the classifications for all the paragraphs pf a document
+
+    :param document: document for which to calculate paragraph classifications
+    """
+
+    paragraphs = []
+
+    for paragraph in document.paragraphs:
+        try:
+            classification = classify_text(paragraph.content)
+        except ValueError as e:
+            # traceback.print_tb(e.__traceback__)
+            # print(type(e))
+            classification = None
+
+        new_paragraph = Paragraph(
+            content=paragraph.content, predicted_classification=classification
+        )
+
+        paragraphs.append(new_paragraph)
+
+    return paragraphs
+
+
+def get_predicted_classification(set_id, doc_id):  # noqa: E501
     """Get the explanation for the predicted classification of a document
 
      # noqa: E501
@@ -346,8 +387,14 @@ def classify(set_id: str, doc_id: str) -> None:
     document_content = "".join([paragraph.content for paragraph in document.paragraphs])
 
     classification = classify_text(document_content)
+    try:
+        classified_paragraphs = calculate_paragraph_classifications(document)
+    except Exception as e:
+        print("##################################################################")
+        print(set_id, document.name)
+        print(document_content)
 
-    classified_paragraphs = calculate_paragraph_classifications(document)
+        raise e
 
     doc_id = db[set_id].update_one(
         {"_id": ObjectId(doc_id)},
