@@ -63,14 +63,14 @@ export default function ExplanationChart(props) {
 
   if (uniqueExplanations) {
     return (
-      <div style={{ height: "100%", width: "90%", display: "block" }}>
+      <div style={{ height: "100%", width: "100%", display: "block" }}>
         <ResponsiveContainer height="100%" width="100%">
           <BarChart
             width={0}
             height={0}
             data={uniqueExplanations}
             layout="vertical"
-            margin={{ top: 10, right: 20, bottom: 20, left: 40 }}
+            margin={{ top: 10, right: 20, bottom: 20, left: 80 }}
             onClick={handleClick}
           >
             <CartesianGrid strokeDasharray="3 3" />
