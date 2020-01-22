@@ -1,8 +1,9 @@
-from typing import Dict
+import re
+from typing import Dict, List
 from copy import deepcopy
 
 from harpocrates_server.models.document import Document
-from openapi_server.models.paragraph import Paragraph
+from harpocrates_server.models.paragraph import Paragraph
 
 
 def document_from_mongo_dict(doc: Dict) -> Document:
@@ -20,8 +21,10 @@ def paragraphs_from_content(content: str) -> List[Paragraph]:
 
     :param content: document content to split
     """
-    delimiter = "\n"
-    paragraphs_content = content.splitlines(True)
+    # Regex matching paragraph limit
+    # delimiter = re.compile(r"(\n\s*\n)")
+    delimiter = re.compile(r"(?=\n\s\n)")
+    paragraphs_content = delimiter.split(content)
     paragraphs = []
     for paragraph_content in paragraphs_content:
         paragraphs.append(Paragraph(content=paragraph_content))

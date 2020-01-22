@@ -4,7 +4,7 @@ info:
   license:
     name: MIT
   title: Harpocrates API
-  version: 8.1.1
+  version: 8.2.0
 externalDocs:
   description: Documentation
   url: https://harpocrates-app.gitlab.io/harpocrates
@@ -597,6 +597,19 @@ components:
     document:
       description: A document to review
       example:
+        predictedClassification:
+          classifier: SVM
+          explanations:
+            - features:
+                - null
+                - null
+              explainer: Lime
+            - features:
+                - null
+                - null
+              explainer: Lime
+          sensitive: true
+          sensitivity: 78.3
         name: ""
         documentId: ""
         paragraphs:
@@ -645,6 +658,8 @@ components:
           allOf:
             - $ref: "#/components/schemas/idBase"
             - description: Unique identifier for a Document
+        predictedClassification:
+          $ref: "#/components/schemas/predictedClassification"
         paragraphs:
           description: list of paragraph object representing the content of the document
           items:
@@ -659,7 +674,20 @@ components:
       description: an object representing multiple documents
       example:
         documents:
-          - name: ""
+          - predictedClassification:
+              classifier: SVM
+              explanations:
+                - features:
+                    - null
+                    - null
+                  explainer: Lime
+                - features:
+                    - null
+                    - null
+                  explainer: Lime
+              sensitive: true
+              sensitivity: 78.3
+            name: ""
             documentId: ""
             paragraphs:
               - predictedClassification:
@@ -698,7 +726,20 @@ components:
                     - null
                     - null
                 content: content
-          - name: ""
+          - predictedClassification:
+              classifier: SVM
+              explanations:
+                - features:
+                    - null
+                    - null
+                  explainer: Lime
+                - features:
+                    - null
+                    - null
+                  explainer: Lime
+              sensitive: true
+              sensitivity: 78.3
+            name: ""
             documentId: ""
             paragraphs:
               - predictedClassification:
