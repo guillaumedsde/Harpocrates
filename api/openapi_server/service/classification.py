@@ -34,14 +34,15 @@ from openapi_server.service.data_parsing import (
 
 
 # instantiate classifier objects
-CLASSIFIERS = (
+CLASSIFIERS = [
     # MultinomialNB(),
     # DecisionTreeClassifier(),
     # KNeighborsClassifier(3),
     # DecisionTreeClassifier(),
     # SVC(probability=True, kernel="linear", cache_size=1000),
-    XGBClassifier(n_jobs=PROCESSES, objective="binary:logistic"),
-)
+    # XGBClassifier(n_jobs=PROCESSES, objective="binary:logistic"),
+    SVC()
+]
 
 
 VECTORIZER = None
@@ -66,10 +67,7 @@ def build_vectorizer():
     )
 
 
-def train(classifier):
-    train_labels = extract_labels()
-    file_paths = extract_file_paths()
-    train_data = extract_data(file_paths)
+def train(classifier, skip_training=False):
     # build ML pipeline
     pipeline = Pipeline(
         steps=[
@@ -85,8 +83,13 @@ def train(classifier):
         verbose=True,
     )
 
-    # train classifier
-    pipeline.fit(train_data, train_labels)
+    if not skip_training:
+        train_labels = extract_labels()
+        file_paths = extract_file_paths()
+        train_data = extract_data(file_paths)
+
+        # train classifier
+        pipeline.fit(train_data, train_labels)
 
     # Train
     return pipeline
