@@ -16,4 +16,9 @@ enabled = true
 
 [analyzers.meta]
 dockerfile_paths = ["api/Dockerfile", "frontend/Dockerfile"]
-trusted_registries = ["docker.io"]
+trusted_registries = [
+    # official docker repository
+    "docker.io",
+    # Google Cloud Compute repository
+    "gcr.io"
+]
