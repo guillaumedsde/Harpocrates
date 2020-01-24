@@ -18,7 +18,7 @@ RUN pip install --no-cache-dir pipenv && \
 COPY . ./
 
 
-FROM gcr.io/distroless/python3-debian10
+FROM gcr.io/distroless/python3-debian10:latest
 
 ARG PYTHON_VERSION=3.7
 COPY --from=build /usr/src/app /usr/src/app
