@@ -3,6 +3,8 @@
 ![Gitlab pipeline status](https://gitlab.com/harpocrates-app/harpocrates/badges/master/pipeline.svg)
 ![Website](https://img.shields.io/website?url=https%3A%2F%2Fharpocrates-app.gitlab.io%2Fharpocrates)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![DeepScan grade](https://deepscan.io/api/teams/7077/projects/9224/branches/117107/badge/grade.svg?token=a1fa0980263b30233c0ddf1e9c3ed778290db2ee)](https://deepscan.io/dashboard#view=project&tid=7077&pid=9224&bid=117107)
+[![DeepSource](https://static.deepsource.io/deepsource-badge-light-mini.svg)](https://deepsource.io/gh/guillaumedsde/Harpocrates/?ref=repository-badge)
 
 ![UI demo](docs/redacting.gif)
 
