@@ -1,4 +1,5 @@
 import connexion
+from typing import Tuple, Union
 import six
 from http import HTTPStatus
 import time
@@ -8,7 +9,9 @@ from harpocrates_server.models.document_set import DocumentSet  # noqa: E501
 from harpocrates_server.models.document_sets import DocumentSets  # noqa: E501
 from harpocrates_server.models.documents import Documents  # noqa: E501
 from harpocrates_server.models.document import Document
-from harpocrates_server.models.http_status import HttpStatus  # noqa: E501
+from harpocrates_server.models.http_status import (
+    HttpStatus as ApiHttpStatus,
+)  # noqa: E501
 from harpocrates_server import util, db
 
 from harpocrates_server.service.errors import create_api_http_status
