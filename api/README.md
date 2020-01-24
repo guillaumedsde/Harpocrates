@@ -25,7 +25,7 @@ To run the server, please execute the following from the root directory:
 ```
 pipenv install
 pipenv shell
-python -m openapi_server
+python -m harpocrates_server
 ```
 
 and open your browser to here:
@@ -54,8 +54,8 @@ To run the **development** server on a Docker container, please execute the foll
 
 ```bash
 # building the image
-docker build -t openapi_server .
+docker build -t harpocrates_server .
 
 # starting up a container
-docker run -p 8080:8080 openapi_server
+docker run -p 8080:8080 harpocrates_server
 ```
