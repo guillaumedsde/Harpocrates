@@ -49,8 +49,8 @@ export default function Document(props) {
       apiDocument => {
         setDocument(apiDocument);
       },
-      reason => {
-        console.error(reason);
+      error => {
+        console.error(error);
       }
     );
   }, []);
@@ -82,8 +82,8 @@ export default function Document(props) {
           setNbrExplanations(apiMaxClassification);
           setClassification(apiClassification);
         },
-        reason => {
-          console.error(reason);
+        error => {
+          console.error(error);
         }
       );
   }, []);
@@ -94,11 +94,13 @@ export default function Document(props) {
       apiSensitiveSections => {
         setSensitiveSections(apiSensitiveSections);
       },
-      reason => {
-        console.error(reason);
+      error => {
+        console.error(error);
       }
     );
   }, []);
+
+  console.log(document);
 
   if (document) {
     return (
