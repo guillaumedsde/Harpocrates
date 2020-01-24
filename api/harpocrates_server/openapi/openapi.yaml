@@ -1,0 +1,792 @@
+openapi: 3.0.2
+info:
+  description: This is the Rest API specification for the Harpocrates application
+  license:
+    name: MIT
+  title: Harpocrates API
+  version: 7.1.1
+externalDocs:
+  description: Documentation
+  url: https://harpocrates-app.gitlab.io/harpocrates
+servers:
+- description: Local test server
+  url: http://api.harpocrates.app.local
+tags:
+- description: Everything about document sets
+  name: set
+- description: Everything about documents
+  name: document
+paths:
+  /documentSet:
+    get:
+      operationId: get_sets
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/documentSets'
+          description: Listing of all known document sets
+      summary: List all document sets known by the engine
+      tags:
+      - set
+      x-openapi-router-controller: harpocrates_server.controllers.set_controller
+    post:
+      operationId: create_set
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/documentSet'
+        description: documentSet descriptor that needs to be added to the engine
+        required: true
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/documentSet'
+          description: The created document set Object
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The request was invalid JSON or missing some attributes
+        409:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: Conflicting element already present
+      summary: Add a new document set set to the engine
+      tags:
+      - set
+      x-openapi-router-controller: harpocrates_server.controllers.set_controller
+  /documentSet/{setId}:
+    delete:
+      operationId: delete_set
+      parameters:
+      - description: ID of a set
+        explode: false
+        in: path
+        name: setId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/documentSet'
+          description: Successfully deleted the document set
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The request was invalid JSON or missing some attributes
+        404:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The specified resource was not found
+      summary: delete the set
+      tags:
+      - set
+      x-openapi-router-controller: harpocrates_server.controllers.set_controller
+    get:
+      operationId: get_set
+      parameters:
+      - description: ID of a set
+        explode: false
+        in: path
+        name: setId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/documents'
+          description: Successfully got list of documents in set
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The request was invalid JSON or missing some attributes
+        404:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The specified resource was not found
+      summary: lists all documents in the set
+      tags:
+      - set
+      x-openapi-router-controller: harpocrates_server.controllers.set_controller
+    post:
+      description: Contents of the document in the body of the request. This should
+        be in plain text. The Content-Type header should be appropriately set to text/plain.
+      operationId: create_document
+      parameters:
+      - description: ID of a set
+        explode: false
+        in: path
+        name: setId
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          text/plain:
+            schema:
+              type: string
+        required: true
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/document'
+          description: Successfully created document in set
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The request was invalid JSON or missing some attributes
+        404:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The specified resource was not found
+        409:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: Conflicting element already present
+      summary: Add a new document to the set
+      tags:
+      - document
+      x-openapi-router-controller: harpocrates_server.controllers.document_controller
+  /documentSet/{setId}/{docId}:
+    delete:
+      operationId: delete_document
+      parameters:
+      - description: ID of a set
+        explode: false
+        in: path
+        name: setId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: ID of a document
+        explode: false
+        in: path
+        name: docId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/document'
+          description: Successfully deleted document in the set
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The request was invalid JSON or missing some attributes
+        404:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The specified resource was not found
+      summary: delete document from set
+      tags:
+      - document
+      x-openapi-router-controller: harpocrates_server.controllers.document_controller
+    get:
+      operationId: get_document
+      parameters:
+      - description: ID of a set
+        explode: false
+        in: path
+        name: setId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: ID of a document
+        explode: false
+        in: path
+        name: docId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/document'
+          description: Successfully got document from set
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The request was invalid JSON or missing some attributes
+        404:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The specified resource was not found
+      summary: get document from set
+      tags:
+      - document
+      x-openapi-router-controller: harpocrates_server.controllers.document_controller
+  /documentSet/{setId}/{docId}/predictedClassification:
+    get:
+      operationId: get_predicted_classification
+      parameters:
+      - description: ID of a set
+        explode: false
+        in: path
+        name: setId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: ID of a document
+        explode: false
+        in: path
+        name: docId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/predictedClassification'
+          description: Successfully got the predicted classification
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The request was invalid JSON or missing some attributes
+        404:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The specified resource was not found
+      summary: Get the predicted classification for the document
+      tags:
+      - document
+      x-openapi-router-controller: harpocrates_server.controllers.document_controller
+  /documentSet/{setId}/{docId}/sensitiveSection:
+    post:
+      description: add a sensitive section to the document
+      operationId: add_sensitive_section
+      parameters:
+      - description: ID of a set
+        explode: false
+        in: path
+        name: setId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: ID of a document
+        explode: false
+        in: path
+        name: docId
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/sensitiveSection'
+      responses:
+        201:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/sensitiveSection'
+          description: Successfully added the sensitive section
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The request was invalid JSON or missing some attributes
+        404:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The specified resource was not found
+      summary: add a sensitive section to the document
+      tags:
+      - document
+      x-openapi-router-controller: harpocrates_server.controllers.document_controller
+  /documentSet/{setId}/{docId}/sensitiveSections:
+    get:
+      description: get sensitive sections of the document
+      operationId: get_sensitive_sections
+      parameters:
+      - description: ID of a set
+        explode: false
+        in: path
+        name: setId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: ID of a document
+        explode: false
+        in: path
+        name: docId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/sensitiveSections'
+          description: Successfully got the sensitive sections for the document
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The request was invalid JSON or missing some attributes
+        404:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The specified resource was not found
+      summary: get sensitive sections of the document
+      tags:
+      - document
+      x-openapi-router-controller: harpocrates_server.controllers.document_controller
+    post:
+      description: add multiple sensitive sections to the document
+      operationId: add_sensitive_sections
+      parameters:
+      - description: ID of a set
+        explode: false
+        in: path
+        name: setId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: ID of a document
+        explode: false
+        in: path
+        name: docId
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/sensitiveSections'
+      responses:
+        201:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/sensitiveSections'
+          description: Successfully added the sensitive sections
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The request was invalid JSON or missing some attributes
+        404:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The specified resource was not found
+      summary: add multiple sensitive sections to the document
+      tags:
+      - document
+      x-openapi-router-controller: harpocrates_server.controllers.document_controller
+components:
+  parameters:
+    docId:
+      description: ID of a document
+      explode: false
+      in: path
+      name: docId
+      required: true
+      schema:
+        type: string
+      style: simple
+    setId:
+      description: ID of a set
+      explode: false
+      in: path
+      name: setId
+      required: true
+      schema:
+        type: string
+      style: simple
+  responses:
+    notFound:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/httpStatus'
+      description: The specified resource was not found
+    conflict:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/httpStatus'
+      description: Conflicting element already present
+    malformedRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/httpStatus'
+      description: The request was invalid JSON or missing some attributes
+  schemas:
+    idBase:
+      description: Base for the id schema of an object.
+      example: WaROKG4B0l9WO2IWoBnP
+      type: string
+    nameBase:
+      description: The name of the object.
+      example: Object 1
+      type: string
+    httpStatus:
+      description: This object describes an HTTP status
+      properties:
+        code:
+          description: HTTP status code
+          format: int32
+          maximum: 600
+          minimum: 100
+          type: integer
+        message:
+          description: HTTP status message
+          type: string
+      required:
+      - code
+      - message
+      type: object
+    documentSet:
+      description: schema for a set of Documents
+      example:
+        documentCount: 0
+        size: size
+        name: ""
+        setId: ""
+      properties:
+        name:
+          allOf:
+          - $ref: '#/components/schemas/nameBase'
+          - description: Name of the Document set
+        setId:
+          allOf:
+          - $ref: '#/components/schemas/idBase'
+          - description: Unique identifier for a document set
+        documentCount:
+          description: number of documents in set
+          format: int32
+          type: integer
+        size:
+          description: size of the set, unit comes at the end of the string
+          type: string
+      required:
+      - name
+      type: object
+    documentSets:
+      description: an object representing multiple document sets
+      example:
+        documentSets:
+        - documentCount: 0
+          size: size
+          name: ""
+          setId: ""
+        - documentCount: 0
+          size: size
+          name: ""
+          setId: ""
+      properties:
+        documentSets:
+          description: array of document sets
+          items:
+            $ref: '#/components/schemas/documentSet'
+          type: array
+          uniqueItems: true
+      required:
+      - documentSets
+      type: object
+    document:
+      description: A document to review
+      example:
+        predictedClassification:
+          classifier: SVM
+          explanations:
+          - features:
+            - null
+            - null
+            explainer: Lime
+          - features:
+            - null
+            - null
+            explainer: Lime
+          sensitive: true
+          sensitivity: 78.3
+        sensitiveSections:
+          sensitiveSections:
+          - null
+          - null
+        name: ""
+        documentId: ""
+        content: content
+      properties:
+        name:
+          allOf:
+          - $ref: '#/components/schemas/nameBase'
+          - description: Name of the Document
+        documentId:
+          allOf:
+          - $ref: '#/components/schemas/idBase'
+          - description: Unique identifier for a Document
+        predictedClassification:
+          $ref: '#/components/schemas/predictedClassification'
+        sensitiveSections:
+          $ref: '#/components/schemas/sensitiveSections'
+        content:
+          description: content of the document
+          type: string
+      required:
+      - documentId
+      type: object
+    documents:
+      description: an object representing multiple documents
+      example:
+        documents:
+        - predictedClassification:
+            classifier: SVM
+            explanations:
+            - features:
+              - null
+              - null
+              explainer: Lime
+            - features:
+              - null
+              - null
+              explainer: Lime
+            sensitive: true
+            sensitivity: 78.3
+          sensitiveSections:
+            sensitiveSections:
+            - null
+            - null
+          name: ""
+          documentId: ""
+          content: content
+        - predictedClassification:
+            classifier: SVM
+            explanations:
+            - features:
+              - null
+              - null
+              explainer: Lime
+            - features:
+              - null
+              - null
+              explainer: Lime
+            sensitive: true
+            sensitivity: 78.3
+          sensitiveSections:
+            sensitiveSections:
+            - null
+            - null
+          name: ""
+          documentId: ""
+          content: content
+      properties:
+        documents:
+          description: array of documents
+          items:
+            $ref: '#/components/schemas/document'
+          type: array
+          uniqueItems: true
+      required:
+      - documents
+      type: object
+    predictedClassification:
+      description: The predicted Sensitivity (Sensitive or Not) of a document along
+        with feature explanation for that classification
+      example:
+        classifier: SVM
+        explanations:
+        - features:
+          - null
+          - null
+          explainer: Lime
+        - features:
+          - null
+          - null
+          explainer: Lime
+        sensitive: true
+        sensitivity: 78.3
+      properties:
+        sensitive:
+          description: true if the document is predicted to be sensitive, false otherwise
+          example: true
+          type: boolean
+        sensitivity:
+          description: Document sensitivity
+          example: 78.3
+          format: double
+          maximum: 100.0
+          minimum: 0.0
+          type: number
+        classifier:
+          description: Classifier algorithm used for this classification
+          example: SVM
+          type: string
+        explanations:
+          description: list of explanations for a predicted classification
+          items:
+            $ref: '#/components/schemas/predictedClassificationExplanation'
+          type: array
+          uniqueItems: true
+      required:
+      - sensitive
+      type: object
+    predictedClassificationExplanation:
+      description: Explanation for a predicted classification
+      example:
+        features:
+        - null
+        - null
+        explainer: Lime
+      properties:
+        features:
+          description: List of features with weights explaining a document's classification
+          items:
+            $ref: '#/components/schemas/feature'
+          type: array
+          uniqueItems: true
+        explainer:
+          description: Explainer used to obtain explanation
+          example: Lime
+          type: string
+      required:
+      - explainer
+      - features
+      type: object
+    section:
+      description: Section of characters within a document
+      properties:
+        startOffset:
+          description: start offset of a section in characters from the beginning
+            of the document
+          example: 4
+          format: int32
+          type: integer
+        endOffset:
+          description: end offset of a section in characters from the beginning of
+            the document
+          example: 20
+          format: int32
+          type: integer
+        text:
+          description: textual representation of the section
+          example: NSA
+          type: string
+      required:
+      - endOffset
+      - startOffset
+      type: object
+    feature:
+      allOf:
+      - $ref: '#/components/schemas/section'
+      - $ref: '#/components/schemas/feature_allOf'
+    sensitiveSections:
+      description: an object representing multiple sensitive sections
+      example:
+        sensitiveSections:
+        - null
+        - null
+      properties:
+        sensitiveSections:
+          description: array of sensitive sections
+          items:
+            $ref: '#/components/schemas/sensitiveSection'
+          type: array
+          uniqueItems: true
+      required:
+      - sensitiveSections
+      type: object
+    sensitiveSection:
+      allOf:
+      - $ref: '#/components/schemas/section'
+      - $ref: '#/components/schemas/sensitiveSection_allOf'
+    feature_allOf:
+      description: an object representing a feature that explains the classification
+      properties:
+        weight:
+          description: The contribution of that feature to the classification, if
+            positive weight, this feature contributes to a document's sensitivity
+            and conversely
+          format: float
+          type: number
+    sensitiveSection_allOf:
+      description: This is the base object for recording or suggesting sensitivities
+      properties:
+        name:
+          description: what was the exemption that was found (mandatory)
+          example: S27
+          type: string
+        description:
+          description: This is an optional textual description of what the predicted
+            sensitivity is, suitable for presentation to the user
+          example: This matches the Royal Family checklist
+          type: string
+      required:
+      - name

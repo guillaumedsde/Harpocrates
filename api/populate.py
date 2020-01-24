@@ -8,22 +8,22 @@ from sklearn.model_selection import train_test_split
 from joblib import dump
 from sklearn.pipeline import Pipeline
 
-from openapi_server.db import create_db_client
+from harpocrates_server.db import create_db_client
 
-from openapi_server.service.data_parsing import (
+from harpocrates_server.service.data_parsing import (
     extract_data,
     extract_file_paths,
     extract_labels,
 )
-from openapi_server.service.classification import get_model, CLASSIFIERS, get_vectorizer
+from harpocrates_server.service.classification import get_model, CLASSIFIERS, get_vectorizer
 
-from openapi_server.controllers.document_controller import (
+from harpocrates_server.controllers.document_controller import (
     classify,
     calculate_classification_with_explanation,
     get_document,
 )
 
-from openapi_server.models.document import Document
+from harpocrates_server.models.document import Document
 
 MODEL_DIRECTORY = pathlib.Path("instance", "models")
 
