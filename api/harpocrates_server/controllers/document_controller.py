@@ -210,7 +210,7 @@ def calculate_classification_with_explanation(
 
     :rtype: PredictedClassification
     """
-    document = get_document(set_id, doc_id)
+    document, status = get_document(set_id, doc_id)
 
     # TODO this is a long blocking call when first training the classifier, needs to return 202 "created" with some URL to the processed element
     trained_model, classifier_type = get_model()
@@ -342,7 +342,7 @@ def get_predicted_classification(
     return classification, HTTPStatus.OK.value
 
 
-def classify(set_id: str, doc_id: str): -> None
+def classify(set_id: str, doc_id: str) -> None:
     """calculates document classification and accompanying explanation
 
     :param set_id: ID of a set
