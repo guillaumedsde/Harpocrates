@@ -1,4 +1,5 @@
 import connexion
+from typing import Tuple, Union
 import six
 from http import HTTPStatus
 import json
@@ -18,6 +19,7 @@ from harpocrates_server.models.predicted_classification import PredictedClassifi
 from harpocrates_server.models.feature import Feature
 from harpocrates_server.models.sensitive_section import SensitiveSection
 from harpocrates_server.models.sensitive_sections import SensitiveSections
+from harpocrates_server.models.http_status import HttpStatus as ApiHttpStatus
 
 from harpocrates_server import util, db
 
@@ -28,8 +30,12 @@ from harpocrates_server.service.explanation import (
     shap_tree_explanation,
 )
 
+from harpocrates_server.service.errors import create_api_http_status
 
-def add_sensitive_section(set_id, doc_id, body):  # noqa: E501
+
+def add_sensitive_section(
+    set_id: str, doc_id: str, body
+) -> Tuple[Union[ApiHttpStatus, SensitiveSection], int]:  # noqa: E501
     """add a sensitive section to the document
 
     :param set_id: ID of a set
@@ -42,7 +48,8 @@ def add_sensitive_section(set_id, doc_id, body):  # noqa: E501
     :rtype: SensitiveSection
     """
     if not connexion.request.is_json:
-        return HTTPStatus.BAD_REQUEST
+        error = HTTPStatus.BAD_REQUEST
+        return create_api_http_status(error), error.value
     sensitive_section = SensitiveSection.from_dict(
         connexion.request.get_json()
     )  # noqa: E501
@@ -53,10 +60,12 @@ def add_sensitive_section(set_id, doc_id, body):  # noqa: E501
     )
 
     # return sensitive sections with HTTPStatus
-    return sensitive_section, HTTPStatus.CREATED
+    return sensitive_section, HTTPStatus.CREATED.value
 
 
-def add_sensitive_sections(set_id, doc_id, body):  # noqa: E501
+def add_sensitive_sections(
+    set_id: str, doc_id: str, body
+) -> Tuple[Union[ApiHttpStatus, SensitiveSections], int]:  # noqa: E501
     """add multiple sensitive sections to the document
 
     :param set_id: ID of a set
@@ -69,7 +78,8 @@ def add_sensitive_sections(set_id, doc_id, body):  # noqa: E501
     :rtype: SensitiveSections
     """
     if not connexion.request.is_json:
-        return HTTPStatus.BAD_REQUEST
+        error = HTTPStatus.BAD_REQUEST
+        return create_api_http_status(error), error.value
     sensitive_sections = SensitiveSections.from_dict(
         connexion.request.get_json()
     )  # noqa: E501
@@ -84,10 +94,12 @@ def add_sensitive_sections(set_id, doc_id, body):  # noqa: E501
     )
 
     # return sensitive sections with HTTPStatus
-    return sensitive_sections, HTTPStatus.CREATED
+    return sensitive_sections, HTTPStatus.CREATED.value
 
 
-def get_sensitive_sections(set_id, doc_id):
+def get_sensitive_sections(
+    set_id: str, doc_id: str
+) -> Tuple[Union[ApiHttpStatus, SensitiveSections], int]:
     """get document sensitive sections
 
     :param set_id: ID of a set
@@ -103,7 +115,8 @@ def get_sensitive_sections(set_id, doc_id):
     )
 
     if not sensitive_sections_query:
-        return HTTPStatus.NOT_FOUND
+        error = HTTPStatus.NOT_FOUND
+        return create_api_http_status(error), error.value
 
     sensitive_section_list = []
     for section in sensitive_sections_query.get("sensitive_sections") or []:
@@ -111,10 +124,10 @@ def get_sensitive_sections(set_id, doc_id):
 
     sensitive_sections = SensitiveSections(sensitive_sections=sensitive_section_list)
 
-    return sensitive_sections
+    return sensitive_sections, HTTPStatus.OK.value
 
 
-def create_document(set_id, body):  # noqa: E501
+def create_document(set_id, body) -> Tuple[Document, int]:  # noqa: E501
     """Add a new document to the document set
 
     Contents of the document in the body of the request. This should be in plain text. The Content-Type header should be appropriately set to text/plain. # noqa: E501
@@ -134,10 +147,10 @@ def create_document(set_id, body):  # noqa: E501
 
     classify(set_id, doc_id)
 
-    return document
+    return document, HTTPStatus.OK.value
 
 
-def delete_document(set_id, doc_id):  # noqa: E501
+def delete_document(set_id: str, doc_id: str) -> Tuple[Document, int]:  # noqa: E501
     """delete the set
 
      # noqa: E501
@@ -151,10 +164,14 @@ def delete_document(set_id, doc_id):  # noqa: E501
     """
 
     result = db[set_id].delete_one({"_id": ObjectId(doc_id)})
-    return HTTPStatus.OK
+
+    deleted = Document(**result.raw_result)
+    return deleted, HTTPStatus.OK.value
 
 
-def get_document(set_id, doc_id):  # noqa: E501
+def get_document(
+    set_id: str, doc_id: str
+) -> Tuple[Union[ApiHttpStatus, Document], int]:  # noqa: E501
     """get document from set
 
      # noqa: E501
@@ -169,16 +186,19 @@ def get_document(set_id, doc_id):  # noqa: E501
 
     doc = db[set_id].find_one({"_id": ObjectId(doc_id)})
     if not doc:
-        return None, HTTPStatus.NOT_FOUND
+        error = HTTPStatus.NOT_FOUND
+        return create_api_http_status(error), error.value
     document_dict = deepcopy(doc)
     document_dict["document_id"] = str(doc["_id"])
     del document_dict["_id"]
     document = Document(**document_dict)
 
-    return document
+    return document, HTTPStatus.OK.value
 
 
-def calculate_classification_with_explanation(set_id, doc_id):
+def calculate_classification_with_explanation(
+    set_id: str, doc_id: str
+) -> PredictedClassification:
     """Calculate the classification of a document with the explanation for the predicted classification
 
      # noqa: E501
@@ -266,7 +286,9 @@ def calculate_classification_with_explanation(set_id, doc_id):
     return classification
 
 
-def get_predicted_classification(set_id, doc_id):  # noqa: E501
+def get_predicted_classification(
+    set_id: str, doc_id: str
+) -> Tuple[Union[ApiHttpStatus, PredictedClassification], int]:  # noqa: E501
     """Get the explanation for the predicted classification of a document
 
      # noqa: E501
@@ -285,14 +307,16 @@ def get_predicted_classification(set_id, doc_id):  # noqa: E501
     )
 
     if not predicted_classification_query:
-        return HTTPStatus.NOT_FOUND
+        error = HTTPStatus.NOT_FOUND
+        return create_api_http_status(error), error.value
 
     predicted_classification = predicted_classification_query[
         "predicted_classification"
     ]
 
     if not predicted_classification:
-        return HTTPStatus.NOT_FOUND
+        error = HTTPStatus.NOT_FOUND
+        return create_api_http_status(error), error.value
 
     # build and return final classification with explanation object
     classification = PredictedClassification.from_dict(predicted_classification)
@@ -315,10 +339,10 @@ def get_predicted_classification(set_id, doc_id):  # noqa: E501
 
     classification.explanations = explanations
 
-    return classification
+    return classification, HTTPStatus.OK.value
 
 
-def classify(set_id, doc_id):
+def classify(set_id: str, doc_id: str): -> None
     """calculates document classification and accompanying explanation
 
     :param set_id: ID of a set
