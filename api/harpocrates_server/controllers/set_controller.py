@@ -11,8 +11,10 @@ from harpocrates_server.models.document import Document
 from harpocrates_server.models.http_status import HttpStatus  # noqa: E501
 from harpocrates_server import util, db
 
+from harpocrates_server.service.errors import create_api_http_status
 
-def create_set(body):  # noqa: E501
+
+def create_set(body) -> Tuple[Union[ApiHttpStatus, DocumentSet], int]:  # noqa: E501
     """Add a new documentset set to the engine
 
      # noqa: E501
@@ -23,16 +25,17 @@ def create_set(body):  # noqa: E501
     :rtype: DocumentSet
     """
     if not connexion.request.is_json:
-        return HTTPStatus.BAD_REQUEST
+        error = HTTPStatus.BAD_REQUEST
+        return create_api_http_status(error), error.value
 
     document_set = DocumentSet.from_dict(connexion.request.get_json())  # noqa: E501
 
     db.create_collection(document_set.name)
 
-    return HTTPStatus.CREATED
+    return document_set, HTTPStatus.CREATED.value
 
 
-def delete_set(set_id):  # noqa: E501
+def delete_set(set_id) -> int:  # noqa: E501
     """delete the set
 
      # noqa: E501
@@ -44,10 +47,10 @@ def delete_set(set_id):  # noqa: E501
     """
 
     db[set_id].drop()
-    return HTTPStatus.OK
+    return HTTPStatus.OK.value
 
 
-def get_set(set_id):  # noqa: E501
+def get_set(set_id) -> Tuple[Union[ApiHttpStatus, Documents], int]:  # noqa: E501
     """lists all documents in the set
 
      # noqa: E501
@@ -67,10 +70,12 @@ def get_set(set_id):  # noqa: E501
         del document_dict["_id"]
         document = Document(**document_dict)
         document_list.append(document)
-    return Documents(documents=document_list)
+
+    document_set = DocumentSet()
+    return Documents(documents=document_list), HTTPStatus.OK.value
 
 
-def get_sets():  # noqa: E501
+def get_sets() -> Tuple[Union[ApiHttpStatus, DocumentSets], int]:  # noqa: E501
     """List all documentsets known by the engine
 
      # noqa: E501
@@ -89,4 +94,4 @@ def get_sets():  # noqa: E501
             )
         )
     doc_sets = DocumentSets(document_sets=doc_set_list)
-    return doc_sets
+    return doc_sets, HTTPStatus.OK.value
