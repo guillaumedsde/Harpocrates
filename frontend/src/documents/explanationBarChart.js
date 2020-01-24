@@ -54,7 +54,11 @@ export default function ExplanationChart(props) {
 
   // handle clicks on chart bars
   const handleClick = params => {
-    if (!params || props.activeFeature !== params.activeLabel) {
+    if (
+      !params ||
+      !params.activeLabel ||
+      props.activeFeature !== params.activeLabel
+    ) {
       props.setActiveFeature(params.activeLabel);
     } else {
       props.setActiveFeature(null);
