@@ -2,7 +2,7 @@ import React from "react";
 
 import BorderColor from "@material-ui/icons/BorderColor";
 import FormatColorResetIcon from "@material-ui/icons/FormatColorReset";
-import InsertCommentIcon from "@material-ui/icons/InsertComment";
+// import InsertCommentIcon from "@material-ui/icons/InsertComment";
 import { Button, ButtonGroup } from "@material-ui/core";
 
 import { DocumentApi } from "@harpocrates/api-client";

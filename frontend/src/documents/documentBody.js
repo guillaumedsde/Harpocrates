@@ -4,7 +4,7 @@ import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
 import { useTheme } from "@material-ui/styles";
 
-import { TextAnnotator, TokenAnnotator } from "react-text-annotate";
+import { TextAnnotator } from "react-text-annotate";
 import { Badge } from "@material-ui/core";
 
 import { uniqueFeatures } from "./explanationBarChart";
