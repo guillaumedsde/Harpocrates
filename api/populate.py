@@ -15,7 +15,11 @@ from harpocrates_server.service.data_parsing import (
     extract_file_paths,
     extract_labels,
 )
-from harpocrates_server.service.classification import get_model, CLASSIFIERS, get_vectorizer
+from harpocrates_server.service.classification import (
+    get_model,
+    CLASSIFIERS,
+    get_vectorizer,
+)
 
 from harpocrates_server.controllers.document_controller import (
     classify,
@@ -90,9 +94,11 @@ if __name__ == "__main__":
 
     pool = Pool(cpu_count())
     # create, classify and store documents
-    for path, data in zip(test_paths, test_data):
+    for doc_path, doc_data in zip(test_paths, test_data):
         pool.apply_async(
-            func=process_document, args=[path, data], error_callback=logging.exception
+            func=process_document,
+            args=[doc_path, doc_data],
+            error_callback=logging.exception,
         )
     pool.close()
     pool.join()
