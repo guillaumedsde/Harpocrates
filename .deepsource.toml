@@ -1,0 +1,19 @@
+version = 1
+
+# Python analyzer
+[[analyzers]]
+name = "python"
+enabled = true
+dependency_file_paths = ["api/Pipfile", "api/Pipfile.lock"]
+
+[analyzers.meta]
+runtime_version = "3.x.x"
+
+# Docker Analyzer
+[[analyzers]]
+name = "docker"
+enabled = true
+
+[analyzers.meta]
+dockerfile_paths = ["api/Dockerfile", "frontend/Dockerfile"]
+trusted_registries = ["docker.io"]
