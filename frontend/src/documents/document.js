@@ -45,48 +45,59 @@ export default function Document(props) {
 
   // effect for getting document
   useEffect(() => {
-    api
-      .getDocument(props.documentSetName, props.documentId)
-      .then(apiDocument => {
+    api.getDocument(props.documentSetName, props.documentId).then(
+      apiDocument => {
         setDocument(apiDocument);
-      });
+      },
+      reason => {
+        console.error(reason);
+      }
+    );
   }, []);
 
   // effect for getting prediction and explanation
   useEffect(() => {
     api
       .getPredictedClassification(props.documentSetName, props.documentId)
-      .then(apiClassification => {
-        // create list of explainers from API response
-        const apiExplainers = apiClassification.explanations.map(
-          explanation => explanation.explainer
-        );
+      .then(
+        apiClassification => {
+          // create list of explainers from API response
+          const apiExplainers = apiClassification.explanations.map(
+            explanation => explanation.explainer
+          );
 
-        // update list of explainers
-        setExplainers(apiExplainers);
+          // update list of explainers
+          setExplainers(apiExplainers);
 
-        // set current explainer to first explainer
-        setExplainer(apiExplainers[0]);
+          // set current explainer to first explainer
+          setExplainer(apiExplainers[0]);
 
-        // calculate maximum number of explanation features from
-        // number of unique features in first explanation
-        const apiMaxClassification = uniqueFeatures(
-          apiClassification.explanations[0]
-        ).length;
+          // calculate maximum number of explanation features from
+          // number of unique features in first explanation
+          const apiMaxClassification = uniqueFeatures(
+            apiClassification.explanations[0]
+          ).length;
 
-        setMaxExplanations(apiMaxClassification);
-        setNbrExplanations(apiMaxClassification);
-        setClassification(apiClassification);
-      });
+          setMaxExplanations(apiMaxClassification);
+          setNbrExplanations(apiMaxClassification);
+          setClassification(apiClassification);
+        },
+        reason => {
+          console.error(reason);
+        }
+      );
   }, []);
 
   // effect for getting sensitive sections
   useEffect(() => {
-    api
-      .getSensitiveSections(props.documentSetName, props.documentId)
-      .then(apiSensitiveSections => {
+    api.getSensitiveSections(props.documentSetName, props.documentId).then(
+      apiSensitiveSections => {
         setSensitiveSections(apiSensitiveSections);
-      });
+      },
+      reason => {
+        console.error(reason);
+      }
+    );
   }, []);
 
   if (document) {

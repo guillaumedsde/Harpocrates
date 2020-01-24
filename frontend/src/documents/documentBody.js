@@ -111,7 +111,7 @@ export default function DocumentBody(props) {
       style={{ height: "85vh", overflow: "auto" }}
     >
       <TextAnnotator
-        tokens={props.document.content.split(/(?!\n)\s+/)}
+        // tokens={props.document.content.split(/(?!\n)\s+/)}
         content={props.document.content}
         value={annotations}
         onChange={handleChange}
