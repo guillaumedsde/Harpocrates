@@ -41,7 +41,7 @@ CLASSIFIERS = [
     # DecisionTreeClassifier(),
     # SVC(probability=True, kernel="linear", cache_size=1000),
     # XGBClassifier(n_jobs=PROCESSES, objective="binary:logistic"),
-    SVC()
+    SVC(kernel="linear", decision_function_shape="ovo", cache_size=1000)
 ]
 
 
@@ -57,13 +57,14 @@ def get_vectorizer():
 
 def build_vectorizer():
     return TfidfVectorizer(
-        norm="l2",
+        norm="l1",
         analyzer="word",
         stop_words="english",
         strip_accents="unicode",
         lowercase=True,
         use_idf=True,
         smooth_idf=True,
+        sublinear_tf=True,
     )
 
 
