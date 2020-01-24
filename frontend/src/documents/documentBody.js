@@ -84,8 +84,8 @@ export default function DocumentBody(props) {
     var sensitiveSections = [];
     newAnnotations.forEach(newAnnotation => {
       if (
-        (newAnnotation.tag !== "sensitive") &
-        (newAnnotation.tag !== "insensitive")
+        newAnnotation.tag !== "sensitive" &&
+        newAnnotation.tag !== "insensitive"
       ) {
         sensitiveSections.push(
           new SensitiveSection(
