@@ -26,8 +26,6 @@ COPY --from=build /usr/local/lib/python${PYTHON_VERSION}/site-packages /usr/loca
 # COPY --from=build /usr/local/bin/waitress-serve /usr/local/bin/waitress-serve
 WORKDIR /usr/src/app
 ENV PYTHONPATH=/usr/local/lib/python${PYTHON_VERSION}/site-packages
-ENV FLASK_APP=harpocrates_server
-ENV FLASK_ENV=production
 
 EXPOSE 80
 
