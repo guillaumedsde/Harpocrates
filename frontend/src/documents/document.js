@@ -100,8 +100,6 @@ export default function Document(props) {
     );
   }, []);
 
-  console.log(document);
-
   if (document) {
     return (
       <>
