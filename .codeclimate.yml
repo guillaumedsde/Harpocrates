@@ -31,3 +31,7 @@ exclude_patterns:
   - "**/tests/"
   - "**/vendor/"
   - "**/*.d.ts"
+  - "js-api-client/"
+  - "api-specification/"
+  - ".vscode/"
+  - "docs/"
