@@ -215,9 +215,8 @@ def get_document(
 def classify_text(text: str) -> PredictedClassification:
     """Calculate the classification of a text with the explanation for the predicted classification
 
-    :param document: document for which to calculate classification
+    :param text: text for which to calculate classification
     """
-    document, status = get_document(set_id, doc_id)
 
     # TODO this is a long blocking call when first training the classifier, needs to return 202 "created" with some URL to the processed element
     trained_model, classifier_type = get_model()
@@ -262,7 +261,7 @@ def classify_text(text: str) -> PredictedClassification:
             matches = re.finditer(
                 pattern,
                 text,
-                # match in entire document and regardless of case
+                # match in entire text and regardless of case
                 flags=re.MULTILINE | re.IGNORECASE,
             )
 
@@ -330,7 +329,7 @@ def get_predicted_classification(set_id, doc_id):  # noqa: E501
 
     :rtype: PredictedClassification
     """
-    document = get_document(set_id, doc_id)
+    document, status = get_document(set_id, doc_id)
 
     predicted_classification_query = db[set_id].find_one(
         {"_id": ObjectId(doc_id)}, {"predicted_classification": 1}
@@ -381,7 +380,7 @@ def classify(set_id: str, doc_id: str) -> None:
     :type doc_id: str
     """
 
-    document = get_document(set_id, doc_id)
+    document, status = get_document(set_id, doc_id)
 
     # rebuild document content from list of paragraph content
     document_content = "".join([paragraph.content for paragraph in document.paragraphs])
