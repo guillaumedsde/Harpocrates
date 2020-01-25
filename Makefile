@@ -93,3 +93,6 @@ api-server: ## generate Python API server code from specification
 		--additional-properties=packageName=harpocrates_server \
 		--additional-properties=serverPort=80 \
 
+.PHONY: codeclimate-report
+codeclimate-report:
+	@CONTAINER_TIMEOUT_SECONDS=1200 CODECLIMATE_DEBUG=1 codeclimate analyze  -f html > codeclimate.html
