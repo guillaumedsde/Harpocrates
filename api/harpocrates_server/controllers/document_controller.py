@@ -219,14 +219,14 @@ def calculate_classification_with_explanation(
     lime = lime_explanation(trained_model, document.content)
 
     # shap explanation
-    shap = shap_tree_explanation(trained_model, document.content)
+    # shap = shap_tree_explanation(trained_model, document.content)
 
     # document is sensitive if probability of "non sensitive" classification is lower than "sensitive" classification
     sensitive = lime.predict_proba[0] < lime.predict_proba[1]
     # sensitivity of document is the probability of "sensitive" classification
     sensitivity = round(lime.predict_proba[1] * 100)
 
-    feature_weights = {"lime": lime.as_list(), "shap": shap}
+    feature_weights = {"lime": lime.as_list()} #, "shap": shap}
 
     explanations = []
 
