@@ -65,7 +65,7 @@ delete the set
 import @HarpocratesApiClient from '@harpocrates/api-client';
 
 let apiInstance = new @HarpocratesApiClient.SetApi();
-let setId = "setId_example"; // String | ID of a set
+let setId = 9_11; // String | ID of a set
 apiInstance.deleteSet(setId).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
 }, (error) => {
@@ -107,7 +107,7 @@ lists all documents in the set
 import @HarpocratesApiClient from '@harpocrates/api-client';
 
 let apiInstance = new @HarpocratesApiClient.SetApi();
-let setId = "setId_example"; // String | ID of a set
+let setId = 9_11; // String | ID of a set
 apiInstance.getSet(setId).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
 }, (error) => {

@@ -71,14 +71,10 @@ export default function DocumentSet(props) {
       <List>
         {documents.map(document => (
           <ListItem
-            key={document.documentId}
+            key={document._id}
             button
             onClick={event =>
-              handleListItemClick(
-                event,
-                props.documentSetName,
-                document.documentId
-              )
+              handleListItemClick(event, props.documentSetName, document._id)
             }
           >
             <ListItemAvatar>
@@ -87,7 +83,7 @@ export default function DocumentSet(props) {
               </Avatar>
             </ListItemAvatar>
             <ListItemText
-              primary={document.name || document.documentId}
+              primary={document.name || document._id}
               secondary={
                 <>
                   <Sensitivity
@@ -105,7 +101,7 @@ export default function DocumentSet(props) {
                 edge="end"
                 aria-label="delete"
                 onClick={event =>
-                  deleteItem(event, props.documentSetName, document.documentId)
+                  deleteItem(event, props.documentSetName, document._id)
                 }
               >
                 <DeleteIcon />
