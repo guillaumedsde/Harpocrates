@@ -31,6 +31,7 @@ from harpocrates_server.service.explanation import (
 )
 
 from harpocrates_server.service.errors import create_api_http_status
+from harpocrates_server.service.document import document_from_mongo_dict
 
 
 def add_sensitive_section(
@@ -150,22 +151,15 @@ def create_document(set_id, body) -> Tuple[Document, int]:  # noqa: E501
     return document, HTTPStatus.OK.value
 
 
-def delete_document(set_id: str, doc_id: str) -> Tuple[Document, int]:  # noqa: E501
-    """delete the set
-
-     # noqa: E501
-
-    :param set_id: ID of a set
-    :type set_id: str
-    :param doc_id: ID of a document
-    :type doc_id: str
-
-    :rtype: Document
+def delete_document(set_id: str, doc_id: str) -> Tuple[Document, int]:
     """
+    Delete a document a in the set
+    :param set_id: ID of a set
+    :param doc_id: ID of a document
+    """
+    result = db[set_id].find_one_and_delete({"_id": ObjectId(doc_id)})
 
-    result = db[set_id].delete_one({"_id": ObjectId(doc_id)})
-
-    deleted = Document(**result.raw_result)
+    deleted = document_from_mongo_dict(result)
     return deleted, HTTPStatus.OK.value
 
 
@@ -226,7 +220,7 @@ def calculate_classification_with_explanation(
     # sensitivity of document is the probability of "sensitive" classification
     sensitivity = round(lime.predict_proba[1] * 100)
 
-    feature_weights = {"lime": lime.as_list()} #, "shap": shap}
+    feature_weights = {"lime": lime.as_list()}  # , "shap": shap}
 
     explanations = []
 
