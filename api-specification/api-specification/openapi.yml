@@ -1,7 +1,7 @@
 openapi: "3.0.2"
 info:
   description: This is the Rest API specification for the Harpocrates application
-  version: "8.2.0"
+  version: "8.2.0-lineClassifications.0"
   title: Harpocrates API
   license:
     name: MIT
@@ -357,9 +357,9 @@ components:
           description: array of document sets
           items:
             $ref: "#/components/schemas/documentSet"
-    paragraph:
+    line:
       type: object
-      description: A paragraph from a document
+      description: A line from a document
       required:
         - content
       properties:
@@ -369,13 +369,13 @@ components:
           $ref: "#/components/schemas/sensitiveSections"
         content:
           type: string
-          description: content of the paragraph
+          description: content of the line
     document:
       type: object
       description: A document to review
       required:
         - documentId
-        - paragraphs
+        - lines
       properties:
         name:
           allOf:
@@ -387,12 +387,12 @@ components:
             - description: Unique identifier for a Document
         predictedClassification:
           $ref: "#/components/schemas/predictedClassification"
-        paragraphs:
+        lines:
           type: array
           uniqueItems: true
           items:
-            $ref: "#/components/schemas/paragraph"
-          description: list of paragraph object representing the content of the document
+            $ref: "#/components/schemas/line"
+          description: list of line object representing the content of the document
     documents:
       type: object
       description: an object representing multiple documents

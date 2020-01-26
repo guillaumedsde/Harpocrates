@@ -5,7 +5,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useTheme } from "@material-ui/styles";
 
 import { TextAnnotator } from "react-text-annotate";
-import { Grid} from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 
 import { uniqueFeatures } from "./explanationBarChart";
 import SensitivityBar from "./documentSensitivityBar";
@@ -113,11 +113,21 @@ export default function DocumentBody(props) {
       style={{ height: "85vh", overflow: "auto" }}
     >
       <Grid container alignItems="center" justify="center">
-        {props.document.paragraphs.map(paragraph => (
+        {props.document.lines.map(line => (
           <>
-            <Grid item xs={10}>
+            <Grid item xs={1}>
+              {/* <Sensitivity classification={line.predictedClassification} /> */}
+              {line.predictedClassification ? (
+                <div style={{ width: "75%" }}>
+                  <SensitivityBar
+                    classification={line.predictedClassification}
+                  />
+                </div>
+              ) : null}
+            </Grid>
+            <Grid item xs={11}>
               <TextAnnotator
-                content={paragraph.content}
+                content={line.content}
                 value={[]}
                 onChange={handleChange}
                 getSpan={span => ({
@@ -125,12 +135,6 @@ export default function DocumentBody(props) {
                   tag: props.tag,
                   color: TAG_COLORS[props.tag]
                 })}
-              />
-            </Grid>
-            <Grid item xs={2}>
-              <Sensitivity classification={paragraph.predictedClassification} />
-              <SensitivityBar
-                classification={paragraph.predictedClassification}
               />
             </Grid>
           </>
