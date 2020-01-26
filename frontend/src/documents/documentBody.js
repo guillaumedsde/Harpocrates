@@ -2,20 +2,13 @@ import * as React from "react";
 
 import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
-import { useTheme } from "@material-ui/styles";
 
-import { TextAnnotator } from "react-text-annotate";
 import { Grid } from "@material-ui/core";
 
 import { uniqueFeatures } from "./explanationBarChart";
-import SensitivityBar from "./documentSensitivityBar";
 
-import {
-  SensitiveSection,
-  DocumentApi,
-  SensitiveSections
-} from "@harpocrates/api-client";
-import Sensitivity from "./documentSensitivity";
+import { DocumentApi } from "@harpocrates/api-client";
+import TextContentAnnotator from "./textContentAnnotator";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -30,23 +23,6 @@ const useStyles = makeStyles(theme => ({
 
 export default function DocumentBody(props) {
   var annotations = [];
-  const theme = useTheme();
-
-  const TAG_STYLES = {
-    sensitiveExplanation: {
-      backgroundColor: "rgba(255, 0, 0, 0.5)",
-      color: "black"
-    },
-    insensitiveExplanation: {
-      backgroundColor: "rgba(0, 0, 255, 0.5)",
-      color: "black"
-    }
-  };
-
-  const TAG_COLORS = {
-    sensitive: theme.palette.primary.main,
-    insensitive: theme.palette.secondary.main
-  };
 
   // display sensitive sections (redactions) if there are any
   if (props.sensitiveSections) {
@@ -82,31 +58,6 @@ export default function DocumentBody(props) {
 
   const classes = useStyles();
 
-  const handleChange = newAnnotations => {
-    var sensitiveSections = [];
-    newAnnotations.forEach(newAnnotation => {
-      if (
-        newAnnotation.tag !== "sensitive" &&
-        newAnnotation.tag !== "insensitive"
-      ) {
-        sensitiveSections.push(
-          new SensitiveSection(
-            newAnnotation.start,
-            newAnnotation.end,
-            newAnnotation.tag
-          )
-        );
-      }
-    });
-    api
-      .addSensitiveSections(props.setName, props.document.documentId, {
-        sensitiveSections: new SensitiveSections(sensitiveSections)
-      })
-      .then(sensitiveSections => {
-        props.setSensitiveSections(sensitiveSections);
-      }, console.error);
-  };
-
   return (
     <Paper
       className={classes.root}
@@ -114,28 +65,13 @@ export default function DocumentBody(props) {
     >
       <Grid container alignItems="center" justify="center">
         {props.document.textContents.map(textContent => (
-          <>
-            <Grid item xs={10}>
-              <TextAnnotator
-                content={textContent.content}
-                value={[]}
-                onChange={handleChange}
-                getSpan={span => ({
-                  ...span,
-                  tag: props.tag,
-                  color: TAG_COLORS[props.tag]
-                })}
-              />
-            </Grid>
-            <Grid item xs={2}>
-              <Sensitivity
-                classification={textContent.predictedClassification}
-              />
-              <SensitivityBar
-                classification={textContent.predictedClassification}
-              />
-            </Grid>
-          </>
+          <TextContentAnnotator
+            key={`${textContent.content.split(" ")[0]}${
+              textContent.sensitivity
+            }`}
+            api={api}
+            textContent={textContent}
+          />
         ))}
       </Grid>
     </Paper>
