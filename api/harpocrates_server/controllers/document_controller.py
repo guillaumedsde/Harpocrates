@@ -22,7 +22,7 @@ from harpocrates_server.models.feature import Feature
 from harpocrates_server.models.sensitive_section import SensitiveSection
 from harpocrates_server.models.sensitive_sections import SensitiveSections
 from harpocrates_server.models.http_status import HttpStatus as ApiHttpStatus
-from harpocrates_server.models.paragraph import Paragraph
+from harpocrates_server.models.text_content import TextContent
 
 from harpocrates_server import util, db
 
@@ -36,7 +36,7 @@ from harpocrates_server.service.explanation import (
 from harpocrates_server.service.errors import create_api_http_status
 from harpocrates_server.service.document import (
     document_from_mongo_dict,
-    paragraphs_from_content,
+    text_contents_from_document_body,
 )
 
 
@@ -146,8 +146,8 @@ def create_document(set_id, body) -> Tuple[Document, int]:  # noqa: E501
 
     :rtype: Document
     """
-    paragraphs = paragraphs_from_content(body.decode())
-    document = Document(paragraphs=paragraphs)
+    text_contents = text_contents_from_document_body(body.decode())
+    document = Document(text_contents=text_contents)
     operation_result = db[set_id].insert_one(document.to_dict())
 
     doc_id = operation_result.inserted_id
@@ -195,20 +195,20 @@ def get_document(
     del document_dict["_id"]
     document = Document().from_dict(document_dict)
 
-    # recreate paragraph objects
-    paragraphs = []
-    for paragraph_dict in document_dict["paragraphs"]:
-        classification_dict = paragraph_dict["predicted_classification"]
+    # recreate text_content objects
+    text_contents = []
+    for text_content_dict in document_dict["text_contents"]:
+        classification_dict = text_content_dict["predicted_classification"]
 
         classification = None
         if classification_dict:
             classification = PredictedClassification().from_dict(classification_dict)
-        paragraph = Paragraph().from_dict(paragraph_dict)
-        paragraph.predicted_classification = classification
-        paragraphs.append(paragraph)
+        text_content = TextContent().from_dict(text_content_dict)
+        text_content.predicted_classification = classification
+        text_contents.append(text_content)
 
-    # add paragraphs to document and return it
-    document.paragraphs = paragraphs
+    # add text_contents to document and return it
+    document.text_contents = text_contents
     return document, HTTPStatus.OK.value
 
 
@@ -290,31 +290,31 @@ def classify_text(text: str) -> PredictedClassification:
     return classification
 
 
-def calculate_paragraph_classifications(
+def calculate_text_content_classifications(
     document: Document,
 ) -> List[PredictedClassification]:
-    """Calculate the classifications for all the paragraphs pf a document
+    """Calculate the classifications for all the text_contents pf a document
 
-    :param document: document for which to calculate paragraph classifications
+    :param document: document for which to calculate text_content classifications
     """
 
-    paragraphs = []
+    text_contents = []
 
-    for paragraph in document.paragraphs:
+    for text_content in document.text_contents:
         try:
-            classification = classify_text(paragraph.content)
+            classification = classify_text(text_content.content)
         except ValueError as e:
             # traceback.print_tb(e.__traceback__)
             # print(type(e))
             classification = None
 
-        new_paragraph = Paragraph(
-            content=paragraph.content, predicted_classification=classification
+        new_text_content = TextContent(
+            content=text_content.content, predicted_classification=classification
         )
 
-        paragraphs.append(new_paragraph)
+        text_contents.append(new_text_content)
 
-    return paragraphs
+    return text_contents
 
 
 def get_predicted_classification(set_id, doc_id):  # noqa: E501
@@ -382,12 +382,14 @@ def classify(set_id: str, doc_id: str) -> None:
 
     document, status = get_document(set_id, doc_id)
 
-    # rebuild document content from list of paragraph content
-    document_content = "".join([paragraph.content for paragraph in document.paragraphs])
+    # rebuild document content from list of text_content content
+    document_content = "".join(
+        [text_content.content for text_content in document.text_contents]
+    )
 
     classification = classify_text(document_content)
     try:
-        classified_paragraphs = calculate_paragraph_classifications(document)
+        classified_text_contents = calculate_text_content_classifications(document)
     except Exception as e:
         print("##################################################################")
         print(set_id, document.name)
@@ -402,8 +404,8 @@ def classify(set_id: str, doc_id: str) -> None:
                 # Update document wide predicted classification
                 "predicted_classification": classification.to_dict(),
                 # Update paragrah classifications
-                "paragraphs": [
-                    paragraph.to_dict() for paragraph in classified_paragraphs
+                "text_contents": [
+                    text_content.to_dict() for text_content in classified_text_contents
                 ],
             }
         },
