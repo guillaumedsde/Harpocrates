@@ -14,6 +14,10 @@ import {
   Label
 } from "recharts";
 
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
+import Typography from "@material-ui/core/Typography";
+
 import uniqBy from "lodash/uniqBy";
 
 import { CircularProgress } from "@material-ui/core";
@@ -38,6 +42,35 @@ export function uniqueFeatures(classification) {
   }
   return allUniqueFeatures;
 }
+
+const CustomTooltip = ({ active, payload, label }) => {
+  if (active) {
+    return (
+      <Card>
+        <CardContent>
+          <Typography
+            // className={classes.title}
+            color="textSecondary"
+            gutterBottom
+          >
+            Explanation feature
+          </Typography>
+          <Typography variant="h5" component="h2">
+            {label}
+          </Typography>
+          <Typography
+            // className={classes.pos}
+            color="textSecondary"
+          >
+            {payload[0].value.toFixed(6)}
+          </Typography>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  return null;
+};
 
 export default function ExplanationChart(props) {
   const theme = useTheme();
@@ -86,7 +119,7 @@ export default function ExplanationChart(props) {
                 Sensitive
               </Label>
             </XAxis>
-            <Tooltip formatter={value => value.toFixed(6)} />
+            <Tooltip content={CustomTooltip} />
             <ReferenceLine x={0} stroke="#000" />
             {/* Color depending on positivity of value */}
             <Bar dataKey="weight">
