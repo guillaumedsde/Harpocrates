@@ -10,10 +10,10 @@ from harpocrates_server.models.documents import Documents
 from harpocrates_server.models.feature import Feature
 from harpocrates_server.models.feature_all_of import FeatureAllOf
 from harpocrates_server.models.http_status import HttpStatus
-from harpocrates_server.models.paragraph import Paragraph
 from harpocrates_server.models.predicted_classification import PredictedClassification
 from harpocrates_server.models.predicted_classification_explanation import PredictedClassificationExplanation
 from harpocrates_server.models.section import Section
 from harpocrates_server.models.sensitive_section import SensitiveSection
 from harpocrates_server.models.sensitive_section_all_of import SensitiveSectionAllOf
 from harpocrates_server.models.sensitive_sections import SensitiveSections
+from harpocrates_server.models.text_content import TextContent

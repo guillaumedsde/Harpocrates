@@ -1,7 +1,7 @@
 openapi: "3.0.2"
 info:
   description: This is the Rest API specification for the Harpocrates application
-  version: "8.2.0-paragraphClassifications.0"
+  version: "8.2.0-textContentClassifications.0"
   title: Harpocrates API
   license:
     name: MIT
@@ -357,9 +357,9 @@ components:
           description: array of document sets
           items:
             $ref: "#/components/schemas/documentSet"
-    paragraph:
+    textContent:
       type: object
-      description: A paragraph from a document
+      description: A textContent from a document
       required:
         - content
       properties:
@@ -369,13 +369,13 @@ components:
           $ref: "#/components/schemas/sensitiveSections"
         content:
           type: string
-          description: content of the paragraph
+          description: content of the textContent
     document:
       type: object
       description: A document to review
       required:
         - documentId
-        - paragraphs
+        - textContents
       properties:
         name:
           allOf:
@@ -387,12 +387,12 @@ components:
             - description: Unique identifier for a Document
         predictedClassification:
           $ref: "#/components/schemas/predictedClassification"
-        paragraphs:
+        textContents:
           type: array
           uniqueItems: true
           items:
-            $ref: "#/components/schemas/paragraph"
-          description: list of paragraph object representing the content of the document
+            $ref: "#/components/schemas/textContent"
+          description: list of textContent object representing the content of the document
     documents:
       type: object
       description: an object representing multiple documents

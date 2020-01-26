@@ -4,7 +4,7 @@ info:
   license:
     name: MIT
   title: Harpocrates API
-  version: 8.2.0-paragraphClassifications.0
+  version: 8.2.0-textContentClassifications.0
 externalDocs:
   description: Documentation
   url: https://harpocrates-app.gitlab.io/harpocrates
@@ -561,8 +561,8 @@ components:
       required:
       - documentSets
       type: object
-    paragraph:
-      description: A paragraph from a document
+    textContent:
+      description: A textContent from a document
       example:
         predictedClassification:
           classifier: SVM
@@ -588,7 +588,7 @@ components:
         sensitiveSections:
           $ref: '#/components/schemas/sensitiveSections'
         content:
-          description: content of the paragraph
+          description: content of the textContent
           type: string
       required:
       - content
@@ -596,6 +596,43 @@ components:
     document:
       description: A document to review
       example:
+        textContents:
+        - predictedClassification:
+            classifier: SVM
+            explanations:
+            - features:
+              - null
+              - null
+              explainer: Lime
+            - features:
+              - null
+              - null
+              explainer: Lime
+            sensitive: true
+            sensitivity: 78.3
+          sensitiveSections:
+            sensitiveSections:
+            - null
+            - null
+          content: content
+        - predictedClassification:
+            classifier: SVM
+            explanations:
+            - features:
+              - null
+              - null
+              explainer: Lime
+            - features:
+              - null
+              - null
+              explainer: Lime
+            sensitive: true
+            sensitivity: 78.3
+          sensitiveSections:
+            sensitiveSections:
+            - null
+            - null
+          content: content
         predictedClassification:
           classifier: SVM
           explanations:
@@ -611,43 +648,6 @@ components:
           sensitivity: 78.3
         name: ""
         documentId: ""
-        paragraphs:
-        - predictedClassification:
-            classifier: SVM
-            explanations:
-            - features:
-              - null
-              - null
-              explainer: Lime
-            - features:
-              - null
-              - null
-              explainer: Lime
-            sensitive: true
-            sensitivity: 78.3
-          sensitiveSections:
-            sensitiveSections:
-            - null
-            - null
-          content: content
-        - predictedClassification:
-            classifier: SVM
-            explanations:
-            - features:
-              - null
-              - null
-              explainer: Lime
-            - features:
-              - null
-              - null
-              explainer: Lime
-            sensitive: true
-            sensitivity: 78.3
-          sensitiveSections:
-            sensitiveSections:
-            - null
-            - null
-          content: content
       properties:
         name:
           allOf:
@@ -659,21 +659,59 @@ components:
           - description: Unique identifier for a Document
         predictedClassification:
           $ref: '#/components/schemas/predictedClassification'
-        paragraphs:
-          description: list of paragraph object representing the content of the document
+        textContents:
+          description: list of textContent object representing the content of the
+            document
           items:
-            $ref: '#/components/schemas/paragraph'
+            $ref: '#/components/schemas/textContent'
           type: array
           uniqueItems: true
       required:
       - documentId
-      - paragraphs
+      - textContents
       type: object
     documents:
       description: an object representing multiple documents
       example:
         documents:
-        - predictedClassification:
+        - textContents:
+          - predictedClassification:
+              classifier: SVM
+              explanations:
+              - features:
+                - null
+                - null
+                explainer: Lime
+              - features:
+                - null
+                - null
+                explainer: Lime
+              sensitive: true
+              sensitivity: 78.3
+            sensitiveSections:
+              sensitiveSections:
+              - null
+              - null
+            content: content
+          - predictedClassification:
+              classifier: SVM
+              explanations:
+              - features:
+                - null
+                - null
+                explainer: Lime
+              - features:
+                - null
+                - null
+                explainer: Lime
+              sensitive: true
+              sensitivity: 78.3
+            sensitiveSections:
+              sensitiveSections:
+              - null
+              - null
+            content: content
+          predictedClassification:
             classifier: SVM
             explanations:
             - features:
@@ -688,7 +726,7 @@ components:
             sensitivity: 78.3
           name: ""
           documentId: ""
-          paragraphs:
+        - textContents:
           - predictedClassification:
               classifier: SVM
               explanations:
@@ -725,7 +763,7 @@ components:
               - null
               - null
             content: content
-        - predictedClassification:
+          predictedClassification:
             classifier: SVM
             explanations:
             - features:
@@ -740,43 +778,6 @@ components:
             sensitivity: 78.3
           name: ""
           documentId: ""
-          paragraphs:
-          - predictedClassification:
-              classifier: SVM
-              explanations:
-              - features:
-                - null
-                - null
-                explainer: Lime
-              - features:
-                - null
-                - null
-                explainer: Lime
-              sensitive: true
-              sensitivity: 78.3
-            sensitiveSections:
-              sensitiveSections:
-              - null
-              - null
-            content: content
-          - predictedClassification:
-              classifier: SVM
-              explanations:
-              - features:
-                - null
-                - null
-                explainer: Lime
-              - features:
-                - null
-                - null
-                explainer: Lime
-              sensitive: true
-              sensitivity: 78.3
-            sensitiveSections:
-              sensitiveSections:
-              - null
-              - null
-            content: content
       properties:
         documents:
           description: array of documents
