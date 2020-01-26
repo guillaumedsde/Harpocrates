@@ -19,13 +19,13 @@ class Document(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, name=None, document_id=None, predicted_classification=None, text_contents=None):  # noqa: E501
+    def __init__(self, name=None, id=None, predicted_classification=None, text_contents=None):  # noqa: E501
         """Document - a model defined in OpenAPI
 
         :param name: The name of this Document.  # noqa: E501
         :type name: str
-        :param document_id: The document_id of this Document.  # noqa: E501
-        :type document_id: str
+        :param id: The id of this Document.  # noqa: E501
+        :type id: str
         :param predicted_classification: The predicted_classification of this Document.  # noqa: E501
         :type predicted_classification: PredictedClassification
         :param text_contents: The text_contents of this Document.  # noqa: E501
@@ -33,20 +33,20 @@ class Document(Model):
         """
         self.openapi_types = {
             'name': str,
-            'document_id': str,
+            'id': str,
             'predicted_classification': PredictedClassification,
             'text_contents': List[TextContent]
         }
 
         self.attribute_map = {
             'name': 'name',
-            'document_id': 'documentId',
+            'id': '_id',
             'predicted_classification': 'predictedClassification',
             'text_contents': 'textContents'
         }
 
         self._name = name
-        self._document_id = document_id
+        self._id = id
         self._predicted_classification = predicted_classification
         self._text_contents = text_contents
 
@@ -83,27 +83,27 @@ class Document(Model):
         self._name = name
 
     @property
-    def document_id(self):
-        """Gets the document_id of this Document.
+    def id(self):
+        """Gets the id of this Document.
 
 
-        :return: The document_id of this Document.
+        :return: The id of this Document.
         :rtype: str
         """
-        return self._document_id
+        return self._id
 
-    @document_id.setter
-    def document_id(self, document_id):
-        """Sets the document_id of this Document.
+    @id.setter
+    def id(self, id):
+        """Sets the id of this Document.
 
 
-        :param document_id: The document_id of this Document.
-        :type document_id: str
+        :param id: The id of this Document.
+        :type id: str
         """
-        if document_id is None:
-            raise ValueError("Invalid value for `document_id`, must not be `None`")  # noqa: E501
+        if id is None:
+            raise ValueError("Invalid value for `id`, must not be `None`")  # noqa: E501
 
-        self._document_id = document_id
+        self._id = id
 
     @property
     def predicted_classification(self):

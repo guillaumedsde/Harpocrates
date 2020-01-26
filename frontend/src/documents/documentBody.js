@@ -5,9 +5,7 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import { Grid } from "@material-ui/core";
 
-import { uniqueFeatures } from "./explanationBarChart";
-
-import { DocumentApi } from "@harpocrates/api-client";
+import { TextContentApi } from "@harpocrates/api-client";
 import TextContentAnnotator from "./textContentAnnotator";
 
 const useStyles = makeStyles(theme => ({
@@ -22,39 +20,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function DocumentBody(props) {
-  var annotations = [];
-
-  // display sensitive sections (redactions) if there are any
-  if (props.sensitiveSections) {
-    props.sensitiveSections.sensitiveSections.forEach(feature => {
-      annotations.push({
-        start: feature.startOffset,
-        end: feature.endOffset,
-        tag: feature.name
-      });
-    });
-  }
-  // display classification explanations if a classification is defined
-  if (props.explanations) {
-    uniqueFeatures(props.explanations)
-      .slice(0, props.nbrExplanations)
-      .forEach(explanation => {
-        const sensitive = explanation.weight > 0;
-        if (
-          explanation.text === props.activeFeature ||
-          (!sensitive && props.showNonSensitive) ||
-          (sensitive && props.showSensitive)
-        ) {
-          annotations.push({
-            start: explanation.startOffset,
-            end: explanation.endOffset,
-            tag: sensitive ? "sensitive" : "insensitive"
-          });
-        }
-      });
-  }
-
-  var api = new DocumentApi();
+  var api = new TextContentApi();
 
   const classes = useStyles();
 
@@ -64,13 +30,20 @@ export default function DocumentBody(props) {
       style={{ height: "85vh", overflow: "auto" }}
     >
       <Grid container alignItems="center" justify="center">
-        {props.document.textContents.map(textContent => (
+        {props.document.textContents.map((textContent, index) => (
           <TextContentAnnotator
             key={`${textContent.content.split(" ")[0]}${
               textContent.sensitivity
             }`}
             api={api}
             textContent={textContent}
+            setName={props.setName}
+            documentId={props.document._id}
+            textContentIndex={index}
+            tag={props.tag}
+            showNonSensitive={props.showNonSensitive}
+            showSensitive={props.showSensitive}
+            explainer={props.explainer}
           />
         ))}
       </Grid>

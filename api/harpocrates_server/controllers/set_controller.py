@@ -65,13 +65,10 @@ def get_set(set_id) -> Tuple[Union[ApiHttpStatus, Documents], int]:  # noqa: E50
     """
 
     document_list = []
-    for entry in db[set_id].find(
+    for document_dict in db[set_id].find(
         {}, {"_id": 1, "name": 1, "predicted_classification": 1}
     ):
-        document_dict = deepcopy(entry)
-        document_dict["document_id"] = str(entry["_id"])
-        del document_dict["_id"]
-        document = Document(**document_dict)
+        document = Document().from_dict(document_dict)
         document_list.append(document)
 
     document_set = DocumentSet()

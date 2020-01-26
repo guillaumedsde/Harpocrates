@@ -18,7 +18,7 @@ def split_content_into_document(content: str) -> List[TextContent]:
         List[TextContent] --    document split into a list of one TextContent object
                                 representing the document
     """
-    return TextContent(content=content)
+    return [TextContent(content=content)]
 
 
 def split_content_into_paragraphs(content: str) -> List[TextContent]:
@@ -112,4 +112,5 @@ def document_from_mongo_dict(doc: Dict) -> Document:
     document_dict["document_id"] = str(doc["_id"])
     del document_dict["_id"]
     document = Document().from_dict(document_dict)
+    print(document)
     return document

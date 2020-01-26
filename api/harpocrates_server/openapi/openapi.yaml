@@ -4,7 +4,7 @@ info:
   license:
     name: MIT
   title: Harpocrates API
-  version: 8.2.0-textContentClassifications.0
+  version: 8.2.0-textContentClassifications.3
 externalDocs:
   description: Documentation
   url: https://harpocrates-app.gitlab.io/harpocrates
@@ -68,6 +68,7 @@ paths:
       operationId: delete_set
       parameters:
       - description: ID of a set
+        example: 9_11
         explode: false
         in: path
         name: setId
@@ -102,6 +103,7 @@ paths:
       operationId: get_set
       parameters:
       - description: ID of a set
+        example: 9_11
         explode: false
         in: path
         name: setId
@@ -138,6 +140,7 @@ paths:
       operationId: create_document
       parameters:
       - description: ID of a set
+        example: 9_11
         explode: false
         in: path
         name: setId
@@ -185,6 +188,7 @@ paths:
       operationId: delete_document
       parameters:
       - description: ID of a set
+        example: 9_11
         explode: false
         in: path
         name: setId
@@ -193,6 +197,7 @@ paths:
           type: string
         style: simple
       - description: ID of a document
+        example: document1
         explode: false
         in: path
         name: docId
@@ -227,6 +232,7 @@ paths:
       operationId: get_document
       parameters:
       - description: ID of a set
+        example: 9_11
         explode: false
         in: path
         name: setId
@@ -235,6 +241,7 @@ paths:
           type: string
         style: simple
       - description: ID of a document
+        example: document1
         explode: false
         in: path
         name: docId
@@ -270,6 +277,7 @@ paths:
       operationId: get_predicted_classification
       parameters:
       - description: ID of a set
+        example: 9_11
         explode: false
         in: path
         name: setId
@@ -278,6 +286,7 @@ paths:
           type: string
         style: simple
       - description: ID of a document
+        example: document1
         explode: false
         in: path
         name: docId
@@ -308,61 +317,13 @@ paths:
       tags:
       - document
       x-openapi-router-controller: harpocrates_server.controllers.document_controller
-  /documentSet/{setId}/{docId}/sensitiveSection:
-    post:
-      description: add a sensitive section to the document
-      operationId: add_sensitive_section
-      parameters:
-      - description: ID of a set
-        explode: false
-        in: path
-        name: setId
-        required: true
-        schema:
-          type: string
-        style: simple
-      - description: ID of a document
-        explode: false
-        in: path
-        name: docId
-        required: true
-        schema:
-          type: string
-        style: simple
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/sensitiveSection'
-      responses:
-        201:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/sensitiveSection'
-          description: Successfully added the sensitive section
-        400:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/httpStatus'
-          description: The request was invalid JSON or missing some attributes
-        404:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/httpStatus'
-          description: The specified resource was not found
-      summary: add a sensitive section to the document
-      tags:
-      - document
-      x-openapi-router-controller: harpocrates_server.controllers.document_controller
   /documentSet/{setId}/{docId}/sensitiveSections:
     get:
       description: get sensitive sections of the document
       operationId: get_sensitive_sections
       parameters:
       - description: ID of a set
+        example: 9_11
         explode: false
         in: path
         name: setId
@@ -371,6 +332,7 @@ paths:
           type: string
         style: simple
       - description: ID of a document
+        example: document1
         explode: false
         in: path
         name: docId
@@ -401,11 +363,13 @@ paths:
       tags:
       - document
       x-openapi-router-controller: harpocrates_server.controllers.document_controller
+  /documentSet/{setId}/{docId}/{textContentIndex}:
     post:
-      description: add multiple sensitive sections to the document
-      operationId: add_sensitive_sections
+      description: add a sensitive section to the document
+      operationId: add_sensitive_section
       parameters:
       - description: ID of a set
+        example: 9_11
         explode: false
         in: path
         name: setId
@@ -414,6 +378,7 @@ paths:
           type: string
         style: simple
       - description: ID of a document
+        example: document1
         explode: false
         in: path
         name: docId
@@ -421,18 +386,30 @@ paths:
         schema:
           type: string
         style: simple
+      - description: Index of the position of a TextContent object in the list of
+          TextContent objects making up the document
+        example: 2
+        explode: false
+        in: path
+        name: textContentIndex
+        required: true
+        schema:
+          format: int32
+          minimum: 0
+          type: integer
+        style: simple
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/sensitiveSections'
+              $ref: '#/components/schemas/sensitiveSection'
       responses:
         201:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/sensitiveSections'
-          description: Successfully added the sensitive sections
+                $ref: '#/components/schemas/sensitiveSection'
+          description: Successfully added the sensitive section
         400:
           content:
             application/json:
@@ -445,14 +422,77 @@ paths:
               schema:
                 $ref: '#/components/schemas/httpStatus'
           description: The specified resource was not found
-      summary: add multiple sensitive sections to the document
+      summary: add a sensitive section to the document
       tags:
-      - document
-      x-openapi-router-controller: harpocrates_server.controllers.document_controller
+      - textContent
+      x-openapi-router-controller: harpocrates_server.controllers.text_content_controller
+    put:
+      description: Overwrite the sensitive sections of a TextContent object
+      operationId: add_sensitive_sections
+      parameters:
+      - description: ID of a set
+        example: 9_11
+        explode: false
+        in: path
+        name: setId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: ID of a document
+        example: document1
+        explode: false
+        in: path
+        name: docId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Index of the position of a TextContent object in the list of
+          TextContent objects making up the document
+        example: 2
+        explode: false
+        in: path
+        name: textContentIndex
+        required: true
+        schema:
+          format: int32
+          minimum: 0
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/sensitiveSections'
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/sensitiveSections'
+          description: Successfully overwrote the sensitive sections
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The request was invalid JSON or missing some attributes
+        404:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The specified resource was not found
+      summary: Overwrite the sensitive sections of a TextContent object
+      tags:
+      - textContent
+      x-openapi-router-controller: harpocrates_server.controllers.text_content_controller
 components:
   parameters:
     docId:
       description: ID of a document
+      example: document1
       explode: false
       in: path
       name: docId
@@ -462,12 +502,26 @@ components:
       style: simple
     setId:
       description: ID of a set
+      example: 9_11
       explode: false
       in: path
       name: setId
       required: true
       schema:
         type: string
+      style: simple
+    textContentIndex:
+      description: Index of the position of a TextContent object in the list of TextContent
+        objects making up the document
+      example: 2
+      explode: false
+      in: path
+      name: textContentIndex
+      required: true
+      schema:
+        format: int32
+        minimum: 0
+        type: integer
       style: simple
   responses:
     notFound:
@@ -516,8 +570,7 @@ components:
     documentSet:
       description: schema for a set of Documents
       example:
-        documentCount: 0
-        size: size
+        documentCount: 42
         name: ""
         setId: ""
       properties:
@@ -529,13 +582,12 @@ components:
           allOf:
           - $ref: '#/components/schemas/idBase'
           - description: Unique identifier for a document set
+          nullable: true
         documentCount:
           description: number of documents in set
+          example: 42
           format: int32
           type: integer
-        size:
-          description: size of the set, unit comes at the end of the string
-          type: string
       required:
       - name
       type: object
@@ -543,12 +595,10 @@ components:
       description: an object representing multiple document sets
       example:
         documentSets:
-        - documentCount: 0
-          size: size
+        - documentCount: 42
           name: ""
           setId: ""
-        - documentCount: 0
-          size: size
+        - documentCount: 42
           name: ""
           setId: ""
       properties:
@@ -647,13 +697,14 @@ components:
           sensitive: true
           sensitivity: 78.3
         name: ""
-        documentId: ""
+        _id: ""
       properties:
         name:
           allOf:
           - $ref: '#/components/schemas/nameBase'
           - description: Name of the Document
-        documentId:
+          nullable: true
+        _id:
           allOf:
           - $ref: '#/components/schemas/idBase'
           - description: Unique identifier for a Document
@@ -667,7 +718,7 @@ components:
           type: array
           uniqueItems: true
       required:
-      - documentId
+      - _id
       - textContents
       type: object
     documents:
@@ -725,7 +776,7 @@ components:
             sensitive: true
             sensitivity: 78.3
           name: ""
-          documentId: ""
+          _id: ""
         - textContents:
           - predictedClassification:
               classifier: SVM
@@ -777,7 +828,7 @@ components:
             sensitive: true
             sensitivity: 78.3
           name: ""
-          documentId: ""
+          _id: ""
       properties:
         documents:
           description: array of documents
@@ -859,12 +910,14 @@ components:
             of the text
           example: 4
           format: int32
+          minimum: 0
           type: integer
         endOffset:
           description: end offset of a section in characters from the beginning of
             the text
           example: 20
           format: int32
+          minimum: 0
           type: integer
         text:
           description: textual representation of the section
@@ -878,6 +931,12 @@ components:
       allOf:
       - $ref: '#/components/schemas/section'
       - $ref: '#/components/schemas/feature_allOf'
+    features:
+      description: List of features with weights explaining a text's classification
+      items:
+        $ref: '#/components/schemas/feature'
+      type: array
+      uniqueItems: true
     sensitiveSections:
       description: an object representing multiple sensitive sections
       example:
@@ -918,6 +977,7 @@ components:
           description: This is an optional textual description of what the predicted
             sensitivity is, suitable for presentation to the user
           example: This matches the Royal Family checklist
+          nullable: true
           type: string
       required:
       - name

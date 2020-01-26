@@ -165,7 +165,7 @@ def delete_document(set_id: str, doc_id: str) -> Tuple[Document, int]:
     """
     result = db[set_id].find_one_and_delete({"_id": ObjectId(doc_id)})
 
-    deleted = document_from_mongo_dict(result)
+    deleted = Document.from_dict(result)
     return deleted, HTTPStatus.OK.value
 
 
@@ -188,27 +188,36 @@ def get_document(
     if not doc:
         error = HTTPStatus.NOT_FOUND
         return create_api_http_status(error), error.value
-
-    # recreate document object
-    document_dict = deepcopy(doc)
-    document_dict["document_id"] = str(doc["_id"])
-    del document_dict["_id"]
-    document = Document().from_dict(document_dict)
+    document = Document.from_dict(doc)
 
     # recreate text_content objects
     text_contents = []
-    for text_content_dict in document_dict["text_contents"]:
+
+    for text_content_dict in doc["text_contents"]:
         classification_dict = text_content_dict["predicted_classification"]
 
         classification = None
         if classification_dict:
-            classification = PredictedClassification().from_dict(classification_dict)
-        text_content = TextContent().from_dict(text_content_dict)
+            explanations = []
+            for explanation_dict in classification_dict["explanations"]:
+                features = []
+                for feature_dict in explanation_dict["features"]:
+                    feature = Feature.from_dict(feature_dict)
+                    features.append(feature)
+                explanation = PredictedClassificationExplanation.from_dict(
+                    explanation_dict
+                )
+                explanation.features = features
+                explanations.append(explanation)
+            classification = PredictedClassification.from_dict(classification_dict)
+            classification.explanations = explanations
+        text_content = TextContent.from_dict(text_content_dict)
         text_content.predicted_classification = classification
         text_contents.append(text_content)
 
-    # add text_contents to document and return it
+    # # add text_contents to document and return it
     document.text_contents = text_contents
+
     return document, HTTPStatus.OK.value
 
 
