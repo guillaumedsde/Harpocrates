@@ -1,12 +1,11 @@
-# @HarpocratesApiClient.Document
+# @HarpocratesApiClient.Line
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**name** | **String** |  | [optional] 
-**documentId** | **String** |  | 
 **predictedClassification** | [**PredictedClassification**](PredictedClassification.md) |  | [optional] 
-**lines** | [**[Line]**](Line.md) | list of line object representing the content of the document | 
+**sensitiveSections** | [**SensitiveSections**](SensitiveSections.md) |  | [optional] 
+**content** | **String** | content of the line | 
 
 

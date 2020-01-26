@@ -22,7 +22,7 @@ from harpocrates_server.models.feature import Feature
 from harpocrates_server.models.sensitive_section import SensitiveSection
 from harpocrates_server.models.sensitive_sections import SensitiveSections
 from harpocrates_server.models.http_status import HttpStatus as ApiHttpStatus
-from harpocrates_server.models.paragraph import Paragraph
+from harpocrates_server.models.line import Line
 
 from harpocrates_server import util, db
 
@@ -36,7 +36,7 @@ from harpocrates_server.service.explanation import (
 from harpocrates_server.service.errors import create_api_http_status
 from harpocrates_server.service.document import (
     document_from_mongo_dict,
-    paragraphs_from_content,
+    lines_from_content,
 )
 
 
@@ -146,8 +146,8 @@ def create_document(set_id, body) -> Tuple[Document, int]:  # noqa: E501
 
     :rtype: Document
     """
-    paragraphs = paragraphs_from_content(body.decode())
-    document = Document(paragraphs=paragraphs)
+    lines = lines_from_content(body.decode())
+    document = Document(lines=lines)
     operation_result = db[set_id].insert_one(document.to_dict())
 
     doc_id = operation_result.inserted_id
@@ -195,20 +195,20 @@ def get_document(
     del document_dict["_id"]
     document = Document().from_dict(document_dict)
 
-    # recreate paragraph objects
-    paragraphs = []
-    for paragraph_dict in document_dict["paragraphs"]:
-        classification_dict = paragraph_dict["predicted_classification"]
+    # recreate line objects
+    lines = []
+    for line_dict in document_dict["lines"]:
+        classification_dict = line_dict["predicted_classification"]
 
         classification = None
         if classification_dict:
             classification = PredictedClassification().from_dict(classification_dict)
-        paragraph = Paragraph().from_dict(paragraph_dict)
-        paragraph.predicted_classification = classification
-        paragraphs.append(paragraph)
+        line = Line().from_dict(line_dict)
+        line.predicted_classification = classification
+        lines.append(line)
 
-    # add paragraphs to document and return it
-    document.paragraphs = paragraphs
+    # add lines to document and return it
+    document.lines = lines
     return document, HTTPStatus.OK.value
 
 
@@ -290,31 +290,31 @@ def classify_text(text: str) -> PredictedClassification:
     return classification
 
 
-def calculate_paragraph_classifications(
+def calculate_line_classifications(
     document: Document,
 ) -> List[PredictedClassification]:
-    """Calculate the classifications for all the paragraphs pf a document
+    """Calculate the classifications for all the lines pf a document
 
-    :param document: document for which to calculate paragraph classifications
+    :param document: document for which to calculate line classifications
     """
 
-    paragraphs = []
+    lines = []
 
-    for paragraph in document.paragraphs:
+    for line in document.lines:
         try:
-            classification = classify_text(paragraph.content)
+            classification = classify_text(line.content)
         except ValueError as e:
             # traceback.print_tb(e.__traceback__)
             # print(type(e))
             classification = None
 
-        new_paragraph = Paragraph(
-            content=paragraph.content, predicted_classification=classification
+        new_line = Line(
+            content=line.content, predicted_classification=classification
         )
 
-        paragraphs.append(new_paragraph)
+        lines.append(new_line)
 
-    return paragraphs
+    return lines
 
 
 def get_predicted_classification(set_id, doc_id):  # noqa: E501
@@ -382,12 +382,12 @@ def classify(set_id: str, doc_id: str) -> None:
 
     document, status = get_document(set_id, doc_id)
 
-    # rebuild document content from list of paragraph content
-    document_content = "".join([paragraph.content for paragraph in document.paragraphs])
+    # rebuild document content from list of line content
+    document_content = "".join([line.content for line in document.lines])
 
     classification = classify_text(document_content)
     try:
-        classified_paragraphs = calculate_paragraph_classifications(document)
+        classified_lines = calculate_line_classifications(document)
     except Exception as e:
         print("##################################################################")
         print(set_id, document.name)
@@ -402,8 +402,8 @@ def classify(set_id: str, doc_id: str) -> None:
                 # Update document wide predicted classification
                 "predicted_classification": classification.to_dict(),
                 # Update paragrah classifications
-                "paragraphs": [
-                    paragraph.to_dict() for paragraph in classified_paragraphs
+                "lines": [
+                    line.to_dict() for line in classified_lines
                 ],
             }
         },
