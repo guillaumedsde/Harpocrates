@@ -45,28 +45,28 @@ code_quality:
     - shared
   stage: test
 
-codeclimate_report:
-  # disable cache for this job
-  cache: {}
-  # for some reason code quality only works on gitlab shared runners
-  only:
-    - merge_requests
-    - develop
-    - master
-  tags:
-    - shared
-  stage: test
-  image:
-    name: codeclimate/codeclimate:latest
-    entrypoint: [""]
-  before_script:
-    - apk add --no-cache make
-    - ln -s /usr/src/app/bin/codeclimate /usr/bin/codeclimate
-  script:
-    - make codeclimate-report
-  artifacts:
-    paths:
-      - "*.html"
+# codeclimate_report:
+#   # disable cache for this job
+#   cache: {}
+#   # for some reason code quality only works on gitlab shared runners
+#   only:
+#     - merge_requests
+#     - develop
+#     - master
+#   tags:
+#     - shared
+#   stage: test
+#   image:
+#     name: codeclimate/codeclimate:latest
+#     entrypoint: [""]
+#   before_script:
+#     - apk add --no-cache make
+#     - ln -s /usr/src/app/bin/codeclimate /usr/bin/codeclimate
+#   script:
+#     - make codeclimate-report
+#   artifacts:
+#     paths:
+#       - "*.html"
 
 api_client_doc:
   stage: build-documentation
