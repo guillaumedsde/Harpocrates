@@ -62,8 +62,8 @@ def add_sensitive_section(
     )  # noqa: E501
 
     db[set_id].update_one(
-        {"document_id": ObjectId(doc_id)},
-        {"$push": {"sensitive_sections": sensitive_section.to_dict()}},
+        {"_id": ObjectId(doc_id)},
+        {"$push": {"sensitiveSections": sensitive_section.to_dict()}},
     )
 
     # return sensitive sections with HTTPStatus
@@ -92,10 +92,10 @@ def add_sensitive_sections(
     )  # noqa: E501
 
     db[set_id].update_one(
-        {"document_id": ObjectId(doc_id)},
+        {"_id": ObjectId(doc_id)},
         {
             "$set": {
-                "sensitive_sections": sensitive_sections.to_dict()["sensitive_sections"]
+                "sensitiveSections": sensitive_sections.to_dict()["sensitiveSections"]
             }
         },
     )
@@ -118,7 +118,7 @@ def get_sensitive_sections(
     """
 
     sensitive_sections_query = db[set_id].find_one(
-        {"document_id": ObjectId(doc_id)}, {"sensitive_sections": 1}
+        {"_id": ObjectId(doc_id)}, {"sensitiveSections": 1}
     )
 
     if not sensitive_sections_query:
@@ -126,7 +126,7 @@ def get_sensitive_sections(
         return create_api_http_status(error), error.value
 
     sensitive_section_list = []
-    for section in sensitive_sections_query.get("sensitive_sections") or []:
+    for section in sensitive_sections_query.get("sensitiveSections") or []:
         sensitive_section_list.append(SensitiveSection(**section))
 
     sensitive_sections = SensitiveSections(sensitive_sections=sensitive_section_list)
@@ -148,8 +148,7 @@ def create_document(set_id, body) -> Tuple[Document, int]:  # noqa: E501
     """
     text_contents = text_contents_from_document_body(body.decode())
 
-    generated_document_id = ObjectId()
-    document = Document(document_id=generated_document_id, text_contents=text_contents)
+    document = Document(text_contents=text_contents)
 
     operation_result = db[set_id].insert_one(document.to_dict())
 
@@ -157,9 +156,9 @@ def create_document(set_id, body) -> Tuple[Document, int]:  # noqa: E501
         error = HTTPStatus.INTERNAL_SERVER_ERROR
         return create_api_http_status(error), error.value
 
-    document.document_id = str(document.document_id)
+    classify(set_id, operation_result.inserted_id)
 
-    classify(set_id, document.document_id)
+    document = get_document(set_id, operation_result.inserted_id)
 
     return document, HTTPStatus.OK.value
 
@@ -170,8 +169,10 @@ def delete_document(set_id: str, doc_id: str) -> Tuple[Document, int]:
     :param set_id: ID of a set
     :param doc_id: ID of a document
     """
-    result = db[set_id].find_one_and_delete({"document_id": ObjectId(doc_id)})
+    result = db[set_id].find_one_and_delete({"_id": ObjectId(doc_id)})
 
+    result["documentId"] = str(result["_id"])
+    del result["_id"]
     deleted = Document.from_dict(result)
     return deleted, HTTPStatus.OK.value
 
@@ -191,17 +192,22 @@ def get_document(
     :rtype: Document
     """
 
-    doc = db[set_id].find_one({"document_id": ObjectId(doc_id)})
+    doc = db[set_id].find_one({"_id": ObjectId(doc_id)})
     if not doc:
         error = HTTPStatus.NOT_FOUND
         return create_api_http_status(error), error.value
+
+    doc["documentId"] = str(doc["_id"])
+    del doc["_id"]
+
+    print(doc)
     document = Document.from_dict(doc)
 
     # recreate text_content objects
     text_contents = []
 
-    for text_content_dict in doc["text_contents"]:
-        classification_dict = text_content_dict["predicted_classification"]
+    for text_content_dict in doc["textContents"]:
+        classification_dict = text_content_dict["predictedClassification"]
 
         # Build predicted_classification from dictionary
         classification = None
@@ -221,13 +227,11 @@ def get_document(
             classification.explanations = explanations
 
         # build sensitive_sections from dictionaries
-        sensitive_sections_dicts = text_content_dict["sensitive_sections"]
+        sensitive_sections_dicts = text_content_dict["sensitiveSections"]
         sensitive_sections = []
         if sensitive_sections_dicts:
 
-            for sensitive_section_dict in sensitive_sections_dicts[
-                "sensitive_sections"
-            ]:
+            for sensitive_section_dict in sensitive_sections_dicts["sensitiveSections"]:
                 sensitive_sections.append(
                     SensitiveSection.from_dict(sensitive_section_dict)
                 )
@@ -364,16 +368,14 @@ def get_predicted_classification(set_id, doc_id):  # noqa: E501
     document, status = get_document(set_id, doc_id)
 
     predicted_classification_query = db[set_id].find_one(
-        {"document_id": ObjectId(doc_id)}, {"predicted_classification": 1}
+        {"_id": ObjectId(doc_id)}, {"predictedClassification": 1}
     )
 
     if not predicted_classification_query:
         error = HTTPStatus.NOT_FOUND
         return create_api_http_status(error), error.value
 
-    predicted_classification = predicted_classification_query[
-        "predicted_classification"
-    ]
+    predicted_classification = predicted_classification_query["predictedClassification"]
 
     if not predicted_classification:
         error = HTTPStatus.NOT_FOUND
@@ -391,7 +393,7 @@ def get_predicted_classification(set_id, doc_id):  # noqa: E501
         for explanation in explanations_dict:
             features = []
             for feature in explanation["features"]:
-                features.append(Feature(**feature))
+                features.append(Feature.from_dict(feature))
             explanations.append(
                 PredictedClassificationExplanation(
                     features=features, explainer=explanation["explainer"]
@@ -430,13 +432,13 @@ def classify(set_id: str, doc_id: str) -> None:
         raise e
 
     doc_id = db[set_id].update_one(
-        {"document_id": ObjectId(doc_id)},
+        {"_id": ObjectId(doc_id)},
         {
             "$set": {
                 # Update document wide predicted classification
-                "predicted_classification": classification.to_dict(),
+                "predictedClassification": classification.to_dict(),
                 # Update paragrah classifications
-                "text_contents": [
+                "textContents": [
                     text_content.to_dict() for text_content in classified_text_contents
                 ],
             }
