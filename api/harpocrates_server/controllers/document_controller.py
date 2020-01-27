@@ -196,6 +196,7 @@ def get_document(
     for text_content_dict in doc["text_contents"]:
         classification_dict = text_content_dict["predicted_classification"]
 
+        # Build predicted_classification from dictionary
         classification = None
         if classification_dict:
             explanations = []
@@ -211,8 +212,19 @@ def get_document(
                 explanations.append(explanation)
             classification = PredictedClassification.from_dict(classification_dict)
             classification.explanations = explanations
+
+        # build sensitive_sections from dictionaries
+        sensitive_sections_dicts = text_content_dict["sensitive_sections"]
+        sensitive_sections = []
+        for sensitive_section_dict in sensitive_sections_dicts:
+            sensitive_sections.append(
+                SensitiveSection.from_dict(sensitive_section_dict)
+            )
+
+        # build text_content object
         text_content = TextContent.from_dict(text_content_dict)
         text_content.predicted_classification = classification
+        text_content.sensitive_sections = SensitiveSections(sensitive_sections)
         text_contents.append(text_content)
 
     # # add text_contents to document and return it
