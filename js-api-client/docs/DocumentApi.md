@@ -8,7 +8,6 @@ Method | HTTP request | Description
 [**deleteDocument**](DocumentApi.md#deleteDocument) | **DELETE** /documentSet/{setId}/{docId} | delete document from set
 [**getDocument**](DocumentApi.md#getDocument) | **GET** /documentSet/{setId}/{docId} | get document from set
 [**getPredictedClassification**](DocumentApi.md#getPredictedClassification) | **GET** /documentSet/{setId}/{docId}/predictedClassification | Get the predicted classification for the document
-[**getSensitiveSections**](DocumentApi.md#getSensitiveSections) | **GET** /documentSet/{setId}/{docId}/sensitiveSections | get sensitive sections of the document
 
 
 
@@ -179,52 +178,6 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**PredictedClassification**](PredictedClassification.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: Not defined
-- **Accept**: application/json
-
-
-## getSensitiveSections
-
-> SensitiveSections getSensitiveSections(setId, docId)
-
-get sensitive sections of the document
-
-get sensitive sections of the document
-
-### Example
-
-```javascript
-import @HarpocratesApiClient from '@harpocrates/api-client';
-
-let apiInstance = new @HarpocratesApiClient.DocumentApi();
-let setId = 9_11; // String | ID of a set
-let docId = document1; // String | ID of a document
-apiInstance.getSensitiveSections(setId, docId).then((data) => {
-  console.log('API called successfully. Returned data: ' + data);
-}, (error) => {
-  console.error(error);
-});
-
-```
-
-### Parameters
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **setId** | **String**| ID of a set | 
- **docId** | **String**| ID of a document | 
-
-### Return type
-
-[**SensitiveSections**](SensitiveSections.md)
 
 ### Authorization
 

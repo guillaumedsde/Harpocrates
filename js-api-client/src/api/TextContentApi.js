@@ -80,7 +80,7 @@ export default class TextContentApi {
       let accepts = ['application/json'];
       let returnType = SensitiveSection;
       return this.apiClient.callApi(
-        '/documentSet/{setId}/{docId}/{textContentIndex}', 'POST',
+        '/documentSet/{setId}/{docId}/{textContentIndex}/sensitiveSections', 'POST',
         pathParams, queryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, null
       );
@@ -147,7 +147,7 @@ export default class TextContentApi {
       let accepts = ['application/json'];
       let returnType = SensitiveSections;
       return this.apiClient.callApi(
-        '/documentSet/{setId}/{docId}/{textContentIndex}', 'PUT',
+        '/documentSet/{setId}/{docId}/{textContentIndex}/sensitiveSections', 'PUT',
         pathParams, queryParams, headerParams, formParams, postBody,
         authNames, contentTypes, accepts, returnType, null
       );
@@ -165,6 +165,68 @@ export default class TextContentApi {
      */
     addSensitiveSections(setId, docId, textContentIndex, opts) {
       return this.addSensitiveSectionsWithHttpInfo(setId, docId, textContentIndex, opts)
+        .then(function(response_and_data) {
+          return response_and_data.data;
+        });
+    }
+
+
+    /**
+     * get sensitive sections of a TextContent object
+     * get sensitive sections of a TextContent object
+     * @param {String} setId ID of a set
+     * @param {String} docId ID of a document
+     * @param {Number} textContentIndex Index of the position of a TextContent object in the list of TextContent objects making up the document
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/SensitiveSections} and HTTP response
+     */
+    getSensitiveSectionsWithHttpInfo(setId, docId, textContentIndex) {
+      let postBody = null;
+      // verify the required parameter 'setId' is set
+      if (setId === undefined || setId === null) {
+        throw new Error("Missing the required parameter 'setId' when calling getSensitiveSections");
+      }
+      // verify the required parameter 'docId' is set
+      if (docId === undefined || docId === null) {
+        throw new Error("Missing the required parameter 'docId' when calling getSensitiveSections");
+      }
+      // verify the required parameter 'textContentIndex' is set
+      if (textContentIndex === undefined || textContentIndex === null) {
+        throw new Error("Missing the required parameter 'textContentIndex' when calling getSensitiveSections");
+      }
+
+      let pathParams = {
+        'setId': setId,
+        'docId': docId,
+        'textContentIndex': textContentIndex
+      };
+      let queryParams = {
+      };
+      let headerParams = {
+      };
+      let formParams = {
+      };
+
+      let authNames = [];
+      let contentTypes = [];
+      let accepts = ['application/json'];
+      let returnType = SensitiveSections;
+      return this.apiClient.callApi(
+        '/documentSet/{setId}/{docId}/{textContentIndex}/sensitiveSections', 'GET',
+        pathParams, queryParams, headerParams, formParams, postBody,
+        authNames, contentTypes, accepts, returnType, null
+      );
+    }
+
+    /**
+     * get sensitive sections of a TextContent object
+     * get sensitive sections of a TextContent object
+     * @param {String} setId ID of a set
+     * @param {String} docId ID of a document
+     * @param {Number} textContentIndex Index of the position of a TextContent object in the list of TextContent objects making up the document
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/SensitiveSections}
+     */
+    getSensitiveSections(setId, docId, textContentIndex) {
+      return this.getSensitiveSectionsWithHttpInfo(setId, docId, textContentIndex)
         .then(function(response_and_data) {
           return response_and_data.data;
         });
