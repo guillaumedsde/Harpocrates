@@ -38,7 +38,7 @@ export default function DocumentBody(props) {
             api={api}
             textContent={textContent}
             setName={props.setName}
-            documentId={props.document._id}
+            documentId={props.document.documentId}
             textContentIndex={index}
             tag={props.tag}
             showNonSensitive={props.showNonSensitive}

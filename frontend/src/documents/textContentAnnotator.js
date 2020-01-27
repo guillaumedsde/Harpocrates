@@ -15,7 +15,7 @@ export default function TextContentAnnotator(props) {
     props.textContent.sensitiveSections
   );
 
-  console.log(props.textContent);
+  console.log(props);
 
   // display sensitive sections (redactions) if there are any
   if (sensitiveSections) {

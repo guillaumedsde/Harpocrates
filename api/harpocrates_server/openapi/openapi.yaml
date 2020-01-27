@@ -4,7 +4,7 @@ info:
   license:
     name: MIT
   title: Harpocrates API
-  version: 8.2.0-textContentClassifications.4
+  version: 8.2.0-textContentClassifications.5
 externalDocs:
   description: Documentation
   url: https://harpocrates-app.gitlab.io/harpocrates
@@ -709,14 +709,14 @@ components:
           sensitive: true
           sensitivity: 78.3
         name: ""
-        _id: ""
+        documentId: ""
       properties:
         name:
           allOf:
           - $ref: '#/components/schemas/nameBase'
           - description: Name of the Document
           nullable: true
-        _id:
+        documentId:
           allOf:
           - $ref: '#/components/schemas/idBase'
           - description: Unique identifier for a Document
@@ -730,7 +730,7 @@ components:
           type: array
           uniqueItems: true
       required:
-      - _id
+      - documentId
       - textContents
       type: object
     documents:
@@ -788,7 +788,7 @@ components:
             sensitive: true
             sensitivity: 78.3
           name: ""
-          _id: ""
+          documentId: ""
         - textContents:
           - predictedClassification:
               classifier: SVM
@@ -840,7 +840,7 @@ components:
             sensitive: true
             sensitivity: 78.3
           name: ""
-          _id: ""
+          documentId: ""
       properties:
         documents:
           description: array of documents

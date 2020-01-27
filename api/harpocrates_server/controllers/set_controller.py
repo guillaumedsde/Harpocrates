@@ -33,7 +33,9 @@ def create_set(body) -> Tuple[Union[ApiHttpStatus, DocumentSet], int]:  # noqa: 
 
     document_set = DocumentSet.from_dict(connexion.request.get_json())  # noqa: E501
 
-    db.create_collection(document_set.name)
+    collection = db.create_collection(document_set.name)
+
+    collection.create_index("document_id", unique=True)
 
     return document_set, HTTPStatus.CREATED.value
 
@@ -66,12 +68,16 @@ def get_set(set_id) -> Tuple[Union[ApiHttpStatus, Documents], int]:  # noqa: E50
 
     document_list = []
     for document_dict in db[set_id].find(
-        {}, {"_id": 1, "name": 1, "predicted_classification": 1}
+        {}, {"_id": 0, "document_id": 1, "name": 1, "predicted_classification": 1}
     ):
-        document = Document().from_dict(document_dict)
-        document_list.append(document)
+        document_dict["document_id"] = str(document_dict["document_id"])
 
-    document_set = DocumentSet()
+        document = Document(
+            document_id=document_dict["document_id"],
+            name=document_dict["name"],
+            predicted_classification=document_dict["predicted_classification"],
+        )
+        document_list.append(document)
     return Documents(documents=document_list), HTTPStatus.OK.value
 
 
