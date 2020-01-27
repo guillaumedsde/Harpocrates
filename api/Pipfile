@@ -28,7 +28,6 @@ connexion = "*"
 shap = "*"
 xgboost = "*"
 waitress = "*"
-stringcase = "*"
 
 [pipenv]
 allow_prereleases = true
