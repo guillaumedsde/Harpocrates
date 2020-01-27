@@ -59,7 +59,7 @@ export default function PopoverMenu(props) {
 
   const selectedNodeParent = window.getSelection().anchorNode.parentNode;
 
-  const handleRedact = (event, setId, docId, setSensitiveSections) => {
+  const handleRedact = (event, setId, documentId, setSensitiveSections) => {
     const selection = window.getSelection();
     const selectionRange = getTextSelection(selection.anchorNode.parentNode);
     const section = new SensitiveSection(
@@ -67,7 +67,7 @@ export default function PopoverMenu(props) {
       selectionRange.end
     );
     api
-      .addSensitiveSection(setId, docId, { sensitiveSection: section })
+      .addSensitiveSection(setId, documentId, { sensitiveSection: section })
       .then(sensitiveSections => {
         setSensitiveSections(sensitiveSections);
       });
@@ -86,7 +86,7 @@ export default function PopoverMenu(props) {
             handleRedact(
               event,
               props.setName,
-              props.docId,
+              props.documentId,
               props.setSensitiveSections
             )
           }

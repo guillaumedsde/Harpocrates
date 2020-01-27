@@ -29,13 +29,13 @@ export default function DocumentSet(props) {
   var api = new SetApi();
   var docApi = new DocumentApi();
 
-  const handleListItemClick = (event, setId, docId) => {
-    navigate(`/documentSets/${setId}/${docId}`);
+  const handleListItemClick = (event, setId, documentId) => {
+    navigate(`/documentSets/${setId}/${documentId}`);
   };
 
-  const deleteItem = React.useCallback((event, setId, docId) => {
+  const deleteItem = React.useCallback((event, setId, documentId) => {
     setLoading(true);
-    docApi.deleteDocument(setId, docId).then(response => {
+    docApi.deleteDocument(setId, documentId).then(response => {
       setTriggerListRefresh(Math.random());
     });
   });
@@ -71,10 +71,14 @@ export default function DocumentSet(props) {
       <List>
         {documents.map(document => (
           <ListItem
-            key={document._id}
+            key={document.documentId}
             button
             onClick={event =>
-              handleListItemClick(event, props.documentSetName, document._id)
+              handleListItemClick(
+                event,
+                props.documentSetName,
+                document.documentId
+              )
             }
           >
             <ListItemAvatar>
@@ -83,7 +87,7 @@ export default function DocumentSet(props) {
               </Avatar>
             </ListItemAvatar>
             <ListItemText
-              primary={document.name || document._id}
+              primary={document.name || document.documentId}
               secondary={
                 <>
                   <Sensitivity
@@ -101,7 +105,7 @@ export default function DocumentSet(props) {
                 edge="end"
                 aria-label="delete"
                 onClick={event =>
-                  deleteItem(event, props.documentSetName, document._id)
+                  deleteItem(event, props.documentSetName, document.documentId)
                 }
               >
                 <DeleteIcon />

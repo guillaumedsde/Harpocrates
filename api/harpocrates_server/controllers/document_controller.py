@@ -62,7 +62,7 @@ def add_sensitive_section(
     )  # noqa: E501
 
     db[set_id].update_one(
-        {"_id": ObjectId(doc_id)},
+        {"document_id": ObjectId(doc_id)},
         {"$push": {"sensitive_sections": sensitive_section.to_dict()}},
     )
 
@@ -92,7 +92,7 @@ def add_sensitive_sections(
     )  # noqa: E501
 
     db[set_id].update_one(
-        {"_id": ObjectId(doc_id)},
+        {"document_id": ObjectId(doc_id)},
         {
             "$set": {
                 "sensitive_sections": sensitive_sections.to_dict()["sensitive_sections"]
@@ -118,7 +118,7 @@ def get_sensitive_sections(
     """
 
     sensitive_sections_query = db[set_id].find_one(
-        {"_id": ObjectId(doc_id)}, {"sensitive_sections": 1}
+        {"document_id": ObjectId(doc_id)}, {"sensitive_sections": 1}
     )
 
     if not sensitive_sections_query:
@@ -147,12 +147,19 @@ def create_document(set_id, body) -> Tuple[Document, int]:  # noqa: E501
     :rtype: Document
     """
     text_contents = text_contents_from_document_body(body.decode())
-    document = Document(text_contents=text_contents)
+
+    generated_document_id = ObjectId()
+    document = Document(document_id=generated_document_id, text_contents=text_contents)
+
     operation_result = db[set_id].insert_one(document.to_dict())
 
-    doc_id = operation_result.inserted_id
+    if not operation_result.inserted_id:
+        error = HTTPStatus.INTERNAL_SERVER_ERROR
+        return create_api_http_status(error), error.value
 
-    classify(set_id, doc_id)
+    document.document_id = str(document.document_id)
+
+    classify(set_id, document.document_id)
 
     return document, HTTPStatus.OK.value
 
@@ -163,7 +170,7 @@ def delete_document(set_id: str, doc_id: str) -> Tuple[Document, int]:
     :param set_id: ID of a set
     :param doc_id: ID of a document
     """
-    result = db[set_id].find_one_and_delete({"_id": ObjectId(doc_id)})
+    result = db[set_id].find_one_and_delete({"document_id": ObjectId(doc_id)})
 
     deleted = Document.from_dict(result)
     return deleted, HTTPStatus.OK.value
@@ -184,7 +191,7 @@ def get_document(
     :rtype: Document
     """
 
-    doc = db[set_id].find_one({"_id": ObjectId(doc_id)})
+    doc = db[set_id].find_one({"document_id": ObjectId(doc_id)})
     if not doc:
         error = HTTPStatus.NOT_FOUND
         return create_api_http_status(error), error.value
@@ -216,10 +223,14 @@ def get_document(
         # build sensitive_sections from dictionaries
         sensitive_sections_dicts = text_content_dict["sensitive_sections"]
         sensitive_sections = []
-        for sensitive_section_dict in sensitive_sections_dicts:
-            sensitive_sections.append(
-                SensitiveSection.from_dict(sensitive_section_dict)
-            )
+        if sensitive_sections_dicts:
+
+            for sensitive_section_dict in sensitive_sections_dicts[
+                "sensitive_sections"
+            ]:
+                sensitive_sections.append(
+                    SensitiveSection.from_dict(sensitive_section_dict)
+                )
 
         # build text_content object
         text_content = TextContent.from_dict(text_content_dict)
@@ -353,7 +364,7 @@ def get_predicted_classification(set_id, doc_id):  # noqa: E501
     document, status = get_document(set_id, doc_id)
 
     predicted_classification_query = db[set_id].find_one(
-        {"_id": ObjectId(doc_id)}, {"predicted_classification": 1}
+        {"document_id": ObjectId(doc_id)}, {"predicted_classification": 1}
     )
 
     if not predicted_classification_query:
@@ -419,7 +430,7 @@ def classify(set_id: str, doc_id: str) -> None:
         raise e
 
     doc_id = db[set_id].update_one(
-        {"_id": ObjectId(doc_id)},
+        {"document_id": ObjectId(doc_id)},
         {
             "$set": {
                 # Update document wide predicted classification

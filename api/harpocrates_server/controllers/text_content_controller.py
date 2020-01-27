@@ -79,7 +79,7 @@ def add_sensitive_sections(
         connexion.request.get_json()
     )  # noqa: E501
 
-    sensitive_sections_dict = sensitive_sections.to_dict()["sensitive_sections"]
+    sensitive_sections_dict = sensitive_sections.to_dict()
 
     db[set_id].update_one(
         {"_id": ObjectId(doc_id)},
@@ -130,6 +130,6 @@ def get_sensitive_sections(
     for section in sensitive_sections_query.get("sensitive_sections") or []:
         sensitive_section_list.append(SensitiveSection(**section))
 
-    sensitive_sections = SensitiveSections(sensitive_sections=sensitive_section_list)
+    sensitive_sections = SensitiveSections(sensitive_section_list)
 
     return sensitive_sections, HTTPStatus.OK.value
