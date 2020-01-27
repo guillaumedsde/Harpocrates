@@ -176,19 +176,20 @@ paths:
           $ref: "#/components/responses/malformedRequest"
         "404":
           $ref: "#/components/responses/notFound"
-  "/documentSet/{setId}/{docId}/sensitiveSections":
+  "/documentSet/{setId}/{docId}/{textContentIndex}/sensitiveSections":
     get:
-      summary: get sensitive sections of the document
-      description: get sensitive sections of the document
+      summary: get sensitive sections of a TextContent object
+      description: get sensitive sections of a TextContent object
       operationId: get_sensitive_sections
       tags:
-        - document
+        - textContent
       parameters:
         - $ref: "#/components/parameters/setId"
         - $ref: "#/components/parameters/docId"
+        - $ref: "#/components/parameters/textContentIndex"
       responses:
         "200":
-          description: Successfully got the sensitive sections for the document
+          description: Successfully got the sensitive sections for the TextContent object
           content:
             application/json:
               schema:
@@ -197,7 +198,6 @@ paths:
           $ref: "#/components/responses/malformedRequest"
         "404":
           $ref: "#/components/responses/notFound"
-  "/documentSet/{setId}/{docId}/{textContentIndex}":
     post:
       summary: add a sensitive section to the document
       description: add a sensitive section to the document

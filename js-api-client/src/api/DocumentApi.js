@@ -16,7 +16,6 @@ import ApiClient from "../ApiClient";
 import Document from '../model/Document';
 import HttpStatus from '../model/HttpStatus';
 import PredictedClassification from '../model/PredictedClassification';
-import SensitiveSections from '../model/SensitiveSections';
 
 /**
 * Document service.
@@ -245,61 +244,6 @@ export default class DocumentApi {
      */
     getPredictedClassification(setId, docId) {
       return this.getPredictedClassificationWithHttpInfo(setId, docId)
-        .then(function(response_and_data) {
-          return response_and_data.data;
-        });
-    }
-
-
-    /**
-     * get sensitive sections of the document
-     * get sensitive sections of the document
-     * @param {String} setId ID of a set
-     * @param {String} docId ID of a document
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/SensitiveSections} and HTTP response
-     */
-    getSensitiveSectionsWithHttpInfo(setId, docId) {
-      let postBody = null;
-      // verify the required parameter 'setId' is set
-      if (setId === undefined || setId === null) {
-        throw new Error("Missing the required parameter 'setId' when calling getSensitiveSections");
-      }
-      // verify the required parameter 'docId' is set
-      if (docId === undefined || docId === null) {
-        throw new Error("Missing the required parameter 'docId' when calling getSensitiveSections");
-      }
-
-      let pathParams = {
-        'setId': setId,
-        'docId': docId
-      };
-      let queryParams = {
-      };
-      let headerParams = {
-      };
-      let formParams = {
-      };
-
-      let authNames = [];
-      let contentTypes = [];
-      let accepts = ['application/json'];
-      let returnType = SensitiveSections;
-      return this.apiClient.callApi(
-        '/documentSet/{setId}/{docId}/sensitiveSections', 'GET',
-        pathParams, queryParams, headerParams, formParams, postBody,
-        authNames, contentTypes, accepts, returnType, null
-      );
-    }
-
-    /**
-     * get sensitive sections of the document
-     * get sensitive sections of the document
-     * @param {String} setId ID of a set
-     * @param {String} docId ID of a document
-     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/SensitiveSections}
-     */
-    getSensitiveSections(setId, docId) {
-      return this.getSensitiveSectionsWithHttpInfo(setId, docId)
         .then(function(response_and_data) {
           return response_and_data.data;
         });

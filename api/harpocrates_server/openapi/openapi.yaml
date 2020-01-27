@@ -317,9 +317,9 @@ paths:
       tags:
       - document
       x-openapi-router-controller: harpocrates_server.controllers.document_controller
-  /documentSet/{setId}/{docId}/sensitiveSections:
+  /documentSet/{setId}/{docId}/{textContentIndex}/sensitiveSections:
     get:
-      description: get sensitive sections of the document
+      description: get sensitive sections of a TextContent object
       operationId: get_sensitive_sections
       parameters:
       - description: ID of a set
@@ -340,13 +340,26 @@ paths:
         schema:
           type: string
         style: simple
+      - description: Index of the position of a TextContent object in the list of
+          TextContent objects making up the document
+        example: 2
+        explode: false
+        in: path
+        name: textContentIndex
+        required: true
+        schema:
+          format: int32
+          minimum: 0
+          type: integer
+        style: simple
       responses:
         200:
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/sensitiveSections'
-          description: Successfully got the sensitive sections for the document
+          description: Successfully got the sensitive sections for the TextContent
+            object
         400:
           content:
             application/json:
@@ -359,11 +372,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/httpStatus'
           description: The specified resource was not found
-      summary: get sensitive sections of the document
+      summary: get sensitive sections of a TextContent object
       tags:
-      - document
-      x-openapi-router-controller: harpocrates_server.controllers.document_controller
-  /documentSet/{setId}/{docId}/{textContentIndex}:
+      - textContent
+      x-openapi-router-controller: harpocrates_server.controllers.text_content_controller
     post:
       description: add a sensitive section to the document
       operationId: add_sensitive_section
@@ -931,12 +943,6 @@ components:
       allOf:
       - $ref: '#/components/schemas/section'
       - $ref: '#/components/schemas/feature_allOf'
-    features:
-      description: List of features with weights explaining a text's classification
-      items:
-        $ref: '#/components/schemas/feature'
-      type: array
-      uniqueItems: true
     sensitiveSections:
       description: an object representing multiple sensitive sections
       example:

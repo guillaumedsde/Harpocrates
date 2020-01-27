@@ -123,13 +123,13 @@ Class | Method | HTTP request | Description
 *@HarpocratesApiClient.DocumentApi* | [**deleteDocument**](docs/DocumentApi.md#deleteDocument) | **DELETE** /documentSet/{setId}/{docId} | delete document from set
 *@HarpocratesApiClient.DocumentApi* | [**getDocument**](docs/DocumentApi.md#getDocument) | **GET** /documentSet/{setId}/{docId} | get document from set
 *@HarpocratesApiClient.DocumentApi* | [**getPredictedClassification**](docs/DocumentApi.md#getPredictedClassification) | **GET** /documentSet/{setId}/{docId}/predictedClassification | Get the predicted classification for the document
-*@HarpocratesApiClient.DocumentApi* | [**getSensitiveSections**](docs/DocumentApi.md#getSensitiveSections) | **GET** /documentSet/{setId}/{docId}/sensitiveSections | get sensitive sections of the document
 *@HarpocratesApiClient.SetApi* | [**createSet**](docs/SetApi.md#createSet) | **POST** /documentSet | Add a new document set set to the engine
 *@HarpocratesApiClient.SetApi* | [**deleteSet**](docs/SetApi.md#deleteSet) | **DELETE** /documentSet/{setId} | delete the set
 *@HarpocratesApiClient.SetApi* | [**getSet**](docs/SetApi.md#getSet) | **GET** /documentSet/{setId} | lists all documents in the set
 *@HarpocratesApiClient.SetApi* | [**getSets**](docs/SetApi.md#getSets) | **GET** /documentSet | List all document sets known by the engine
-*@HarpocratesApiClient.TextContentApi* | [**addSensitiveSection**](docs/TextContentApi.md#addSensitiveSection) | **POST** /documentSet/{setId}/{docId}/{textContentIndex} | add a sensitive section to the document
-*@HarpocratesApiClient.TextContentApi* | [**addSensitiveSections**](docs/TextContentApi.md#addSensitiveSections) | **PUT** /documentSet/{setId}/{docId}/{textContentIndex} | Overwrite the sensitive sections of a TextContent object
+*@HarpocratesApiClient.TextContentApi* | [**addSensitiveSection**](docs/TextContentApi.md#addSensitiveSection) | **POST** /documentSet/{setId}/{docId}/{textContentIndex}/sensitiveSections | add a sensitive section to the document
+*@HarpocratesApiClient.TextContentApi* | [**addSensitiveSections**](docs/TextContentApi.md#addSensitiveSections) | **PUT** /documentSet/{setId}/{docId}/{textContentIndex}/sensitiveSections | Overwrite the sensitive sections of a TextContent object
+*@HarpocratesApiClient.TextContentApi* | [**getSensitiveSections**](docs/TextContentApi.md#getSensitiveSections) | **GET** /documentSet/{setId}/{docId}/{textContentIndex}/sensitiveSections | get sensitive sections of a TextContent object
 
 
 ## Documentation for Models
