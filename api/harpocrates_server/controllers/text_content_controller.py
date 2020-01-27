@@ -1,8 +1,11 @@
 import connexion
 import six
 from http import HTTPStatus
+from typing import Tuple, Union
 
-from harpocrates_server.models.http_status import HttpStatus  # noqa: E501
+from harpocrates_server.models.http_status import (
+    HttpStatus as ApiHttpStatus,
+)  # noqa: E501
 from harpocrates_server.models.sensitive_section import SensitiveSection  # noqa: E501
 from harpocrates_server.models.sensitive_sections import SensitiveSections  # noqa: E501
 from harpocrates_server import util, db

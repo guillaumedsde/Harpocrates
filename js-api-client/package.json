@@ -1,6 +1,6 @@
 {
   "name": "@harpocrates/api-client",
-  "version": "8.2.0-textContentClassifications.3",
+  "version": "8.2.0-textContentClassifications.4",
   "description": "This_is_the_Rest_API_specification_for_the_Harpocrates_application",
   "license": "MIT",
   "main": "dist/index.js",

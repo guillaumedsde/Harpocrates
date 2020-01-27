@@ -93,18 +93,6 @@ export default function Document(props) {
       );
   }, []);
 
-  // effect for getting sensitive sections
-  useEffect(() => {
-    api.getSensitiveSections(props.documentSetName, props.documentId).then(
-      apiSensitiveSections => {
-        setSensitiveSections(apiSensitiveSections);
-      },
-      error => {
-        console.error(error);
-      }
-    );
-  }, []);
-
   if (document) {
     return (
       <>

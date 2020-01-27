@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { Grid } from "@material-ui/core";
 import { SensitiveSection, SensitiveSections } from "@harpocrates/api-client";
@@ -11,27 +11,28 @@ import { uniqueFeatures } from "./explanationBarChart";
 export default function TextContentAnnotator(props) {
   var annotations = [];
 
-  // const [sensitiveSections, setSensitiveSections] = useState(null);
+  const [sensitiveSections, setSensitiveSections] = useState(
+    props.textContent.sensitiveSections
+  );
 
-  // // display sensitive sections (redactions) if there are any
-  // if (props.sensitiveSections) {
-  //   props.sensitiveSections.sensitiveSections.forEach(feature => {
-  //     annotations.push({
-  //       start: feature.startOffset,
-  //       end: feature.endOffset,
-  //       tag: feature.name
-  //     });
-  //   });
-  // }
+  console.log(props.textContent);
+
+  // display sensitive sections (redactions) if there are any
+  if (sensitiveSections) {
+    sensitiveSections.sensitiveSections.forEach(feature => {
+      annotations.push({
+        start: feature.startOffset,
+        end: feature.endOffset,
+        tag: feature.name
+      });
+    });
+  }
 
   // display classification explanations if a classification is defined
   if (props.textContent.predictedClassification && props.explainer) {
     const explainerIndex = props.textContent.predictedClassification.explanations
       .map(e => e.explainer)
       .indexOf(props.explainer);
-    console.log(
-      props.textContent.predictedClassification.explanations[explainerIndex]
-    );
     uniqueFeatures(
       props.textContent.predictedClassification.explanations[explainerIndex]
     )
@@ -78,7 +79,7 @@ export default function TextContentAnnotator(props) {
         }
       )
       .then(sensitiveSections => {
-        props.setSensitiveSections(sensitiveSections);
+        setSensitiveSections(sensitiveSections);
       }, console.error);
   };
 
@@ -87,7 +88,7 @@ export default function TextContentAnnotator(props) {
       <Grid item xs={10}>
         <TextAnnotator
           content={props.textContent.content}
-          value={[]}
+          value={annotations}
           onChange={handleChange}
           getSpan={span => ({
             ...span,
