@@ -5,7 +5,7 @@ from datetime import date, datetime  # noqa: F401
 
 from typing import List, Dict  # noqa: F401
 
-from harpocrates_server.models.base_model_ import Model
+from harpocrates_server.models.base_model import Model
 from harpocrates_server.models.sensitive_section import SensitiveSection
 from harpocrates_server import util
 

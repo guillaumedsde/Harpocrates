@@ -90,7 +90,7 @@ def add_sensitive_sections(
                 ): sensitive_sections_dict
             }
         },
-        # {"$set": {"sensitive_sections": sensitive_sections_dict}},
+        # {"$set": {"sensitiveSections": sensitive_sections_dict}},
     )
 
     # return sensitive sections with HTTPStatus
@@ -127,7 +127,7 @@ def get_sensitive_sections(
         return create_api_http_status(error), error.value
 
     sensitive_section_list = []
-    for section in sensitive_sections_query.get("sensitive_sections") or []:
+    for section in sensitive_sections_query.get("sensitiveSections") or []:
         sensitive_section_list.append(SensitiveSection(**section))
 
     sensitive_sections = SensitiveSections(sensitive_section_list)
