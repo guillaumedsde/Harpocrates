@@ -112,6 +112,4 @@ def document_from_mongo_dict(doc: Dict) -> Document:
     document_dict["document_id"] = str(doc["_id"])
     del document_dict["_id"]
     document = Document().from_dict(document_dict)
-    print(document_dict)
-    print(document)
     return document
