@@ -28,7 +28,7 @@
   var instance;
 
   beforeEach(function() {
-    instance = new @HarpocratesApiClient.SensitiveSectionAllOf();
+    instance = new @HarpocratesApiClient.TextContent();
   });
 
   var getProperty = function(object, getter, property) {
@@ -47,22 +47,28 @@
       object[property] = value;
   }
 
-  describe('SensitiveSectionAllOf', function() {
-    it('should create an instance of SensitiveSectionAllOf', function() {
-      // uncomment below and update the code to test SensitiveSectionAllOf
-      //var instane = new @HarpocratesApiClient.SensitiveSectionAllOf();
-      //expect(instance).to.be.a(@HarpocratesApiClient.SensitiveSectionAllOf);
+  describe('TextContent', function() {
+    it('should create an instance of TextContent', function() {
+      // uncomment below and update the code to test TextContent
+      //var instane = new @HarpocratesApiClient.TextContent();
+      //expect(instance).to.be.a(@HarpocratesApiClient.TextContent);
     });
 
-    it('should have the property name (base name: "name")', function() {
-      // uncomment below and update the code to test the property name
-      //var instane = new @HarpocratesApiClient.SensitiveSectionAllOf();
+    it('should have the property predictedClassification (base name: "predictedClassification")', function() {
+      // uncomment below and update the code to test the property predictedClassification
+      //var instane = new @HarpocratesApiClient.TextContent();
       //expect(instance).to.be();
     });
 
-    it('should have the property description (base name: "description")', function() {
-      // uncomment below and update the code to test the property description
-      //var instane = new @HarpocratesApiClient.SensitiveSectionAllOf();
+    it('should have the property sensitiveSections (base name: "sensitiveSections")', function() {
+      // uncomment below and update the code to test the property sensitiveSections
+      //var instane = new @HarpocratesApiClient.TextContent();
+      //expect(instance).to.be();
+    });
+
+    it('should have the property content (base name: "content")', function() {
+      // uncomment below and update the code to test the property content
+      //var instane = new @HarpocratesApiClient.TextContent();
       //expect(instance).to.be();
     });
 

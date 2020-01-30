@@ -70,7 +70,7 @@ class SensitiveSection(Model):
     def start_offset(self):
         """Gets the start_offset of this SensitiveSection.
 
-        start offset of a section in characters from the beginning of the document  # noqa: E501
+        start offset of a section in characters from the beginning of the text  # noqa: E501
 
         :return: The start_offset of this SensitiveSection.
         :rtype: int
@@ -81,13 +81,15 @@ class SensitiveSection(Model):
     def start_offset(self, start_offset):
         """Sets the start_offset of this SensitiveSection.
 
-        start offset of a section in characters from the beginning of the document  # noqa: E501
+        start offset of a section in characters from the beginning of the text  # noqa: E501
 
         :param start_offset: The start_offset of this SensitiveSection.
         :type start_offset: int
         """
         if start_offset is None:
             raise ValueError("Invalid value for `start_offset`, must not be `None`")  # noqa: E501
+        if start_offset is not None and start_offset < 0:  # noqa: E501
+            raise ValueError("Invalid value for `start_offset`, must be a value greater than or equal to `0`")  # noqa: E501
 
         self._start_offset = start_offset
 
@@ -95,7 +97,7 @@ class SensitiveSection(Model):
     def end_offset(self):
         """Gets the end_offset of this SensitiveSection.
 
-        end offset of a section in characters from the beginning of the document  # noqa: E501
+        end offset of a section in characters from the beginning of the text  # noqa: E501
 
         :return: The end_offset of this SensitiveSection.
         :rtype: int
@@ -106,13 +108,15 @@ class SensitiveSection(Model):
     def end_offset(self, end_offset):
         """Sets the end_offset of this SensitiveSection.
 
-        end offset of a section in characters from the beginning of the document  # noqa: E501
+        end offset of a section in characters from the beginning of the text  # noqa: E501
 
         :param end_offset: The end_offset of this SensitiveSection.
         :type end_offset: int
         """
         if end_offset is None:
             raise ValueError("Invalid value for `end_offset`, must not be `None`")  # noqa: E501
+        if end_offset is not None and end_offset < 0:  # noqa: E501
+            raise ValueError("Invalid value for `end_offset`, must be a value greater than or equal to `0`")  # noqa: E501
 
         self._end_offset = end_offset
 

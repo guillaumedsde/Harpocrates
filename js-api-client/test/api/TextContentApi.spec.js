@@ -28,7 +28,7 @@
   var instance;
 
   beforeEach(function() {
-    instance = new @HarpocratesApiClient.DocumentApi();
+    instance = new @HarpocratesApiClient.TextContentApi();
   });
 
   var getProperty = function(object, getter, property) {
@@ -47,7 +47,7 @@
       object[property] = value;
   }
 
-  describe('DocumentApi', function() {
+  describe('TextContentApi', function() {
     describe('addSensitiveSection', function() {
       it('should call addSensitiveSection successfully', function(done) {
         //uncomment below and update the code to test addSensitiveSection
@@ -62,56 +62,6 @@
       it('should call addSensitiveSections successfully', function(done) {
         //uncomment below and update the code to test addSensitiveSections
         //instance.addSensitiveSections(function(error) {
-        //  if (error) throw error;
-        //expect().to.be();
-        //});
-        done();
-      });
-    });
-    describe('createDocument', function() {
-      it('should call createDocument successfully', function(done) {
-        //uncomment below and update the code to test createDocument
-        //instance.createDocument(function(error) {
-        //  if (error) throw error;
-        //expect().to.be();
-        //});
-        done();
-      });
-    });
-    describe('deleteDocument', function() {
-      it('should call deleteDocument successfully', function(done) {
-        //uncomment below and update the code to test deleteDocument
-        //instance.deleteDocument(function(error) {
-        //  if (error) throw error;
-        //expect().to.be();
-        //});
-        done();
-      });
-    });
-    describe('getDocument', function() {
-      it('should call getDocument successfully', function(done) {
-        //uncomment below and update the code to test getDocument
-        //instance.getDocument(function(error) {
-        //  if (error) throw error;
-        //expect().to.be();
-        //});
-        done();
-      });
-    });
-    describe('getPredictedClassification', function() {
-      it('should call getPredictedClassification successfully', function(done) {
-        //uncomment below and update the code to test getPredictedClassification
-        //instance.getPredictedClassification(function(error) {
-        //  if (error) throw error;
-        //expect().to.be();
-        //});
-        done();
-      });
-    });
-    describe('getSensitiveSections', function() {
-      it('should call getSensitiveSections successfully', function(done) {
-        //uncomment below and update the code to test getSensitiveSections
-        //instance.getSensitiveSections(function(error) {
         //  if (error) throw error;
         //expect().to.be();
         //});
