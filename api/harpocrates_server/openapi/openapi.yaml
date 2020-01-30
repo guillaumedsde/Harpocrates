@@ -4,7 +4,7 @@ info:
   license:
     name: MIT
   title: Harpocrates API
-  version: 8.2.0-textContentClassifications.5
+  version: 9.0.0
 externalDocs:
   description: Documentation
   url: https://harpocrates-app.gitlab.io/harpocrates

@@ -1,7 +1,7 @@
 openapi: "3.0.2"
 info:
   description: This is the Rest API specification for the Harpocrates application
-  version: "8.2.0-textContentClassifications.5"
+  version: "9.0.0"
   title: Harpocrates API
   license:
     name: MIT
