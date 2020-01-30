@@ -199,8 +199,7 @@ def get_document(
 
     doc["documentId"] = str(doc["_id"])
     del doc["_id"]
-
-    print(doc)
+    
     document = Document.from_dict(doc)
 
     # recreate text_content objects

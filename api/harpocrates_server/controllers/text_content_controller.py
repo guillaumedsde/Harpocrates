@@ -43,7 +43,7 @@ def add_sensitive_section(
         {"_id": ObjectId(doc_id)},
         {
             "$push": {
-                "text_contents.{}.sensitive_sections".format(
+                "textContents.{}.sensitiveSections".format(
                     text_content_index
                 ): sensitive_section.to_dict()
             }
@@ -85,7 +85,7 @@ def add_sensitive_sections(
         {"_id": ObjectId(doc_id)},
         {
             "$set": {
-                "text_contents.{}.sensitive_sections".format(
+                "textContents.{}.sensitiveSections".format(
                     text_content_index
                 ): sensitive_sections_dict
             }
@@ -117,10 +117,8 @@ def get_sensitive_sections(
 
     sensitive_sections_query = db[set_id].find_one(
         {"_id": ObjectId(doc_id)},
-        {"text_contents.{}.sensitive_sections".format(text_content_index): 1},
+        {"textContents.{}.sensitiveSections".format(text_content_index): 1},
     )
-
-    print(sensitive_sections_query)
 
     if not sensitive_sections_query:
         error = HTTPStatus.NOT_FOUND

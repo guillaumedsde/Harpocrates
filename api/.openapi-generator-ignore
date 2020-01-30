@@ -25,7 +25,7 @@
 harpocrates_server/controllers/set_controller.py
 harpocrates_server/controllers/document_controller.py
 harpocrates_server/controllers/text_content_controller.py
-harpocrates_server/models/base_model.py
+harpocrates_server/models/base_model_.py
 harpocrates_server/__init__.py
 harpocrates_server/__main__.py
 requirements.txt
