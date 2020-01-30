@@ -38,7 +38,7 @@ def split_content_into_paragraphs(content: str) -> List[TextContent]:
     delimiter = re.compile(r"(?=\n\s*\n)")
     text_contents_content = []
     for text_content in delimiter.split(content):
-        # attach whitespace only "text_contents" to the previous one
+        # attach whitespace only "textContents" to the previous one
         # except for the first one
         if text_contents_content and text_content.isspace():
             text_contents_content[-1] += text_content

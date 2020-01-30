@@ -71,11 +71,8 @@ def get_set(set_id) -> Tuple[Union[ApiHttpStatus, Documents], int]:  # noqa: E50
         document_dict["documentId"] = str(document_dict["_id"])
         del document_dict["_id"]
 
-        print(document_dict)
-
         document = Document.from_dict(document_dict)
 
-        print(document)
         document_list.append(document)
     return Documents(documents=document_list), HTTPStatus.OK.value
 
