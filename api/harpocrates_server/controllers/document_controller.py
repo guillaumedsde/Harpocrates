@@ -146,9 +146,14 @@ def create_document(set_id, body) -> Tuple[Document, int]:  # noqa: E501
 
     :rtype: Document
     """
-    text_contents = text_contents_from_document_body(body.decode())
 
-    document = Document(text_contents=text_contents)
+    granularity = "line"
+
+    text_contents = text_contents_from_document_body(
+        body.decode(), granularity=granularity
+    )
+
+    document = Document(text_contents=text_contents, text_split_granularity=granularity)
 
     operation_result = db[set_id].insert_one(document.to_dict())
 
@@ -199,7 +204,7 @@ def get_document(
 
     doc["documentId"] = str(doc["_id"])
     del doc["_id"]
-    
+
     document = Document.from_dict(doc)
 
     # recreate text_content objects

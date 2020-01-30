@@ -1,7 +1,7 @@
 openapi: "3.0.2"
 info:
   description: This is the Rest API specification for the Harpocrates application
-  version: "9.0.0"
+  version: "9.1.0"
   title: Harpocrates API
   license:
     name: MIT
@@ -398,6 +398,11 @@ components:
           allOf:
             - "$ref": "#/components/schemas/idBase"
             - description: Unique identifier for a Document
+        textSplitGranularity:
+          type: string
+          enum: ["document", "paragraph", "line"]
+          description: Granularity of the split of the document's content
+          example: "paragraph"
         predictedClassification:
           nullable: true
           $ref: "#/components/schemas/predictedClassification"

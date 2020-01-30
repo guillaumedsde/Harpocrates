@@ -4,7 +4,7 @@ info:
   license:
     name: MIT
   title: Harpocrates API
-  version: 9.0.0
+  version: 9.1.0
 externalDocs:
   description: Documentation
   url: https://harpocrates-app.gitlab.io/harpocrates
@@ -658,6 +658,7 @@ components:
     document:
       description: A document to review
       example:
+        textSplitGranularity: paragraph
         textContents:
         - predictedClassification:
             classifier: SVM
@@ -720,6 +721,14 @@ components:
           allOf:
           - $ref: '#/components/schemas/idBase'
           - description: Unique identifier for a Document
+        textSplitGranularity:
+          description: Granularity of the split of the document's content
+          enum:
+          - document
+          - paragraph
+          - line
+          example: paragraph
+          type: string
         predictedClassification:
           $ref: '#/components/schemas/predictedClassification'
         textContents:
@@ -737,7 +746,8 @@ components:
       description: an object representing multiple documents
       example:
         documents:
-        - textContents:
+        - textSplitGranularity: paragraph
+          textContents:
           - predictedClassification:
               classifier: SVM
               explanations:
@@ -789,7 +799,8 @@ components:
             sensitivity: 78.3
           name: ""
           documentId: ""
-        - textContents:
+        - textSplitGranularity: paragraph
+          textContents:
           - predictedClassification:
               classifier: SVM
               explanations:

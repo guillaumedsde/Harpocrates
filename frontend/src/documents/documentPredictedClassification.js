@@ -11,6 +11,7 @@ import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import GroupWorkIcon from "@material-ui/icons/GroupWork";
 import WarningIcon from "@material-ui/icons/Warning";
 import CheckIcon from "@material-ui/icons/Check";
+import HorizontalSplitIcon from "@material-ui/icons/HorizontalSplit";
 import { CircularProgress } from "@material-ui/core";
 
 import SensitivityBar from "./documentSensitivityBar";
@@ -45,6 +46,24 @@ export default function PredictedClassification(props) {
           secondary={<SensitivityBar classification={props.classification} />}
           secondaryTypographyProps={{ component: "div" }}
         />
+      </ListItem>
+      <ListItem>
+        <ListItemIcon>
+          <HorizontalSplitIcon />
+        </ListItemIcon>
+        <ListItemText id="select-granularity" primary="Content split level" />
+        <ListItemSecondaryAction>
+          <Select
+            value={props.granularity}
+            autoWidth
+            disabled
+            inputProps={{ "aria-labelledby": "select-granularity" }}
+          >
+            <MenuItem key={props.granularity} value={props.granularity}>
+              {props.granularity}
+            </MenuItem>
+          </Select>
+        </ListItemSecondaryAction>
       </ListItem>
       <ListItem>
         <ListItemIcon>
