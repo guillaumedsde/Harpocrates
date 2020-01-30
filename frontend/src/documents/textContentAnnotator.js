@@ -15,7 +15,7 @@ export default function TextContentAnnotator(props) {
     props.textContent.sensitiveSections
   );
 
-  console.log(props);
+  // const TAG_COLORS = {};
 
   // display sensitive sections (redactions) if there are any
   if (sensitiveSections) {
@@ -85,7 +85,18 @@ export default function TextContentAnnotator(props) {
 
   return (
     <>
-      <Grid item xs={10}>
+      <Grid item xs={1}>
+        {/* <Sensitivity classification={line.predictedClassification} /> */}
+        {props.textContent.predictedClassification ? (
+          <div style={{ width: "90%" }}>
+            <SensitivityBar
+              classification={props.textContent.predictedClassification}
+            />
+          </div>
+        ) : null}
+      </Grid>
+
+      <Grid item xs={11}>
         <TextAnnotator
           content={props.textContent.content}
           value={annotations}
@@ -95,14 +106,6 @@ export default function TextContentAnnotator(props) {
             tag: props.tag
             // color: TAG_COLORS[props.tag]
           })}
-        />
-      </Grid>
-      <Grid item xs={2}>
-        <Sensitivity
-          classification={props.textContent.predictedClassification}
-        />
-        <SensitivityBar
-          classification={props.textContent.predictedClassification}
         />
       </Grid>
     </>
