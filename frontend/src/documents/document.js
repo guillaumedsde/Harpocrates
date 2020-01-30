@@ -94,6 +94,7 @@ export default function Document(props) {
   }, []);
 
   if (document) {
+    console.log(document);
     return (
       <>
         <Grid container spacing={5}>
@@ -107,7 +108,10 @@ export default function Document(props) {
                 <DocumentInfo document={document} />
               </Grid>
               <Grid item style={{ width: "100%" }}>
-                <PredictedClassification classification={classification} />
+                <PredictedClassification
+                  classification={classification}
+                  granularity={document.textSplitGranularity}
+                />
                 <Divider />
                 <ExplanationToggles
                   classification={classification}

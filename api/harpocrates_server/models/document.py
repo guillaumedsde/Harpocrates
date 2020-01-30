@@ -19,13 +19,15 @@ class Document(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, name=None, document_id=None, predicted_classification=None, text_contents=None):  # noqa: E501
+    def __init__(self, name=None, document_id=None, text_split_granularity=None, predicted_classification=None, text_contents=None):  # noqa: E501
         """Document - a model defined in OpenAPI
 
         :param name: The name of this Document.  # noqa: E501
         :type name: str
         :param document_id: The document_id of this Document.  # noqa: E501
         :type document_id: str
+        :param text_split_granularity: The text_split_granularity of this Document.  # noqa: E501
+        :type text_split_granularity: str
         :param predicted_classification: The predicted_classification of this Document.  # noqa: E501
         :type predicted_classification: PredictedClassification
         :param text_contents: The text_contents of this Document.  # noqa: E501
@@ -34,6 +36,7 @@ class Document(Model):
         self.openapi_types = {
             'name': str,
             'document_id': str,
+            'text_split_granularity': str,
             'predicted_classification': PredictedClassification,
             'text_contents': List[TextContent]
         }
@@ -41,12 +44,14 @@ class Document(Model):
         self.attribute_map = {
             'name': 'name',
             'document_id': 'documentId',
+            'text_split_granularity': 'textSplitGranularity',
             'predicted_classification': 'predictedClassification',
             'text_contents': 'textContents'
         }
 
         self._name = name
         self._document_id = document_id
+        self._text_split_granularity = text_split_granularity
         self._predicted_classification = predicted_classification
         self._text_contents = text_contents
 
@@ -104,6 +109,35 @@ class Document(Model):
             raise ValueError("Invalid value for `document_id`, must not be `None`")  # noqa: E501
 
         self._document_id = document_id
+
+    @property
+    def text_split_granularity(self):
+        """Gets the text_split_granularity of this Document.
+
+        Granularity of the split of the document's content  # noqa: E501
+
+        :return: The text_split_granularity of this Document.
+        :rtype: str
+        """
+        return self._text_split_granularity
+
+    @text_split_granularity.setter
+    def text_split_granularity(self, text_split_granularity):
+        """Sets the text_split_granularity of this Document.
+
+        Granularity of the split of the document's content  # noqa: E501
+
+        :param text_split_granularity: The text_split_granularity of this Document.
+        :type text_split_granularity: str
+        """
+        allowed_values = ["document", "paragraph", "line"]  # noqa: E501
+        if text_split_granularity not in allowed_values:
+            raise ValueError(
+                "Invalid value for `text_split_granularity` ({0}), must be one of {1}"
+                .format(text_split_granularity, allowed_values)
+            )
+
+        self._text_split_granularity = text_split_granularity
 
     @property
     def predicted_classification(self):

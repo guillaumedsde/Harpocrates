@@ -85,18 +85,29 @@ export default function TextContentAnnotator(props) {
 
   return (
     <>
-      <Grid item xs={1}>
-        {/* <Sensitivity classification={line.predictedClassification} /> */}
-        {props.textContent.predictedClassification ? (
-          <div style={{ width: "90%" }}>
-            <SensitivityBar
-              classification={props.textContent.predictedClassification}
-            />
-          </div>
-        ) : null}
-      </Grid>
+      {/* don't display in text classification if granularity is document
+      because it is already displayed in DocumentInfo */}
+      {props.granularity === "document" ? null : (
+        <Grid item xs={2}>
+          {props.textContent.predictedClassification ? ( //check if predictedClassification has been calculated
+            <div style={{ width: "90%" }}>
+              {/* Only display text classification percentage if paragraph level classification
+          otherwise lines are spread apart */}
+              {props.granularity === "paragraph" ? (
+                <Sensitivity
+                  classification={props.textContent.predictedClassification}
+                />
+              ) : null}
 
-      <Grid item xs={11}>
+              <SensitivityBar
+                classification={props.textContent.predictedClassification}
+              />
+            </div>
+          ) : null}
+        </Grid>
+      )}
+
+      <Grid item xs={10}>
         <TextAnnotator
           content={props.textContent.content}
           value={annotations}

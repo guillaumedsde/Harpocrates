@@ -44,6 +44,7 @@ export default function DocumentBody(props) {
             showNonSensitive={props.showNonSensitive}
             showSensitive={props.showSensitive}
             explainer={props.explainer}
+            granularity={props.document.textSplitGranularity}
           />
         ))}
       </Grid>
