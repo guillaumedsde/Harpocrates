@@ -71,7 +71,7 @@ def split_content_into_lines(content: str) -> List[TextContent]:
     # build a list of line objects
     lines = []
     for line_content in lines_content:
-        lines.append(Line(content=line_content))
+        lines.append(TextContent(content=line_content))
 
     return lines
 
