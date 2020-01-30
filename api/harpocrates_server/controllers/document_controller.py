@@ -1,7 +1,9 @@
+import traceback
 import connexion
 from typing import Tuple, Union
 import six
 from http import HTTPStatus
+from typing import List
 import json
 import re
 from copy import deepcopy
@@ -20,6 +22,7 @@ from harpocrates_server.models.feature import Feature
 from harpocrates_server.models.sensitive_section import SensitiveSection
 from harpocrates_server.models.sensitive_sections import SensitiveSections
 from harpocrates_server.models.http_status import HttpStatus as ApiHttpStatus
+from harpocrates_server.models.text_content import TextContent
 
 from harpocrates_server import util, db
 
@@ -31,7 +34,10 @@ from harpocrates_server.service.explanation import (
 )
 
 from harpocrates_server.service.errors import create_api_http_status
-from harpocrates_server.service.document import document_from_mongo_dict
+from harpocrates_server.service.document import (
+    document_from_mongo_dict,
+    text_contents_from_document_body,
+)
 
 
 def add_sensitive_section(
@@ -57,7 +63,7 @@ def add_sensitive_section(
 
     db[set_id].update_one(
         {"_id": ObjectId(doc_id)},
-        {"$push": {"sensitive_sections": sensitive_section.to_dict()}},
+        {"$push": {"sensitiveSections": sensitive_section.to_dict()}},
     )
 
     # return sensitive sections with HTTPStatus
@@ -89,7 +95,7 @@ def add_sensitive_sections(
         {"_id": ObjectId(doc_id)},
         {
             "$set": {
-                "sensitive_sections": sensitive_sections.to_dict()["sensitive_sections"]
+                "sensitiveSections": sensitive_sections.to_dict()["sensitiveSections"]
             }
         },
     )
@@ -112,7 +118,7 @@ def get_sensitive_sections(
     """
 
     sensitive_sections_query = db[set_id].find_one(
-        {"_id": ObjectId(doc_id)}, {"sensitive_sections": 1}
+        {"_id": ObjectId(doc_id)}, {"sensitiveSections": 1}
     )
 
     if not sensitive_sections_query:
@@ -120,7 +126,7 @@ def get_sensitive_sections(
         return create_api_http_status(error), error.value
 
     sensitive_section_list = []
-    for section in sensitive_sections_query.get("sensitive_sections") or []:
+    for section in sensitive_sections_query.get("sensitiveSections") or []:
         sensitive_section_list.append(SensitiveSection(**section))
 
     sensitive_sections = SensitiveSections(sensitive_sections=sensitive_section_list)
@@ -141,12 +147,23 @@ def create_document(set_id, body) -> Tuple[Document, int]:  # noqa: E501
     :rtype: Document
     """
 
-    document = Document(content=body.decode())
+    granularity = "line"
+
+    text_contents = text_contents_from_document_body(
+        body.decode(), granularity=granularity
+    )
+
+    document = Document(text_contents=text_contents, text_split_granularity=granularity)
+
     operation_result = db[set_id].insert_one(document.to_dict())
 
-    doc_id = operation_result.inserted_id
+    if not operation_result.inserted_id:
+        error = HTTPStatus.INTERNAL_SERVER_ERROR
+        return create_api_http_status(error), error.value
 
-    classify(set_id, doc_id)
+    classify(set_id, operation_result.inserted_id)
+
+    document = get_document(set_id, operation_result.inserted_id)
 
     return document, HTTPStatus.OK.value
 
@@ -159,7 +176,9 @@ def delete_document(set_id: str, doc_id: str) -> Tuple[Document, int]:
     """
     result = db[set_id].find_one_and_delete({"_id": ObjectId(doc_id)})
 
-    deleted = document_from_mongo_dict(result)
+    result["documentId"] = str(result["_id"])
+    del result["_id"]
+    deleted = Document.from_dict(result)
     return deleted, HTTPStatus.OK.value
 
 
@@ -182,42 +201,74 @@ def get_document(
     if not doc:
         error = HTTPStatus.NOT_FOUND
         return create_api_http_status(error), error.value
-    document_dict = deepcopy(doc)
-    document_dict["document_id"] = str(doc["_id"])
-    del document_dict["_id"]
-    document = Document(**document_dict)
+
+    doc["documentId"] = str(doc["_id"])
+    del doc["_id"]
+
+    document = Document.from_dict(doc)
+
+    # recreate text_content objects
+    text_contents = []
+
+    for text_content_dict in doc["textContents"]:
+        classification_dict = text_content_dict["predictedClassification"]
+
+        # Build predicted_classification from dictionary
+        classification = None
+        if classification_dict:
+            explanations = []
+            for explanation_dict in classification_dict["explanations"]:
+                features = []
+                for feature_dict in explanation_dict["features"]:
+                    feature = Feature.from_dict(feature_dict)
+                    features.append(feature)
+                explanation = PredictedClassificationExplanation.from_dict(
+                    explanation_dict
+                )
+                explanation.features = features
+                explanations.append(explanation)
+            classification = PredictedClassification.from_dict(classification_dict)
+            classification.explanations = explanations
+
+        # build sensitive_sections from dictionaries
+        sensitive_sections_dicts = text_content_dict["sensitiveSections"]
+        sensitive_sections = []
+        if sensitive_sections_dicts:
+
+            for sensitive_section_dict in sensitive_sections_dicts["sensitiveSections"]:
+                sensitive_sections.append(
+                    SensitiveSection.from_dict(sensitive_section_dict)
+                )
+
+        # build text_content object
+        text_content = TextContent.from_dict(text_content_dict)
+        text_content.predicted_classification = classification
+        text_content.sensitive_sections = SensitiveSections(sensitive_sections)
+        text_contents.append(text_content)
+
+    # # add text_contents to document and return it
+    document.text_contents = text_contents
 
     return document, HTTPStatus.OK.value
 
 
-def calculate_classification_with_explanation(
-    set_id: str, doc_id: str
-) -> PredictedClassification:
-    """Calculate the classification of a document with the explanation for the predicted classification
+def classify_text(text: str) -> PredictedClassification:
+    """Calculate the classification of a text with the explanation for the predicted classification
 
-     # noqa: E501
-
-    :param set_id: ID of a set
-    :type set_id: str
-    :param doc_id: ID of a document
-    :type doc_id: str
-
-    :rtype: PredictedClassification
+    :param text: text for which to calculate classification
     """
-    document, status = get_document(set_id, doc_id)
 
     # TODO this is a long blocking call when first training the classifier, needs to return 202 "created" with some URL to the processed element
     trained_model, classifier_type = get_model()
 
     # calculate explanations
-    lime = lime_explanation(trained_model, document.content)
+    lime = lime_explanation(trained_model, text)
 
     # shap explanation
-    # shap = shap_tree_explanation(trained_model, document.content)
-
-    # document is sensitive if probability of "non sensitive" classification is lower than "sensitive" classification
+    # shap = shap_tree_explanation(trained_model, text)
+    # text is sensitive if probability of "non sensitive" classification is lower than "sensitive" classification
     sensitive = lime.predict_proba[0] < lime.predict_proba[1]
-    # sensitivity of document is the probability of "sensitive" classification
+    # sensitivity of text is the probability of "sensitive" classification
     sensitivity = round(lime.predict_proba[1] * 100)
 
     feature_weights = {"lime": lime.as_list()}  # , "shap": shap}
@@ -232,7 +283,7 @@ def calculate_classification_with_explanation(
         # iterate over all features
         for feature_info in explanation:
 
-            # regex pattern for finding feature in document
+            # regex pattern for finding feature in text
             pattern = "\\b({feature})+\\b".format(feature=feature_info[0])
 
             # calculate custom weight, positive if sensitive, negative otherwise
@@ -249,8 +300,8 @@ def calculate_classification_with_explanation(
             # match all features in content
             matches = re.finditer(
                 pattern,
-                document.content,
-                # match in entire document and regardless of case
+                text,
+                # match in entire text and regardless of case
                 flags=re.MULTILINE | re.IGNORECASE,
             )
 
@@ -263,7 +314,6 @@ def calculate_classification_with_explanation(
                     text=match[0],
                 )
                 features.append(feature)
-
         explanations.append(
             PredictedClassificationExplanation(features=features, explainer=explainer)
         )
@@ -280,9 +330,34 @@ def calculate_classification_with_explanation(
     return classification
 
 
-def get_predicted_classification(
-    set_id: str, doc_id: str
-) -> Tuple[Union[ApiHttpStatus, PredictedClassification], int]:  # noqa: E501
+def calculate_text_content_classifications(
+    document: Document,
+) -> List[PredictedClassification]:
+    """Calculate the classifications for all the text_contents pf a document
+
+    :param document: document for which to calculate text_content classifications
+    """
+
+    text_contents = []
+
+    for text_content in document.text_contents:
+        try:
+            classification = classify_text(text_content.content)
+        except ValueError as e:
+            # traceback.print_tb(e.__traceback__)
+            # print(type(e))
+            classification = None
+
+        new_text_content = TextContent(
+            content=text_content.content, predicted_classification=classification
+        )
+
+        text_contents.append(new_text_content)
+
+    return text_contents
+
+
+def get_predicted_classification(set_id, doc_id):  # noqa: E501
     """Get the explanation for the predicted classification of a document
 
      # noqa: E501
@@ -294,19 +369,17 @@ def get_predicted_classification(
 
     :rtype: PredictedClassification
     """
-    document = get_document(set_id, doc_id)
+    document, status = get_document(set_id, doc_id)
 
     predicted_classification_query = db[set_id].find_one(
-        {"_id": ObjectId(doc_id)}, {"predicted_classification": 1}
+        {"_id": ObjectId(doc_id)}, {"predictedClassification": 1}
     )
 
     if not predicted_classification_query:
         error = HTTPStatus.NOT_FOUND
         return create_api_http_status(error), error.value
 
-    predicted_classification = predicted_classification_query[
-        "predicted_classification"
-    ]
+    predicted_classification = predicted_classification_query["predictedClassification"]
 
     if not predicted_classification:
         error = HTTPStatus.NOT_FOUND
@@ -324,7 +397,7 @@ def get_predicted_classification(
         for explanation in explanations_dict:
             features = []
             for feature in explanation["features"]:
-                features.append(Feature(**feature))
+                features.append(Feature.from_dict(feature))
             explanations.append(
                 PredictedClassificationExplanation(
                     features=features, explainer=explanation["explainer"]
@@ -345,10 +418,34 @@ def classify(set_id: str, doc_id: str) -> None:
     :type doc_id: str
     """
 
-    classification = calculate_classification_with_explanation(set_id, doc_id)
+    document, status = get_document(set_id, doc_id)
+
+    # rebuild document content from list of text_content content
+    document_content = "".join(
+        [text_content.content for text_content in document.text_contents]
+    )
+
+    classification = classify_text(document_content)
+    try:
+        classified_text_contents = calculate_text_content_classifications(document)
+    except Exception as e:
+        print("##################################################################")
+        print(set_id, document.name)
+        print(document_content)
+
+        raise e
 
     doc_id = db[set_id].update_one(
         {"_id": ObjectId(doc_id)},
-        {"$set": {"predicted_classification": classification.to_dict()}},
+        {
+            "$set": {
+                # Update document wide predicted classification
+                "predictedClassification": classification.to_dict(),
+                # Update paragrah classifications
+                "textContents": [
+                    text_content.to_dict() for text_content in classified_text_contents
+                ],
+            }
+        },
     )
 

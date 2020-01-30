@@ -29,13 +29,13 @@ export default function DocumentSet(props) {
   var api = new SetApi();
   var docApi = new DocumentApi();
 
-  const handleListItemClick = (event, setId, docId) => {
-    navigate(`/documentSets/${setId}/${docId}`);
+  const handleListItemClick = (event, setId, documentId) => {
+    navigate(`/documentSets/${setId}/${documentId}`);
   };
 
-  const deleteItem = React.useCallback((event, setId, docId) => {
+  const deleteItem = React.useCallback((event, setId, documentId) => {
     setLoading(true);
-    docApi.deleteDocument(setId, docId).then(response => {
+    docApi.deleteDocument(setId, documentId).then(response => {
       setTriggerListRefresh(Math.random());
     });
   });

@@ -15,8 +15,8 @@ from sklearn.linear_model import SGDClassifier
 from sklearn.model_selection import GridSearchCV
 from sklearn.pipeline import Pipeline
 
-from openapi_server.service.classification import train, CLASSIFIERS
-from openapi_server.service.data_parsing import (
+from harpocrates_server.service.classification import train, CLASSIFIERS
+from harpocrates_server.service.data_parsing import (
     extract_data,
     extract_labels,
     extract_file_paths,

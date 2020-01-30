@@ -4,7 +4,7 @@ info:
   license:
     name: MIT
   title: Harpocrates API
-  version: 7.1.2
+  version: 9.1.0
 externalDocs:
   description: Documentation
   url: https://harpocrates-app.gitlab.io/harpocrates
@@ -68,6 +68,7 @@ paths:
       operationId: delete_set
       parameters:
       - description: ID of a set
+        example: 9_11
         explode: false
         in: path
         name: setId
@@ -102,6 +103,7 @@ paths:
       operationId: get_set
       parameters:
       - description: ID of a set
+        example: 9_11
         explode: false
         in: path
         name: setId
@@ -138,6 +140,7 @@ paths:
       operationId: create_document
       parameters:
       - description: ID of a set
+        example: 9_11
         explode: false
         in: path
         name: setId
@@ -185,6 +188,7 @@ paths:
       operationId: delete_document
       parameters:
       - description: ID of a set
+        example: 9_11
         explode: false
         in: path
         name: setId
@@ -193,6 +197,7 @@ paths:
           type: string
         style: simple
       - description: ID of a document
+        example: document1
         explode: false
         in: path
         name: docId
@@ -227,6 +232,7 @@ paths:
       operationId: get_document
       parameters:
       - description: ID of a set
+        example: 9_11
         explode: false
         in: path
         name: setId
@@ -235,6 +241,7 @@ paths:
           type: string
         style: simple
       - description: ID of a document
+        example: document1
         explode: false
         in: path
         name: docId
@@ -270,6 +277,7 @@ paths:
       operationId: get_predicted_classification
       parameters:
       - description: ID of a set
+        example: 9_11
         explode: false
         in: path
         name: setId
@@ -278,6 +286,7 @@ paths:
           type: string
         style: simple
       - description: ID of a document
+        example: document1
         explode: false
         in: path
         name: docId
@@ -308,12 +317,13 @@ paths:
       tags:
       - document
       x-openapi-router-controller: harpocrates_server.controllers.document_controller
-  /documentSet/{setId}/{docId}/sensitiveSection:
-    post:
-      description: add a sensitive section to the document
-      operationId: add_sensitive_section
+  /documentSet/{setId}/{docId}/{textContentIndex}/sensitiveSections:
+    get:
+      description: get sensitive sections of a TextContent object
+      operationId: get_sensitive_sections
       parameters:
       - description: ID of a set
+        example: 9_11
         explode: false
         in: path
         name: setId
@@ -322,12 +332,83 @@ paths:
           type: string
         style: simple
       - description: ID of a document
+        example: document1
         explode: false
         in: path
         name: docId
         required: true
         schema:
           type: string
+        style: simple
+      - description: Index of the position of a TextContent object in the list of
+          TextContent objects making up the document
+        example: 2
+        explode: false
+        in: path
+        name: textContentIndex
+        required: true
+        schema:
+          format: int32
+          minimum: 0
+          type: integer
+        style: simple
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/sensitiveSections'
+          description: Successfully got the sensitive sections for the TextContent
+            object
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The request was invalid JSON or missing some attributes
+        404:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The specified resource was not found
+      summary: get sensitive sections of a TextContent object
+      tags:
+      - textContent
+      x-openapi-router-controller: harpocrates_server.controllers.text_content_controller
+    post:
+      description: add a sensitive section to the document
+      operationId: add_sensitive_section
+      parameters:
+      - description: ID of a set
+        example: 9_11
+        explode: false
+        in: path
+        name: setId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: ID of a document
+        example: document1
+        explode: false
+        in: path
+        name: docId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Index of the position of a TextContent object in the list of
+          TextContent objects making up the document
+        example: 2
+        explode: false
+        in: path
+        name: textContentIndex
+        required: true
+        schema:
+          format: int32
+          minimum: 0
+          type: integer
         style: simple
       requestBody:
         content:
@@ -355,57 +436,14 @@ paths:
           description: The specified resource was not found
       summary: add a sensitive section to the document
       tags:
-      - document
-      x-openapi-router-controller: harpocrates_server.controllers.document_controller
-  /documentSet/{setId}/{docId}/sensitiveSections:
-    get:
-      description: get sensitive sections of the document
-      operationId: get_sensitive_sections
-      parameters:
-      - description: ID of a set
-        explode: false
-        in: path
-        name: setId
-        required: true
-        schema:
-          type: string
-        style: simple
-      - description: ID of a document
-        explode: false
-        in: path
-        name: docId
-        required: true
-        schema:
-          type: string
-        style: simple
-      responses:
-        200:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/sensitiveSections'
-          description: Successfully got the sensitive sections for the document
-        400:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/httpStatus'
-          description: The request was invalid JSON or missing some attributes
-        404:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/httpStatus'
-          description: The specified resource was not found
-      summary: get sensitive sections of the document
-      tags:
-      - document
-      x-openapi-router-controller: harpocrates_server.controllers.document_controller
-    post:
-      description: add multiple sensitive sections to the document
+      - textContent
+      x-openapi-router-controller: harpocrates_server.controllers.text_content_controller
+    put:
+      description: Overwrite the sensitive sections of a TextContent object
       operationId: add_sensitive_sections
       parameters:
       - description: ID of a set
+        example: 9_11
         explode: false
         in: path
         name: setId
@@ -414,12 +452,25 @@ paths:
           type: string
         style: simple
       - description: ID of a document
+        example: document1
         explode: false
         in: path
         name: docId
         required: true
         schema:
           type: string
+        style: simple
+      - description: Index of the position of a TextContent object in the list of
+          TextContent objects making up the document
+        example: 2
+        explode: false
+        in: path
+        name: textContentIndex
+        required: true
+        schema:
+          format: int32
+          minimum: 0
+          type: integer
         style: simple
       requestBody:
         content:
@@ -427,12 +478,12 @@ paths:
             schema:
               $ref: '#/components/schemas/sensitiveSections'
       responses:
-        201:
+        200:
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/sensitiveSections'
-          description: Successfully added the sensitive sections
+          description: Successfully overwrote the sensitive sections
         400:
           content:
             application/json:
@@ -445,14 +496,15 @@ paths:
               schema:
                 $ref: '#/components/schemas/httpStatus'
           description: The specified resource was not found
-      summary: add multiple sensitive sections to the document
+      summary: Overwrite the sensitive sections of a TextContent object
       tags:
-      - document
-      x-openapi-router-controller: harpocrates_server.controllers.document_controller
+      - textContent
+      x-openapi-router-controller: harpocrates_server.controllers.text_content_controller
 components:
   parameters:
     docId:
       description: ID of a document
+      example: document1
       explode: false
       in: path
       name: docId
@@ -462,12 +514,26 @@ components:
       style: simple
     setId:
       description: ID of a set
+      example: 9_11
       explode: false
       in: path
       name: setId
       required: true
       schema:
         type: string
+      style: simple
+    textContentIndex:
+      description: Index of the position of a TextContent object in the list of TextContent
+        objects making up the document
+      example: 2
+      explode: false
+      in: path
+      name: textContentIndex
+      required: true
+      schema:
+        format: int32
+        minimum: 0
+        type: integer
       style: simple
   responses:
     notFound:
@@ -516,8 +582,7 @@ components:
     documentSet:
       description: schema for a set of Documents
       example:
-        documentCount: 0
-        size: size
+        documentCount: 42
         name: ""
         setId: ""
       properties:
@@ -529,13 +594,12 @@ components:
           allOf:
           - $ref: '#/components/schemas/idBase'
           - description: Unique identifier for a document set
+          nullable: true
         documentCount:
           description: number of documents in set
+          example: 42
           format: int32
           type: integer
-        size:
-          description: size of the set, unit comes at the end of the string
-          type: string
       required:
       - name
       type: object
@@ -543,12 +607,10 @@ components:
       description: an object representing multiple document sets
       example:
         documentSets:
-        - documentCount: 0
-          size: size
+        - documentCount: 42
           name: ""
           setId: ""
-        - documentCount: 0
-          size: size
+        - documentCount: 42
           name: ""
           setId: ""
       properties:
@@ -561,8 +623,8 @@ components:
       required:
       - documentSets
       type: object
-    document:
-      description: A document to review
+    textContent:
+      description: A textContent from a document
       example:
         predictedClassification:
           classifier: SVM
@@ -581,33 +643,148 @@ components:
           sensitiveSections:
           - null
           - null
-        name: ""
-        documentId: ""
         content: content
       properties:
-        name:
-          allOf:
-          - $ref: '#/components/schemas/nameBase'
-          - description: Name of the Document
-        documentId:
-          allOf:
-          - $ref: '#/components/schemas/idBase'
-          - description: Unique identifier for a Document
         predictedClassification:
           $ref: '#/components/schemas/predictedClassification'
         sensitiveSections:
           $ref: '#/components/schemas/sensitiveSections'
         content:
-          description: content of the document
+          description: content of the textContent
           type: string
       required:
+      - content
+      type: object
+    document:
+      description: A document to review
+      example:
+        textSplitGranularity: paragraph
+        textContents:
+        - predictedClassification:
+            classifier: SVM
+            explanations:
+            - features:
+              - null
+              - null
+              explainer: Lime
+            - features:
+              - null
+              - null
+              explainer: Lime
+            sensitive: true
+            sensitivity: 78.3
+          sensitiveSections:
+            sensitiveSections:
+            - null
+            - null
+          content: content
+        - predictedClassification:
+            classifier: SVM
+            explanations:
+            - features:
+              - null
+              - null
+              explainer: Lime
+            - features:
+              - null
+              - null
+              explainer: Lime
+            sensitive: true
+            sensitivity: 78.3
+          sensitiveSections:
+            sensitiveSections:
+            - null
+            - null
+          content: content
+        predictedClassification:
+          classifier: SVM
+          explanations:
+          - features:
+            - null
+            - null
+            explainer: Lime
+          - features:
+            - null
+            - null
+            explainer: Lime
+          sensitive: true
+          sensitivity: 78.3
+        name: ""
+        documentId: ""
+      properties:
+        name:
+          allOf:
+          - $ref: '#/components/schemas/nameBase'
+          - description: Name of the Document
+          nullable: true
+        documentId:
+          allOf:
+          - $ref: '#/components/schemas/idBase'
+          - description: Unique identifier for a Document
+        textSplitGranularity:
+          description: Granularity of the split of the document's content
+          enum:
+          - document
+          - paragraph
+          - line
+          example: paragraph
+          type: string
+        predictedClassification:
+          $ref: '#/components/schemas/predictedClassification'
+        textContents:
+          description: list of textContent object representing the content of the
+            document
+          items:
+            $ref: '#/components/schemas/textContent'
+          type: array
+          uniqueItems: true
+      required:
       - documentId
+      - textContents
       type: object
     documents:
       description: an object representing multiple documents
       example:
         documents:
-        - predictedClassification:
+        - textSplitGranularity: paragraph
+          textContents:
+          - predictedClassification:
+              classifier: SVM
+              explanations:
+              - features:
+                - null
+                - null
+                explainer: Lime
+              - features:
+                - null
+                - null
+                explainer: Lime
+              sensitive: true
+              sensitivity: 78.3
+            sensitiveSections:
+              sensitiveSections:
+              - null
+              - null
+            content: content
+          - predictedClassification:
+              classifier: SVM
+              explanations:
+              - features:
+                - null
+                - null
+                explainer: Lime
+              - features:
+                - null
+                - null
+                explainer: Lime
+              sensitive: true
+              sensitivity: 78.3
+            sensitiveSections:
+              sensitiveSections:
+              - null
+              - null
+            content: content
+          predictedClassification:
             classifier: SVM
             explanations:
             - features:
@@ -620,14 +797,47 @@ components:
               explainer: Lime
             sensitive: true
             sensitivity: 78.3
-          sensitiveSections:
-            sensitiveSections:
-            - null
-            - null
           name: ""
           documentId: ""
-          content: content
-        - predictedClassification:
+        - textSplitGranularity: paragraph
+          textContents:
+          - predictedClassification:
+              classifier: SVM
+              explanations:
+              - features:
+                - null
+                - null
+                explainer: Lime
+              - features:
+                - null
+                - null
+                explainer: Lime
+              sensitive: true
+              sensitivity: 78.3
+            sensitiveSections:
+              sensitiveSections:
+              - null
+              - null
+            content: content
+          - predictedClassification:
+              classifier: SVM
+              explanations:
+              - features:
+                - null
+                - null
+                explainer: Lime
+              - features:
+                - null
+                - null
+                explainer: Lime
+              sensitive: true
+              sensitivity: 78.3
+            sensitiveSections:
+              sensitiveSections:
+              - null
+              - null
+            content: content
+          predictedClassification:
             classifier: SVM
             explanations:
             - features:
@@ -640,13 +850,8 @@ components:
               explainer: Lime
             sensitive: true
             sensitivity: 78.3
-          sensitiveSections:
-            sensitiveSections:
-            - null
-            - null
           name: ""
           documentId: ""
-          content: content
       properties:
         documents:
           description: array of documents
@@ -658,8 +863,8 @@ components:
       - documents
       type: object
     predictedClassification:
-      description: The predicted Sensitivity (Sensitive or Not) of a document along
-        with feature explanation for that classification
+      description: The predicted Sensitivity (Sensitive or Not) of a text along with
+        feature explanation for that classification
       example:
         classifier: SVM
         explanations:
@@ -707,7 +912,7 @@ components:
         explainer: Lime
       properties:
         features:
-          description: List of features with weights explaining a document's classification
+          description: List of features with weights explaining a text's classification
           items:
             $ref: '#/components/schemas/feature'
           type: array
@@ -721,19 +926,21 @@ components:
       - features
       type: object
     section:
-      description: Section of characters within a document
+      description: Section of characters within a text
       properties:
         startOffset:
           description: start offset of a section in characters from the beginning
-            of the document
+            of the text
           example: 4
           format: int32
+          minimum: 0
           type: integer
         endOffset:
           description: end offset of a section in characters from the beginning of
-            the document
+            the text
           example: 20
           format: int32
+          minimum: 0
           type: integer
         text:
           description: textual representation of the section
@@ -787,6 +994,7 @@ components:
           description: This is an optional textual description of what the predicted
             sensitivity is, suitable for presentation to the user
           example: This matches the Royal Family checklist
+          nullable: true
           type: string
       required:
       - name

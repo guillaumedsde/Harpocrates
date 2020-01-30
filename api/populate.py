@@ -21,9 +21,10 @@ from harpocrates_server.service.classification import (
     get_vectorizer,
 )
 
+from harpocrates_server.service.document import text_contents_from_document_body
 from harpocrates_server.controllers.document_controller import (
     classify,
-    calculate_classification_with_explanation,
+    classify_text,
     get_document,
 )
 
@@ -41,7 +42,10 @@ def process_document(path, data):
 
     collection = pathlib.Path(path).parts[-3]
     name = pathlib.Path(path).parts[-1]
-    document = Document(name=name, content=data)
+
+    text_contents = text_contents_from_document_body(data)
+
+    document = Document(name=name, text_contents=text_contents)
     operation_result = db[collection].insert_one(document.to_dict())
     doc_id = operation_result.inserted_id
     classify(collection, doc_id)

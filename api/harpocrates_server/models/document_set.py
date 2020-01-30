@@ -15,7 +15,7 @@ class DocumentSet(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, name=None, set_id=None, document_count=None, size=None):  # noqa: E501
+    def __init__(self, name=None, set_id=None, document_count=None):  # noqa: E501
         """DocumentSet - a model defined in OpenAPI
 
         :param name: The name of this DocumentSet.  # noqa: E501
@@ -24,27 +24,22 @@ class DocumentSet(Model):
         :type set_id: str
         :param document_count: The document_count of this DocumentSet.  # noqa: E501
         :type document_count: int
-        :param size: The size of this DocumentSet.  # noqa: E501
-        :type size: str
         """
         self.openapi_types = {
             'name': str,
             'set_id': str,
-            'document_count': int,
-            'size': str
+            'document_count': int
         }
 
         self.attribute_map = {
             'name': 'name',
             'set_id': 'setId',
-            'document_count': 'documentCount',
-            'size': 'size'
+            'document_count': 'documentCount'
         }
 
         self._name = name
         self._set_id = set_id
         self._document_count = document_count
-        self._size = size
 
     @classmethod
     def from_dict(cls, dikt) -> 'DocumentSet':
@@ -123,26 +118,3 @@ class DocumentSet(Model):
         """
 
         self._document_count = document_count
-
-    @property
-    def size(self):
-        """Gets the size of this DocumentSet.
-
-        size of the set, unit comes at the end of the string  # noqa: E501
-
-        :return: The size of this DocumentSet.
-        :rtype: str
-        """
-        return self._size
-
-    @size.setter
-    def size(self, size):
-        """Sets the size of this DocumentSet.
-
-        size of the set, unit comes at the end of the string  # noqa: E501
-
-        :param size: The size of this DocumentSet.
-        :type size: str
-        """
-
-        self._size = size
