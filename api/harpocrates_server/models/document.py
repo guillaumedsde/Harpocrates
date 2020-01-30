@@ -5,7 +5,7 @@ from datetime import date, datetime  # noqa: F401
 
 from typing import List, Dict  # noqa: F401
 
-from harpocrates_server.models.base_model import Model
+from harpocrates_server.models.base_model_ import Model
 from harpocrates_server.models.predicted_classification import PredictedClassification
 from harpocrates_server.models.text_content import TextContent
 from harpocrates_server import util

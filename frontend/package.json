@@ -1,8 +1,11 @@
 {
   "name": "@harpocrates/frontend",
-  "version": "0.1.0",
+  "version": "9.0.0",
   "description": "This is the ReactJS frontend for the Harpocrates frontend",
-  "repository": "https://gitlab.com/harpocrates-app/harpocrates",
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/harpocrates-app/harpocrates.git"
+  },
   "main": "index.html",
   "scripts": {
     "dev": "npx parcel src/index.html",
@@ -18,7 +21,7 @@
     "redactions"
   ],
   "author": "guillaumedsde",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "babel-eslint": "^10.0.3",
     "eslint": "^6.5.1",
@@ -33,7 +36,7 @@
   },
   "dependencies": {
     "@babel/core": "^7.7.5",
-    "@harpocrates/api-client": "^8.2.0-textContentClassifications.5",
+    "@harpocrates/api-client": "^9.0.0",
     "@material-ui/core": "^4.8.0",
     "@material-ui/icons": "^4.5.1",
     "@reach/router": "^1.2.1",
@@ -55,5 +58,12 @@
     "last 2 Edge versions",
     "last 2 Opera versions",
     "last 2 OperaMobile versions"
+  ],
+  "bugs": {
+    "url": "https://gitlab.com/harpocrates-app/harpocrates/issues"
+  },
+  "homepage": "https://gitlab.com/harpocrates-app/harpocrates#readme",
+  "files": [
+    "dist"
   ]
 }
