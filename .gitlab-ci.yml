@@ -157,7 +157,7 @@ pages:
     - mkdir public
     - cp ./docs/index.html public
     # copy codeclimate report, allow failure
-    - cp codeclimate.html public | true
+    # - cp codeclimate.html public
     - cp -r docs public
     - cp README.md public
     - cp -r api-client public/
