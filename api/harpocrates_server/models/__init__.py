@@ -16,3 +16,4 @@ from harpocrates_server.models.section import Section
 from harpocrates_server.models.sensitive_section import SensitiveSection
 from harpocrates_server.models.sensitive_section_all_of import SensitiveSectionAllOf
 from harpocrates_server.models.sensitive_sections import SensitiveSections
+from harpocrates_server.models.text_content import TextContent
