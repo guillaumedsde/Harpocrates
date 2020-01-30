@@ -1,7 +1,7 @@
 openapi: "3.0.2"
 info:
   description: This is the Rest API specification for the Harpocrates application
-  version: "7.1.2"
+  version: "9.1.0"
   title: Harpocrates API
   license:
     name: MIT
@@ -176,16 +176,38 @@ paths:
           $ref: "#/components/responses/malformedRequest"
         "404":
           $ref: "#/components/responses/notFound"
-  "/documentSet/{setId}/{docId}/sensitiveSection":
+  "/documentSet/{setId}/{docId}/{textContentIndex}/sensitiveSections":
+    get:
+      summary: get sensitive sections of a TextContent object
+      description: get sensitive sections of a TextContent object
+      operationId: get_sensitive_sections
+      tags:
+        - textContent
+      parameters:
+        - $ref: "#/components/parameters/setId"
+        - $ref: "#/components/parameters/docId"
+        - $ref: "#/components/parameters/textContentIndex"
+      responses:
+        "200":
+          description: Successfully got the sensitive sections for the TextContent object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/sensitiveSections"
+        "400":
+          $ref: "#/components/responses/malformedRequest"
+        "404":
+          $ref: "#/components/responses/notFound"
     post:
       summary: add a sensitive section to the document
       description: add a sensitive section to the document
       operationId: add_sensitive_section
       tags:
-        - document
+        - textContent
       parameters:
         - $ref: "#/components/parameters/setId"
         - $ref: "#/components/parameters/docId"
+        - $ref: "#/components/parameters/textContentIndex"
       requestBody:
         content:
           application/json:
@@ -202,44 +224,24 @@ paths:
           $ref: "#/components/responses/malformedRequest"
         "404":
           $ref: "#/components/responses/notFound"
-  "/documentSet/{setId}/{docId}/sensitiveSections":
-    get:
-      summary: get sensitive sections of the document
-      description: get sensitive sections of the document
-      operationId: get_sensitive_sections
-      tags:
-        - document
-      parameters:
-        - $ref: "#/components/parameters/setId"
-        - $ref: "#/components/parameters/docId"
-      responses:
-        "200":
-          description: Successfully got the sensitive sections for the document
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/sensitiveSections"
-        "400":
-          $ref: "#/components/responses/malformedRequest"
-        "404":
-          $ref: "#/components/responses/notFound"
-    post:
-      summary: add multiple sensitive sections to the document
-      description: add multiple sensitive sections to the document
+    put:
+      summary: Overwrite the sensitive sections of a TextContent object
+      description: Overwrite the sensitive sections of a TextContent object
       operationId: add_sensitive_sections
       tags:
-        - document
+        - textContent
       parameters:
         - $ref: "#/components/parameters/setId"
         - $ref: "#/components/parameters/docId"
+        - $ref: "#/components/parameters/textContentIndex"
       requestBody:
         content:
           application/json:
             schema:
               $ref: "#/components/schemas/sensitiveSections"
       responses:
-        "201":
-          description: Successfully added the sensitive sections
+        "200":
+          description: Successfully overwrote the sensitive sections
           content:
             application/json:
               schema:
@@ -257,6 +259,7 @@ components:
       required: true
       schema:
         type: string
+      example: document1
     setId:
       in: path
       name: setId
@@ -264,9 +267,18 @@ components:
       description: ID of a set
       schema:
         type: string
+      example: "9_11"
+    textContentIndex:
+      in: path
+      name: textContentIndex
+      required: true
+      description: Index of the position of a TextContent object in the list of TextContent objects making up the document
+      schema:
+        type: integer
+        format: int32
+        minimum: 0
+      example: 2
   responses:
-    # FIXME codes and messages don't actually have values
-    # NOTE is this really an issue? they are used as templates in swagger ui, as long as the structure is correct the rest does not really matter
     notFound:
       description: The specified resource was not found
       content:
@@ -335,6 +347,7 @@ components:
             - "$ref": "#/components/schemas/nameBase"
             - description: Name of the Document set
         setId:
+          nullable: true
           allOf:
             - "$ref": "#/components/schemas/idBase"
             - description: Unique identifier for a document set
@@ -342,9 +355,7 @@ components:
           type: integer
           format: int32
           description: number of documents in set
-        size:
-          type: string
-          description: size of the set, unit comes at the end of the string
+          example: 42
     documentSets:
       type: object
       description: an object representing multiple document sets
@@ -357,13 +368,29 @@ components:
           description: array of document sets
           items:
             $ref: "#/components/schemas/documentSet"
+    textContent:
+      type: object
+      description: A textContent from a document
+      required:
+        - content
+      properties:
+        predictedClassification:
+          nullable: true
+          $ref: "#/components/schemas/predictedClassification"
+        sensitiveSections:
+          $ref: "#/components/schemas/sensitiveSections"
+        content:
+          type: string
+          description: content of the textContent
     document:
       type: object
       description: A document to review
       required:
         - documentId
+        - textContents
       properties:
         name:
+          nullable: true
           allOf:
             - "$ref": "#/components/schemas/nameBase"
             - description: Name of the Document
@@ -371,13 +398,20 @@ components:
           allOf:
             - "$ref": "#/components/schemas/idBase"
             - description: Unique identifier for a Document
-        predictedClassification:
-          $ref: "#/components/schemas/predictedClassification"
-        sensitiveSections:
-          $ref: "#/components/schemas/sensitiveSections"
-        content:
+        textSplitGranularity:
           type: string
-          description: content of the document
+          enum: ["document", "paragraph", "line"]
+          description: Granularity of the split of the document's content
+          example: "paragraph"
+        predictedClassification:
+          nullable: true
+          $ref: "#/components/schemas/predictedClassification"
+        textContents:
+          type: array
+          uniqueItems: true
+          items:
+            $ref: "#/components/schemas/textContent"
+          description: list of textContent object representing the content of the document
     documents:
       type: object
       description: an object representing multiple documents
@@ -392,7 +426,7 @@ components:
             $ref: "#/components/schemas/document"
     predictedClassification:
       type: object
-      description: The predicted Sensitivity (Sensitive or Not) of a document along with feature explanation for that classification
+      description: The predicted Sensitivity (Sensitive or Not) of a text along with feature explanation for that classification
       required:
         - sensitive
       properties:
@@ -429,13 +463,13 @@ components:
           uniqueItems: true
           items:
             $ref: "#/components/schemas/feature"
-          description: List of features with weights explaining a document's classification
+          description: List of features with weights explaining a text's classification
         explainer:
           type: string
           description: Explainer used to obtain explanation
           example: Lime
     section:
-      description: Section of characters within a document
+      description: Section of characters within a text
       type: object
       required:
         - startOffset
@@ -444,13 +478,15 @@ components:
         startOffset:
           type: integer
           format: int32
+          minimum: 0
           example: 4
-          description: start offset of a section in characters from the beginning of the document
+          description: start offset of a section in characters from the beginning of the text
         endOffset:
           type: integer
           format: int32
+          minimum: 0
           example: 20
-          description: end offset of a section in characters from the beginning of the document
+          description: end offset of a section in characters from the beginning of the text
         text:
           type: string
           example: NSA
@@ -490,6 +526,7 @@ components:
               example: S27
               description: what was the exemption that was found (mandatory)
             description:
+              nullable: true
               type: string
               example: This matches the Royal Family checklist
               description: This is an optional textual description of what the predicted sensitivity is, suitable for presentation to the user

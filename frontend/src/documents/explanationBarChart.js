@@ -44,7 +44,7 @@ export function uniqueFeatures(classification) {
 }
 
 const CustomTooltip = ({ active, payload, label }) => {
-  if (active) {
+  if (active && payload) {
     return (
       <Card>
         <CardContent>

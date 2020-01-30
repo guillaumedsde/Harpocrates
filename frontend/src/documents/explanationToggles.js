@@ -43,11 +43,13 @@ export default function ExplanationToggles(props) {
             <MenuItem value="None" disabled>
               None
             </MenuItem>
-            {props.explainers.map(explainer => (
-              <MenuItem key={explainer} value={explainer}>
-                {explainer}
-              </MenuItem>
-            ))}
+            {props.explainers
+              ? props.explainers.map(explainer => (
+                  <MenuItem key={explainer} value={explainer}>
+                    {explainer}
+                  </MenuItem>
+                ))
+              : null}
           </Select>
         </ListItemSecondaryAction>
       </ListItem>

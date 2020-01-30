@@ -26,7 +26,7 @@ export default function Document(props) {
   const [sensitiveSections, setSensitiveSections] = useState(null);
 
   const [explainer, setExplainer] = useState(null);
-  const [explainers, setExplainers] = useState([]);
+  const [explainers, setExplainers] = useState(null);
 
   const [nbrExplanations, setNbrExplanations] = useState(null);
   const [maxExplanations, setMaxExplanations] = useState(null);
@@ -61,6 +61,7 @@ export default function Document(props) {
       .getPredictedClassification(props.documentSetName, props.documentId)
       .then(
         apiClassification => {
+          // console.log(apiClassification);
           // create list of explainers from API response
           const apiExplainers = apiClassification.explanations.map(
             explanation => explanation.explainer
@@ -83,24 +84,17 @@ export default function Document(props) {
           setClassification(apiClassification);
         },
         error => {
-          console.error(error);
+          if (error.status === 404) {
+            setClassification(null);
+          } else {
+            console.error(error);
+          }
         }
       );
   }, []);
 
-  // effect for getting sensitive sections
-  useEffect(() => {
-    api.getSensitiveSections(props.documentSetName, props.documentId).then(
-      apiSensitiveSections => {
-        setSensitiveSections(apiSensitiveSections);
-      },
-      error => {
-        console.error(error);
-      }
-    );
-  }, []);
-
   if (document) {
+    console.log(document);
     return (
       <>
         <Grid container spacing={5}>
@@ -114,7 +108,10 @@ export default function Document(props) {
                 <DocumentInfo document={document} />
               </Grid>
               <Grid item style={{ width: "100%" }}>
-                <PredictedClassification classification={classification} />
+                <PredictedClassification
+                  classification={classification}
+                  granularity={document.textSplitGranularity}
+                />
                 <Divider />
                 <ExplanationToggles
                   classification={classification}
@@ -148,11 +145,7 @@ export default function Document(props) {
               setName={props.documentSetName}
               sensitiveSections={sensitiveSections}
               setSensitiveSections={setSensitiveSections}
-              explanations={
-                classification
-                  ? classification.explanations[explainers.indexOf(explainer)]
-                  : []
-              }
+              explainer={explainer}
               showNonSensitive={showNonSensitiveExplanations}
               showSensitive={showSensitiveExplanations}
               tag={redactionLabel}
