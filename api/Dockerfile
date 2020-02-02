@@ -1,4 +1,4 @@
-ARG PYTHON_VERSION=3.7
+ARG PYTHON_VERSION=3.6
 
 FROM python:${PYTHON_VERSION}-buster as build
 
