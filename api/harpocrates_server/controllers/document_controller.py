@@ -147,7 +147,7 @@ def create_document(set_id, body) -> Tuple[Document, int]:  # noqa: E501
     :rtype: Document
     """
 
-    granularity = "line"
+    granularity = "document"
 
     text_contents = text_contents_from_document_body(
         body.decode(), granularity=granularity
