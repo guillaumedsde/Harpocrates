@@ -15,7 +15,9 @@ from sklearn.model_selection import KFold
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.pipeline import Pipeline
-from sklearn.svm import SVC, LinearSVC
+
+# from sklearn.svm import SVC, LinearSVC
+from thundersvm import SVC
 from sklearn.tree import DecisionTreeClassifier
 from xgboost import XGBClassifier
 
@@ -105,7 +107,7 @@ def train_and_store_classifier(classifier, path):
     classifier_type = type(classifier).__name__
     print("training model for %s, and storing it at %s" % (classifier_type, path))
     trained_classifier = train(classifier)
-    dump(trained_classifier, path)
+    # dump(trained_classifier, path)
     return trained_classifier
 
 
