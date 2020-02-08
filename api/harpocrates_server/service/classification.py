@@ -45,9 +45,9 @@ CLASSIFIERS = [
     # XGBClassifier(n_jobs=PROCESSES, objective="binary:logistic"),
     SVC(
         kernel="linear",
+        C=0.01,
         probability=True,
-        decision_function_shape="ovo",
-        cache_size=1000,
+        decision_function_shape="ovo"
     )
 ]
 
@@ -68,9 +68,11 @@ def build_vectorizer():
         analyzer="word",
         stop_words="english",
         strip_accents="unicode",
-        lowercase=True,
+        max_df=0.9,
+        min_df=1,
+        lowercase=False,
         use_idf=True,
-        smooth_idf=True,
+        smooth_idf=False,
         sublinear_tf=True,
     )
 
