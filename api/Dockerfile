@@ -5,15 +5,16 @@ FROM python:${BUILD_PYTHON_VERSION}-buster as build
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
+# install pipenv
+RUN pip install --no-cache-dir pipenv
+
 COPY Pipfile* ./
 
-RUN pip install --no-cache-dir pipenv && \
-    # install dependencies with optimizations
-    CFLAGS="-g0 -Wl,--strip-all -I/usr/include:/usr/local/include -L/usr/lib:/usr/local/lib" \
+# install dependencies with optimizations
+RUN CFLAGS="-g0 -Wl,--strip-all -I/usr/include:/usr/local/include -L/usr/lib:/usr/local/lib" \
     CPPFLAGS=${CFLAGS} \
     #PIP_GLOBAL_OPTION="build_ext -j 4" \
-    pipenv install --system --deploy --ignore-pipfile && \
-    pip uninstall pipenv -y
+    pipenv install --system --deploy --ignore-pipfile
 
 COPY . ./
 
