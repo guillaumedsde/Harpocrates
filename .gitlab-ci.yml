@@ -70,10 +70,7 @@ code_quality:
 
 api_client_doc:
   stage: build-documentation
-  image: python:alpine
-  before_script:
-    - apk add --no-cache make
-    - pip install mkdocs mkdocs-material
+  image: squidfunk/mkdocs-material:4.6.1
   script:
     - cd js-api-client
     - make doc
