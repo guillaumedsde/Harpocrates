@@ -19,7 +19,7 @@ from sklearn.pipeline import Pipeline
 # from sklearn.svm import SVC, LinearSVC
 from thundersvm import SVC
 from sklearn.tree import DecisionTreeClassifier
-from xgboost import XGBClassifier
+# from xgboost import XGBClassifier
 
 from harpocrates_server.service import (
     PROCESSES,
