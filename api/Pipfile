@@ -14,6 +14,7 @@ Flask-Testing = "==0.6.1"
 python-dotenv = "*"
 tox-pipenv-install = "*"
 pylint = "*"
+twine = "*"
 
 [packages]
 swagger-ui-bundle = ">=0.0.2"
@@ -26,5 +27,8 @@ lxml = "*"
 pymongo = "*"
 connexion = "*"
 shap = "*"
-xgboost = "*"
 waitress = "*"
+thundersvm-cpu = { file = "https://github.com/Xtra-Computing/thundersvm/releases/download/v0.3.4/thundersvm_cpu-0.3.4-cp36-cp36m-linux_x86_64.whl" }
+
+[requires]
+python_version = "3.6"
