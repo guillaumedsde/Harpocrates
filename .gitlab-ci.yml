@@ -16,11 +16,6 @@ variables:
   DOCS_FOLDER: api-specification
   SPEC_TO_DISPLAY: openapi.yml
 
-# These folders are cached between builds
-cache:
-  paths:
-    - ./node_modules
-
 # Use IBM OpenAPI validator to check for any errors in API specification
 validate-api-specification:
   image: node:alpine
@@ -73,6 +68,8 @@ api_client_doc:
   image:
     name: squidfunk/mkdocs-material:4.6.1
     entrypoint: [""]
+  before_script:
+    - apk add --no-cache make
   script:
     - cd js-api-client
     - make doc
