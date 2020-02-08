@@ -70,7 +70,9 @@ code_quality:
 
 api_client_doc:
   stage: build-documentation
-  image: squidfunk/mkdocs-material:4.6.1
+  image:
+    name: squidfunk/mkdocs-material:4.6.1
+    entrypoint: [""]
   script:
     - cd js-api-client
     - make doc
