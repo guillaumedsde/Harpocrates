@@ -133,6 +133,20 @@ api:
       - .gitlab-ci/yml
       - Makefile
 
+api-windows:
+  extends: .build_service
+  # name of service to build is the name of the job
+  variables:
+    SERVICE: api
+    DOCKERFILE_PREFIX: windows.
+  # only build on changes to api
+  only:
+    changes:
+      - api/**/*
+      - .gitlab-ci/yml
+      - Makefile
+  tags:
+    - shared-windows
 frontend:
   extends: .build_service
   # name of service to build is the name of the job
