@@ -1,6 +1,6 @@
-ARG PYTHON_VERSION=3.7
+ARG BUILD_PYTHON_VERSION=3.6
 
-FROM python:${PYTHON_VERSION}-buster as build
+FROM python:${BUILD_PYTHON_VERSION}-buster as build
 
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
@@ -20,12 +20,14 @@ COPY . ./
 
 FROM gcr.io/distroless/python3-debian10:latest
 
-ARG PYTHON_VERSION=3.7
+ARG BUILD_PYTHON_VERSION=3.6
+ARG RUN_PYTHON_VERSION=3.7
+
 COPY --from=build /usr/src/app /usr/src/app
-COPY --from=build /usr/local/lib/python${PYTHON_VERSION}/site-packages /usr/local/lib/python${PYTHON_VERSION}/site-packages
-# COPY --from=build /usr/local/bin/waitress-serve /usr/local/bin/waitress-serve
+COPY --from=build /usr/local/lib/python${BUILD_PYTHON_VERSION}/site-packages /usr/local/lib/python${RUN_PYTHON_VERSION}/site-packages
+
 WORKDIR /usr/src/app
-ENV PYTHONPATH=/usr/local/lib/python${PYTHON_VERSION}/site-packages
+ENV PYTHONPATH=/usr/local/lib/python${RUN_PYTHON_VERSION}/site-packages
 
 EXPOSE 80
 
