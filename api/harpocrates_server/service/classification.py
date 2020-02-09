@@ -70,7 +70,7 @@ def build_vectorizer():
         strip_accents="unicode",
         max_df=0.9,
         min_df=1,
-        lowercase=False,
+        lowercase=True,
         use_idf=True,
         smooth_idf=False,
         sublinear_tf=True,
@@ -149,9 +149,9 @@ def get_model(classifier=None, retrain=False):
         # trained_classifier = load(model_path)
 
 
-        clf = SVC().load_from_file(str(model_path.joinpath("clf")))
-
-        print(clf)
+        clf = SVC()
+        clf.load_from_file(str(model_path.joinpath("clf")))
+        
         vect = load(str(model_path.joinpath("vect")))
 
         trained_classifier = Pipeline(
