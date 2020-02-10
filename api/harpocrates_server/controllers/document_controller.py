@@ -261,14 +261,16 @@ def classify_text(text: str) -> PredictedClassification:
     # TODO this is a long blocking call when first training the classifier, needs to return 202 "created" with some URL to the processed element
     trained_model, classifier_type = get_model()
 
+    sensitive = bool(trained_model.predict([text])[0])
+
     # calculate explanations
     lime = lime_explanation(trained_model, text)
 
     # shap explanation
     # shap = shap_tree_explanation(trained_model, text)
-    # text is sensitive if probability of "non sensitive" classification is lower than "sensitive" classification
-    sensitive = lime.predict_proba[0] < lime.predict_proba[1]
     # sensitivity of text is the probability of "sensitive" classification
+    # FIXME using a libSVM based SVC classifier, this will sometimes output
+    # a different result from the .predict() method
     sensitivity = round(lime.predict_proba[1] * 100)
 
     feature_weights = {"lime": lime.as_list()}  # , "shap": shap}
