@@ -1,7 +1,7 @@
 openapi: "3.0.2"
 info:
   description: This is the Rest API specification for the Harpocrates application
-  version: "9.1.0"
+  version: "10.0.0-multiplefileupload.0"
   title: Harpocrates API
   license:
     name: MIT
@@ -82,17 +82,23 @@ paths:
         - $ref: "#/components/parameters/setId"
       requestBody:
         content:
-          text/plain:
+          multipart/form-data:
             schema:
-              type: string
+              type: object
+              properties:
+                files:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
         required: true
       responses:
         "200":
-          description: Successfully created document in set
+          description: Successfully created documents in set
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/document"
+                $ref: "#/components/schemas/documents"
         "400":
           $ref: "#/components/responses/malformedRequest"
         "404":

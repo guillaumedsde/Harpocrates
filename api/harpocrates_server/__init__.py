@@ -12,7 +12,7 @@ from flask_cors import CORS
 from harpocrates_server import encoder
 from harpocrates_server.db import create_db_client
 
-__version__ = (9, 0, 0, "dev")
+__version__ = (10, 0, 0, "dev")
 
 # setup database
 db = create_db_client()
@@ -39,6 +39,8 @@ def create_app(test_config=None):
     app.config.from_mapping(
         # default secret that should be overridden in environ or config
         SECRET_KEY=os.environ.get("SECRET_KEY", "dev"),
+        MAX_CONTENT_LENGTH=16 * 1024 * 1024,
+        ALLOWED_EXTENSIONS=["txt", "html"],
     )
 
     # setup messaging broker
