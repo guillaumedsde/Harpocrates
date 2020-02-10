@@ -10,14 +10,8 @@ from copy import deepcopy
 import numpy as np
 from bson.objectid import ObjectId
 
-from flask import current_app
-
 from harpocrates_server.models.document import Document  # noqa: E501
-from harpocrates_server.models.documents import Documents
-
 from harpocrates_server.models.http_status import HttpStatus  # noqa: E501
-from harpocrates_server.models.sensitive_section import SensitiveSection  # noqa: E501
-from harpocrates_server.models.sensitive_sections import SensitiveSections  # noqa: E501
 from harpocrates_server.models.predicted_classification_explanation import (
     PredictedClassificationExplanation,
 )
@@ -25,6 +19,8 @@ from harpocrates_server.models.predicted_classification_explanation import (
 from harpocrates_server.models.predicted_classification import PredictedClassification
 
 from harpocrates_server.models.feature import Feature
+from harpocrates_server.models.sensitive_section import SensitiveSection
+from harpocrates_server.models.sensitive_sections import SensitiveSections
 from harpocrates_server.models.http_status import HttpStatus as ApiHttpStatus
 from harpocrates_server.models.text_content import TextContent
 
@@ -42,53 +38,134 @@ from harpocrates_server.service.document import (
     document_from_mongo_dict,
     text_contents_from_document_body,
 )
-from flask import request
-from werkzeug.utils import secure_filename
 
 
-def create_document(
-    set_id, files=None
-) -> Union[HttpStatus, Tuple[Documents, int]]:  # noqa: E501
-    """Add new documents to the document set
+def add_sensitive_section(
+    set_id: str, doc_id: str, body
+) -> Tuple[Union[ApiHttpStatus, SensitiveSection], int]:  # noqa: E501
+    """add a sensitive section to the document
 
     :param set_id: ID of a set
+    :type set_id: str
+    :param doc_id: ID of a document
+    :type doc_id: str
+    :param sensitive_section: 
+    :type sensitive_section: dict | bytes
+
+    :rtype: SensitiveSection
+    """
+    if not connexion.request.is_json:
+        error = HTTPStatus.BAD_REQUEST
+        return create_api_http_status(error), error.value
+    sensitive_section = SensitiveSection.from_dict(
+        connexion.request.get_json()
+    )  # noqa: E501
+
+    db[set_id].update_one(
+        {"_id": ObjectId(doc_id)},
+        {"$push": {"sensitiveSections": sensitive_section.to_dict()}},
+    )
+
+    # return sensitive sections with HTTPStatus
+    return sensitive_section, HTTPStatus.CREATED.value
+
+
+def add_sensitive_sections(
+    set_id: str, doc_id: str, body
+) -> Tuple[Union[ApiHttpStatus, SensitiveSections], int]:  # noqa: E501
+    """add multiple sensitive sections to the document
+
+    :param set_id: ID of a set
+    :type set_id: str
+    :param doc_id: ID of a document
+    :type doc_id: str
+    :param sensitive_sections: 
+    :type sensitive_sections: dict | bytes
+
+    :rtype: SensitiveSections
+    """
+    if not connexion.request.is_json:
+        error = HTTPStatus.BAD_REQUEST
+        return create_api_http_status(error), error.value
+    sensitive_sections = SensitiveSections.from_dict(
+        connexion.request.get_json()
+    )  # noqa: E501
+
+    db[set_id].update_one(
+        {"_id": ObjectId(doc_id)},
+        {
+            "$set": {
+                "sensitiveSections": sensitive_sections.to_dict()["sensitiveSections"]
+            }
+        },
+    )
+
+    # return sensitive sections with HTTPStatus
+    return sensitive_sections, HTTPStatus.CREATED.value
+
+
+def get_sensitive_sections(
+    set_id: str, doc_id: str
+) -> Tuple[Union[ApiHttpStatus, SensitiveSections], int]:
+    """get document sensitive sections
+
+    :param set_id: ID of a set
+    :type set_id: str
+    :param doc_id: ID of a document
+    :type doc_id: str
+
+    :rtype: SensitiveSections
+    """
+
+    sensitive_sections_query = db[set_id].find_one(
+        {"_id": ObjectId(doc_id)}, {"sensitiveSections": 1}
+    )
+
+    if not sensitive_sections_query:
+        error = HTTPStatus.NOT_FOUND
+        return create_api_http_status(error), error.value
+
+    sensitive_section_list = []
+    for section in sensitive_sections_query.get("sensitiveSections") or []:
+        sensitive_section_list.append(SensitiveSection(**section))
+
+    sensitive_sections = SensitiveSections(sensitive_sections=sensitive_section_list)
+
+    return sensitive_sections, HTTPStatus.OK.value
+
+
+def create_document(set_id, body) -> Tuple[Document, int]:  # noqa: E501
+    """Add a new document to the document set
+
+    Contents of the document in the body of the request. This should be in plain text. The Content-Type header should be appropriately set to text/plain. # noqa: E501
+
+    :param set_id: ID of a set
+    :type set_id: str
+    :param body: 
+    :type body: str
+
+    :rtype: Document
     """
 
     granularity = "document"
 
-    documents = []
-
-    for file in request.files.values():
-
-        text_contents = text_contents_from_document_body(
-            file.read(), granularity=granularity
-        )
-
-        documents.append(
-            Document(
-                name=file.filename,
-                text_contents=text_contents,
-                text_split_granularity=granularity,
-            )
-        )
-
-    operation_result = db[set_id].insert_many(
-        [document.to_dict() for document in documents]
+    text_contents = text_contents_from_document_body(
+        body.decode(), granularity=granularity
     )
 
-    if len(operation_result.inserted_ids) != len(documents):
+    document = Document(text_contents=text_contents, text_split_granularity=granularity)
+
+    operation_result = db[set_id].insert_one(document.to_dict())
+
+    if not operation_result.inserted_id:
         error = HTTPStatus.INTERNAL_SERVER_ERROR
         return create_api_http_status(error), error.value
 
-    # classify(set_id, operation_result.inserted_id)
+    classify(set_id, operation_result.inserted_id)
 
-    added_documents_list = []
-    for document_id in operation_result.inserted_ids:
-        added_documents_list.append(get_document(set_id, operation_result.inserted_id))
+    document = get_document(set_id, operation_result.inserted_id)
 
-    added_documents = Documents(documents=added_documents_list)
-
-    return added_documents, HTTPStatus.OK.value
+    return document, HTTPStatus.OK.value
 
 
 def delete_document(set_id: str, doc_id: str) -> Tuple[Document, int]:
@@ -175,7 +252,7 @@ def get_document(
     return document, HTTPStatus.OK.value
 
 
-def classify_text(text: str, explanations=None) -> PredictedClassification:
+def classify_text(text: str) -> PredictedClassification:
     """Calculate the classification of a text with the explanation for the predicted classification
 
     :param text: text for which to calculate classification
@@ -196,15 +273,7 @@ def classify_text(text: str, explanations=None) -> PredictedClassification:
     # a different result from the .predict() method
     sensitivity = round(lime.predict_proba[1] * 100)
 
-    if explanations:
-        feature_weights = {}
-        for explanation in explanations:
-            feature_list = [
-                (feature.text, feature.weight) for feature in explanation.features
-            ]
-            feature_weights[explanation.explainer] = list(set(feature_list))
-    else:
-        feature_weights = {"lime": lime.as_list()}  # , "shap": shap}
+    feature_weights = {"lime": lime.as_list()}  # , "shap": shap}
 
     explanations = []
 
@@ -264,7 +333,7 @@ def classify_text(text: str, explanations=None) -> PredictedClassification:
 
 
 def calculate_text_content_classifications(
-    document: Document, explanations: List[PredictedClassificationExplanation]
+    document: Document,
 ) -> List[PredictedClassification]:
     """Calculate the classifications for all the text_contents pf a document
 
@@ -275,9 +344,10 @@ def calculate_text_content_classifications(
 
     for text_content in document.text_contents:
         try:
-            classification = classify_text(text_content.content, explanations)
+            classification = classify_text(text_content.content)
         except ValueError as e:
-            current_app.logger.warn("Could not classify: %s", text_content.content)
+            # traceback.print_tb(e.__traceback__)
+            # print(type(e))
             classification = None
 
         new_text_content = TextContent(
@@ -358,18 +428,12 @@ def classify(set_id: str, doc_id: str) -> None:
     )
 
     classification = classify_text(document_content)
-
     try:
-        classified_text_contents = calculate_text_content_classifications(
-            document, explanations=classification.explanations
-        )
+        classified_text_contents = calculate_text_content_classifications(document)
     except Exception as e:
-        current_app.logger.warn(
-            "Could not classify document %s in set %s: %s",
-            set_id,
-            document.name,
-            document_content,
-        )
+        print("##################################################################")
+        print(set_id, document.name)
+        print(document_content)
 
         raise e
 
