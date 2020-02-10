@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "3d1c9e627cb968836565e254d1e2d8d33a7d7cc8805890305f900f70088fce77"
+            "sha256": "65d662b91c4888467e8d7336e7cfcd8b88c1bfa6820ff74f33af508c79b66394"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -628,12 +628,16 @@
             "version": "==0.0.6"
         },
         "thundersvm-cpu": {
-            "file": "https://github.com/Xtra-Computing/thundersvm/releases/download/v0.3.4/thundersvm_cpu-0.3.4-cp36-cp36m-linux_x86_64.whl",
             "hashes": [
                 "sha256:d9cac9ed835c17e36e65c77c505751a4f30df4e4523d7beb1f28a4b4f1fcdbbd"
             ],
             "index": "pypi",
+            "markers": "sys_platform == 'linux'",
             "version": "==0.3.4"
+        },
+        "thundersvm-cpu-linux": {
+            "file": "https://github.com/Xtra-Computing/thundersvm/releases/download/v0.3.4/thundersvm_cpu-0.3.4-cp36-cp36m-linux_x86_64.whl",
+            "sys_platform": "== 'linux'"
         },
         "tqdm": {
             "hashes": [
@@ -663,6 +667,15 @@
                 "sha256:6dc65cf9091cf750012f56f2cad759fa9e879f511b5ff8685e456b4e3bf90d16"
             ],
             "version": "==1.0.0"
+        },
+        "xgboost": {
+            "hashes": [
+                "sha256:5ec073f6d68348784e9afdb831371fefb89de896d8eb58e79244ad05177c5753",
+                "sha256:898f26bb66589c644d17deff1b03961504f7ad79296ed434d0d7a5e9cb4deae6",
+                "sha256:d69f90d61a63e8889fd39a31ad00c629bac1ca627f8406b9b6d4594c9e29ab84"
+            ],
+            "index": "pypi",
+            "version": "==0.90"
         },
         "zipp": {
             "hashes": [
@@ -868,6 +881,14 @@
             ],
             "markers": "python_version < '3.8'",
             "version": "==1.5.0"
+        },
+        "importlib-resources": {
+            "hashes": [
+                "sha256:6e2783b2538bd5a14678284a3962b0660c715e5a0f10243fd5e00a4b5974f50b",
+                "sha256:d3279fd0f6f847cced9f7acc19bd3e5df54d34f93a2e7bb5f238f81545787078"
+            ],
+            "markers": "python_version < '3.7'",
+            "version": "==1.0.2"
         },
         "isort": {
             "hashes": [
@@ -1201,10 +1222,10 @@
         },
         "virtualenv": {
             "hashes": [
-                "sha256:0d62c70883c0342d59c11d0ddac0d954d0431321a41ab20851facf2b222598f3",
-                "sha256:55059a7a676e4e19498f1aad09b8313a38fcc0cdbe4fdddc0e9b06946d21b4bb"
+                "sha256:65ac7fc1513b1d39de71cc12b7ee1d80b44fc5d9279fa9073dee4d0b037e63a4",
+                "sha256:c018fa2e8a19d88bd1742a4f7bb6db5c9b8dfd65a43c03115554ba9f0771c1ec"
             ],
-            "version": "==16.7.9"
+            "version": "==20.0.0"
         },
         "webencodings": {
             "hashes": [
