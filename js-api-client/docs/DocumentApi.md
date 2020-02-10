@@ -13,7 +13,7 @@ Method | HTTP request | Description
 
 ## createDocument
 
-> Document createDocument(setId, body)
+> Documents createDocument(setId, opts)
 
 Add a new document to the set
 
@@ -26,8 +26,10 @@ import @HarpocratesApiClient from '@harpocrates/api-client';
 
 let apiInstance = new @HarpocratesApiClient.DocumentApi();
 let setId = 9_11; // String | ID of a set
-let body = "body_example"; // String | 
-apiInstance.createDocument(setId, body).then((data) => {
+let opts = {
+  'files': "/path/to/file" // [File] | 
+};
+apiInstance.createDocument(setId, opts).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
 }, (error) => {
   console.error(error);
@@ -41,11 +43,11 @@ apiInstance.createDocument(setId, body).then((data) => {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **setId** | **String**| ID of a set | 
- **body** | **String**|  | 
+ **files** | **[File]**|  | [optional] 
 
 ### Return type
 
-[**Document**](Document.md)
+[**Documents**](Documents.md)
 
 ### Authorization
 
@@ -53,7 +55,7 @@ No authorization required
 
 ### HTTP request headers
 
-- **Content-Type**: text/plain
+- **Content-Type**: multipart/form-data
 - **Accept**: application/json
 
 

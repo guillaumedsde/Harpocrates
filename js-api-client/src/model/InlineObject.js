@@ -14,19 +14,18 @@
 import ApiClient from '../ApiClient';
 
 /**
- * The FeatureAllOf model module.
- * @module model/FeatureAllOf
+ * The InlineObject model module.
+ * @module model/InlineObject
  * @version 10.0.0-multiplefileupload.0
  */
-class FeatureAllOf {
+class InlineObject {
     /**
-     * Constructs a new <code>FeatureAllOf</code>.
-     * an object representing a feature that explains the classification
-     * @alias module:model/FeatureAllOf
+     * Constructs a new <code>InlineObject</code>.
+     * @alias module:model/InlineObject
      */
     constructor() { 
         
-        FeatureAllOf.initialize(this);
+        InlineObject.initialize(this);
     }
 
     /**
@@ -38,18 +37,18 @@ class FeatureAllOf {
     }
 
     /**
-     * Constructs a <code>FeatureAllOf</code> from a plain JavaScript object, optionally creating a new instance.
+     * Constructs a <code>InlineObject</code> from a plain JavaScript object, optionally creating a new instance.
      * Copies all relevant properties from <code>data</code> to <code>obj</code> if supplied or a new instance if not.
      * @param {Object} data The plain JavaScript object bearing properties of interest.
-     * @param {module:model/FeatureAllOf} obj Optional instance to populate.
-     * @return {module:model/FeatureAllOf} The populated <code>FeatureAllOf</code> instance.
+     * @param {module:model/InlineObject} obj Optional instance to populate.
+     * @return {module:model/InlineObject} The populated <code>InlineObject</code> instance.
      */
     static constructFromObject(data, obj) {
         if (data) {
-            obj = obj || new FeatureAllOf();
+            obj = obj || new InlineObject();
 
-            if (data.hasOwnProperty('weight')) {
-                obj['weight'] = ApiClient.convertToType(data['weight'], 'Number');
+            if (data.hasOwnProperty('files')) {
+                obj['files'] = ApiClient.convertToType(data['files'], [File]);
             }
         }
         return obj;
@@ -59,15 +58,14 @@ class FeatureAllOf {
 }
 
 /**
- * The contribution of that feature to the classification, if positive weight, this feature contributes to a document's sensitivity and conversely
- * @member {Number} weight
+ * @member {Array.<File>} files
  */
-FeatureAllOf.prototype['weight'] = undefined;
+InlineObject.prototype['files'] = undefined;
 
 
 
 
 
 
-export default FeatureAllOf;
+export default InlineObject;
 

@@ -6,21 +6,36 @@ import { DocumentApi } from "@harpocrates/api-client";
 export default function DocumentUploadForm(props) {
   var api = new DocumentApi();
   const onDrop = useCallback(acceptedFiles => {
-    const reader = new FileReader();
+    let opts = {};
+    acceptedFiles.forEach(file => {
+      console.log(file);
+      opts["files"] = file;
+    });
 
-    reader.onabort = () => console.log("file reading was aborted");
-    reader.onerror = () => console.log("file reading has failed");
-    reader.onload = () => {
-      // Do whatever you want with the file contents
-      const body = reader.result;
-      props.setLoading(true);
-      api.createDocument(props.documentSet, body).then(() => {
-        props.triggerDocListRefresh(Math.random());
-      });
-    };
+    api.createDocument(props.documentSet, opts).then(
+      data => {
+        console.log("API called successfully. Returned data: " + data);
+      },
+      error => {
+        console.error(error);
+      }
+    );
+    // const reader = new FileReader();
 
-    acceptedFiles.forEach(file => reader.readAsText(file));
+    // reader.onabort = () => console.log("file reading was aborted");
+    // reader.onerror = () => console.log("file reading has failed");
+    // reader.onload = () => {
+    //   // Do whatever you want with the file contents
+    //   const body = reader.result;
+    //   props.setLoading(true);
+    //   api.createDocument(props.documentSet, body).then(() => {
+    //     props.triggerDocListRefresh(Math.random());
+    //   });
+    // };
+
+    // acceptedFiles.forEach(file => reader.readAsText(file));
   }, []);
+
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   return (
