@@ -19,7 +19,8 @@ from sklearn.pipeline import Pipeline
 # from sklearn.svm import SVC, LinearSVC
 from thundersvm import SVC
 from sklearn.tree import DecisionTreeClassifier
-# from xgboost import XGBClassifier
+from xgboost import XGBClassifier
+from sklearn.linear_model import LogisticRegression, SGDClassifier
 
 from harpocrates_server.service import (
     PROCESSES,
@@ -41,12 +42,25 @@ CLASSIFIERS = [
     # DecisionTreeClassifier(),
     # KNeighborsClassifier(3),
     # DecisionTreeClassifier(),
-    # SVC(probability=True, kernel="linear", cache_size=1000),
-    # XGBClassifier(n_jobs=PROCESSES, objective="binary:logistic"),
+    # LogisticRegression(n_jobs=-1),
+    # RandomForestClassifier(n_jobs=-1),
+    # SGDClassifier(n_jobs=-1, loss="log"),
+    # XGBClassifier(
+    #     n_jobs=PROCESSES,
+    #     objective="binary:logitraw",
+    #     subsample=0.2,
+    #     booster="gbtree",
+    #     learning_rate=0.9,
+    #     max_depth=3,
+    #     min_split_loss=10,
+    #     reg_lambda=1,
+    #     reg_alpha=0,
+    #     scale_pos_weight=3299 / 502,
+    # ),
     SVC(
         kernel="linear",
         C=0.01,
-        probability=True,
+        # probability=True,
         decision_function_shape="ovo"
     )
 ]
@@ -110,17 +124,14 @@ def train_and_store_classifier(classifier, path):
     print("training model for %s, and storing it at" % (classifier_type))
     trained_classifier = train(classifier)
 
+    # path.mkdir(parents=True, exist_ok=True)
 
-    path.mkdir(parents=True, exist_ok=True)
+    # trained_classifier.named_steps.clf.save_to_file(str(path.joinpath("clf")))
 
-    print("storing trained classifier at {}".format(path))
-    trained_classifier.named_steps.clf.save_to_file(str(path.joinpath("clf")))
-    print("stored trained classifier at {}".format(path))
+    # dump(trained_classifier.named_steps.vect, str(path.joinpath("vect")))
 
-    print("storing fitted vectorizer at {}".format(path))
-    dump(trained_classifier.named_steps.vect, str(path.joinpath("vect")))
+    dump(trained_classifier, str(path))
 
-    print("stored fitted vectorizer at {}".format(path))
     return trained_classifier
 
 
@@ -137,7 +148,7 @@ def get_model(classifier=None, retrain=False):
     except NameError:
         global_model_name = None
 
-    if retrain or not os.path.exists(model_path) or not os.listdir(model_path):
+    if retrain or not os.path.exists(model_path):
         if not os.path.exists(MODELS_DIRECTORY):
             os.makedirs(MODELS_DIRECTORY)
         trained_classifier = train_and_store_classifier(classifier, model_path)
@@ -146,16 +157,15 @@ def get_model(classifier=None, retrain=False):
         trained_classifier = MODEL
     else:
         print("loading found model for %s from %s" % (classifier_type, model_path))
-        # trained_classifier = load(model_path)
+        trained_classifier = load(model_path)
 
+        # clf = SVC()
+        # clf.load_from_file(str(model_path.joinpath("clf")))
 
-        clf = SVC()
-        clf.load_from_file(str(model_path.joinpath("clf")))
-        
-        vect = load(str(model_path.joinpath("vect")))
+        # vect = load(str(model_path.joinpath("vect")))
 
-        trained_classifier = Pipeline(
-            steps=[("vect", vect), ("clf", clf),], verbose=True,
-        )
+        # trained_classifier = Pipeline(
+        #     steps=[("vect", vect), ("clf", clf),], verbose=True,
+        # )
         MODEL = trained_classifier
     return trained_classifier, classifier_type
