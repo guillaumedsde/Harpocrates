@@ -53,8 +53,6 @@ const getNodeOffset = function(node) {
 };
 
 export default function PopoverMenu(props) {
-  console.log(props);
-
   var api = new DocumentApi();
 
   const selectedNodeParent = window.getSelection().anchorNode.parentNode;

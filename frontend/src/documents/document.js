@@ -61,7 +61,6 @@ export default function Document(props) {
       .getPredictedClassification(props.documentSetName, props.documentId)
       .then(
         apiClassification => {
-          // console.log(apiClassification);
           // create list of explainers from API response
           const apiExplainers = apiClassification.explanations.map(
             explanation => explanation.explainer
@@ -94,7 +93,6 @@ export default function Document(props) {
   }, []);
 
   if (document) {
-    console.log(document);
     return (
       <>
         <Grid container spacing={5}>
