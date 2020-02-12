@@ -19,8 +19,6 @@ from harpocrates_server.models.predicted_classification_explanation import (
 from harpocrates_server.models.predicted_classification import PredictedClassification
 
 from harpocrates_server.models.feature import Feature
-from harpocrates_server.models.sensitive_section import SensitiveSection
-from harpocrates_server.models.sensitive_sections import SensitiveSections
 from harpocrates_server.models.http_status import HttpStatus as ApiHttpStatus
 from harpocrates_server.models.text_content import TextContent
 
@@ -40,98 +38,6 @@ from harpocrates_server.service.document import (
 )
 
 
-def add_sensitive_section(
-    set_id: str, doc_id: str, body
-) -> Tuple[Union[ApiHttpStatus, SensitiveSection], int]:  # noqa: E501
-    """add a sensitive section to the document
-
-    :param set_id: ID of a set
-    :type set_id: str
-    :param doc_id: ID of a document
-    :type doc_id: str
-    :param sensitive_section: 
-    :type sensitive_section: dict | bytes
-
-    :rtype: SensitiveSection
-    """
-    if not connexion.request.is_json:
-        error = HTTPStatus.BAD_REQUEST
-        return create_api_http_status(error), error.value
-    sensitive_section = SensitiveSection.from_dict(
-        connexion.request.get_json()
-    )  # noqa: E501
-
-    db[set_id].update_one(
-        {"_id": ObjectId(doc_id)},
-        {"$push": {"sensitiveSections": sensitive_section.to_dict()}},
-    )
-
-    # return sensitive sections with HTTPStatus
-    return sensitive_section, HTTPStatus.CREATED.value
-
-
-def add_sensitive_sections(
-    set_id: str, doc_id: str, body
-) -> Tuple[Union[ApiHttpStatus, SensitiveSections], int]:  # noqa: E501
-    """add multiple sensitive sections to the document
-
-    :param set_id: ID of a set
-    :type set_id: str
-    :param doc_id: ID of a document
-    :type doc_id: str
-    :param sensitive_sections: 
-    :type sensitive_sections: dict | bytes
-
-    :rtype: SensitiveSections
-    """
-    if not connexion.request.is_json:
-        error = HTTPStatus.BAD_REQUEST
-        return create_api_http_status(error), error.value
-    sensitive_sections = SensitiveSections.from_dict(
-        connexion.request.get_json()
-    )  # noqa: E501
-
-    db[set_id].update_one(
-        {"_id": ObjectId(doc_id)},
-        {
-            "$set": {
-                "sensitiveSections": sensitive_sections.to_dict()["sensitiveSections"]
-            }
-        },
-    )
-
-    # return sensitive sections with HTTPStatus
-    return sensitive_sections, HTTPStatus.CREATED.value
-
-
-def get_sensitive_sections(
-    set_id: str, doc_id: str
-) -> Tuple[Union[ApiHttpStatus, SensitiveSections], int]:
-    """get document sensitive sections
-
-    :param set_id: ID of a set
-    :type set_id: str
-    :param doc_id: ID of a document
-    :type doc_id: str
-
-    :rtype: SensitiveSections
-    """
-
-    sensitive_sections_query = db[set_id].find_one(
-        {"_id": ObjectId(doc_id)}, {"sensitiveSections": 1}
-    )
-
-    if not sensitive_sections_query:
-        error = HTTPStatus.NOT_FOUND
-        return create_api_http_status(error), error.value
-
-    sensitive_section_list = []
-    for section in sensitive_sections_query.get("sensitiveSections") or []:
-        sensitive_section_list.append(SensitiveSection(**section))
-
-    sensitive_sections = SensitiveSections(sensitive_sections=sensitive_section_list)
-
-    return sensitive_sections, HTTPStatus.OK.value
 
 
 def create_document(set_id, body) -> Tuple[Document, int]:  # noqa: E501
