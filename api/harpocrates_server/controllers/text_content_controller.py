@@ -8,6 +8,7 @@ from harpocrates_server.models.http_status import (
 )  # noqa: E501
 from harpocrates_server.models.sensitive_section import SensitiveSection  # noqa: E501
 from harpocrates_server.models.sensitive_sections import SensitiveSections  # noqa: E501
+from harpocrates_server.service.errors import create_api_http_status
 from harpocrates_server import util, db
 
 from bson.objectid import ObjectId
