@@ -10,6 +10,8 @@ from copy import deepcopy
 import numpy as np
 from bson.objectid import ObjectId
 
+from flask import current_app
+
 from harpocrates_server.models.document import Document  # noqa: E501
 from harpocrates_server.models.http_status import HttpStatus  # noqa: E501
 from harpocrates_server.models.sensitive_section import SensitiveSection  # noqa: E501
@@ -186,7 +188,6 @@ def classify_text(text: str, explanations=None) -> PredictedClassification:
         for explanation in explanations:
             feature_list = [(feature.text, feature.weight) for feature in explanation.features]
             feature_weights[explanation.explainer] = list(set(feature_list))
-        print(feature_weights)
     else:
         feature_weights = {"lime": lime.as_list()}  # , "shap": shap}
 
@@ -262,8 +263,7 @@ def calculate_text_content_classifications(
         try:
             classification = classify_text(text_content.content, explanations)
         except ValueError as e:
-            # traceback.print_tb(e.__traceback__)
-            # print(type(e))
+            current_app.logger.warn("Could not classify: %s", text_content.content)
             classification = None
 
         new_text_content = TextContent(
@@ -348,10 +348,8 @@ def classify(set_id: str, doc_id: str) -> None:
     try:
         classified_text_contents = calculate_text_content_classifications(document, explanations=classification.explanations)
     except Exception as e:
-        print("##################################################################")
-        print(set_id, document.name)
-        print(document_content)
-
+        current_app.logger.warn("Could not classify document %s in set %s: %s",set_id, document.name, document_content)
+    
         raise e
 
     doc_id = db[set_id].update_one(
