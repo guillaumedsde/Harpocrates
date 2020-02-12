@@ -55,7 +55,7 @@ def create_document(set_id, body) -> Tuple[Document, int]:  # noqa: E501
     :rtype: Document
     """
 
-    granularity = "document"
+    granularity = "line"
 
     text_contents = text_contents_from_document_body(
         body.decode(), granularity=granularity
@@ -160,7 +160,7 @@ def get_document(
     return document, HTTPStatus.OK.value
 
 
-def classify_text(text: str) -> PredictedClassification:
+def classify_text(text: str, explanations=None) -> PredictedClassification:
     """Calculate the classification of a text with the explanation for the predicted classification
 
     :param text: text for which to calculate classification
@@ -181,7 +181,14 @@ def classify_text(text: str) -> PredictedClassification:
     # a different result from the .predict() method
     sensitivity = round(lime.predict_proba[1] * 100)
 
-    feature_weights = {"lime": lime.as_list()}  # , "shap": shap}
+    if explanations:
+        feature_weights = {}
+        for explanation in explanations:
+            feature_list = [(feature.text, feature.weight) for feature in explanation.features]
+            feature_weights[explanation.explainer] = list(set(feature_list))
+        print(feature_weights)
+    else:
+        feature_weights = {"lime": lime.as_list()}  # , "shap": shap}
 
     explanations = []
 
@@ -242,6 +249,7 @@ def classify_text(text: str) -> PredictedClassification:
 
 def calculate_text_content_classifications(
     document: Document,
+    explanations: List[PredictedClassificationExplanation]
 ) -> List[PredictedClassification]:
     """Calculate the classifications for all the text_contents pf a document
 
@@ -252,7 +260,7 @@ def calculate_text_content_classifications(
 
     for text_content in document.text_contents:
         try:
-            classification = classify_text(text_content.content)
+            classification = classify_text(text_content.content, explanations)
         except ValueError as e:
             # traceback.print_tb(e.__traceback__)
             # print(type(e))
@@ -336,8 +344,9 @@ def classify(set_id: str, doc_id: str) -> None:
     )
 
     classification = classify_text(document_content)
+
     try:
-        classified_text_contents = calculate_text_content_classifications(document)
+        classified_text_contents = calculate_text_content_classifications(document, explanations=classification.explanations)
     except Exception as e:
         print("##################################################################")
         print(set_id, document.name)
