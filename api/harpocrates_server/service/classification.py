@@ -35,14 +35,13 @@ from harpocrates_server.service.data_parsing import (
     extract_file_paths,
 )
 
-from harpocrates_server.models.dummy_flask_app import DummyFlaskApp
-
 # create a dummy current_app for logging outside of flask context
 try:
 
     from flask import current_app
     current_app.logger.info()
 except RuntimeError:
+    from harpocrates_server.models.dummy_flask_app import DummyFlaskApp
     logger = logging.getLogger(__name__)
     handler = logging.StreamHandler()
     handler.setLevel(logging.DEBUG)
