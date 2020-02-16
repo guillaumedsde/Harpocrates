@@ -191,7 +191,7 @@ def classify_text(text: str, explanations=None) -> PredictedClassification:
     else:
         feature_weights = {"lime": lime.as_list()}  # , "shap": shap}
 
-    explanations = []
+    explanation_objects = []
 
     # iterate over all explanations
     for explainer, explanation in feature_weights.items():
@@ -204,16 +204,19 @@ def classify_text(text: str, explanations=None) -> PredictedClassification:
             # regex pattern for finding feature in text
             pattern = "\\b({feature})+\\b".format(feature=feature_info[0])
 
-            # calculate custom weight, positive if sensitive, negative otherwise
+            
 
-            # if sensitive feature
-            if (sensitive and (feature_info[1] > 0)) or (
-                not sensitive and (feature_info[1] < 0)
-            ):
-                weight = abs(feature_info[1])
-            # if non sensitive feature
-            else:
-                weight = -abs(feature_info[1])
+            # calculate custom weight, positive if sensitive, negative otherwise
+            # only if no explanations passed (as this has already been done)
+            if not explanations:
+                # if sensitive feature
+                if (sensitive and (feature_info[1] > 0)) or (
+                    not sensitive and (feature_info[1] < 0)
+                ):
+                    weight = abs(feature_info[1])
+                # if non sensitive feature
+                else:
+                    weight = -abs(feature_info[1])
 
             # match all features in content
             matches = re.finditer(
@@ -232,7 +235,7 @@ def classify_text(text: str, explanations=None) -> PredictedClassification:
                     text=match[0],
                 )
                 features.append(feature)
-        explanations.append(
+        explanation_objects.append(
             PredictedClassificationExplanation(features=features, explainer=explainer)
         )
 
@@ -241,7 +244,7 @@ def classify_text(text: str, explanations=None) -> PredictedClassification:
         # for some reason python boolean can't be casted to JSON
         sensitive=int(sensitive),
         sensitivity=sensitivity,
-        explanations=explanations,
+        explanations=explanation_objects,
         classifier=classifier_type,
     )
 
