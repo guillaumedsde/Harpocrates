@@ -9,7 +9,6 @@ import { DocumentApi } from "@harpocrates/api-client";
 import DocumentInfo from "./documentInfo";
 import DocumentBody from "./documentBody";
 import ExplanationChart, { uniqueFeatures } from "./explanationBarChart";
-import CustomizedSnackbar from "./status";
 import ExplanationToggles from "./explanationToggles";
 import RedactionLabelSelect from "./redactionLabelSelect";
 import PredictedClassification from "./documentPredictedClassification";
@@ -164,11 +163,6 @@ export default function Document(props) {
             />
           </Grid>
         </Grid>
-        <CustomizedSnackbar
-          message="Calculating sensitivity classification with explanation..."
-          open={classification === null}
-          variant="info"
-        />
       </>
     );
   } else {
