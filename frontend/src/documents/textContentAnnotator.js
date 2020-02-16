@@ -38,7 +38,7 @@ export default function TextContentAnnotator(props) {
     )
       .slice(0, props.nbrExplanations)
       .forEach(explanation => {
-        const sensitive = explanation.weight > 0;
+        const sensitive = Math.sign(explanation.weight) > 0;
         if (
           explanation.text === props.activeFeature ||
           (!sensitive && props.showNonSensitive) ||
@@ -84,7 +84,7 @@ export default function TextContentAnnotator(props) {
   };
 
   return (
-    <>
+    <Grid container alignItems="center" justify="center">
       {/* don't display in text classification if granularity is document
       because it is already displayed in DocumentInfo */}
       {props.granularity === "document" ? null : (
@@ -119,6 +119,6 @@ export default function TextContentAnnotator(props) {
           })}
         />
       </Grid>
-    </>
+    </Grid>
   );
 }

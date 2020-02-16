@@ -29,25 +29,21 @@ export default function DocumentBody(props) {
       className={classes.root}
       style={{ height: "85vh", overflow: "auto" }}
     >
-      <Grid container alignItems="center" justify="center">
-        {props.document.textContents.map((textContent, index) => (
-          <TextContentAnnotator
-            key={`${textContent.content.split(" ")[0]}${
-              textContent.sensitivity
-            }`}
-            api={api}
-            textContent={textContent}
-            setName={props.setName}
-            documentId={props.document.documentId}
-            textContentIndex={index}
-            tag={props.tag}
-            showNonSensitive={props.showNonSensitive}
-            showSensitive={props.showSensitive}
-            explainer={props.explainer}
-            granularity={props.document.textSplitGranularity}
-          />
-        ))}
-      </Grid>
+      {props.document.textContents.map((textContent, index) => (
+        <TextContentAnnotator
+          key={index}
+          api={api}
+          textContent={textContent}
+          setName={props.setName}
+          documentId={props.document.documentId}
+          textContentIndex={index}
+          tag={props.tag}
+          showNonSensitive={props.showNonSensitive}
+          showSensitive={props.showSensitive}
+          explainer={props.explainer}
+          granularity={props.document.textSplitGranularity}
+        />
+      ))}
     </Paper>
   );
 }
