@@ -21,7 +21,7 @@ COPY . ./
 
 FROM gcr.io/distroless/python3-debian10:latest
 
-ARG BUILD_PYTHON_VERSION=3.6
+ARG BUILD_PYTHON_VERSION=3.8
 ARG RUN_PYTHON_VERSION=3.7
 
 COPY --from=build /usr/src/app /usr/src/app
