@@ -15,6 +15,7 @@ python-dotenv = "*"
 tox-pipenv-install = "*"
 pylint = "*"
 twine = "*"
+progress = "*"
 
 [packages]
 swagger-ui-bundle = ">=0.0.2"

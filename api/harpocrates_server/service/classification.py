@@ -2,6 +2,7 @@ import logging
 import os
 from multiprocessing import Pool
 
+
 import numpy as np
 from joblib import dump, load
 
@@ -33,6 +34,20 @@ from harpocrates_server.service.data_parsing import (
     extract_labels,
     extract_file_paths,
 )
+
+from harpocrates_server.models.dummy_flask_app import DummyFlaskApp
+
+# create a dummy current_app for logging outside of flask context
+try:
+
+    from flask import current_app
+    current_app.logger.info()
+except RuntimeError:
+    logger = logging.getLogger(__name__)
+    handler = logging.StreamHandler()
+    handler.setLevel(logging.DEBUG)
+    logger.addHandler(handler)
+    current_app = DummyFlaskApp(logger)
 
 
 # instantiate classifier objects
@@ -77,7 +92,7 @@ def build_vectorizer():
     )
 
 
-def train(classifier, skip_training=False):
+def train(classifier, train_data=None, train_labels=None, skip_training=False ):
     # build ML pipeline
     pipeline = Pipeline(
         steps=[
@@ -94,9 +109,10 @@ def train(classifier, skip_training=False):
     )
 
     if not skip_training:
-        train_labels = extract_labels()
-        file_paths = extract_file_paths()
-        train_data = extract_data(file_paths)
+        if (train_data is None) and (train_labels is None):
+            train_labels = extract_labels()
+            file_paths = extract_file_paths()
+            train_data = extract_data(file_paths)
 
         # train classifier
         pipeline.fit(train_data, train_labels)
@@ -105,26 +121,23 @@ def train(classifier, skip_training=False):
     return pipeline
 
 
-def train_and_store_classifier(classifier, path):
+def train_and_store_classifier(classifier, path, train_data=None, train_labels=None):
     classifier_type = type(classifier).__name__
-    print("training model for %s, and storing it at" % (classifier_type))
-    trained_classifier = train(classifier)
-
+    current_app.logger.info("training model for %s", classifier_type)
+    trained_classifier = train(classifier, train_data, train_labels)
 
     path.mkdir(parents=True, exist_ok=True)
 
-    print("storing trained classifier at {}".format(path))
+    current_app.logger.info("storing trained classifier in %s", path)
     trained_classifier.named_steps.clf.save_to_file(str(path.joinpath("clf")))
-    print("stored trained classifier at {}".format(path))
 
-    print("storing fitted vectorizer at {}".format(path))
+    current_app.logger.info("storing fitted vectorizer in %s", path)
     dump(trained_classifier.named_steps.vect, str(path.joinpath("vect")))
-
-    print("stored fitted vectorizer at {}".format(path))
+    
     return trained_classifier
 
 
-def get_model(classifier=None, retrain=False):
+def get_model(classifier=None, train_data=None, train_labels=None):
     global MODEL
     # if no classifier passed, used first one
     if not classifier:
@@ -137,15 +150,14 @@ def get_model(classifier=None, retrain=False):
     except NameError:
         global_model_name = None
 
-    if retrain or not os.path.exists(model_path) or not os.listdir(model_path):
-        if not os.path.exists(MODELS_DIRECTORY):
-            os.makedirs(MODELS_DIRECTORY)
-        trained_classifier = train_and_store_classifier(classifier, model_path)
+    if train_data is not None and train_labels is not None :
+        MODELS_DIRECTORY.mkdir(parents=True, exist_ok=True)
+        trained_classifier = train_and_store_classifier(classifier, model_path, train_data, train_labels)
         MODEL = trained_classifier
     elif global_model_name == classifier_type:
         trained_classifier = MODEL
     else:
-        print("loading found model for %s from %s" % (classifier_type, model_path))
+        current_app.logger.info("loading found model for %s from %s", classifier_type, model_path)
         # trained_classifier = load(model_path)
 
 
