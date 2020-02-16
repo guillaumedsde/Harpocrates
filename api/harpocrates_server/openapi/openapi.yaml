@@ -21,7 +21,7 @@ paths:
     get:
       operationId: get_sets
       responses:
-        200:
+        "200":
           content:
             application/json:
               schema:
@@ -41,19 +41,19 @@ paths:
         description: documentSet descriptor that needs to be added to the engine
         required: true
       responses:
-        200:
+        "200":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/documentSet'
           description: The created document set Object
-        400:
+        "400":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/httpStatus'
           description: The request was invalid JSON or missing some attributes
-        409:
+        "409":
           content:
             application/json:
               schema:
@@ -77,19 +77,19 @@ paths:
           type: string
         style: simple
       responses:
-        200:
+        "200":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/documentSet'
           description: Successfully deleted the document set
-        400:
+        "400":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/httpStatus'
           description: The request was invalid JSON or missing some attributes
-        404:
+        "404":
           content:
             application/json:
               schema:
@@ -112,19 +112,19 @@ paths:
           type: string
         style: simple
       responses:
-        200:
+        "200":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/documents'
           description: Successfully got list of documents in set
-        400:
+        "400":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/httpStatus'
           description: The request was invalid JSON or missing some attributes
-        404:
+        "404":
           content:
             application/json:
               schema:
@@ -155,25 +155,25 @@ paths:
               type: string
         required: true
       responses:
-        200:
+        "200":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/document'
           description: Successfully created document in set
-        400:
+        "400":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/httpStatus'
           description: The request was invalid JSON or missing some attributes
-        404:
+        "404":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/httpStatus'
           description: The specified resource was not found
-        409:
+        "409":
           content:
             application/json:
               schema:
@@ -206,19 +206,19 @@ paths:
           type: string
         style: simple
       responses:
-        200:
+        "200":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/document'
           description: Successfully deleted document in the set
-        400:
+        "400":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/httpStatus'
           description: The request was invalid JSON or missing some attributes
-        404:
+        "404":
           content:
             application/json:
               schema:
@@ -250,19 +250,19 @@ paths:
           type: string
         style: simple
       responses:
-        200:
+        "200":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/document'
           description: Successfully got document from set
-        400:
+        "400":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/httpStatus'
           description: The request was invalid JSON or missing some attributes
-        404:
+        "404":
           content:
             application/json:
               schema:
@@ -295,19 +295,19 @@ paths:
           type: string
         style: simple
       responses:
-        200:
+        "200":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/predictedClassification'
           description: Successfully got the predicted classification
-        400:
+        "400":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/httpStatus'
           description: The request was invalid JSON or missing some attributes
-        404:
+        "404":
           content:
             application/json:
               schema:
@@ -353,20 +353,20 @@ paths:
           type: integer
         style: simple
       responses:
-        200:
+        "200":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/sensitiveSections'
           description: Successfully got the sensitive sections for the TextContent
             object
-        400:
+        "400":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/httpStatus'
           description: The request was invalid JSON or missing some attributes
-        404:
+        "404":
           content:
             application/json:
               schema:
@@ -416,19 +416,19 @@ paths:
             schema:
               $ref: '#/components/schemas/sensitiveSection'
       responses:
-        201:
+        "201":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/sensitiveSection'
           description: Successfully added the sensitive section
-        400:
+        "400":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/httpStatus'
           description: The request was invalid JSON or missing some attributes
-        404:
+        "404":
           content:
             application/json:
               schema:
@@ -478,19 +478,19 @@ paths:
             schema:
               $ref: '#/components/schemas/sensitiveSections'
       responses:
-        200:
+        "200":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/sensitiveSections'
           description: Successfully overwrote the sensitive sections
-        400:
+        "400":
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/httpStatus'
           description: The request was invalid JSON or missing some attributes
-        404:
+        "404":
           content:
             application/json:
               schema:
