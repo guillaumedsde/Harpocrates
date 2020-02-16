@@ -1,4 +1,5 @@
 import traceback
+import logging
 import connexion
 from typing import Tuple, Union
 import six
@@ -41,6 +42,18 @@ from harpocrates_server.service.document import (
     text_contents_from_document_body,
 )
 
+# create a dummy current_app for logging outside of flask context
+try:
+
+    from flask import current_app
+    current_app.logger.info()
+except RuntimeError:
+    from harpocrates_server.models.dummy_flask_app import DummyFlaskApp
+    logger = logging.getLogger(__name__)
+    handler = logging.StreamHandler()
+    handler.setLevel(logging.DEBUG)
+    logger.addHandler(handler)
+    current_app = DummyFlaskApp(logger)
 
 
 
@@ -208,7 +221,9 @@ def classify_text(text: str, explanations=None) -> PredictedClassification:
 
             # calculate custom weight, positive if sensitive, negative otherwise
             # only if no explanations passed (as this has already been done)
-            if not explanations:
+            if explanations:
+                weight = feature_info[1]
+            else:
                 # if sensitive feature
                 if (sensitive and (feature_info[1] > 0)) or (
                     not sensitive and (feature_info[1] < 0)
