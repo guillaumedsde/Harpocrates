@@ -34,6 +34,7 @@ export default function DocumentBody(props) {
           key={index}
           api={api}
           textContent={textContent}
+          activeFeature={props.activeFeature}
           setName={props.setName}
           documentId={props.document.documentId}
           textContentIndex={index}
