@@ -96,10 +96,10 @@ export default function ExplanationChart(props) {
     }
   };
 
-  if (uniqueExplanations) {
-    return (
-      <div style={{ height: "100%", width: "100%", display: "block" }}>
-        <ResponsiveContainer height="100%" width="100%">
+  return (
+    <div style={{ height: "100%", width: "100%", display: "block" }}>
+      <ResponsiveContainer height="100%" width="100%">
+        {props.explanation && uniqueExplanations ? (
           <BarChart
             width={0}
             height={0}
@@ -140,10 +140,10 @@ export default function ExplanationChart(props) {
               ))}
             </Bar>
           </BarChart>
-        </ResponsiveContainer>
-      </div>
-    );
-  } else {
-    return <CircularProgress />;
-  }
+        ) : (
+          <CircularProgress />
+        )}
+      </ResponsiveContainer>
+    </div>
+  );
 }
