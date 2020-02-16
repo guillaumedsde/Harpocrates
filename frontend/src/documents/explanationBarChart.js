@@ -99,7 +99,7 @@ export default function ExplanationChart(props) {
   return (
     <div style={{ height: "100%", width: "100%", display: "block" }}>
       <ResponsiveContainer height="100%" width="100%">
-        {props.explanation && uniqueExplanations ? (
+        {props.explanations && uniqueExplanations ? (
           <BarChart
             width={0}
             height={0}
