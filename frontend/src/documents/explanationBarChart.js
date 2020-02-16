@@ -32,13 +32,11 @@ function sortExplanations(arr) {
 }
 
 export function uniqueFeatures(classification) {
-  var allUniqueFeatures = [];
+  var allUniqueFeatures = null;
 
   if (classification != null) {
     // remove duplicate features and sort by absolute value
     allUniqueFeatures = uniqBy(classification.features, "text");
-  } else {
-    return null;
   }
   return allUniqueFeatures;
 }
@@ -99,7 +97,7 @@ export default function ExplanationChart(props) {
   return (
     <div style={{ height: "100%", width: "100%", display: "block" }}>
       <ResponsiveContainer height="100%" width="100%">
-        {props.explanations && uniqueExplanations ? (
+        {Array.isArray(uniqueExplanations) && uniqueExplanations.length ? (
           <BarChart
             width={0}
             height={0}
