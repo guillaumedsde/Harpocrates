@@ -263,7 +263,7 @@ def calculate_text_content_classifications(
         try:
             classification = classify_text(text_content.content, explanations)
         except ValueError as e:
-            current_app.logger.warn("Could not classify: %s", text_content.content)
+            current_app.logger.warn("Could not classify: %s", repr(text_content.content))
             classification = None
 
         new_text_content = TextContent(
