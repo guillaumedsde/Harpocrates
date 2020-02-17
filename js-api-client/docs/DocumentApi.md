@@ -7,7 +7,9 @@ Method | HTTP request | Description
 [**createDocument**](DocumentApi.md#createDocument) | **POST** /documentSet/{setId} | Add a new document to the set
 [**deleteDocument**](DocumentApi.md#deleteDocument) | **DELETE** /documentSet/{setId}/{docId} | delete document from set
 [**getDocument**](DocumentApi.md#getDocument) | **GET** /documentSet/{setId}/{docId} | get document from set
+[**getOriginalContent**](DocumentApi.md#getOriginalContent) | **GET** /documentSet/{setId}/{docId}/original | get original document content as plain text
 [**getPredictedClassification**](DocumentApi.md#getPredictedClassification) | **GET** /documentSet/{setId}/{docId}/predictedClassification | Get the predicted classification for the document
+[**getRedactedContent**](DocumentApi.md#getRedactedContent) | **GET** /documentSet/{setId}/{docId}/redacted | get redacted document content as plain text
 
 
 
@@ -145,6 +147,50 @@ No authorization required
 - **Accept**: application/json
 
 
+## getOriginalContent
+
+> String getOriginalContent(setId, docId)
+
+get original document content as plain text
+
+### Example
+
+```javascript
+import @HarpocratesApiClient from '@harpocrates/api-client';
+
+let apiInstance = new @HarpocratesApiClient.DocumentApi();
+let setId = 9_11; // String | ID of a set
+let docId = document1; // String | ID of a document
+apiInstance.getOriginalContent(setId, docId).then((data) => {
+  console.log('API called successfully. Returned data: ' + data);
+}, (error) => {
+  console.error(error);
+});
+
+```
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **setId** | **String**| ID of a set | 
+ **docId** | **String**| ID of a document | 
+
+### Return type
+
+**String**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: text/plain, application/json
+
+
 ## getPredictedClassification
 
 > PredictedClassification getPredictedClassification(setId, docId)
@@ -187,4 +233,48 @@ No authorization required
 
 - **Content-Type**: Not defined
 - **Accept**: application/json
+
+
+## getRedactedContent
+
+> String getRedactedContent(setId, docId)
+
+get redacted document content as plain text
+
+### Example
+
+```javascript
+import @HarpocratesApiClient from '@harpocrates/api-client';
+
+let apiInstance = new @HarpocratesApiClient.DocumentApi();
+let setId = 9_11; // String | ID of a set
+let docId = document1; // String | ID of a document
+apiInstance.getRedactedContent(setId, docId).then((data) => {
+  console.log('API called successfully. Returned data: ' + data);
+}, (error) => {
+  console.error(error);
+});
+
+```
+
+### Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **setId** | **String**| ID of a set | 
+ **docId** | **String**| ID of a document | 
+
+### Return type
+
+**String**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: text/plain, application/json
 
