@@ -106,6 +106,15 @@ def text_contents_from_document_body(
 
     return text_content_split_functions[granularity](content)
 
+def content_from_text_contents(document: Document, redacted: bool = False)-> str:
+    content = ""
+    for text_content in document.text_contents:
+        text_content_body = text_content.content
+        if redacted:
+            for sensitive_section in text_content.sensitive_sections.sensitive_sections:
+                text_content_body = text_content_body[:sensitive_section.start_offset] + "█"*(sensitive_section.end_offset-sensitive_section.start_offset) + text_content_body[sensitive_section.end_offset:] 
+        content += text_content_body
+    return content
 
 def document_from_mongo_dict(doc: Dict) -> Document:
     document_dict = deepcopy(doc)
