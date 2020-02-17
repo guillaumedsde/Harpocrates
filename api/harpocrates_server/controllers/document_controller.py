@@ -10,8 +10,9 @@ import re
 from copy import deepcopy
 import numpy as np
 from bson.objectid import ObjectId
+from io import BytesIO
 
-from flask import current_app
+from flask import current_app, send_file
 
 from harpocrates_server.models.document import Document  # noqa: E501
 from harpocrates_server.models.http_status import HttpStatus  # noqa: E501
@@ -40,6 +41,7 @@ from harpocrates_server.service.errors import create_api_http_status
 from harpocrates_server.service.document import (
     document_from_mongo_dict,
     text_contents_from_document_body,
+    content_from_text_contents
 )
 
 # create a dummy current_app for logging outside of flask context
@@ -174,6 +176,50 @@ def get_document(
 
     return document, HTTPStatus.OK.value
 
+
+def get_original_content(set_id: str, doc_id: str) -> Tuple[Union[ApiHttpStatus, str], int]:
+    """returns plain text original document content
+    
+    Arguments:
+        set_id {str} -- ID of a set
+        doc_id {str} -- ID of a document
+    
+    Returns:
+        Tuple[str, int] -- Tuple containing the plaintext string of the document or an HttpStatus object and the HTTP status code
+    """
+    document, status = get_document(set_id, doc_id)
+
+    buffer = BytesIO()
+    buffer.write(content_from_text_contents(document).encode('utf-8'))
+
+    buffer.seek(0)
+    return send_file(
+        buffer, 
+        as_attachment=True,
+        attachment_filename=(document.name or document.document_id ) + ".txt",
+        mimetype='text/plain')
+
+def get_redacted_content(set_id: str, doc_id: str) -> Tuple[Union[ApiHttpStatus, str], int]:
+    """returns plain text redacted document content
+    
+    Arguments:
+        set_id {str} -- ID of a set
+        doc_id {str} -- ID of a document
+    
+    Returns:
+        Tuple[str, int] -- Tuple containing the plaintext string of the redacted document or an HttpStatus object and the HTTP status code
+    """
+    document, status = get_document(set_id, doc_id)
+
+    buffer = BytesIO()
+    buffer.write(content_from_text_contents(document, redacted=True).encode('utf-8'))
+
+    buffer.seek(0)
+    return send_file(
+        buffer, 
+        as_attachment=True,
+        attachment_filename=(document.name or document.document_id ) + ".txt",
+        mimetype='text/plain')
 
 def classify_text(text: str, explanations=None) -> PredictedClassification:
     """Calculate the classification of a text with the explanation for the predicted classification
