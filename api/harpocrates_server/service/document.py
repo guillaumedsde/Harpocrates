@@ -114,7 +114,7 @@ def content_from_text_contents(document: Document, redacted: bool = False)-> str
             for sensitive_section in text_content.sensitive_sections.sensitive_sections:
                 unredacted_sensitive_section = text_content_body[sensitive_section.start_offset:sensitive_section.end_offset]
 
-                redacted_sensitive_section = re.sub(r"(?!\n).",'█', unredacted_sensitive_section)
+                redacted_sensitive_section = re.sub(r"(?![^\S ]+).",'█', unredacted_sensitive_section)
 
                 text_content_body = text_content_body[:sensitive_section.start_offset] + redacted_sensitive_section + text_content_body[sensitive_section.end_offset:] 
                 
