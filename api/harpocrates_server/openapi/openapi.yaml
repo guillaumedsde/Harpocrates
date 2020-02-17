@@ -4,7 +4,7 @@ info:
   license:
     name: MIT
   title: Harpocrates API
-  version: 9.1.0
+  version: 9.2.0
 externalDocs:
   description: Documentation
   url: https://harpocrates-app.gitlab.io/harpocrates
@@ -272,6 +272,54 @@ paths:
       tags:
       - document
       x-openapi-router-controller: harpocrates_server.controllers.document_controller
+  /documentSet/{setId}/{docId}/original:
+    get:
+      operationId: get_original_content
+      parameters:
+      - description: ID of a set
+        example: 9_11
+        explode: false
+        in: path
+        name: setId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: ID of a document
+        example: document1
+        explode: false
+        in: path
+        name: docId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            text/plain:
+              schema:
+                description: original plain text document content
+                example: The source was E. Macron a renowed banker working in the
+                  French Presidency
+                type: string
+          description: Successfully got the original document content as plain text
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The request was invalid JSON or missing some attributes
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The specified resource was not found
+      summary: get original document content as plain text
+      tags:
+      - document
+      x-openapi-router-controller: harpocrates_server.controllers.document_controller
   /documentSet/{setId}/{docId}/predictedClassification:
     get:
       operationId: get_predicted_classification
@@ -314,6 +362,53 @@ paths:
                 $ref: '#/components/schemas/httpStatus'
           description: The specified resource was not found
       summary: Get the predicted classification for the document
+      tags:
+      - document
+      x-openapi-router-controller: harpocrates_server.controllers.document_controller
+  /documentSet/{setId}/{docId}/redacted:
+    get:
+      operationId: get_redacted_content
+      parameters:
+      - description: ID of a set
+        example: 9_11
+        explode: false
+        in: path
+        name: setId
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: ID of a document
+        example: document1
+        explode: false
+        in: path
+        name: docId
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            text/plain:
+              schema:
+                description: redacted plain text document content
+                example: The source was █████████  a renowned ████ working in ██████████████
+                type: string
+          description: Successfully got the redacted document content as plain text
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The request was invalid JSON or missing some attributes
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/httpStatus'
+          description: The specified resource was not found
+      summary: get redacted document content as plain text
       tags:
       - document
       x-openapi-router-controller: harpocrates_server.controllers.document_controller

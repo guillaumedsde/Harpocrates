@@ -40,6 +40,7 @@ from harpocrates_server.service.errors import create_api_http_status
 from harpocrates_server.service.document import (
     document_from_mongo_dict,
     text_contents_from_document_body,
+    content_from_text_contents
 )
 
 # create a dummy current_app for logging outside of flask context
@@ -174,6 +175,34 @@ def get_document(
 
     return document, HTTPStatus.OK.value
 
+
+def get_original_content(set_id: str, doc_id: str) -> Tuple[Union[ApiHttpStatus, str], int]:
+    """returns plain text original document content
+    
+    Arguments:
+        set_id {str} -- ID of a set
+        doc_id {str} -- ID of a document
+    
+    Returns:
+        Tuple[str, int] -- Tuple containing the plaintext string of the document or an HttpStatus object and the HTTP status code
+    """
+    document, status = get_document(set_id, doc_id)
+
+    return content_from_text_contents(document), HTTPStatus.OK
+
+def get_redacted_content(set_id: str, doc_id: str) -> Tuple[Union[ApiHttpStatus, str], int]:
+    """returns plain text redacted document content
+    
+    Arguments:
+        set_id {str} -- ID of a set
+        doc_id {str} -- ID of a document
+    
+    Returns:
+        Tuple[str, int] -- Tuple containing the plaintext string of the redacted document or an HttpStatus object and the HTTP status code
+    """
+    document, status = get_document(set_id, doc_id)
+
+    return content_from_text_contents(document, redacted=True), HTTPStatus.OK
 
 def classify_text(text: str, explanations=None) -> PredictedClassification:
     """Calculate the classification of a text with the explanation for the predicted classification
