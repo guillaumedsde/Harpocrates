@@ -132,7 +132,12 @@ export default function Document(props) {
                   labels={labels}
                 />
                 <Divider />
-                <ExportButtons />
+                <ExportButtons
+                  api={api}
+                  document={document}
+                  setName={props.documentSetName}
+                  documentId={props.documentId}
+                />
               </Grid>
             </Grid>
           </Grid>

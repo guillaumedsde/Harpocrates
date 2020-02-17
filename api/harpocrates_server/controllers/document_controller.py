@@ -10,8 +10,9 @@ import re
 from copy import deepcopy
 import numpy as np
 from bson.objectid import ObjectId
+from io import BytesIO
 
-from flask import current_app
+from flask import current_app, send_file
 
 from harpocrates_server.models.document import Document  # noqa: E501
 from harpocrates_server.models.http_status import HttpStatus  # noqa: E501
@@ -188,7 +189,15 @@ def get_original_content(set_id: str, doc_id: str) -> Tuple[Union[ApiHttpStatus,
     """
     document, status = get_document(set_id, doc_id)
 
-    return content_from_text_contents(document), HTTPStatus.OK
+    buffer = BytesIO()
+    buffer.write(content_from_text_contents(document).encode('utf-8'))
+
+    buffer.seek(0)
+    return send_file(
+        buffer, 
+        as_attachment=True,
+        attachment_filename=(document.name or document.document_id ) + ".txt",
+        mimetype='text/plain')
 
 def get_redacted_content(set_id: str, doc_id: str) -> Tuple[Union[ApiHttpStatus, str], int]:
     """returns plain text redacted document content
@@ -202,7 +211,15 @@ def get_redacted_content(set_id: str, doc_id: str) -> Tuple[Union[ApiHttpStatus,
     """
     document, status = get_document(set_id, doc_id)
 
-    return content_from_text_contents(document, redacted=True), HTTPStatus.OK
+    buffer = BytesIO()
+    buffer.write(content_from_text_contents(document, redacted=True).encode('utf-8'))
+
+    buffer.seek(0)
+    return send_file(
+        buffer, 
+        as_attachment=True,
+        attachment_filename=(document.name or document.document_id ) + ".txt",
+        mimetype='text/plain')
 
 def classify_text(text: str, explanations=None) -> PredictedClassification:
     """Calculate the classification of a text with the explanation for the predicted classification
