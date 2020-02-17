@@ -1,3 +1,5 @@
+<img align="left" width="80" height="80" src="./docs/ic_launcher.png" alt="Harpocrates">
+
 # Harpocrates
 
 ![Gitlab pipeline status](https://gitlab.com/harpocrates-app/harpocrates/badges/master/pipeline.svg)

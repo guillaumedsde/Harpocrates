@@ -9,7 +9,7 @@ import {
   ListItemText
 } from "@material-ui/core";
 import { Link } from "@reach/router";
-
+import logo from "../public/logo/drawable-xxxhdpi/ic_launcher.png";
 export default function Home() {
   return (
     <Grid
@@ -21,9 +21,17 @@ export default function Home() {
       style={{ minHeight: "100vh", width: "100vw" }}
     >
       <Grid item xs={5}>
-        <Typography component="h1" variant="h1">
-          <b>η</b> Harpocrates
-        </Typography>
+        <Grid container alignItems="center" justify="center">
+          <Grid item>
+            <img src={logo} alt="Logo" />
+          </Grid>
+          <Grid item>
+            <Typography component="h1" variant="h1">
+              Harpocrates
+            </Typography>
+          </Grid>
+          {/* <b>𓅂</b>  */}
+        </Grid>
       </Grid>
       <Grid item xs={5}>
         <Typography component="h4" variant="h5">

@@ -88,7 +88,7 @@ export default function Dashboard(props) {
                 style={{ marginRight: "2vw", textDecoration: "none" }}
                 to="/"
               >
-                <b>η</b> Harpocrates
+                <b>𓅂</b> Harpocrates
               </Typography>
             </Grid>
             <Grid item xs>
