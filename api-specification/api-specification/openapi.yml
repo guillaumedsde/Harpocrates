@@ -1,7 +1,7 @@
 openapi: "3.0.2"
 info:
   description: This is the Rest API specification for the Harpocrates application
-  version: "9.1.0"
+  version: "9.2.0"
   title: Harpocrates API
   license:
     name: MIT
@@ -152,6 +152,50 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/document"
+        "400":
+          $ref: "#/components/responses/malformedRequest"
+        "404":
+          $ref: "#/components/responses/notFound"
+  "/documentSet/{setId}/{docId}/redacted":
+    get:
+      summary: get redacted document content as plain text
+      operationId: get_redacted_content
+      tags:
+        - document
+      parameters:
+        - $ref: "#/components/parameters/setId"
+        - $ref: "#/components/parameters/docId"
+      responses:
+        "200":
+          description: Successfully got the redacted document content as plain text
+          content:
+            text/plain:
+              schema:
+                type: string
+                description: redacted plain text document content
+                example: The source was █████████  a renowned ████ working in ██████████████
+        "400":
+          $ref: "#/components/responses/malformedRequest"
+        "404":
+          $ref: "#/components/responses/notFound"
+  "/documentSet/{setId}/{docId}/original":
+    get:
+      summary: get original document content as plain text
+      operationId: get_original_content
+      tags:
+        - document
+      parameters:
+        - $ref: "#/components/parameters/setId"
+        - $ref: "#/components/parameters/docId"
+      responses:
+        "200":
+          description: Successfully got the original document content as plain text
+          content:
+            text/plain:
+              schema:
+                type: string
+                description: original plain text document content
+                example: The source was E. Macron a renowed banker working in the French Presidency
         "400":
           $ref: "#/components/responses/malformedRequest"
         "404":
