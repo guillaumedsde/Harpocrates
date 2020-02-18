@@ -1,4 +1,4 @@
-<img align="left" width="80" height="80" src="./docs/ic_launcher.png" alt="Harpocrates">
+<img align="left" width="100" height="100" src="./docs/ic_launcher.png" alt="Harpocrates">
 
 # Harpocrates
 
