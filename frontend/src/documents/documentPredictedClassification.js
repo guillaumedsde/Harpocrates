@@ -47,60 +47,70 @@ export default function PredictedClassification(props) {
           secondaryTypographyProps={{ component: "div" }}
         />
       </ListItem>
-      <ListItem>
-        <ListItemIcon>
-          <HorizontalSplitIcon />
-        </ListItemIcon>
-        <ListItemText id="select-granularity" primary="Content split level" />
-        <ListItemSecondaryAction>
-          <Select
-            value={props.granularity}
-            autoWidth
-            disabled
-            inputProps={{ "aria-labelledby": "select-granularity" }}
-          >
-            <MenuItem key={props.granularity} value={props.granularity}>
-              {props.granularity}
-            </MenuItem>
-          </Select>
-        </ListItemSecondaryAction>
-      </ListItem>
-      <ListItem>
-        <ListItemIcon>
-          <GroupWorkIcon />
-        </ListItemIcon>
-        <ListItemText id="select-classifier" primary="Classifier" />
-        <ListItemSecondaryAction>
-          <Select
-            value={
-              props.classification ? props.classification.classifier : "None"
-            }
-            autoWidth
-            disabled
-            inputProps={{ "aria-labelledby": "select-classifier" }}
-            // onChange={event => {
-            //   props.setRedactionLabel(event.target.value);
-            // }}
-          >
-            <MenuItem value="None" disabled>
-              None
-            </MenuItem>
-            {props.classification ? (
-              <MenuItem
-                key={props.classification.classifier}
-                value={props.classification.classifier}
+      {process.env.TEST_MODE < 1 ? (
+        <>
+          <ListItem>
+            <ListItemIcon>
+              <HorizontalSplitIcon />
+            </ListItemIcon>
+            <ListItemText
+              id="select-granularity"
+              primary="Content split level"
+            />
+            <ListItemSecondaryAction>
+              <Select
+                value={props.granularity}
+                autoWidth
+                disabled
+                inputProps={{ "aria-labelledby": "select-granularity" }}
               >
-                {props.classification.classifier}
-              </MenuItem>
-            ) : null}
-            {/* {props.labels.map(label => (
+                <MenuItem key={props.granularity} value={props.granularity}>
+                  {props.granularity}
+                </MenuItem>
+              </Select>
+            </ListItemSecondaryAction>
+          </ListItem>
+
+          <ListItem>
+            <ListItemIcon>
+              <GroupWorkIcon />
+            </ListItemIcon>
+            <ListItemText id="select-classifier" primary="Classifier" />
+            <ListItemSecondaryAction>
+              <Select
+                value={
+                  props.classification
+                    ? props.classification.classifier
+                    : "None"
+                }
+                autoWidth
+                disabled
+                inputProps={{ "aria-labelledby": "select-classifier" }}
+                // onChange={event => {
+                //   props.setRedactionLabel(event.target.value);
+                // }}
+              >
+                <MenuItem value="None" disabled>
+                  None
+                </MenuItem>
+                {props.classification ? (
+                  <MenuItem
+                    key={props.classification.classifier}
+                    value={props.classification.classifier}
+                  >
+                    {props.classification.classifier}
+                  </MenuItem>
+                ) : null}
+                {/* {props.labels.map(label => (
               <MenuItem key={label} value={label}>
                 {label}
               </MenuItem>
             ))} */}
-          </Select>
-        </ListItemSecondaryAction>
-      </ListItem>
+              </Select>
+            </ListItemSecondaryAction>
+          </ListItem>
+        </>
+      ) : null}
     </List>
   );
 }

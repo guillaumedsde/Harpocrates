@@ -89,14 +89,16 @@ export default function DocumentSet(props) {
             <ListItemText
               primary={document.name || document.documentId}
               secondary={
-                <>
-                  <Sensitivity
-                    classification={document.predictedClassification}
-                  />
-                  <SensitivityBar
-                    classification={document.predictedClassification}
-                  />
-                </>
+                process.env.TEST_MODE < 2 ? (
+                  <>
+                    <Sensitivity
+                      classification={document.predictedClassification}
+                    />
+                    <SensitivityBar
+                      classification={document.predictedClassification}
+                    />
+                  </>
+                ) : null
               }
               secondaryTypographyProps={{ component: "div" }}
             />
