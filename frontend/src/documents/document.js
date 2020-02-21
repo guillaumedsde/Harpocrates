@@ -33,7 +33,7 @@ export default function Document(props) {
   const [redactionLabel, setRedactionLabel] = useState(labels[0]);
 
   const [showSensitiveExplanations, setShowSensitiveExplanations] = useState(
-    false
+    true
   );
   const [
     showNonSensitiveExplanations,
