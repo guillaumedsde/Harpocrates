@@ -173,10 +173,10 @@ frontend:
     - make build
     - make tag
     - make deploy
-    - VERSION=test-mode-1 make build --build-arg TEST_MODE=1
+    - VERSION=test-mode-1 BUILD_ARGS="--build-arg TEST_MODE=1" make build
     - VERSION=test-mode-1 make tag
     - VERSION=test-mode-1 make deploy
-    - VERSION=test-mode-2 make build --build-arg TEST_MODE=2
+    - VERSION=test-mode-2 BUILD_ARGS="--build-arg TEST_MODE=2" make build
     - VERSION=test-mode-2 make tag
     - VERSION=test-mode-2 make deploy
 
