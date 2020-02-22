@@ -20,39 +20,41 @@ export default function ExplanationToggles(props) {
     props.classification === null || !props.classification.explanations;
   return (
     <List subheader={<ListSubheader>Explanations</ListSubheader>}>
-      <ListItem>
-        <ListItemIcon>
-          <ImportContactsIcon />
-        </ListItemIcon>
-        <ListItemText
-          id="select-explainer"
-          primary="Classification Explainer"
-        />
-        <ListItemSecondaryAction>
-          <Select
-            value={props.explainer || "None"}
-            autoWidth
-            disabled={
-              !(Array.isArray(props.explainers) && props.explainers.length)
-            }
-            inputProps={{ "aria-labelledby": "select-explainer" }}
-            onChange={event => {
-              props.setExplainer(event.target.value);
-            }}
-          >
-            <MenuItem value="None" disabled>
-              None
-            </MenuItem>
-            {props.explainers
-              ? props.explainers.map(explainer => (
-                  <MenuItem key={explainer} value={explainer}>
-                    {explainer}
-                  </MenuItem>
-                ))
-              : null}
-          </Select>
-        </ListItemSecondaryAction>
-      </ListItem>
+      {process.env.TEST_MODE < 1 ? (
+        <ListItem>
+          <ListItemIcon>
+            <ImportContactsIcon />
+          </ListItemIcon>
+          <ListItemText
+            id="select-explainer"
+            primary="Classification Explainer"
+          />
+          <ListItemSecondaryAction>
+            <Select
+              value={props.explainer || "None"}
+              autoWidth
+              disabled={
+                !(Array.isArray(props.explainers) && props.explainers.length)
+              }
+              inputProps={{ "aria-labelledby": "select-explainer" }}
+              onChange={event => {
+                props.setExplainer(event.target.value);
+              }}
+            >
+              <MenuItem value="None" disabled>
+                None
+              </MenuItem>
+              {props.explainers
+                ? props.explainers.map(explainer => (
+                    <MenuItem key={explainer} value={explainer}>
+                      {explainer}
+                    </MenuItem>
+                  ))
+                : null}
+            </Select>
+          </ListItemSecondaryAction>
+        </ListItem>
+      ) : null}
       <ListItem>
         <ListItemIcon>
           <WarningIcon />

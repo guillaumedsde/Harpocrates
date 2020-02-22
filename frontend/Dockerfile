@@ -4,6 +4,7 @@ ARG NODE_VERSION=13.2.0
 FROM node:${NODE_VERSION}-alpine as build
 
 ARG NODE_ENV=production
+ARG TEST_MODE=0
 
 WORKDIR /app
 
