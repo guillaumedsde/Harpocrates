@@ -24,6 +24,14 @@ Finally, you need to build the module:
 npm run build
 ```
 
+##### Test modes
+
+For testing purposes I have added a `TEST_MODE` environment variable to build different variations of the frontend:
+
+- `TEST_MODE=0`: test mode is disable no modifications to the frontend
+- `TEST_MODE=1`: test mode is enabled certain "technical" features are disabled (classifier type, document split level...)
+- `TEST_MODE=2`: test mode is enabled all Machine learning features are disabled (classification, explanations...)
+
 ##### Local development
 
 To use the library locally without publishing to a remote npm registry, first install the dependencies by changing into the directory containing `package.json` (and this README). Then run:
