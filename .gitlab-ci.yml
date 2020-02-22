@@ -169,6 +169,16 @@ frontend:
       - frontend/**/*
       - .gitlab-ci/yml
       - Makefile
+  script:
+    - make build
+    - make tag
+    - make deploy
+    - VERSION=test-mode-1 BUILD_ARGS="--build-arg TEST_MODE=1" make build
+    - VERSION=test-mode-1 make tag
+    - VERSION=test-mode-1 make deploy
+    - VERSION=test-mode-2 BUILD_ARGS="--build-arg TEST_MODE=2" make build
+    - VERSION=test-mode-2 make tag
+    - VERSION=test-mode-2 make deploy
 
 # publishes all files from the $DOCS_FOLDER together with the static version of SwaggerUI
 # sets the specification file named in $SPEC_TO_DISPLAY to be displayed by default

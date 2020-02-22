@@ -91,7 +91,23 @@ export default function Document(props) {
       );
   }, []);
 
+  console.log(process.env.TEST_MODE);
+
   if (document) {
+    const explanationChart =
+      process.env.TEST_MODE < 2 ? (
+        <ExplanationChart
+          nbrExplanations={nbrExplanations}
+          explanations={
+            classification
+              ? classification.explanations[explainers.indexOf(explainer)]
+              : []
+          }
+          activeFeature={activeFeature}
+          setActiveFeature={setActiveFeature}
+        />
+      ) : null;
+
     return (
       <>
         <Grid container spacing={5}>
@@ -105,27 +121,36 @@ export default function Document(props) {
                 <DocumentInfo document={document} />
               </Grid>
               <Grid item style={{ width: "100%" }}>
-                <PredictedClassification
-                  classification={classification}
-                  granularity={document.textSplitGranularity}
-                />
-                <Divider />
-                <ExplanationToggles
-                  classification={classification}
-                  showSensitiveExplanations={showSensitiveExplanations}
-                  setShowSensitiveExplanations={setShowSensitiveExplanations}
-                  showNonSensitiveExplanations={showNonSensitiveExplanations}
-                  setShowNonSensitiveExplanations={
-                    setShowNonSensitiveExplanations
-                  }
-                  nbrExplanations={nbrExplanations}
-                  setNbrExplanations={setNbrExplanations}
-                  maxExplanations={maxExplanations}
-                  explainer={explainer}
-                  setExplainer={setExplainer}
-                  explainers={explainers}
-                />
-                <Divider />
+                {process.env.TEST_MODE < 2 ? (
+                  <>
+                    <PredictedClassification
+                      classification={classification}
+                      granularity={document.textSplitGranularity}
+                    />
+                    <Divider />
+                    <ExplanationToggles
+                      classification={classification}
+                      showSensitiveExplanations={showSensitiveExplanations}
+                      setShowSensitiveExplanations={
+                        setShowSensitiveExplanations
+                      }
+                      showNonSensitiveExplanations={
+                        showNonSensitiveExplanations
+                      }
+                      setShowNonSensitiveExplanations={
+                        setShowNonSensitiveExplanations
+                      }
+                      nbrExplanations={nbrExplanations}
+                      setNbrExplanations={setNbrExplanations}
+                      maxExplanations={maxExplanations}
+                      explainer={explainer}
+                      setExplainer={setExplainer}
+                      explainers={explainers}
+                    />
+                    <Divider />
+                  </>
+                ) : null}
+
                 <RedactionLabelSelect
                   redactionLabel={redactionLabel}
                   setRedactionLabel={setRedactionLabel}
@@ -156,16 +181,7 @@ export default function Document(props) {
             />
           </Grid>
           <Grid item sm>
-            <ExplanationChart
-              nbrExplanations={nbrExplanations}
-              explanations={
-                classification
-                  ? classification.explanations[explainers.indexOf(explainer)]
-                  : []
-              }
-              activeFeature={activeFeature}
-              setActiveFeature={setActiveFeature}
-            />
+            {explanationChart}
           </Grid>
         </Grid>
       </>
