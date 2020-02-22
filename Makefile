@@ -44,7 +44,7 @@ docker-logout: ## Logout to the default registry
 
 .PHONY: build
 build: ## Build a docker image
-	@docker build -t $(CI_REGISTRY_IMAGE)/$(SERVICE):$(VERSION) -f $(SERVICE)/$(DOCKERFILE_PREFIX)Dockerfile ./$(SERVICE)
+	@docker build -t $(CI_REGISTRY_IMAGE)/$(SERVICE):$(VERSION) -f $(SERVICE)/$(DOCKERFILE_PREFIX)Dockerfile ./$(SERVICE) $(BUILD_ARGS)
 
 .PHONY: start
 start: ## Build a docker image
