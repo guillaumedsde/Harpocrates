@@ -16,8 +16,7 @@ from harpocrates_server.db import create_db_client
 
 from harpocrates_server.service.data_parsing import (
     extract_data,
-    extract_file_paths,
-    extract_labels,
+    extract_paths_and_labels
 )
 from harpocrates_server.service.classification import (
     get_model,
@@ -57,10 +56,9 @@ def process_document(path, data):
 
 if __name__ == "__main__":
 
-    labels = extract_labels()
-    file_paths = np.array(extract_file_paths())
+    file_paths, labels = extract_paths_and_labels()
 
-    splitter = StratifiedShuffleSplit(n_splits=1, test_size=0.05, random_state=42)
+    splitter = StratifiedShuffleSplit(n_splits=1, test_size=0.005, random_state=42)
     for train_index, test_index in splitter.split(file_paths, labels):
         train_paths = file_paths[train_index]
         test_paths = file_paths[test_index]
@@ -89,8 +87,8 @@ if __name__ == "__main__":
     bar = Bar('Processing test documents', max=len(test_paths))
     # create, classify and store documents
     for doc_path, doc_data in zip(test_paths, test_data):
-        process_document(doc_path, doc_data)
         bar.next()
+        process_document(doc_path, doc_data)
     #     pool.apply_async(
     #         func=process_document,
     #         args=[doc_path, doc_data],
