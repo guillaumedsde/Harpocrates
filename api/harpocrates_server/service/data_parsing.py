@@ -13,22 +13,17 @@ from harpocrates_server.service import (
 )
 
 
-def extract_labels():
-    print("extracting labels from {}".format(TRAIN_LABELS))
-    # load classification data
-    return np.loadtxt(TRAIN_LABELS, dtype=int, usecols=1)
-
-
-# TODO finish the service module and implement the endpoints
-def extract_file_paths():
-    # load labels (file paths)
+def extract_paths_and_labels():
     file_paths = []
+    labels = []
     print("extracting file paths from {}".format(TRAIN_LABELS))
     with open(TRAIN_LABELS) as ground_truth_file:
         for line in ground_truth_file.read().splitlines():
+            path, classification = line.split(" ")
             # build full file path (path prefix and file extension)
-            file_paths.append(TRAIN_DATA_DIR + line.split(" ")[0] + ".html")
-    return file_paths
+            file_paths.append(TRAIN_DATA_DIR + path + ".html")
+            labels.append(int(classification))
+    return np.array(file_paths), np.array(labels)
 
 
 def read_file(file_path):
@@ -51,13 +46,7 @@ def extract_data(file_paths):
         )
     )
     pool = Pool(processes=PROCESSES)
-    for file_path in file_paths:
-        pool.apply_async(
-            func=read_file,
-            args=(file_path,),
-            callback=texts.append,
-            error_callback=logging.exception,
-        )
+    texts = pool.map(func=read_file, iterable=file_paths)
     pool.close()
     pool.join()
     return np.array(texts)

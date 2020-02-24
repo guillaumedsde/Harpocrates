@@ -20,6 +20,7 @@ from sklearn.pipeline import Pipeline
 # from sklearn.svm import SVC, LinearSVC
 from thundersvm import SVC
 from sklearn.tree import DecisionTreeClassifier
+
 # from xgboost import XGBClassifier
 
 from harpocrates_server.service import (
@@ -31,17 +32,18 @@ from harpocrates_server.service import (
 )
 from harpocrates_server.service.data_parsing import (
     extract_data,
-    extract_labels,
-    extract_file_paths,
+    extract_paths_and_labels,
 )
 
 # create a dummy current_app for logging outside of flask context
 try:
 
     from flask import current_app
+
     current_app.logger.info()
 except RuntimeError:
     from harpocrates_server.models.dummy_flask_app import DummyFlaskApp
+
     logger = logging.getLogger(__name__)
     handler = logging.StreamHandler()
     handler.setLevel(logging.DEBUG)
@@ -57,12 +59,7 @@ CLASSIFIERS = [
     # DecisionTreeClassifier(),
     # SVC(probability=True, kernel="linear", cache_size=1000),
     # XGBClassifier(n_jobs=PROCESSES, objective="binary:logistic"),
-    SVC(
-        kernel="linear",
-        C=0.01,
-        probability=True,
-        decision_function_shape="ovo"
-    )
+    SVC(kernel="linear", C=0.01, probability=True, decision_function_shape="ovo")
 ]
 
 
@@ -91,7 +88,7 @@ def build_vectorizer():
     )
 
 
-def train(classifier, train_data=None, train_labels=None, skip_training=False ):
+def train(classifier, train_data=None, train_labels=None, skip_training=False):
     # build ML pipeline
     pipeline = Pipeline(
         steps=[
@@ -109,8 +106,7 @@ def train(classifier, train_data=None, train_labels=None, skip_training=False ):
 
     if not skip_training:
         if (train_data is None) and (train_labels is None):
-            train_labels = extract_labels()
-            file_paths = extract_file_paths()
+            file_paths, train_labels = extract_paths_and_labels()
             train_data = extract_data(file_paths)
 
         # train classifier
@@ -132,7 +128,7 @@ def train_and_store_classifier(classifier, path, train_data=None, train_labels=N
 
     current_app.logger.info("storing fitted vectorizer in %s", path)
     dump(trained_classifier.named_steps.vect, str(path.joinpath("vect")))
-    
+
     return trained_classifier
 
 
@@ -149,20 +145,23 @@ def get_model(classifier=None, train_data=None, train_labels=None):
     except NameError:
         global_model_name = None
 
-    if train_data is not None and train_labels is not None :
+    if train_data is not None and train_labels is not None:
         MODELS_DIRECTORY.mkdir(parents=True, exist_ok=True)
-        trained_classifier = train_and_store_classifier(classifier, model_path, train_data, train_labels)
+        trained_classifier = train_and_store_classifier(
+            classifier, model_path, train_data, train_labels
+        )
         MODEL = trained_classifier
     elif global_model_name == classifier_type:
         trained_classifier = MODEL
     else:
-        current_app.logger.info("loading found model for %s from %s", classifier_type, model_path)
+        current_app.logger.info(
+            "loading found model for %s from %s", classifier_type, model_path
+        )
         # trained_classifier = load(model_path)
-
 
         clf = SVC()
         clf.load_from_file(str(model_path.joinpath("clf")))
-        
+
         vect = load(str(model_path.joinpath("vect")))
 
         trained_classifier = Pipeline(
