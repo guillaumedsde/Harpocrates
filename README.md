@@ -1,16 +1,28 @@
-<img align="left" width="100" height="100" src="./docs/ic_launcher.png" alt="Harpocrates">
+<p align="center">
+  <img width="256" height="256" src="docs/harpocrates_512.png">
+</p>
 
-# Harpocrates
+<h1 align="center">Harpocrates</h1>
 
-![Gitlab pipeline status](https://gitlab.com/harpocrates-app/harpocrates/badges/master/pipeline.svg)
-![Website](https://img.shields.io/website?url=https%3A%2F%2Fharpocrates-app.gitlab.io%2Fharpocrates)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![DeepScan grade](https://deepscan.io/api/teams/7077/projects/9224/branches/117107/badge/grade.svg?token=a1fa0980263b30233c0ddf1e9c3ed778290db2ee)](https://deepscan.io/dashboard#view=project&tid=7077&pid=9224&bid=117107)
-[![DeepSource](https://static.deepsource.io/deepsource-badge-light-mini.svg)](https://deepsource.io/gh/guillaumedsde/Harpocrates/?ref=repository-badge)
-
-![UI demo](docs/redacting.gif)
+<p align="center">
+  <img src="https://gitlab.com/harpocrates-app/harpocrates/badges/master/pipeline.svg" />
+  <a href="https://harpocrates-app.gitlab.io/harpocrates/">
+    <img alt="Documentation" src="https://img.shields.io/website?url=https%3A%2F%2Fharpocrates-app.gitlab.io%2Fharpocrates" target="_blank" />
+  </a>
+  <a href="https://github.com/kefranabg/readme-md-generator/blob/master/LICENSE">
+    <img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-yellow.svg" target="_blank" />
+  </a>
+  <a href="https://deepscan.io/dashboard#view=project&tid=7077&pid=9224&bid=117107">
+    <img alt="DeepScan grade" src="https://deepscan.io/api/teams/7077/projects/9224/branches/117107/badge/grade.svg?token=a1fa0980263b30233c0ddf1e9c3ed778290db2ee" />
+  </a>
+  <a href="https://deepsource.io/gh/guillaumedsde/Harpocrates/?ref=repository-badge">
+    <img src="https://static.deepsource.io/deepsource-badge-light-mini.svg" alt="deepsource">
+  </a>
+</p>
 
 This is the mono-repository for the Harpocrates sensitive document redaction application. Harpocrates is a Web Application for redacting sensitive documents with Machine Learning (ML) classification of documents by sensitivity as part of my final year project. It is a ReactJS frontend backed by an OpenAPI generated Flask API with a Scikit-learn ML model to classify text documents stored in MongoDB. I am using Lime to extract features explaining the ML classification and to present a classification aid with its explanation to redactors in a friendly redaction web app.
+
+![UI demo](docs/redacting.gif)
 
 ## How to run
 
