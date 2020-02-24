@@ -1,10 +1,10 @@
-<p align="center">
+<div align="center">
   <img width="256" height="256" src="docs/harpocrates_512.png">
-</p>
+</div>
 
-<h1 align="center">Harpocrates</h1>
+<div align="center"><h1>Harpocrates</h1></div>
 
-<p align="center">
+<div align="center">
   <img src="https://gitlab.com/harpocrates-app/harpocrates/badges/master/pipeline.svg" />
   <a href="https://harpocrates-app.gitlab.io/harpocrates/">
     <img alt="Documentation" src="https://img.shields.io/website?url=https%3A%2F%2Fharpocrates-app.gitlab.io%2Fharpocrates" target="_blank" />
