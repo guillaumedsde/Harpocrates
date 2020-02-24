@@ -1,5 +1,5 @@
 <div align="center">
-  <img width="256" height="256" src="docs/harpocrates_512.png">
+  <img width="256" height="256" src="docs/harpocrates_512.png" style="border-radius: 5%;">
 </div>
 
 <div align="center"><h1>Harpocrates</h1></div>
