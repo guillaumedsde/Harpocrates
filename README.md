@@ -18,7 +18,7 @@
   <a href="https://deepsource.io/gh/guillaumedsde/Harpocrates/?ref=repository-badge">
     <img src="https://static.deepsource.io/deepsource-badge-light-mini.svg" alt="deepsource">
   </a>
-</p>
+</div>
 
 This is the mono-repository for the Harpocrates sensitive document redaction application. Harpocrates is a Web Application for redacting sensitive documents with Machine Learning (ML) classification of documents by sensitivity as part of my final year project. It is a ReactJS frontend backed by an OpenAPI generated Flask API with a Scikit-learn ML model to classify text documents stored in MongoDB. I am using Lime to extract features explaining the ML classification and to present a classification aid with its explanation to redactors in a friendly redaction web app.
 
