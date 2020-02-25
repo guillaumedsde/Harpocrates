@@ -29,7 +29,8 @@ pymongo = "*"
 connexion = "*"
 shap = "*"
 waitress = "*"
-thundersvm-cpu = {file = "https://github.com/guillaumedsde/thundersvm/releases/download/0.3.4-multipython.4/thundersvm_cpu-0.3.4-cp38-cp38-linux_x86_64.whl"}
+thundersvm-cpu = { file = "https://github.com/guillaumedsde/thundersvm/releases/download/0.3.4-multipython.5/thundersvm_cpu-0.3.4-cp38-cp38-linux_x86_64.whl" }
+imblearn = "*"
 
 [requires]
 python_version = "3.8"

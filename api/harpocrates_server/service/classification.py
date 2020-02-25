@@ -19,7 +19,9 @@ from sklearn.pipeline import Pipeline
 
 # from sklearn.svm import SVC, LinearSVC
 from thundersvm import SVC
-from sklearn.tree import DecisionTreeClassifier
+from imblearn.under_sampling import RandomUnderSampler
+from imblearn.pipeline import Pipeline
+
 
 # from xgboost import XGBClassifier
 
@@ -93,12 +95,7 @@ def train(classifier, train_data=None, train_labels=None, skip_training=False):
     pipeline = Pipeline(
         steps=[
             ("vect", get_vectorizer()),
-            # HashingVectorizer(
-            #     norm='l2',
-            #     stop_words="english",
-            #     strip_accents="unicode",
-            #     lowercase=True,
-            # ),
+            ("sample", RandomUnderSampler()),
             ("clf", classifier),
         ],
         verbose=True,
@@ -121,13 +118,8 @@ def train_and_store_classifier(classifier, path, train_data=None, train_labels=N
     current_app.logger.info("training model for %s", classifier_type)
     trained_classifier = train(classifier, train_data, train_labels)
 
-    path.mkdir(parents=True, exist_ok=True)
-
     current_app.logger.info("storing trained classifier in %s", path)
-    trained_classifier.named_steps.clf.save_to_file(str(path.joinpath("clf")))
-
-    current_app.logger.info("storing fitted vectorizer in %s", path)
-    dump(trained_classifier.named_steps.vect, str(path.joinpath("vect")))
+    dump(trained_classifier, str(path))
 
     return trained_classifier
 
@@ -145,7 +137,7 @@ def get_model(classifier=None, train_data=None, train_labels=None):
     except NameError:
         global_model_name = None
 
-    if train_data is not None and train_labels is not None:
+    if not model_path.exists() or train_data is not None and train_labels is not None:
         MODELS_DIRECTORY.mkdir(parents=True, exist_ok=True)
         trained_classifier = train_and_store_classifier(
             classifier, model_path, train_data, train_labels
@@ -157,15 +149,8 @@ def get_model(classifier=None, train_data=None, train_labels=None):
         current_app.logger.info(
             "loading found model for %s from %s", classifier_type, model_path
         )
-        # trained_classifier = load(model_path)
 
-        clf = SVC()
-        clf.load_from_file(str(model_path.joinpath("clf")))
+        trained_classifier = load(str(model_path))
 
-        vect = load(str(model_path.joinpath("vect")))
-
-        trained_classifier = Pipeline(
-            steps=[("vect", vect), ("clf", clf),], verbose=True,
-        )
         MODEL = trained_classifier
     return trained_classifier, classifier_type
