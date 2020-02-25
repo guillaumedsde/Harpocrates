@@ -1,11 +1,11 @@
 <div align="center">
-  <img width="256" height="256" src="docs/harpocrates_512.png" style="border-radius: 5%;">
+  <img width="256" height="256" src="docs/harpocrates_512.png" style="border-radius: 5%;" alt="Harpocrates icon">
 </div>
 
 <div align="center"><h1>Harpocrates</h1></div>
 
 <div align="center">
-  <img src="https://gitlab.com/harpocrates-app/harpocrates/badges/master/pipeline.svg" />
+  <img src="https://gitlab.com/harpocrates-app/harpocrates/badges/master/pipeline.svg" alt="Pipeline status" />
   <a href="https://harpocrates-app.gitlab.io/harpocrates/">
     <img alt="Documentation" src="https://img.shields.io/website?url=https%3A%2F%2Fharpocrates-app.gitlab.io%2Fharpocrates" target="_blank" />
   </a>
@@ -25,7 +25,7 @@
 </div>
 
 <div align="center">
-  <img alt="UI Demo" src="docs/redacting.gif" target="_blank" />
+  <img alt="UI Demo" src="docs/redacting.gif"/>
 </div>
 
 ## How to run
