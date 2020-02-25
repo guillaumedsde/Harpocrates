@@ -33,7 +33,7 @@ export default function Document(props) {
   const [redactionLabel, setRedactionLabel] = useState(labels[0]);
 
   const [showSensitiveExplanations, setShowSensitiveExplanations] = useState(
-    true
+    process.env.TEST_MODE < 2
   );
   const [
     showNonSensitiveExplanations,
@@ -90,8 +90,6 @@ export default function Document(props) {
         }
       );
   }, []);
-
-  console.log(process.env.TEST_MODE);
 
   if (document) {
     const explanationChart =
