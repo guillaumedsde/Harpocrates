@@ -59,9 +59,8 @@ CLASSIFIERS = [
     # DecisionTreeClassifier(),
     # SVC(probability=True, kernel="linear", cache_size=1000),
     # XGBClassifier(n_jobs=PROCESSES, objective="binary:logistic"),
-    SVC(kernel="linear", C=0.01, probability=True, decision_function_shape="ovo")
+    SVC(kernel="linear", C=10, probability=True, decision_function_shape="ovr")
 ]
-
 
 VECTORIZER = None
 
@@ -79,11 +78,12 @@ def build_vectorizer():
         analyzer="word",
         stop_words="english",
         strip_accents="unicode",
-        max_df=0.9,
+        binary=True,
+        max_df=0.75,
         min_df=1,
         lowercase=True,
-        use_idf=True,
-        smooth_idf=False,
+        use_idf=False,
+        smooth_idf=True,
         sublinear_tf=True,
     )
 
