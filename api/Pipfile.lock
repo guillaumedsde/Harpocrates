@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "275868dee10e5027ad4e63ecb26393c52564dc01b8ffe75980b7a91d17cd77ac"
+            "sha256": "67abda041f42e1e1b64b6192a7b78fcb55a60f36a08b0e9958bdd74316863c41"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -110,6 +110,21 @@
                 "sha256:fb5fd6d3d17126bbaac9af29fe340e2c97a196eb9416d4f28c0e543744a152cf"
             ],
             "version": "==2.8.0"
+        },
+        "imbalanced-learn": {
+            "hashes": [
+                "sha256:1d5918619317f8fe4065148b9a5758fb999b82eedf665079d73e0c392767d1dd",
+                "sha256:942b9a7f2e1df831097fbee587c5c90a4cc6afa6105b23d3e30d8798f1a9b17d"
+            ],
+            "version": "==0.6.2"
+        },
+        "imblearn": {
+            "hashes": [
+                "sha256:d42c2d709d22c00d2b9a91e638d57240a8b79b4014122d92181fcd2549a2f79a",
+                "sha256:d8fbb662919c1b16f438ad91a8256220e53bcf6815c9ad5502c518b798de34f2"
+            ],
+            "index": "pypi",
+            "version": "==0.0"
         },
         "inflection": {
             "hashes": [
@@ -620,9 +635,9 @@
             "version": "==0.0.6"
         },
         "thundersvm-cpu": {
-            "file": "https://github.com/guillaumedsde/thundersvm/releases/download/0.3.4-multipython.4/thundersvm_cpu-0.3.4-cp38-cp38-linux_x86_64.whl",
+            "file": "https://github.com/guillaumedsde/thundersvm/releases/download/0.3.4-multipython.5/thundersvm_cpu-0.3.4-cp38-cp38-linux_x86_64.whl",
             "hashes": [
-                "sha256:4f278d8c640901263b3f912634b9c05f6725444475998b1fa074f23a27fbc892"
+                "sha256:88d7d299e23522a1b6daae8e7485680d14d9289a88ef068418f5bbd30bd0e3ca"
             ],
             "index": "pypi",
             "version": "==0.3.4"
