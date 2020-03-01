@@ -1,6 +1,8 @@
 import logging
 import pathlib
+from pathlib import Path
 import re
+import json
 from math import floor
 from multiprocessing import Pool, cpu_count
 
@@ -14,9 +16,11 @@ from sklearn.pipeline import Pipeline
 
 from harpocrates_server.db import create_db_client
 
+
+from harpocrates_server.service import TRAIN_DATA_DIR
 from harpocrates_server.service.data_parsing import (
     extract_data,
-    extract_paths_and_labels
+    extract_paths_and_labels,
 )
 from harpocrates_server.service.classification import (
     get_model,
@@ -35,10 +39,30 @@ from harpocrates_server.models.document import Document
 
 MODEL_DIRECTORY = pathlib.Path("instance", "models")
 
+ANNOTATIONS_PATH = pathlib.Path(
+    "/home/architect/git_repositories/dissertation/data", "annotations.json"
+)
+
+
+def extract_annotations(annotations_file: str):
+    path_annotations = {}
+    train_data_dir = Path(TRAIN_DATA_DIR)
+    with open(annotations_file, "r") as annotations_file:
+        for line in annotations_file:
+            relative_path, annotations = line.split(":", 1)
+            relative_path += ".html"
+            full_path = train_data_dir.joinpath(*pathlib.Path(relative_path).parts[-3:])
+            annotations = json.loads(annotations)
+            path_annotations[full_path] = annotations
+    return path_annotations
+
+
 print("MODEL_DIRECTORY", MODEL_DIRECTORY)
 
 
-def process_document(path, data):
+def process_document(path, data, annotations: dict = None):
+
+    print(annotations)
 
     db = create_db_client()
     classify.__globals__["db"] = db
@@ -47,7 +71,9 @@ def process_document(path, data):
     name = pathlib.Path(path).parts[-1]
     text_contents = text_contents_from_document_body(data, granularity="document")
 
-    document = Document(name=name, text_contents=text_contents, text_split_granularity="document")
+    document = Document(
+        name=name, text_contents=text_contents, text_split_granularity="document"
+    )
     operation_result = db[collection].insert_one(document.to_dict())
     doc_id = operation_result.inserted_id
     # disable parallel SVC for population script since already parallelizing below
@@ -74,7 +100,7 @@ if __name__ == "__main__":
     train_data = extract_data(train_paths)
 
     # train classifier
-    get_model(classifier,train_data, train_labels)
+    get_model(classifier, train_data, train_labels)
 
     # extract test data
     test_data = extract_data(test_paths)
@@ -82,13 +108,15 @@ if __name__ == "__main__":
     # check that all test data was read correctly
     assert len(test_data) == len(test_paths)
 
+    path_annotations = extract_annotations(ANNOTATIONS_PATH)
+
     # pool = Pool(cpu_count())
 
-    bar = Bar('Processing test documents', max=len(test_paths))
+    bar = Bar("Processing test documents", max=len(test_paths))
     # create, classify and store documents
     for doc_path, doc_data in zip(test_paths, test_data):
         bar.next()
-        process_document(doc_path, doc_data)
+        process_document(doc_path, doc_data, path_annotations.get(doc_path))
     #     pool.apply_async(
     #         func=process_document,
     #         args=[doc_path, doc_data],
