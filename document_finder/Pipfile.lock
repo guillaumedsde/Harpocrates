@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "207454c9ea942f0c46eba492e25e6497d4cc82e7222ab668ad39df06c1ce8863"
+            "sha256": "61009c88a16ebe14f6f09ee922ee9c1b018f1e4c091f62d2a3b1669619618597"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -201,6 +201,16 @@
                 "sha256:fcd71e08c0aee99aca1b73f45478549ee7e7fc006d51b37bec9e9def7dc22b69"
             ],
             "version": "==2.0"
+        },
+        "thundersvm-cpu": {
+            "hashes": [
+                "sha256:88d7d299e23522a1b6daae8e7485680d14d9289a88ef068418f5bbd30bd0e3ca"
+            ],
+            "index": "pypi",
+            "version": "==0.3.4"
+        },
+        "thundersvm-cpu-linux": {
+            "file": "https://github.com/guillaumedsde/thundersvm/releases/download/0.3.4-multipython.5/thundersvm_cpu-0.3.4-cp38-cp38-linux_x86_64.whl"
         }
     },
     "develop": {}
