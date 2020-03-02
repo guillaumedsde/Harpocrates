@@ -238,10 +238,10 @@ if __name__ == "__main__":
 
         results_dict = {
             "seed": SEED,
-            "true_negatives": true_negatives,
-            "false_negatives" : false_negatives,
-            "false_positives": false_positives,
-            "true_positives": true_positives
+            "true_negatives": len(true_negatives),
+            "false_negatives" : len(false_negatives),
+            "false_positives": len(false_positives),
+            "true_positives": len(true_positives)
         }
 
         print(results)
