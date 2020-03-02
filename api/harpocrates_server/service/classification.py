@@ -19,7 +19,7 @@ from sklearn.pipeline import Pipeline
 
 # from sklearn.svm import SVC, LinearSVC
 from thundersvm import SVC
-from imblearn.under_sampling import CondensedNearestNeighbour
+from imblearn.combine import SMOTETomek
 from imblearn.pipeline import Pipeline
 
 
@@ -95,7 +95,7 @@ def train(classifier, train_data=None, train_labels=None, skip_training=False):
     pipeline = Pipeline(
         steps=[
             ("vect", get_vectorizer()),
-            ("sample", CondensedNearestNeighbour()),
+            ("sample", SMOTETomek()),
             ("clf", classifier),
         ],
         verbose=True,
