@@ -140,9 +140,15 @@ if __name__ == "__main__":
     # SEED = 402
     # SEED =120
 
-    SEED = 144
+    # SEED = 144
 
-    SEEDS = [144]#, 120]
+    # SEEDS = [144]
+
+    SEEDS = [
+        144,
+        # TODO this seed needs a true negative, need to add one manually
+        4549
+        ]
 
 
     for i, SEED in enumerate(SEEDS):
@@ -256,4 +262,4 @@ if __name__ == "__main__":
         # create, classify and store documents
         for document_index, document in batch_evaluation_setup_df.iterrows():
             bar.next()
-            process_document(document, "collection_{}".format(i), pipeline)
+            # process_document(document, "collection_{}".format(i), pipeline)
