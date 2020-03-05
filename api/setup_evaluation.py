@@ -16,7 +16,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.model_selection import StratifiedShuffleSplit
 from joblib import dump
 from imblearn.pipeline import Pipeline
-from imblearn.under_sampling import RandomUnderSampler
+from imblearn.combine import SMOTEENN
 from thundersvm import SVC
 from sklearn.feature_extraction.text import TfidfVectorizer
 
@@ -28,17 +28,22 @@ from harpocrates_server.service import TRAIN_DATA_DIR, MODELS_DIRECTORY, TRAIN_L
 from harpocrates_server.service.data_parsing import (
     extract_data,
     extract_paths_and_labels,
-    read_file
+    read_file,
 )
 from harpocrates_server.service.classification import (
     get_model,
     CLASSIFIERS,
     get_vectorizer,
-    train_and_store_classifier
+    train_and_store_classifier,
 )
 
 from harpocrates_server.service.document import text_contents_from_document_body
-from harpocrates_server.controllers.document_controller import calculate_text_content_classifications, classify, classify_text, get_document
+from harpocrates_server.controllers.document_controller import (
+    calculate_text_content_classifications,
+    classify,
+    classify_text,
+    get_document,
+)
 
 from harpocrates_server.models.document import Document
 from bson.objectid import ObjectId
@@ -50,7 +55,7 @@ ANNOTATIONS_PATH = Path(
 )
 
 # Necessary for reproducing experimental setup
-SEED = 60
+SEED = 32
 
 
 def intersect(*arrays):
@@ -69,20 +74,29 @@ def extract_annotations():
             path_annotations[str(full_path)] = annotations
     return path_annotations
 
+
 def process_document(document, collection, trained_model):
 
     db = create_db_client()
     classify.__globals__["db"] = db
 
-    text_contents = text_contents_from_document_body(document["content"], granularity="document")
+    text_contents = text_contents_from_document_body(
+        document["content"], granularity="document"
+    )
 
-    document_object = Document(text_contents=text_contents, text_split_granularity="document")
+    document_object = Document(
+        text_contents=text_contents, text_split_granularity="document"
+    )
     operation_result = db[collection].insert_one(document_object.to_dict())
     doc_id = operation_result.inserted_id
 
     classification = classify_text(document["content"], trained_model=trained_model)
 
-    classified_text_contents = calculate_text_content_classifications(document_object, explanations=classification.explanations, trained_model=trained_model)
+    classified_text_contents = calculate_text_content_classifications(
+        document_object,
+        explanations=classification.explanations,
+        trained_model=trained_model,
+    )
 
     doc_id = db[collection].update_one(
         {"_id": ObjectId(doc_id)},
@@ -111,7 +125,7 @@ if __name__ == "__main__":
             assert path in file_paths[i]
             assert int(classification) == train_labels[i]
             assert read_file(file_paths[i]) == train_data[i]
-    
+
     annotations = extract_annotations()
 
     train_data_df = DataFrame([train_data, train_labels]).transpose()
@@ -133,7 +147,6 @@ if __name__ == "__main__":
                     train_data_df.at[index, "S40"] = True
                 if "S27" in tag:
                     train_data_df.at[index, "S27"] = True
-    
 
     # SEED=31
     # SEED = 60
@@ -144,12 +157,7 @@ if __name__ == "__main__":
 
     # SEEDS = [144]
 
-    SEEDS = [
-        144,
-        # TODO this seed needs a true negative, need to add one manually
-        4549
-        ]
-
+    SEEDS = [19, 29]
 
     for i, SEED in enumerate(SEEDS):
         np.random.seed(SEED)
@@ -162,46 +170,40 @@ if __name__ == "__main__":
         true_positives = []
 
         vect = TfidfVectorizer(
-                norm="l1",
-                analyzer="word",
-                stop_words="english",
-                strip_accents="unicode",
-                binary=True,
-                max_df=0.75,
-                min_df=1,
-                lowercase=True,
-                use_idf=False,
-                smooth_idf=True,
-                sublinear_tf=True,
-            )
-        sampler = RandomUnderSampler(random_state=SEED)
-        clf = SVC(  kernel="linear",
-                    C=10,
-                    probability=True,
-                    decision_function_shape="ovr"
-                    )
+            norm="l2",
+            analyzer="word",
+            stop_words="english",
+            strip_accents="unicode",
+            binary=False,
+            max_df=0.75,
+            min_df=1,
+            lowercase=True,
+            use_idf=False,
+            smooth_idf=True,
+            sublinear_tf=True,
+        )
+
+        sampler = SMOTEENN(random_state=SEED)
+        clf = SVC(
+            kernel="linear", C=0.1, probability=True, decision_function_shape="ovo"
+        )
 
         # Create the Pipeline
         pipeline = Pipeline(
-                steps=[
-                    ("vect", vect),
-                    ("sample", sampler),
-                    ("clf", clf),
-                ],
-                verbose=10,
-            )
+            steps=[("vect", vect), ("sample", sampler), ("clf", clf),], verbose=10,
+        )
 
         # Split and Train
-        splitter = StratifiedShuffleSplit(n_splits=1, test_size=0.4, random_state=SEED)
-        
+        splitter = StratifiedShuffleSplit(n_splits=1, test_size=0.1, random_state=SEED)
+
         for train_index, test_index in splitter.split(train_data, train_labels):
             X_train = train_data[train_index]
             X_test = train_data[test_index]
             y_train = train_labels[train_index]
             y_test = train_labels[test_index]
+            test_data_df = train_data_df.iloc[test_index]
 
         pipeline.fit(X_train, y_train)
-
 
         # Predict
         predictions = pipeline.predict(X_test)
@@ -213,8 +215,8 @@ if __name__ == "__main__":
         correct = np.where(y_test == predictions)
         misclassified = np.where(y_test != predictions)
 
-        S27 = np.where(np.array(train_data_df["S27"])[test_index] == True)
-        S40 = np.where(np.array(train_data_df["S40"])[test_index] == True)
+        S27 = np.where(np.array(test_data_df["S27"]) == True)
+        S40 = np.where(np.array(test_data_df["S40"]) == True)
 
         train_S27 = np.where(np.array(train_data_df["S27"])[train_index] == True)
         train_S40 = np.where(np.array(train_data_df["S40"])[train_index] == True)
@@ -222,19 +224,31 @@ if __name__ == "__main__":
         actually_sensitive = np.where(y_test == 1)
         actually_insensitive = np.where(y_test == 0)
 
-
-
         classified_sensitive = np.where(predictions == 1)
         classified_insensitive = np.where(predictions == 0)
-        small = np.where(document_lengths < 4000)
+        small = np.where(document_lengths < 2000)
 
         print("Test set S27 count:", len(X_test[S27]))
         print("Train set S27 count:", len(X_train[train_S27]))
 
-        true_negatives = intersect(classified_insensitive, actually_insensitive, S27)
-        false_negatives = intersect(classified_insensitive, actually_sensitive, S27)
-        false_positives = intersect(classified_sensitive, actually_insensitive, S27)
-        true_positives = intersect(classified_sensitive, actually_sensitive, S27)
+        true_negatives = intersect(
+            classified_insensitive, actually_insensitive, S27, small
+        )
+        false_negatives = intersect(
+            classified_insensitive, actually_sensitive, S27, small
+        )
+        false_positives = intersect(
+            classified_sensitive, actually_insensitive, S27, small
+        )
+        true_positives = intersect(classified_sensitive, actually_sensitive, S27, small)
+
+        all_true_negatives = intersect(
+            classified_insensitive, actually_insensitive, small
+        )
+
+        smallest_true_negative = X_test[np.argmin(length(X_test[all_true_negatives]))]
+
+        smallest_true_negative_index = np.where(X_test == smallest_true_negative)[0][0]
 
         print(
             """
@@ -242,24 +256,30 @@ if __name__ == "__main__":
             Sensitive\t\t{true_positives}\t\t{false_positives}
             Not Sensitive\t\t{false_negatives}\t\t{true_negatives}
             """.format(
-                    true_positives=len(true_positives),
-                    false_negatives=len(false_negatives),
-                    false_positives=len(false_positives),
-                    true_negatives=len(true_negatives),
-                    seed=SEED
-                )
+                true_positives=len(true_positives),
+                false_negatives=len(false_negatives),
+                false_positives=len(false_positives),
+                true_negatives=len(true_negatives),
+                seed=SEED,
             )
-        
+        )
+
         # TODO add a small false negatives
-        batch1_indices = [false_negatives[0], false_positives[0]] + [ true_positives[n] for n in range(3)]
+        batch1_indices = (
+            [false_negatives[0], false_positives[0]]
+            + [true_positives[n] for n in range(3)]
+            + [smallest_true_negative_index]
+        )
+
+        print(batch1_indices)
 
         shuffle(batch1_indices)
 
-        batch_evaluation_setup_df = train_data_df.loc[batch1_indices, :]
+        batch_evaluation_setup_df = test_data_df.iloc[batch1_indices, :]
 
-        bar = Bar('Processing test documents', max=batch_evaluation_setup_df.shape[0])
+        bar = Bar("Processing test documents", max=batch_evaluation_setup_df.shape[0])
 
         # create, classify and store documents
         for document_index, document in batch_evaluation_setup_df.iterrows():
             bar.next()
-            # process_document(document, "collection_{}".format(i), pipeline)
+            process_document(document, "collection_{}".format(i), pipeline)

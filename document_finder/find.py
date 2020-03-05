@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 from collections import OrderedDict
 from functools import reduce
-import random 
+import random
 from csv import DictWriter
 
 import numpy as np
@@ -17,25 +17,25 @@ from imblearn.pipeline import Pipeline
 # from sklearn.svm import SVC
 from thundersvm import SVC
 
-from imblearn.under_sampling import RandomUnderSampler, CondensedNearestNeighbour, TomekLinks
 from imblearn.combine import SMOTEENN
-from imblearn.over_sampling import SVMSMOTE
 from sklearn.model_selection import StratifiedShuffleSplit
+from sklearn.metrics import classification_report, balanced_accuracy_score
 
 
 PROCESSES = cpu_count()
 CLASS_NAMES = ["not sensitive", "sensitive"]
 SEED = 1968
 
-BASE_DIR="/home/architect/git_repositories/dissertation/data"
+BASE_DIR = "/home/architect/git_repositories/dissertation/data"
 
-TRAIN_DATA_DIR = BASE_DIR+ "/collection/cab_html_noboiler/"
+TRAIN_DATA_DIR = BASE_DIR + "/collection/cab_html_noboiler/"
 
 TRAIN_LABELS = BASE_DIR + "/full.collection.cables.path.gold"
 
 ANNOTATIONS_PATH = Path(
     "/home/architect/git_repositories/dissertation/data", "annotations.json"
 )
+
 
 def intersect(*arrays):
     return reduce(np.intersect1d, arrays)
@@ -52,6 +52,7 @@ def extract_annotations():
             annotations = json.loads(annotations)
             path_annotations[str(full_path)] = annotations
     return path_annotations
+
 
 def extract_paths_and_labels():
     file_paths = []
@@ -103,7 +104,7 @@ if __name__ == "__main__":
             assert path in file_paths[i]
             assert int(classification) == train_labels[i]
             assert read_file(file_paths[i]) == train_data[i]
-    
+
     annotations = extract_annotations()
 
     train_data_df = DataFrame([train_data, train_labels]).transpose()
@@ -125,75 +126,79 @@ if __name__ == "__main__":
                     train_data_df.at[index, "S40"] = True
                 if "S27" in tag:
                     train_data_df.at[index, "S27"] = True
-    
 
     # SEED=31
     # SEED = 59
     # SEED = 402
     # SEED = 442
     # SEED = 119
-    SEED = 0
+    SEED = 18
 
     true_negatives = []
     false_negatives = []
     false_positives = []
     true_positives = []
-    
-    while ( len(true_negatives) < 1 or
-            len(false_negatives) < 1 or
-            len(false_positives) < 1 or
-            len(true_positives) < 1
-            ):
-        SEED +=1
+
+    while (
+        len(true_negatives) < 1
+        or len(false_negatives) < 1
+        or len(false_positives) < 1
+        or len(true_positives) < 3
+    ):
+        SEED += 1
 
         np.random.seed(SEED)
 
         random.seed(SEED)
+
         # vect = CountVectorizer(binary=True, max_df=0.5, min_df=2, ngram_range=(1,1), stop_words="english")
         vect = TfidfVectorizer(
-                norm="l1",
-                analyzer="word",
-                stop_words="english",
-                strip_accents="unicode",
-                binary=True,
-                max_df=0.75,
-                min_df=1,
-                lowercase=True,
-                use_idf=False,
-                smooth_idf=True,
-                sublinear_tf=True,
-            )
-        sampler = RandomUnderSampler(random_state=SEED)
-        clf = SVC(  kernel="linear",
-                    C=10,
-                    probability=True,
-                    decision_function_shape="ovr"
-                    )
+            norm="l2",
+            analyzer="word",
+            stop_words="english",
+            strip_accents="unicode",
+            binary=False,
+            max_df=0.75,
+            min_df=1,
+            lowercase=True,
+            use_idf=False,
+            smooth_idf=True,
+            sublinear_tf=True,
+        )
+
+        sampler = SMOTEENN(random_state=SEED)
+        clf = SVC(
+            kernel="linear", C=0.1, probability=True, decision_function_shape="ovo"
+        )
 
         # Create the Pipeline
         pipeline = Pipeline(
-                steps=[
-                    ("vect", vect),
-                    ("sample", sampler),
-                    ("clf", clf),
-                ],
-                verbose=10,
-            )
+            steps=[("vect", vect), ("sample", sampler), ("clf", clf),], verbose=10,
+        )
 
         # Split and Train
-        splitter = StratifiedShuffleSplit(n_splits=1, test_size=0.4, random_state=SEED)
-        
+        splitter = StratifiedShuffleSplit(n_splits=1, test_size=0.1, random_state=SEED)
+
+        full_set_S27 = np.where(np.array(train_data_df["S27"]) == True)
+        full_set_S40 = np.where(np.array(train_data_df["S40"]) == True)
+
+        train_data = train_data_df["content"]
+        train_labels = train_data_df["S40"]
+
         for train_index, test_index in splitter.split(train_data, train_labels):
             X_train = train_data[train_index]
             X_test = train_data[test_index]
             y_train = train_labels[train_index]
             y_test = train_labels[test_index]
-            np.save("train_index", train_index )
-            np.save("test_index", test_index)
+
         pipeline.fit(X_train, y_train)
 
         # Predict
         predictions = pipeline.predict(X_test)
+
+        print(classification_report(y_test, predictions))
+
+        print("Balanced accuracy", balanced_accuracy_score(y_test, predictions))
 
         # filters
         length = np.vectorize(len)
@@ -211,53 +216,48 @@ if __name__ == "__main__":
         actually_sensitive = np.where(y_test == 1)
         actually_insensitive = np.where(y_test == 0)
 
-
-
         classified_sensitive = np.where(predictions == 1)
         classified_insensitive = np.where(predictions == 0)
-        small = np.where(document_lengths < 4000)
+        small = np.where(document_lengths < 2000)
 
-        print("Test set small S27 count:", len(intersect(S27, small)))
-        print("Train set small S27 count:", len(intersect(train_S27, small)))
+        print("Test set small S40 count:", len(intersect(S40, small)))
+        print("Train set small S40 count:", len(intersect(train_S40, small)))
 
-        true_negatives = intersect(classified_insensitive, actually_insensitive, S27, small)
-        false_negatives = intersect(classified_insensitive, actually_sensitive, S27, small)
-        false_positives = intersect(classified_sensitive, actually_insensitive, S27, small)
-        true_positives = intersect(classified_sensitive, actually_sensitive, S27, small)
+        true_negatives = intersect(classified_insensitive, actually_insensitive, small)
+        false_negatives = intersect(classified_insensitive, actually_sensitive, small)
+        false_positives = intersect(classified_sensitive, actually_insensitive, small)
+        true_positives = intersect(classified_sensitive, actually_sensitive, small)
 
         results = """
         {seed}\t\tSensitive\t\tNot Sensitive
         Sensitive\t\t{true_positives}\t\t{false_positives}
         Not Sensitive\t\t{false_negatives}\t\t{true_negatives}
-        """.format(true_positives=len(true_positives),
-                false_negatives=len(false_negatives),
-                false_positives=len(false_positives),
-                true_negatives=len(true_negatives),
-                seed=SEED
-                )
+        """.format(
+            true_positives=len(true_positives),
+            false_negatives=len(false_negatives),
+            false_positives=len(false_positives),
+            true_negatives=len(true_negatives),
+            seed=SEED,
+        )
 
         results_dict = {
             "seed": SEED,
             "true_negatives": len(true_negatives),
-            "false_negatives" : len(false_negatives),
+            "false_negatives": len(false_negatives),
             "false_positives": len(false_positives),
-            "true_positives": len(true_positives)
+            "true_positives": len(true_positives),
         }
 
         print(results)
 
-        
         with open("results.csv", "a+") as results_file:
             DictWriter(results_file, list(results_dict.keys())).writerow(results_dict)
-            
 
+    # for index in false_positives:
+    #     print("###############################################")
+    #     print(X_test.iloc[index])
 
-
-    for index in false_positives:
-        print("###############################################")
-        print(X_test[index])
-    
-    for index in false_negatives:
-        print("###############################################")
-        print(X_test[index])
+    # for index in false_negatives:
+    #     print("###############################################")
+    #     print(X_test.iloc[index])
 
