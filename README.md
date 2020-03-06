@@ -57,7 +57,7 @@ The development Logbook of Harpocrates can be [found here](https://dissertation.
 
 To run the stack without docker you will need to have:
 
-- Python 3.8.x
+- Python 3.7.x
 - NodeJS 13.x
 - MongoDB 4.2.x
 
