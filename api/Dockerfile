@@ -1,5 +1,7 @@
-ARG BUILD_PYTHON_VERSION=3.8
+# Python version used in the build container
+ARG BUILD_PYTHON_VERSION=3.7
 
+# debian python base for build time
 FROM python:${BUILD_PYTHON_VERSION}-buster as build
 
 RUN mkdir -p /usr/src/app
@@ -18,10 +20,12 @@ RUN CFLAGS="-g0 -Wl,--strip-all -I/usr/include:/usr/local/include -L/usr/lib:/us
 
 COPY . ./
 
-
+# distroless python base for runtime
 FROM gcr.io/distroless/python3-debian10:latest
 
-ARG BUILD_PYTHON_VERSION=3.8
+# Python version used in the build container
+ARG BUILD_PYTHON_VERSION=3.7
+# Python version used in the distroless container
 ARG RUN_PYTHON_VERSION=3.7
 
 COPY --from=build /usr/src/app /usr/src/app
