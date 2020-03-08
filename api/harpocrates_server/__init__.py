@@ -10,7 +10,7 @@ from flask.cli import with_appcontext
 from flask_cors import CORS
 
 from harpocrates_server import encoder
-from harpocrates_server.db import create_db_client
+from harpocrates_server.db import create_db_client, MONGO_URI
 
 __version__ = (9, 0, 0, "dev")
 

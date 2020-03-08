@@ -1,3 +1,4 @@
+import subprocess
 import logging
 import json
 from pathlib import Path
@@ -7,11 +8,14 @@ import re
 from math import floor
 from multiprocessing import Pool, cpu_count
 from random import shuffle, seed
+from datetime import datetime
 
 from joblib import dump
 from progress.bar import Bar
 import numpy as np
 from pandas import DataFrame
+from pymongo import MongoClient
+
 
 from joblib import dump
 from imblearn.pipeline import Pipeline
@@ -21,7 +25,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import StratifiedShuffleSplit
 from sklearn.metrics import classification_report, balanced_accuracy_score
 
-from harpocrates_server.db import create_db_client
+from harpocrates_server.db import create_db_client, MONGO_URI
 
 from harpocrates_server.service import TRAIN_DATA_DIR, MODELS_DIRECTORY, TRAIN_LABELS
 
@@ -57,6 +61,25 @@ ANNOTATIONS_PATH = Path(
 
 # Necessary for reproducing experimental setup
 SEED = 32
+
+
+def dump_and_delete_db(client, old):
+
+    archive_path = Path("/home/architect") / datetime.now().strftime(
+        "%d-%m-%Y_%H-%M-%S"
+    )
+
+    archive_path.mkdir(parents=True, exist_ok=True)
+
+    archive = "--out={}".format(archive_path)
+
+    uri = "--uri={}".format(MONGO_URI)
+
+    print(archive, uri)
+
+    subprocess.call(["mongodump", uri, archive])
+
+    client.drop_database(old)
 
 
 def intersect(*arrays):
@@ -123,6 +146,12 @@ def process_document(document, collection, trained_model):
 
 
 if __name__ == "__main__":
+
+    mongo_client = MongoClient(MONGO_URI)
+    old_db = "document_sets"
+
+    if old_db in mongo_client.list_database_names():
+        dump_and_delete_db(mongo_client, old_db)
 
     file_paths, train_labels = extract_paths_and_labels()
     train_data = extract_data(file_paths)
