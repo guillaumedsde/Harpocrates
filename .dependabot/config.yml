@@ -1,0 +1,41 @@
+version: 1
+update_configs:
+  - package_manager: "javascript"
+    directory: "/frontend"
+    update_schedule: "live"
+    default_reviewers:
+      - "guillaumedsde"
+    default_assignees:
+      - "guillaumedsde"
+
+  - package_manager: "javascript"
+    directory: "/js-api-client"
+    update_schedule: "live"
+    default_reviewers:
+      - "guillaumedsde"
+    default_assignees:
+      - "guillaumedsde"
+
+  - package_manager: "python"
+    directory: "/api"
+    update_schedule: "live"
+    default_reviewers:
+      - "guillaumedsde"
+    default_assignees:
+      - "guillaumedsde"
+
+  - package_manager: "docker"
+    directory: "/frontend"
+    update_schedule: "daily"
+    default_reviewers:
+      - "guillaumedsde"
+    default_assignees:
+      - "guillaumedsde"
+
+  - package_manager: "docker"
+    directory: "/api"
+    update_schedule: "daily"
+    default_reviewers:
+      - "guillaumedsde"
+    default_assignees:
+      - "guillaumedsde"
