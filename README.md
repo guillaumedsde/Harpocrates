@@ -20,7 +20,7 @@
   </a>
   <img src="https://badgen.net/dependabot/guillaumedsde/Harpocrates/30023543?icon=dependabot" alt="dependabot">
   <img src="https://img.shields.io/snyk/vulnerabilities/github/guillaumedsde/Harpocrates" alt="snyk">
-  <a href="https://app.fossa.com/projects/git%2Bgithub.com%2Fguillaumedsde%2FHarpocrates?ref=badge_shield" alt="FOSSA Status">
+  <a href="https://app.fossa.com/reports/f5f2f0d3-8d62-4141-922d-d9a72ce66260" alt="FOSSA report">
     <img src="https://app.fossa.com/api/projects/git%2Bgithub.com%2Fguillaumedsde%2FHarpocrates.svg?type=shield"/>
   </a>
 </div>
