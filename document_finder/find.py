@@ -127,24 +127,14 @@ if __name__ == "__main__":
                 if "S27" in tag:
                     train_data_df.at[index, "S27"] = True
 
-    # SEED=31
-    # SEED = 59
-    # SEED = 402
-    # SEED = 442
-    # SEED = 119
-    SEED = 18
+    SEED = 0
 
     true_negatives = []
     false_negatives = []
     false_positives = []
     true_positives = []
 
-    while (
-        len(true_negatives) < 1
-        or len(false_negatives) < 1
-        or len(false_positives) < 1
-        or len(true_positives) < 3
-    ):
+    while True:
         SEED += 1
 
         np.random.seed(SEED)
@@ -168,7 +158,11 @@ if __name__ == "__main__":
 
         sampler = SMOTEENN(random_state=SEED)
         clf = SVC(
-            kernel="linear", C=0.1, probability=True, decision_function_shape="ovo"
+            kernel="linear",
+            C=0.1,
+            probability=True,
+            decision_function_shape="ovo",
+            random_state=SEED,
         )
 
         # Create the Pipeline
@@ -177,7 +171,7 @@ if __name__ == "__main__":
         )
 
         # Split and Train
-        splitter = StratifiedShuffleSplit(n_splits=1, test_size=0.1, random_state=SEED)
+        splitter = StratifiedShuffleSplit(n_splits=1, test_size=0.2, random_state=SEED)
 
         full_set_S27 = np.where(np.array(train_data_df["S27"]) == True)
         full_set_S40 = np.where(np.array(train_data_df["S40"]) == True)
@@ -198,7 +192,9 @@ if __name__ == "__main__":
 
         print(classification_report(y_test, predictions))
 
-        print("Balanced accuracy", balanced_accuracy_score(y_test, predictions))
+        bac = balanced_accuracy_score(y_test, predictions)
+
+        print("Balanced accuracy", bac)
 
         # filters
         length = np.vectorize(len)
@@ -246,12 +242,20 @@ if __name__ == "__main__":
             "false_negatives": len(false_negatives),
             "false_positives": len(false_positives),
             "true_positives": len(true_positives),
+            "balanced_accuracy": bac,
         }
 
         print(results)
-
-        with open("results.csv", "a+") as results_file:
-            DictWriter(results_file, list(results_dict.keys())).writerow(results_dict)
+        if not (
+            len(true_negatives) < 1
+            or len(false_negatives) < 1
+            or len(false_positives) < 1
+            or len(true_positives) < 3
+        ):
+            with open("results.csv", "a+") as results_file:
+                DictWriter(results_file, list(results_dict.keys())).writerow(
+                    results_dict
+                )
 
     # for index in false_positives:
     #     print("###############################################")
