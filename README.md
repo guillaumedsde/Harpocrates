@@ -5,7 +5,7 @@
 <div align="center"><h1>Harpocrates</h1></div>
 
 <div align="center">
-  <img src="https://gitlab.com/harpocrates-app/harpocrates/badges/master/pipeline.svg" alt="Pipeline status" />
+  <img src="https://gitlab.com/harpocrates-app/harpocrates/badges/master/pipeline.svg" alt="Pipeline status" onerror="this.style.display='none'"/>
   <a href="https://harpocrates-app.gitlab.io/harpocrates/">
     <img alt="Documentation" src="https://img.shields.io/website?url=https%3A%2F%2Fharpocrates-app.gitlab.io%2Fharpocrates" target="_blank" />
   </a>
@@ -18,8 +18,8 @@
   <a href="https://deepsource.io/gh/guillaumedsde/Harpocrates/?ref=repository-badge">
     <img src="https://static.deepsource.io/deepsource-badge-light-mini.svg" alt="deepsource">
   </a>
-  <img src="https://badgen.net/dependabot/guillaumedsde/Harpocrates/30023543?icon=dependabot" alt="dependabot">
-  <img src="https://img.shields.io/snyk/vulnerabilities/github/guillaumedsde/Harpocrates" alt="snyk">
+  <!-- <img src="https://badgen.net/dependabot/guillaumedsde/Harpocrates/30023543?icon=dependabot" alt="dependabot"> -->
+  <!-- <img src="https://img.shields.io/snyk/vulnerabilities/github/guillaumedsde/Harpocrates" alt="snyk"> -->
   <a href="https://app.fossa.com/reports/f5f2f0d3-8d62-4141-922d-d9a72ce66260" alt="FOSSA report">
     <img src="https://app.fossa.com/api/projects/git%2Bgithub.com%2Fguillaumedsde%2FHarpocrates.svg?type=shield"/>
   </a>
