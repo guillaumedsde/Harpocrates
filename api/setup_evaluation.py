@@ -65,9 +65,9 @@ SEED = 32
 
 def dump_and_delete_db(client, old):
 
-    archive_path = Path("/home/architect") / datetime.now().strftime(
-        "%d-%m-%Y_%H-%M-%S"
-    )
+    archive_path = Path(
+        "/home/architect/git_repositories/dissertation/db_dumps"
+    ) / datetime.now().strftime("%d-%m-%Y_%H-%M-%S")
 
     archive_path.mkdir(parents=True, exist_ok=True)
 
