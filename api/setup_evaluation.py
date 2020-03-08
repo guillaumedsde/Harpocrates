@@ -111,7 +111,7 @@ def process_document(document, collection, trained_model):
     classify.__globals__["db"] = db
 
     text_contents = text_contents_from_document_body(
-        document["content"], granularity="document"
+        document["content"], granularity="paragraph"
     )
 
     document_object = Document(
