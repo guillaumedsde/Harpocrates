@@ -9,7 +9,7 @@
   <a href="https://harpocrates-app.gitlab.io/harpocrates/">
     <img alt="Documentation" src="https://img.shields.io/website?url=https%3A%2F%2Fharpocrates-app.gitlab.io%2Fharpocrates" target="_blank" />
   </a>
-  <a href="https://github.com/kefranabg/readme-md-generator/blob/master/LICENSE">
+  <a href="https://github.com/guillaumedsde/Harpocrates/blob/master/LICENSE.md">
     <img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-yellow.svg" target="_blank" />
   </a>
   <a href="https://deepscan.io/dashboard#view=project&tid=7077&pid=9224&bid=117107">
@@ -18,6 +18,8 @@
   <a href="https://deepsource.io/gh/guillaumedsde/Harpocrates/?ref=repository-badge">
     <img src="https://static.deepsource.io/deepsource-badge-light-mini.svg" alt="deepsource">
   </a>
+  <img src="https://badgen.net/dependabot/guillaumedsde/Harpocrates/30023543?icon=dependabot" alt="dependabot">
+  <img src="https://img.shields.io/snyk/vulnerabilities/github/guillaumedsde/Harpocrates" alt="snyk">
 </div>
 
 <div align="center">
