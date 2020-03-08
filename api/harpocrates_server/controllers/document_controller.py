@@ -228,11 +228,11 @@ def classify_text(text: str, explanations=None, trained_model=None) -> Predicted
     """
 
     # TODO this is a long blocking call when first training the classifier, needs to return 202 "created" with some URL to the processed element
-    if not trained_model:
-        trained_model, classifier_type = get_model()
-    else:
+    if trained_model:
         classifier_type = trained_model.named_steps.clf.__class__.__name__
-
+    else:
+        trained_model, classifier_type = get_model()
+        
     sensitive = bool(trained_model.predict([text])[0])
 
     # calculate explanations
