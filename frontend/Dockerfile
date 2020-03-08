@@ -1,7 +1,5 @@
-ARG NODE_VERSION=13.2.0
-
 # build image
-FROM node:${NODE_VERSION}-alpine as build
+FROM node:13.10-alpine as build
 
 ARG NODE_ENV=production
 ARG TEST_MODE=0
@@ -17,7 +15,7 @@ COPY . .
 RUN npm run build
 
 # final image
-FROM nginx:alpine
+FROM nginx:1.17-alpine
 
 COPY --from=build /app/dist /usr/share/nginx/html
 
