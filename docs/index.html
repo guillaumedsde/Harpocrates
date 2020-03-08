@@ -58,20 +58,55 @@
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item">
+          <li class="nav-item dropdown">
             <a
-              class="nav-item nav-link"
-              href="https://gitlab.com/harpocrates-app"
+              class="nav-link dropdown-toggle"
+              href="#"
+              id="navbarDropdown"
+              role="button"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
             >
-              GitLab Group
+              Development
             </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="https://gitlab.com/harpocrates-app"
+                >GitLab Group</a
+              >
+              <div class="dropdown-divider"></div>
+              <a
+                class="dropdown-item"
+                href="https://github.com/guillaumedsde/Harpocrates"
+                >Github Repository</a
+              >
+            </div>
           </li>
-          <li class="nav-item">
+          <li class="nav-item dropdown">
             <a
-              class="nav-item nav-link"
-              href="https://gitlab.com/harpocrates-app/harpocrates"
-              >GitLab Repository</a
+              class="nav-link dropdown-toggle"
+              href="#"
+              id="navbarDropdown"
+              role="button"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
             >
+              Documentation
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="/harpocrates/api/index.html"
+                >API</a
+              >
+              <a class="dropdown-item" href="/harpocrates/api-client/"
+                >JavaScript API Client</a
+              >
+              <a
+                class="dropdown-item"
+                href="https://app.fossa.com/reports/f5f2f0d3-8d62-4141-922d-d9a72ce66260"
+                >FOSSA Open Source Licenses report</a
+              >
+            </div>
           </li>
           <li class="nav-item">
             <a
@@ -79,16 +114,6 @@
               href="https://dissertation.guillaume.desusanne.com/"
             >
               Development Logbook
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-item nav-link" href="/harpocrates/api/index.html">
-              API Documentation
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-item nav-link" href="/harpocrates/api-client/">
-              JS API Client Documentation
             </a>
           </li>
           <li class="nav-item">
