@@ -28,6 +28,12 @@ validate-api-specification:
   tags:
     - trdocker
 
+license_check:
+  image: fossa/fossa-cli:buildtools
+  script:
+    - fossa init
+    - FOSSA_API_KEY=${FOSSA_API_KEY} fossa analyze
+
 code_quality:
   # disable cache for this job
   cache: {}
