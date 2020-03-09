@@ -5,12 +5,12 @@
 <div align="center"><h1>Harpocrates</h1></div>
 
 <div align="center">
-  <img src="https://gitlab.com/harpocrates-app/harpocrates/badges/master/pipeline.svg" alt="Pipeline status" onerror="this.style.display='none'"/>
-  <a href="https://harpocrates-app.gitlab.io/harpocrates/">
-    <img alt="Documentation" src="https://img.shields.io/website?url=https%3A%2F%2Fharpocrates-app.gitlab.io%2Fharpocrates" target="_blank" />
+  <img src="https://gitlab.com/harpocrates-app/harpocrates/badges/master/pipeline.svg" onerror="this.style.display='none'"/>
+  <a href="https://codecov.io/gh/guillaumedsde/Harpocrates">
+    <img src="https://codecov.io/gh/guillaumedsde/Harpocrates/branch/master/graph/badge.svg?token=IAoDgvpduE" />
   </a>
-  <a href="https://github.com/guillaumedsde/Harpocrates/blob/master/LICENSE.md">
-    <img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-yellow.svg" target="_blank" />
+  <a href="https://harpocrates-app.gitlab.io/harpocrates/">
+    <img alt="Documentation" src="https://img.shields.io/website?down_message=offline&label=docs&up_message=online&url=https%3A%2F%2Fharpocrates-app.gitlab.io%2Fharpocrates%2F"/>
   </a>
   <a href="https://deepscan.io/dashboard#view=project&tid=7077&pid=9224&bid=117107">
     <img alt="DeepScan grade" src="https://deepscan.io/api/teams/7077/projects/9224/branches/117107/badge/grade.svg?token=a1fa0980263b30233c0ddf1e9c3ed778290db2ee" />
@@ -23,6 +23,10 @@
   <a href="https://app.fossa.com/reports/f5f2f0d3-8d62-4141-922d-d9a72ce66260" alt="FOSSA report">
     <img src="https://app.fossa.com/api/projects/git%2Bgithub.com%2Fguillaumedsde%2FHarpocrates.svg?type=shield"/>
   </a>
+  <a href="https://github.com/guillaumedsde/Harpocrates/blob/master/LICENSE.md">
+    <img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-yellow.svg" target="_blank" />
+  </a>
+
 </div>
 
 <div align="center">
