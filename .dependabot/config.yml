@@ -4,43 +4,23 @@ update_configs:
     target_branch: master
     directory: "/frontend"
     update_schedule: "live"
-    default_reviewers:
-      - "guillaumedsde"
-    default_assignees:
-      - "guillaumedsde"
 
   - package_manager: "javascript"
     target_branch: master
     directory: "/js-api-client"
     update_schedule: "live"
-    default_reviewers:
-      - "guillaumedsde"
-    default_assignees:
-      - "guillaumedsde"
 
   - package_manager: "python"
     target_branch: master
     directory: "/api"
     update_schedule: "live"
-    default_reviewers:
-      - "guillaumedsde"
-    default_assignees:
-      - "guillaumedsde"
 
   - package_manager: "docker"
     target_branch: master
     directory: "/frontend"
     update_schedule: "daily"
-    default_reviewers:
-      - "guillaumedsde"
-    default_assignees:
-      - "guillaumedsde"
 
   - package_manager: "docker"
     target_branch: master
     directory: "/api"
     update_schedule: "daily"
-    default_reviewers:
-      - "guillaumedsde"
-    default_assignees:
-      - "guillaumedsde"
