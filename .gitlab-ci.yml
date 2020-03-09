@@ -41,6 +41,8 @@ test_api-client:
     - npm install -g nyc codecov
     # run tests with code coverage
     - nyc --reporter=lcov npm test && codecov
+  tags:
+    - trdocker
 
 code_quality:
   # disable cache for this job
