@@ -1,0 +1,14 @@
+coverage:
+  status:
+    project:
+      default: off
+      js-api-client:
+        flags: js-api-client
+
+flags:
+  # filter the folder(s) you wish to measure by that flag
+  js-api-client:
+    # only include files in the backend folder
+    paths:
+      - js-api-client/src/model
+      - js-api-client/src/api
