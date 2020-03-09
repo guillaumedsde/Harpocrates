@@ -85,7 +85,7 @@ api_client_doc:
     name: squidfunk/mkdocs-material:4.6.1
     entrypoint: [""]
   before_script:
-    - apk add --no-cache build-base libffi-dev py3-cffi cairo pango-dev gdk-pixbuf shared-mime-info
+    - apk add --no-cache build-base  py3-cffi  pango-dev  gdk-pixbuf  shared-mime-info  build-base  libffi-dev  zlib-dev  jpeg-dev  libjpeg-turbo-dev  openjpeg-dev  tiff-dev  libwebp-dev  tk-dev  tcl-dev  cairo  zlib  jpeg  libjpeg-turbo  openjpeg  tiff  libwebp
     - pip install mkdocs-pdf-export-plugin
   script:
     - cd js-api-client
