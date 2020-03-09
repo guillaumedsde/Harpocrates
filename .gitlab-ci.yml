@@ -86,6 +86,7 @@ api_client_doc:
     entrypoint: [""]
   before_script:
     - apk add --no-cache make
+    - pip install mkdocs-pdf-export-plugin
   script:
     - cd js-api-client
     - make doc

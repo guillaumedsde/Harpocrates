@@ -8,3 +8,6 @@ nav:
   - Home: index.md
 theme:
   name: "material"
+plugins:
+  - search
+  - pdf-export
