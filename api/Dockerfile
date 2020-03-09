@@ -21,7 +21,7 @@ RUN CFLAGS="-g0 -Wl,--strip-all -I/usr/include:/usr/local/include -L/usr/lib:/us
 COPY . ./
 
 # distroless python base for runtime
-FROM gcr.io/distroless/python3-debian10:latest
+FROM gcr.io/distroless/python3@sha256:ea01cb37b865764175854e62f286920fbbf7945e3933a6a5a4f248755619132c
 
 # Python version used in the build container
 ARG BUILD_PYTHON_VERSION=3.7
