@@ -1,4 +1,4 @@
-# @HarpocratesApiClient.PredictedClassification
+# api.PredictedClassification
 
 ## Properties
 

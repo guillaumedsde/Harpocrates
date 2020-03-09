@@ -1,4 +1,4 @@
-# @HarpocratesApiClient.SensitiveSectionAllOf
+# api.SensitiveSectionAllOf
 
 ## Properties
 

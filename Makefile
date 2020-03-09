@@ -78,7 +78,8 @@ api-client: ## generate JS API client code from specification
 		-i ./api-specification/api-specification/openapi.yml \
 		--additional-properties=usePromises=true \
 		--additional-properties=projectName=@harpocrates/api-client \
-		--additional-properties=licenseName=MIT
+		--additional-properties=licenseName=MIT \
+		--additional-properties=moduleName=api
 
 .PHONY: api-client-doc
 api-client-doc: ## generate JS API client code from specification

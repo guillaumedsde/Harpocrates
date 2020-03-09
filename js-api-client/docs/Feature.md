@@ -1,4 +1,4 @@
-# @HarpocratesApiClient.Feature
+# api.Feature
 
 ## Properties
 
