@@ -28,6 +28,20 @@ validate-api-specification:
   tags:
     - trdocker
 
+test_api-client:
+  image: node:13.10-alpine3.10
+  script:
+    - cd js-api-client
+    # install dependencies
+    - npm install
+    - npm install --dev-only
+    # build
+    - npm run build
+    # install code coverage dependencies
+    - npm install -g nyc codecov
+    # run tests with code coverage
+    - nyc --reporter=lcov npm test && codecov
+
 code_quality:
   # disable cache for this job
   cache: {}
