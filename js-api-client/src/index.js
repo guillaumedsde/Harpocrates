@@ -38,9 +38,9 @@ import TextContentApi from './api/TextContentApi';
 * <p>
 * An AMD (recommended!) or CommonJS application will generally do something equivalent to the following:
 * <pre>
-* var @HarpocratesApiClient = require('index'); // See note below*.
-* var xxxSvc = new @HarpocratesApiClient.XxxApi(); // Allocate the API class we're going to use.
-* var yyyModel = new @HarpocratesApiClient.Yyy(); // Construct a model instance.
+* var api = require('index'); // See note below*.
+* var xxxSvc = new api.XxxApi(); // Allocate the API class we're going to use.
+* var yyyModel = new api.Yyy(); // Construct a model instance.
 * yyyModel.someProperty = 'someValue';
 * ...
 * var zzz = xxxSvc.doSomething(yyyModel); // Invoke the service.
@@ -52,8 +52,8 @@ import TextContentApi from './api/TextContentApi';
 * <p>
 * A non-AMD browser application (discouraged) might do something like this:
 * <pre>
-* var xxxSvc = new @HarpocratesApiClient.XxxApi(); // Allocate the API class we're going to use.
-* var yyy = new @HarpocratesApiClient.Yyy(); // Construct a model instance.
+* var xxxSvc = new api.XxxApi(); // Allocate the API class we're going to use.
+* var yyy = new api.Yyy(); // Construct a model instance.
 * yyyModel.someProperty = 'someValue';
 * ...
 * var zzz = xxxSvc.doSomething(yyyModel); // Invoke the service.

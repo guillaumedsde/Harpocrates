@@ -1,4 +1,4 @@
-# @HarpocratesApiClient.DocumentSets
+# api.DocumentSets
 
 ## Properties
 

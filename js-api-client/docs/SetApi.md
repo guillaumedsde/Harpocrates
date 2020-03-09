@@ -1,4 +1,4 @@
-# @HarpocratesApiClient.SetApi
+# api.SetApi
 
 All URIs are relative to *http://api.harpocrates.app.local*
 
@@ -20,10 +20,10 @@ Add a new document set set to the engine
 ### Example
 
 ```javascript
-import @HarpocratesApiClient from '@harpocrates/api-client';
+import api from '@harpocrates/api-client';
 
-let apiInstance = new @HarpocratesApiClient.SetApi();
-let documentSet = new @HarpocratesApiClient.DocumentSet(); // DocumentSet | documentSet descriptor that needs to be added to the engine
+let apiInstance = new api.SetApi();
+let documentSet = new api.DocumentSet(); // DocumentSet | documentSet descriptor that needs to be added to the engine
 apiInstance.createSet(documentSet).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
 }, (error) => {
@@ -62,9 +62,9 @@ delete the set
 ### Example
 
 ```javascript
-import @HarpocratesApiClient from '@harpocrates/api-client';
+import api from '@harpocrates/api-client';
 
-let apiInstance = new @HarpocratesApiClient.SetApi();
+let apiInstance = new api.SetApi();
 let setId = 9_11; // String | ID of a set
 apiInstance.deleteSet(setId).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -104,9 +104,9 @@ lists all documents in the set
 ### Example
 
 ```javascript
-import @HarpocratesApiClient from '@harpocrates/api-client';
+import api from '@harpocrates/api-client';
 
-let apiInstance = new @HarpocratesApiClient.SetApi();
+let apiInstance = new api.SetApi();
 let setId = 9_11; // String | ID of a set
 apiInstance.getSet(setId).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -146,9 +146,9 @@ List all document sets known by the engine
 ### Example
 
 ```javascript
-import @HarpocratesApiClient from '@harpocrates/api-client';
+import api from '@harpocrates/api-client';
 
-let apiInstance = new @HarpocratesApiClient.SetApi();
+let apiInstance = new api.SetApi();
 apiInstance.getSets().then((data) => {
   console.log('API called successfully. Returned data: ' + data);
 }, (error) => {

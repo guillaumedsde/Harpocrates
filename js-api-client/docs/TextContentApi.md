@@ -1,4 +1,4 @@
-# @HarpocratesApiClient.TextContentApi
+# api.TextContentApi
 
 All URIs are relative to *http://api.harpocrates.app.local*
 
@@ -21,14 +21,14 @@ add a sensitive section to the document
 ### Example
 
 ```javascript
-import @HarpocratesApiClient from '@harpocrates/api-client';
+import api from '@harpocrates/api-client';
 
-let apiInstance = new @HarpocratesApiClient.TextContentApi();
+let apiInstance = new api.TextContentApi();
 let setId = 9_11; // String | ID of a set
 let docId = document1; // String | ID of a document
 let textContentIndex = 2; // Number | Index of the position of a TextContent object in the list of TextContent objects making up the document
 let opts = {
-  'sensitiveSection': new @HarpocratesApiClient.SensitiveSection() // SensitiveSection | 
+  'sensitiveSection': new api.SensitiveSection() // SensitiveSection | 
 };
 apiInstance.addSensitiveSection(setId, docId, textContentIndex, opts).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -73,14 +73,14 @@ Overwrite the sensitive sections of a TextContent object
 ### Example
 
 ```javascript
-import @HarpocratesApiClient from '@harpocrates/api-client';
+import api from '@harpocrates/api-client';
 
-let apiInstance = new @HarpocratesApiClient.TextContentApi();
+let apiInstance = new api.TextContentApi();
 let setId = 9_11; // String | ID of a set
 let docId = document1; // String | ID of a document
 let textContentIndex = 2; // Number | Index of the position of a TextContent object in the list of TextContent objects making up the document
 let opts = {
-  'sensitiveSections': new @HarpocratesApiClient.SensitiveSections() // SensitiveSections | 
+  'sensitiveSections': new api.SensitiveSections() // SensitiveSections | 
 };
 apiInstance.addSensitiveSections(setId, docId, textContentIndex, opts).then((data) => {
   console.log('API called successfully. Returned data: ' + data);
@@ -125,9 +125,9 @@ get sensitive sections of a TextContent object
 ### Example
 
 ```javascript
-import @HarpocratesApiClient from '@harpocrates/api-client';
+import api from '@harpocrates/api-client';
 
-let apiInstance = new @HarpocratesApiClient.TextContentApi();
+let apiInstance = new api.TextContentApi();
 let setId = 9_11; // String | ID of a set
 let docId = document1; // String | ID of a document
 let textContentIndex = 2; // Number | Index of the position of a TextContent object in the list of TextContent objects making up the document

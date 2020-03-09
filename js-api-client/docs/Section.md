@@ -1,4 +1,4 @@
-# @HarpocratesApiClient.Section
+# api.Section
 
 ## Properties
 

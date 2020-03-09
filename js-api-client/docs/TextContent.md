@@ -1,4 +1,4 @@
-# @HarpocratesApiClient.TextContent
+# api.TextContent
 
 ## Properties
 

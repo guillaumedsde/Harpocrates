@@ -1,4 +1,4 @@
-# @HarpocratesApiClient.DocumentApi
+# api.DocumentApi
 
 All URIs are relative to *http://api.harpocrates.app.local*
 
@@ -24,9 +24,9 @@ Contents of the document in the body of the request. This should be in plain tex
 ### Example
 
 ```javascript
-import @HarpocratesApiClient from '@harpocrates/api-client';
+import api from '@harpocrates/api-client';
 
-let apiInstance = new @HarpocratesApiClient.DocumentApi();
+let apiInstance = new api.DocumentApi();
 let setId = 9_11; // String | ID of a set
 let body = "body_example"; // String | 
 apiInstance.createDocument(setId, body).then((data) => {
@@ -68,9 +68,9 @@ delete document from set
 ### Example
 
 ```javascript
-import @HarpocratesApiClient from '@harpocrates/api-client';
+import api from '@harpocrates/api-client';
 
-let apiInstance = new @HarpocratesApiClient.DocumentApi();
+let apiInstance = new api.DocumentApi();
 let setId = 9_11; // String | ID of a set
 let docId = document1; // String | ID of a document
 apiInstance.deleteDocument(setId, docId).then((data) => {
@@ -112,9 +112,9 @@ get document from set
 ### Example
 
 ```javascript
-import @HarpocratesApiClient from '@harpocrates/api-client';
+import api from '@harpocrates/api-client';
 
-let apiInstance = new @HarpocratesApiClient.DocumentApi();
+let apiInstance = new api.DocumentApi();
 let setId = 9_11; // String | ID of a set
 let docId = document1; // String | ID of a document
 apiInstance.getDocument(setId, docId).then((data) => {
@@ -156,9 +156,9 @@ get original document content as plain text
 ### Example
 
 ```javascript
-import @HarpocratesApiClient from '@harpocrates/api-client';
+import api from '@harpocrates/api-client';
 
-let apiInstance = new @HarpocratesApiClient.DocumentApi();
+let apiInstance = new api.DocumentApi();
 let setId = 9_11; // String | ID of a set
 let docId = document1; // String | ID of a document
 apiInstance.getOriginalContent(setId, docId).then((data) => {
@@ -200,9 +200,9 @@ Get the predicted classification for the document
 ### Example
 
 ```javascript
-import @HarpocratesApiClient from '@harpocrates/api-client';
+import api from '@harpocrates/api-client';
 
-let apiInstance = new @HarpocratesApiClient.DocumentApi();
+let apiInstance = new api.DocumentApi();
 let setId = 9_11; // String | ID of a set
 let docId = document1; // String | ID of a document
 apiInstance.getPredictedClassification(setId, docId).then((data) => {
@@ -244,9 +244,9 @@ get redacted document content as plain text
 ### Example
 
 ```javascript
-import @HarpocratesApiClient from '@harpocrates/api-client';
+import api from '@harpocrates/api-client';
 
-let apiInstance = new @HarpocratesApiClient.DocumentApi();
+let apiInstance = new api.DocumentApi();
 let setId = 9_11; // String | ID of a set
 let docId = document1; // String | ID of a document
 apiInstance.getRedactedContent(setId, docId).then((data) => {
