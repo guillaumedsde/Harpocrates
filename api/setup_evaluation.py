@@ -110,13 +110,15 @@ def process_document(document, collection, trained_model):
     db = create_db_client()
     classify.__globals__["db"] = db
 
+    granularity: str ="paragraph"
+
     text_contents = text_contents_from_document_body(
-        document["content"], granularity="paragraph"
+        document["content"], granularity=granularity
     )
 
     document_object = Document(
         text_contents=text_contents,
-        text_split_granularity="document",
+        text_split_granularity=granularity,
         name=document["document_number"],
     )
     operation_result = db[collection].insert_one(document_object.to_dict())
@@ -281,7 +283,7 @@ if __name__ == "__main__":
         false_positives = intersect(classified_sensitive, actually_insensitive, small)
         true_positives = intersect(classified_sensitive, actually_sensitive, small)
 
-        results = """
+        confusion_matrix = """
         {seed}\t\tSensitive\t\tNot Sensitive
         Sensitive\t\t{true_positives}\t\t{false_positives}
         Not Sensitive\t\t{false_negatives}\t\t{true_negatives}
@@ -293,13 +295,15 @@ if __name__ == "__main__":
             seed=SEED,
         )
 
+        print(confusion_matrix)
+
         batch1_indices = [
             # smallest true negatives
-            smallest(X_test, true_negatives),
+            smallest(X_test, intersect(true_negatives, S27) if intersect(true_negatives, S27).size > 0 else true_negatives),
             # smallest false negatives
-            smallest(X_test, false_negatives),
+            smallest(X_test, intersect(false_negatives, S27) if intersect(false_negatives, S27).size > 0 else false_negatives),
             # smallest false positive
-            smallest(X_test, false_positives),
+            smallest(X_test, intersect(false_positives, S27) if intersect(false_positives, S27).size > 0 else false_positives),
             # first 3 true positives
         ] + [true_positives[n] for n in range(3)]
 
