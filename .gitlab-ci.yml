@@ -54,7 +54,7 @@ lighthouse-ci:
     - cd frontend
     - npm install
     - npm run build
-    - npx lhci autorun --upload.target=../temporary-public-storage --collect.settings.chromeFlags="--no-sandbox" || echo "LHCI failed!"
+    - npx lhci autorun --upload.target=temporary-public-storage --collect.settings.chromeFlags="--no-sandbox" || echo "LHCI failed!"
   tags:
     - trdocker
 
