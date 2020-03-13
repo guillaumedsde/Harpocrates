@@ -53,6 +53,7 @@ lighthouse-ci:
   script:
     - cd frontend
     - npm install
+    - npm install --dev
     - npm run build
     - npx lhci autorun --upload.target=temporary-public-storage --collect.settings.chromeFlags="--no-sandbox" || echo "LHCI failed!"
   tags:
