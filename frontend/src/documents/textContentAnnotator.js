@@ -87,7 +87,7 @@ export default function TextContentAnnotator(props) {
     <Grid container alignItems="center" justify="center">
       {/* don't display in text classification if granularity is document
       because it is already displayed in DocumentInfo */}
-      {props.granularity === "document" || process.env.TEST_MODE > 0 ? null : (
+      {props.granularity === "document" || process.env.TEST_MODE > 1 ? null : (
         <Grid item xs={2}>
           {props.textContent.predictedClassification ? ( //check if predictedClassification has been calculated
             <div style={{ width: "90%" }}>
