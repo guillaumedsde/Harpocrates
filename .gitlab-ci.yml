@@ -140,32 +140,6 @@ api:
       - .gitlab-ci/yml
       - Makefile
 
-# api-windows:
-#   stage: build
-#   image: mcr.microsoft.com/windows:1909
-#   # disable cache for this job
-#   cache: {}
-#   before_script:
-#     - \@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" && SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
-#     - choco install make docker -y
-#     - make docker-login
-#   script:
-#     - make build
-#     - make tag
-#     - make deploy
-#   # name of service to build is the name of the job
-#   variables:
-#     SERVICE: api
-#     DOCKERFILE_PREFIX: windows.
-#   # only build on changes to api
-#   only:
-#     changes:
-#       - api/**/*
-#       - .gitlab-ci/yml
-#       - Makefile
-#   tags:
-#     - shared-windows
-
 frontend:
   extends: .build_service
   # name of service to build is the name of the job
