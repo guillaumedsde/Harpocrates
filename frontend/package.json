@@ -12,7 +12,8 @@
     "build": "npx parcel build src/index.html",
     "test": "echo \"Error: no test specified\" && exit 1",
     "format": "prettier \"src/**/*.{js,jsx,html}\" --write",
-    "lint": "eslint \"src/**/*.{js,jsx}\" --quiet"
+    "lint": "eslint \"src/**/*.{js,jsx}\" --quiet",
+    "lighthouse": "npx lhci autorun"
   },
   "keywords": [
     "react",
@@ -23,6 +24,7 @@
   "author": "guillaumedsde",
   "license": "MIT",
   "devDependencies": {
+    "@lhci/cli": "^0.3.9",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.10.0",
@@ -31,7 +33,6 @@
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^2.5.0",
     "parcel-bundler": "^1.12.4",
-    "parcel-plugin-bundle-visualiser": "^1.2.0",
     "prettier": "^1.19.1"
   },
   "dependencies": {
@@ -63,7 +64,7 @@
   "bugs": {
     "url": "https://gitlab.com/harpocrates-app/harpocrates/issues"
   },
-  "homepage": "https://gitlab.com/harpocrates-app/harpocrates#readme",
+  "homepage": "https://gitlab.com/harpocrates-app/harpocrates",
   "files": [
     "dist"
   ]
