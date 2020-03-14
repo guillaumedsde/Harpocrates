@@ -1,3 +1,5 @@
+import os
+import string
 import subprocess
 import logging
 import json
@@ -7,7 +9,8 @@ from functools import reduce
 import re
 from math import floor
 from multiprocessing import Pool, cpu_count
-from random import shuffle, seed
+from random import seed
+import random
 from datetime import datetime
 
 from joblib import dump
@@ -26,7 +29,6 @@ from sklearn.model_selection import StratifiedShuffleSplit
 from sklearn.metrics import classification_report, balanced_accuracy_score
 
 from harpocrates_server.db import create_db_client, MONGO_URI
-
 from harpocrates_server.service import TRAIN_DATA_DIR, MODELS_DIRECTORY, TRAIN_LABELS
 
 from harpocrates_server.service.data_parsing import (
@@ -63,23 +65,14 @@ ANNOTATIONS_PATH = Path(
 SEED = 32
 
 
-def dump_and_delete_db(client, old):
+def generate_id(length=6):
+    # create another random number generator
+    # with unfixed seed
+    rng = random.Random()
+    return "".join(rng.choices(string.ascii_uppercase + string.digits, k=length))
 
-    archive_path = Path(
-        "/home/architect/git_repositories/dissertation/db_dumps"
-    ) / datetime.now().strftime("%d-%m-%Y_%H-%M-%S")
 
-    archive_path.mkdir(parents=True, exist_ok=True)
-
-    archive = "--out={}".format(archive_path)
-
-    uri = "--uri={}".format(MONGO_URI)
-
-    print(archive, uri)
-
-    subprocess.call(["mongodump", uri, archive])
-
-    client.drop_database(old)
+USER_ID = generate_id()
 
 
 def intersect(*arrays):
@@ -99,18 +92,12 @@ def extract_annotations():
     return path_annotations
 
 
-def smallest(X_test, indices):
-    smallest = X_test[np.argmin(length(X_test[indices]))]
+def process_document(odcument, collection, trained_model):
 
-    return np.where(X_test == smallest)[0][0]
-
-
-def process_document(document, collection, trained_model):
-
-    db = create_db_client()
+    db = create_db_client(db_name=USER_ID)
     classify.__globals__["db"] = db
 
-    granularity: str ="paragraph"
+    granularity: str = "paragraph"
 
     text_contents = text_contents_from_document_body(
         document["content"], granularity=granularity
@@ -149,11 +136,16 @@ def process_document(document, collection, trained_model):
 
 if __name__ == "__main__":
 
-    mongo_client = MongoClient(MONGO_URI)
-    old_db = "document_sets"
+    print(USER_ID)
 
-    if old_db in mongo_client.list_database_names():
-        dump_and_delete_db(mongo_client, old_db)
+    # create env file with mongod database name
+    with open(".env.sample", "r") as sample_env_file:
+        env_content = sample_env_file.read()
+
+    env_content += "\nMONGO_DB_NAME={}".format(USER_ID)
+
+    with open(".env", "w") as env_file:
+        env_file.write(env_content)
 
     file_paths, train_labels = extract_paths_and_labels()
     train_data = extract_data(file_paths)
@@ -279,9 +271,25 @@ if __name__ == "__main__":
         print("Train set small S40 count:", len(intersect(train_S40, small)))
 
         true_negatives = intersect(classified_insensitive, actually_insensitive, small)
-        false_negatives = intersect(classified_insensitive, actually_sensitive, small)
+        false_negatives = intersect(
+            classified_insensitive, actually_sensitive, S40, small
+        )
         false_positives = intersect(classified_sensitive, actually_insensitive, small)
-        true_positives = intersect(classified_sensitive, actually_sensitive, small)
+        true_positives = intersect(classified_sensitive, actually_sensitive, S40, small)
+
+        print(train_data_df.iloc[test_index, :].iloc[false_positives, :])
+
+        smallest_true_negatives = get_document_number_of_smallest(
+            train_data_df.iloc[test_index, :], true_negatives
+        )
+
+        smallest_false_negatives = get_document_number_of_smallest(
+            train_data_df.iloc[test_index, :], false_negatives
+        )
+
+        smallest_false_positives = get_document_number_of_smallest(
+            train_data_df.iloc[test_index, :], false_positives
+        )
 
         confusion_matrix = """
         {seed}\t\tSensitive\t\tNot Sensitive
@@ -298,16 +306,20 @@ if __name__ == "__main__":
         print(confusion_matrix)
 
         batch1_indices = [
-            # smallest true negatives
-            smallest(X_test, intersect(true_negatives, S27) if intersect(true_negatives, S27).size > 0 else true_negatives),
-            # smallest false negatives
-            smallest(X_test, intersect(false_negatives, S27) if intersect(false_negatives, S27).size > 0 else false_negatives),
-            # smallest false positive
-            smallest(X_test, intersect(false_positives, S27) if intersect(false_positives, S27).size > 0 else false_positives),
+            # smallest_true_negatives,
+            true_negatives[0],
+            # smallest_false_negatives,
+            false_negatives[0],
+            # smallest_false_positives,
+            false_positives[0,]
             # first 3 true positives
         ] + [true_positives[n] for n in range(3)]
 
-        shuffle(batch1_indices)
+        # create another random number generator
+        # with unfixed seed
+        rng = random.Random()
+
+        rng.shuffle(batch1_indices)
 
         batch_evaluation_setup_df = test_data_df.iloc[batch1_indices, :]
 
@@ -319,3 +331,10 @@ if __name__ == "__main__":
         for document_index, document in batch_evaluation_setup_df.iterrows():
             bar.next()
             process_document(document, "collection_{}".format(i), pipeline)
+
+        # sample a sensitive document that is not in the test set
+        test_document = np.setdiff1d(
+            intersect(actually_sensitive, small), batch1_indices
+        )
+
+        print(test_data_df.iloc[test_document, :])
