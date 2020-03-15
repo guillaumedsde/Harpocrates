@@ -277,20 +277,6 @@ if __name__ == "__main__":
         false_positives = intersect(classified_sensitive, actually_insensitive, small)
         true_positives = intersect(classified_sensitive, actually_sensitive, S40, small)
 
-        print(train_data_df.iloc[test_index, :].iloc[false_positives, :])
-
-        smallest_true_negatives = get_document_number_of_smallest(
-            train_data_df.iloc[test_index, :], true_negatives
-        )
-
-        smallest_false_negatives = get_document_number_of_smallest(
-            train_data_df.iloc[test_index, :], false_negatives
-        )
-
-        smallest_false_positives = get_document_number_of_smallest(
-            train_data_df.iloc[test_index, :], false_positives
-        )
-
         confusion_matrix = """
         {seed}\t\tSensitive\t\tNot Sensitive
         Sensitive\t\t{true_positives}\t\t{false_positives}
@@ -332,9 +318,16 @@ if __name__ == "__main__":
             bar.next()
             process_document(document, "collection_{}".format(i), pipeline)
 
+        from progress.spinner import Spinner
+
+        spinner = Spinner("Processing demo document ")
+
         # sample a sensitive document that is not in the test set
         test_document = np.setdiff1d(
             intersect(actually_sensitive, small), batch1_indices
         )
 
         print(test_data_df.iloc[test_document, :])
+
+        process_document(document, "demo", pipeline)
+        spinner.next()
