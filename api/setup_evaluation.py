@@ -15,6 +15,7 @@ from datetime import datetime
 
 from joblib import dump
 from progress.bar import Bar
+from progress.spinner import Spinner
 import numpy as np
 from pandas import DataFrame
 from pymongo import MongoClient
@@ -185,6 +186,8 @@ if __name__ == "__main__":
 
     SEEDS = [7, 8]
 
+    all_test_doc_numbers = []
+
     for i, SEED in enumerate(SEEDS):
         np.random.seed(SEED)
 
@@ -309,6 +312,10 @@ if __name__ == "__main__":
 
         batch_evaluation_setup_df = test_data_df.iloc[batch1_indices, :]
 
+        all_test_doc_numbers += (
+            test_data_df["document_number"].iloc[batch1_indices].to_list()
+        )
+
         bar = Bar("Processing test documents", max=batch_evaluation_setup_df.shape[0])
 
         print(batch_evaluation_setup_df)
@@ -318,16 +325,20 @@ if __name__ == "__main__":
             bar.next()
             process_document(document, "collection_{}".format(i), pipeline)
 
-        from progress.spinner import Spinner
+    spinner = Spinner("Processing demo document ")
 
-        spinner = Spinner("Processing demo document ")
+    unused_s40_document_indices = intersect(
+        np.where(train_data_df["S40"].to_numpy() == True)[0],
+        np.where(train_data_df["document_number"].to_numpy() != all_test_doc_numbers)[
+            0
+        ][0],
+    )
 
-        # sample a sensitive document that is not in the test set
-        test_document = np.setdiff1d(
-            intersect(actually_sensitive, small), batch1_indices
-        )
+    # sample a sensitive document that is not in the test set
+    test_document = train_data_df[unused_s40_document_indices, :]
 
-        print(test_data_df.iloc[test_document, :])
+    print(test_data_df.iloc[test_document, :])
 
-        process_document(document, "demo", pipeline)
-        spinner.next()
+    process_document(document, "demo", pipeline)
+    spinner.next()
+
