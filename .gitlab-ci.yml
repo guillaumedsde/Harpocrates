@@ -78,6 +78,8 @@ api_client_doc_pdf:
   image:
     name: pandoc/latex
     entrypoint: [""]
+  before_script:
+    - apk add make
   script:
     - cd js-api-client
     - make pdf-doc
