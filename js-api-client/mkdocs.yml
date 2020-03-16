@@ -10,4 +10,3 @@ theme:
   name: "material"
 plugins:
   - search
-  - pdf-export
