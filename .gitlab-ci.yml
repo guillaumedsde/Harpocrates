@@ -73,6 +73,22 @@ api_client_doc:
   tags:
     - trdocker
 
+api_client_doc_pdf:
+  stage: build-documentation
+  image:
+    name: pandoc/latex
+    entrypoint: [""]
+  script:
+    - cd js-api-client
+    - make pdf-doc
+  only:
+    - master
+  artifacts:
+    paths:
+      - "*.pdf"
+  tags:
+    - trdocker
+
 # publishes all files from the $DOCS_FOLDER together with the static version of SwaggerUI
 # sets the specification file named in $SPEC_TO_DISPLAY to be displayed by default
 api_doc:
