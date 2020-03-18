@@ -62,9 +62,12 @@ Documentation for Harpocrates services is available here: [https://harpocrates-a
 
 The development Logbook of Harpocrates can be [found here](https://dissertation.guillaume.desusanne.com).
 
+### Tech stack
+
 <div align="center">
   <img width="25%" src="docs/tech_stack.png" alt="Harpocrates tech stack">
 </div>
+
 ### Develop locally (without docker)
 
 To run the stack without docker you will need to have:
