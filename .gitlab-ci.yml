@@ -61,6 +61,8 @@ api_client_doc:
   image:
     name: squidfunk/mkdocs-material:4.6.1
     entrypoint: [""]
+  before_script:
+    - apk add make
   script:
     - cd js-api-client
     - make doc
