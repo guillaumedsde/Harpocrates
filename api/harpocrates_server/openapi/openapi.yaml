@@ -4,7 +4,7 @@ info:
   license:
     name: MIT
   title: Harpocrates API
-  version: 9.2.0
+  version: 9.2.1
 externalDocs:
   description: Documentation
   url: https://harpocrates-app.gitlab.io/harpocrates
