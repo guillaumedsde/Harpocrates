@@ -72,7 +72,7 @@ clean: ## Remove all images related to the project
 
 .PHONY: api-client
 api-client: ## generate JS API client code from specification
-	@openapi-generator-cli generate \
+	@openapi-generator generate \
 		-g javascript \
 		-o ./js-api-client/ \
 		-i ./api-specification/api-specification/openapi.yml \
