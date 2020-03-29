@@ -1,13 +1,13 @@
 {
   "name": "@harpocrates/api-client",
-  "version": "9.2.0",
+  "version": "9.2.1",
   "description": "This_is_the_Rest_API_specification_for_the_Harpocrates_application",
   "license": "MIT",
   "main": "dist/index.js",
   "scripts": {
     "build": "babel src -d dist",
     "prepack": "npm run build",
-    "test": "mocha --require @babel/register --recursive "
+    "test": "mocha --require @babel/register --recursive"
   },
   "browser": {
     "fs": false
