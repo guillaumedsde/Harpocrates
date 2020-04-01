@@ -6,21 +6,28 @@ import Button from "@material-ui/core/Button";
 import { SetApi, DocumentSet } from "@harpocrates/api-client";
 
 export default function NewSetForm(props) {
+  // initialize name for new set
   const [newSetName, setNewSetName] = useState("");
 
+  // create API client
   var api = new SetApi();
 
   const handleSubmit = event => {
+    // prevent trigger until button is pressed
     event.preventDefault();
+    // set loading state on parent component
     props.setLoading(true);
+    // Create DocumentSet API object
     const newDocumentSet = new DocumentSet(newSetName);
-    // TODO error handling
     api.createSet(newDocumentSet).then(() => {
+      // trigger refetch of document sets
       props.setTriggerRequest(newDocumentSet.name);
+      // reset new set name
+      setNewSetName("");
     });
-    setNewSetName("");
   };
 
+  // set creation form template
   return (
     <form onSubmit={handleSubmit} noValidate autoComplete="off">
       <div>
