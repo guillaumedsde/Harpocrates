@@ -12,7 +12,7 @@ export default function NewSetForm(props) {
   // create API client
   var api = new SetApi();
 
-  const handleSubmit = event => {
+  const handleSubmit = (event) => {
     // prevent trigger until button is pressed
     event.preventDefault();
     // set loading state on parent component
@@ -22,9 +22,9 @@ export default function NewSetForm(props) {
     api.createSet(newDocumentSet).then(() => {
       // trigger refetch of document sets
       props.setTriggerRequest(newDocumentSet.name);
-      // reset new set name
-      setNewSetName("");
     });
+    // reset new set name
+    setNewSetName("");
   };
 
   // set creation form template
@@ -38,7 +38,7 @@ export default function NewSetForm(props) {
           value={newSetName}
           type="text"
           placeholder="sensitive_collection_1"
-          onChange={event => setNewSetName(event.target.value)}
+          onChange={(event) => setNewSetName(event.target.value)}
         />
       </div>
       <Button variant="contained" color="primary" type="submit" value="Submit">
