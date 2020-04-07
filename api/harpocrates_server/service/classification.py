@@ -17,6 +17,8 @@ from sklearn.naive_bayes import MultinomialNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.pipeline import Pipeline
 
+from xgboost import XGBClassifier
+
 # from sklearn.svm import SVC, LinearSVC
 from thundersvm import SVC
 from imblearn.combine import SMOTETomek
@@ -61,7 +63,7 @@ CLASSIFIERS = [
     # DecisionTreeClassifier(),
     # SVC(probability=True, kernel="linear", cache_size=1000),
     # XGBClassifier(n_jobs=PROCESSES, objective="binary:logistic"),
-    SVC(kernel="linear", C=10, probability=True, decision_function_shape="ovr")
+    XGBClassifier()
 ]
 
 VECTORIZER = None

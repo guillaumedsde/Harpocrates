@@ -29,8 +29,9 @@ pymongo = "*"
 connexion = "*"
 shap = "*"
 waitress = "*"
-thundersvm-cpu = { file = "https://github.com/guillaumedsde/thundersvm/releases/download/0.3.4-multipython.15/thundersvm_cpu-0.3.4-cp37-cp37m-linux_x86_64.whl" }
+thundersvm-cpu = {file = "https://github.com/guillaumedsde/thundersvm/releases/download/0.3.4-multipython.15/thundersvm_cpu-0.3.4-cp37-cp37m-linux_x86_64.whl"}
 imblearn = "*"
+xgboost = "*"
 
 [requires]
 python_version = "3.7"
