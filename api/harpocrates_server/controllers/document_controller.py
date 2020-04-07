@@ -221,15 +221,18 @@ def get_redacted_content(set_id: str, doc_id: str) -> Tuple[Union[ApiHttpStatus,
         attachment_filename=(document.name or document.document_id ) + ".txt",
         mimetype='text/plain')
 
-def classify_text(text: str, explanations=None) -> PredictedClassification:
+def classify_text(text: str, explanations=None, trained_model=None) -> PredictedClassification:
     """Calculate the classification of a text with the explanation for the predicted classification
 
     :param text: text for which to calculate classification
     """
 
     # TODO this is a long blocking call when first training the classifier, needs to return 202 "created" with some URL to the processed element
-    trained_model, classifier_type = get_model()
-
+    if trained_model:
+        classifier_type = trained_model.named_steps.clf.__class__.__name__
+    else:
+        trained_model, classifier_type = get_model()
+        
     sensitive = bool(trained_model.predict([text])[0])
 
     # calculate explanations
@@ -314,7 +317,8 @@ def classify_text(text: str, explanations=None) -> PredictedClassification:
 
 def calculate_text_content_classifications(
     document: Document,
-    explanations: List[PredictedClassificationExplanation]
+    explanations: List[PredictedClassificationExplanation],
+    trained_model=None
 ) -> List[PredictedClassification]:
     """Calculate the classifications for all the text_contents pf a document
 
@@ -325,7 +329,7 @@ def calculate_text_content_classifications(
 
     for text_content in document.text_contents:
         try:
-            classification = classify_text(text_content.content, explanations)
+            classification = classify_text(text_content.content, explanations, trained_model=trained_model)
         except ValueError as e:
             current_app.logger.warn("Could not classify: %s", repr(text_content.content))
             classification = None

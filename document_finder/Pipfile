@@ -1,0 +1,16 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[packages]
+numpy = "*"
+scikit-learn = "*"
+beautifulsoup4 = "*"
+lxml = "*"
+pandas = "*"
+thundersvm-cpu-linux = { file = "https://github.com/guillaumedsde/thundersvm/releases/download/0.3.4-multipython.5/thundersvm_cpu-0.3.4-cp38-cp38-linux_x86_64.whl" }
+imblearn = "*"
+
+[requires]
+python_version = "3.8"

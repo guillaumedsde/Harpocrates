@@ -10,6 +10,15 @@ import ListSubheader from "@material-ui/core/ListSubheader";
 import LabelIcon from "@material-ui/icons/Label";
 
 export default function RedactionLabelSelect(props) {
+  var labels;
+  // Set only one option if a test mode is active
+  if (process.env.TEST_MODE > 0) {
+    props.setRedactionLabel("Personal Information");
+    labels = ["Personal Information"];
+  } else {
+    labels = props.labels;
+  }
+
   return (
     <List subheader={<ListSubheader>Redactions</ListSubheader>}>
       <ListItem>
@@ -27,7 +36,7 @@ export default function RedactionLabelSelect(props) {
               props.setRedactionLabel(event.target.value);
             }}
           >
-            {props.labels.map(label => (
+            {labels.map(label => (
               <MenuItem key={label} value={label}>
                 {label}
               </MenuItem>
