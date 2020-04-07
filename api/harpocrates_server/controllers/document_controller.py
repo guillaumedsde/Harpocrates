@@ -236,14 +236,16 @@ def classify_text(text: str, explanations=None, trained_model=None) -> Predicted
     sensitive = bool(trained_model.predict([text])[0])
 
     # calculate explanations
-    lime = lime_explanation(trained_model, text)
+    # lime = lime_explanation(trained_model, text)
 
     # shap explanation
-    # shap = shap_tree_explanation(trained_model, text)
+    shap = shap_tree_explanation(trained_model, text)
     # sensitivity of text is the probability of "sensitive" classification
     # FIXME using a libSVM based SVC classifier, this will sometimes output
     # a different result from the .predict() method
-    sensitivity = round(lime.predict_proba[1] * 100)
+    # sensitivity = round(lime.predict_proba[1] * 100)
+
+    sensitivity = round(trained_model.predict_proba([text])[0] 100)
 
     if explanations:
         feature_weights = {}
@@ -251,7 +253,10 @@ def classify_text(text: str, explanations=None, trained_model=None) -> Predicted
             feature_list = [(feature.text, feature.weight) for feature in explanation.features]
             feature_weights[explanation.explainer] = list(set(feature_list))
     else:
-        feature_weights = {"lime": lime.as_list()}  # , "shap": shap}
+        feature_weights = {
+            # "lime": lime.as_list(),
+            "shap": shap
+        }
 
     explanation_objects = []
 
