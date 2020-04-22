@@ -1,5 +1,5 @@
 # build image
-FROM node:13-alpine as build
+FROM node:14-alpine as build
 
 ARG NODE_ENV=production
 ARG TEST_MODE=0
