@@ -33,14 +33,24 @@
 <div align="center">
   This work is part of my <a href="https://harpocrates-app.gitlab.io/dissertation/dissertation.pdf">📝 final year dissertation</a> at the University of Glasgow
 </div>
+
 <br/>
 
 <div align="center">
   This is the mono-repository for the Harpocrates <b>sensitive document redaction</b> Proof of Concept application. Harpocrates is a Web Application for redacting sensitive documents with Machine Learning (ML) classification of documents by sensitivity as part of my final year project. It is a <a href="https://github.com/facebook/react">ReactJS</a> frontend backed by an <a href="https://github.com/OAI/OpenAPI-Specification">OpenAPI</a> generated <a href="https://github.com/pallets/flask">Flask API</a> with a <a href="https://github.com/scikit-learn/scikit-learn">Scikit-learn ML model</a> to classify text documents stored in <a href="https://github.com/mongodb/mongo">MongoDB</a>. I am using <a href="https://github.com/marcotcr/lime">Lime</a> to extract features explaining the ML classification and to present a classification aid with its explanation to redactors in a friendly redaction web app.
 </div>
 <br/>
+
 <div align="center">
   <img alt="UI Demo" src="docs/redacting.gif"/>
+</div>
+
+## Project Overview
+
+<div align="center">
+<a href="https://www.youtube.com/watch?feature=player_embedded&v=-C3zsvscaKI
+" target="_blank"><img src="https://img.youtube.com/vi/-C3zsvscaKI/0.jpg" 
+alt="Harpocrates overview video"/></a>
 </div>
 
 ## How to run
